@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="content-body">
+        <div class="container">
+            <div class="row">
+                <main class="col-md-8">
+                    {% for article in article_list %}
+
+                        <article class="post post-1">
+                            <header class="entry-header">
+                                <h1 class="entry-title">
+                                    <a href="single.html">{{ article.title }} </a>
+                                </h1>
+                                <div class="entry-meta">
+                                    <span class="post-category"><a href="#">{{ article.category.name }}</a></span>
+
+                                    <span class="post-date">
+                                        <a href="#">
+                                            <time class="entry-date"
+                                                  datetime="{{ article.created_time }}">{{ article.created_time|date:'Y年n月j日' }}</time>
+                                        </a>
+                                    </span>
+
+                                    <span class="post-author"><a href="#">{{ article.author.username }}</a></span>
+
+                                    <span class="comments-link"><a href="#">4 Comments</a></span>
+                                </div>
+                            </header>
+                            <div class="entry-content clearfix">
+                                <p>Responsive web design offers us a way forward, finally allowing us to design for the
+                                    ebb
+                                    and
+                                    flow of things. There are many variations of passages of Lorem Ipsum available, but
+                                    the
+                                    majority have suffered alteration in some form, by injected humour, or randomised
+                                    words
+                                    which don’t look even slightly.</p>
+                                <div class="read-more cl-effect-14">
+                                    <a href="#" class="more-link">Continue reading <span class="meta-nav">→</span></a>
+                                </div>
+                            </div>
+                        </article>
+
+
+                    {% endfor %}
+
+
+
+
+
+                    <article class="post post-2">
+                        <header class="entry-header">
+                            <h1 class="entry-title">
+                                <a href="single.html">Adaptive Vs. Responsive Layouts And Optimal Text Readability</a>
+                            </h1>
+                            <div class="entry-meta">
+                                <span class="post-category"><a href="#">Web Design</a></span>
+
+                                <span class="post-date"><a href="#"><time class="entry-date"
+                                                                          datetime="2012-11-09T23:15:57+00:00">February 2, 2013</time></a></span>
+
+                                <span class="post-author"><a href="#">Albert Einstein</a></span>
+
+                                <span class="comments-link"><a href="#">4 Comments</a></span>
+                            </div>
+                        </header>
+                        <div class="entry-content clearfix">
+                            <p>Responsive web design offers us a way forward, finally allowing us to design for the ebb
+                                and
+                                flow of things. There are many variations of passages of Lorem Ipsum available, but the
+                                majority have suffered alteration in some form, by injected humour, or randomised words
+                                which don’t look even slightly.</p>
+                            <div class="read-more cl-effect-14">
+                                <a href="#" class="more-link">Continue reading <span class="meta-nav">→</span></a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="post post-3">
+                        <header class="entry-header">
+                            <h1 class="entry-title">
+                                <a href="single.html">Adaptive Vs. Responsive Layouts And Optimal Text Readability</a>
+                            </h1>
+                            <div class="entry-meta">
+                                <span class="post-category"><a href="#">Web Design</a></span>
+
+                                <span class="post-date"><a href="#"><time class="entry-date"
+                                                                          datetime="2012-11-09T23:15:57+00:00">February 2, 2013</time></a></span>
+
+                                <span class="post-author"><a href="#">Albert Einstein</a></span>
+
+                                <span class="comments-link"><a href="#">4 Comments</a></span>
+                            </div>
+                        </header>
+                        <div class="entry-content clearfix">
+                            <p>Responsive web design offers us a way forward, finally allowing us to design for the ebb
+                                and
+                                flow of things. There are many variations of passages of Lorem Ipsum available, but the
+                                majority have suffered alteration in some form, by injected humour, or randomised words
+                                which don’t look even slightly.</p>
+                            <div class="read-more cl-effect-14">
+                                <a href="#" class="more-link">Continue reading <span class="meta-nav">→</span></a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="post post-4">
+                        <header class="entry-header">
+                            <h1 class="entry-title">
+                                <a href="single.html">Adaptive Vs. Responsive Layouts And Optimal Text Readability</a>
+                            </h1>
+                            <div class="entry-meta">
+                                <span class="post-category"><a href="#">Web Design</a></span>
+
+                                <span class="post-date"><a href="#"><time class="entry-date"
+                                                                          datetime="2012-11-09T23:15:57+00:00">February 2, 2013</time></a></span>
+
+                                <span class="post-author"><a href="#">Albert Einstein</a></span>
+
+                                <span class="comments-link"><a href="#">4 Comments</a></span>
+                            </div>
+                        </header>
+                        <div class="entry-content clearfix">
+                            <p>Responsive web design offers us a way forward, finally allowing us to design for the ebb
+                                and
+                                flow of things. There are many variations of passages of Lorem Ipsum available, but the
+                                majority have suffered alteration in some form, by injected humour, or randomised words
+                                which don’t look even slightly.</p>
+                            <div class="read-more cl-effect-14">
+                                <a href="#" class="more-link">Continue reading <span class="meta-nav">→</span></a>
+                            </div>
+                        </div>
+                    </article>
+                </main>
+                <aside class="col-md-4">
+                    <div class="widget widget-recent-posts">
+                        <h3 class="widget-title">Recent Posts</h3>
+                        <ul>
+                            <li>
+                                <a href="#">Adaptive Vs. Responsive Layouts And Optimal Text Readability</a>
+                            </li>
+                            <li>
+                                <a href="#">Web Design is 95% Typography</a>
+                            </li>
+                            <li>
+                                <a href="#">Paper by FiftyThree</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="widget widget-archives">
+                        <h3 class="widget-title">Archives</h3>
+                        <ul>
+                            <li>
+                                <a href="#">November 2014</a>
+                            </li>
+                            <li>
+                                <a href="#">September 2014</a>
+                            </li>
+                            <li>
+                                <a href="#">January 2013</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="widget widget-category">
+                        <h3 class="widget-title">Category</h3>
+                        <ul>
+                            <li>
+                                <a href="#">Web Design</a>
+                            </li>
+                            <li>
+                                <a href="#">Web Development</a>
+                            </li>
+                            <li>
+                                <a href="#">SEO</a>
+                            </li>
+                        </ul>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
