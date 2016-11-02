@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 
+from  blog.models import Article
 
 
 # Create your models here.
@@ -11,6 +12,7 @@ class Comment(models.Model):
     last_mod_time = models.DateTimeField('修改时间', auto_now=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='作者', on_delete=models.CASCADE)
 
+    article = models.ForeignKey(Article, verbose_name='文章', on_delete=models.CASCADE)
 
     class Meta:
         ordering = ['created_time']

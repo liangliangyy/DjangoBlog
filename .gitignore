@@ -62,3 +62,7 @@ target/
 # http://www.jetbrains.com/pycharm/webhelp/project.html
 .idea
 .iml
+
+
+migrations/
+!migrations/__init__.py
