@@ -124,3 +124,6 @@ STATIC_URL = '/static/'
 STATICFILES = os.path.join(BASE_DIR, 'static')
 
 AUTH_USER_MODEL = 'accounts.BlogUser'
+
+TIME_FORMAT = '%Y年%n月%j日'
+DATE_TIME_FORMAT = '%Y年%n月%j日'

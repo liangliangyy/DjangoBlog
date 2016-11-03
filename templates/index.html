@@ -23,24 +23,19 @@
                                     </span>
 
                                     <span class="post-author"><a href="#">{{ article.author.username }}</a></span>
-
-                                    <span class="comments-link"><a href="#">4 Comments</a></span>
+                                    {% load comments_tags %}
+                                    <span class="comments-link"><a
+                                            href="#">{% get_comment_count for article.pk %}</a></span>
                                 </div>
                             </header>
                             <div class="entry-content clearfix">
-                                {% load comments_tags %}
-                                {% get_comment_count for article.pk as num_comments %}
+
 
                                 <p>
-                                    {{ num_comments }}
-                                    Responsive web design offers us a way forward, finally allowing us to design for the
-                                    ebb
-                                    and
-                                    flow of things. There are many variations of passages of Lorem Ipsum available, but
-                                    the
-                                    majority have suffered alteration in some form, by injected humour, or randomised
-                                    words
-                                    which don’t look even slightly.</p>
+                                    {% load blog_tags %}
+                                    {% timeformat article.created_time %}
+                                    {{ article.body }}
+                                </p>
                                 <div class="read-more cl-effect-14">
                                     <a href="#" class="more-link">Continue reading <span class="meta-nav">→</span></a>
                                 </div>
@@ -54,7 +49,7 @@
 
 
 
-                    <article class="post post-2">
+                    {% comment %}<article class="post post-2">
                         <header class="entry-header">
                             <h1 class="entry-title">
                                 <a href="single.html">Adaptive Vs. Responsive Layouts And Optimal Text Readability</a>
@@ -136,7 +131,7 @@
                                 <a href="#" class="more-link">Continue reading <span class="meta-nav">→</span></a>
                             </div>
                         </div>
-                    </article>
+                    </article>{% endcomment %}
                 </main>
                 <aside class="col-md-4">
                     <div class="widget widget-recent-posts">
