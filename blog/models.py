@@ -36,7 +36,7 @@ class Article(models.Model):
 
     def getCategoryNameTree(self):
         names = []
-        names.append((settings.SITE_NAME, 'http://127.0.0.1:8000'))
+
 
         def parse(category):
             names.append((category.name,category.get_absolute_url()))

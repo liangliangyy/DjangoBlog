@@ -7,6 +7,7 @@
         <div class="col-sm-8 blog-main">
 
             {% for article in article_list %}
+
                 <div class="blog-post">
                     <a href="{{ article.get_absolute_url }}" class="blog-post-title">{{ article.title }}</a>
 
@@ -20,6 +21,11 @@
                         by <a href="{{ article.author.get_absolute_url }}">{{ article.author }}</a></p>
 
                     {{ article.body|custom_markdown }}
+                    <p class="blog-read-more">
+                        <a href="{{ article.get_absolute_url }}">
+                            Read more
+                        </a>
+                    </p>
                 </div><!-- /.blog-post -->
 
             {% endfor %}

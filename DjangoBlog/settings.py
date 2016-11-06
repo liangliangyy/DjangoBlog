@@ -65,6 +65,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'blog.context_processors.seo_processor',
             ],
         },
     },
@@ -129,5 +130,5 @@ TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 DATE_TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 
 SITE_NAME = 'Django Blog'
-SITE_DESCRIPTION = 'The Simple blog creating by Django and Bootstrap.'
+SITE_DESCRIPTION = '大巧无工,重剑无锋.'
 ARTICLE_SUB_LENGTH = 300

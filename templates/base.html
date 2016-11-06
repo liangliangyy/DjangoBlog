@@ -51,10 +51,12 @@
     <div class="blog-header">
         <h1 class="blog-title">
             <a href="{% url 'blog:index' %}">
-                The Django Blog
+                {{ SITE_NAME }}
             </a>
         </h1>
-        <p class="lead blog-description">The Simple blog creating by Django and Bootstrap.</p>
+        <p class="lead blog-description">
+            {{ SITE_DESCRIPTION }}
+        </p>
     </div>
     {% block content %}
     {% endblock %}
