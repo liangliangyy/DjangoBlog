@@ -3,7 +3,6 @@ from django.core.urlresolvers import reverse
 from django.conf import settings
 
 
-
 class Article(models.Model):
     STATUS_CHOICES = (
         ('d', '草稿'),
@@ -17,13 +16,12 @@ class Article(models.Model):
     pub_time = models.DateTimeField('发布时间', blank=True, null=True,
                                     help_text="不指定发布时间则视为草稿，可以指定未来时间，到时将自动发布。")
     status = models.CharField('文章状态', max_length=1, choices=STATUS_CHOICES)
-    summary = models.CharField('摘要', max_length=200, blank=True, help_text="可选，若为空将摘取正文的前54个字符。")
+    summary = models.CharField('摘要', max_length=200, blank=True, help_text="可选，若为空将摘取正文的前300个字符。")
     views = models.PositiveIntegerField('浏览量', default=0)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='作者', on_delete=models.CASCADE)
 
     category = models.ForeignKey('Category', verbose_name='分类', on_delete=models.CASCADE)
     tags = models.ManyToManyField('Tag', verbose_name='标签集合', blank=True)
-
 
     def __str__(self):
         return self.title
@@ -35,6 +33,18 @@ class Article(models.Model):
 
     def get_absolute_url(self):
         return reverse('blog:detail', kwargs={'article_id': self.pk})
+
+    def getCategoryNameTree(self):
+        names = []
+        names.append((settings.SITE_NAME, 'http://127.0.0.1:8000'))
+
+        def parse(category):
+            names.append((category.name,category.get_absolute_url()))
+            if category.parent_category:
+                parse(category.parent_category)
+
+        parse(self.category)
+        return names
 
     def save(self, *args, **kwargs):
         self.summary = self.summary or self.body[:120]
@@ -49,11 +59,15 @@ class Category(models.Model):
     name = models.CharField('分类名', max_length=30)
     created_time = models.DateTimeField('创建时间', auto_now_add=True)
     last_mod_time = models.DateTimeField('修改时间', auto_now=True)
+    parent_category = models.ForeignKey('self', verbose_name="父级分类", blank=True, null=True)
 
     class Meta:
         ordering = ['name']
         verbose_name = "分类"
         verbose_name_plural = verbose_name
+
+    def get_absolute_url(self):
+        return reverse('blog:category_detail', kwargs={'category_name': self.name})
 
     def __str__(self):
         return self.name

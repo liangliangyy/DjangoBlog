@@ -81,7 +81,7 @@ DATABASES = {
         'NAME': 'djangoblog',
         'USER': 'root',
         'PASSWORD': 'root',
-        'HOST': '192.168.21.130',
+        'HOST': '192.168.33.10',
         'PORT': 3306,
     }
 }
@@ -125,5 +125,9 @@ STATICFILES = os.path.join(BASE_DIR, 'static')
 
 AUTH_USER_MODEL = 'accounts.BlogUser'
 
-TIME_FORMAT = '%Y年%n月%j日'
-DATE_TIME_FORMAT = '%Y年%n月%j日'
+TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
+DATE_TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
+
+SITE_NAME = 'Django Blog'
+SITE_DESCRIPTION = 'The Simple blog creating by Django and Bootstrap.'
+ARTICLE_SUB_LENGTH = 300
