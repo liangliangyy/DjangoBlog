@@ -19,11 +19,6 @@ class ArticleListView(ListView):
     # context_object_name属性用于给上下文变量取名（在模板中使用该名字）
     context_object_name = 'article_list'
 
-    def set_article_subbody(self, article_list):
-        for article in article_list:
-            article.body = article.body[0:settings.ARTICLE_SUB_LENGTH]
-        return article_list
-
     def __init__(self):
         self.page_description = ''
 
@@ -36,7 +31,7 @@ class IndexView(ArticleListView):
         #     article.body = article.body[0:settings.ARTICLE_SUB_LENGTH]
         #     # article.body = markdown2.markdown(article.body)
 
-        return self.set_article_subbody(article_list)
+        return article_list
 
 
 class ArticleDetailView(DetailView):
@@ -47,6 +42,7 @@ class ArticleDetailView(DetailView):
 
     def get_object(self):
         obj = super(ArticleDetailView, self).get_object()
+        obj.viewed()
         # obj.body = markdown2.markdown(obj.body)
         return obj
 
@@ -62,7 +58,7 @@ class CategoryDetailView(ArticleListView):
         # print(categoryname)
         self.page_description = '分类目录归档: %s ' % categoryname
         article_list = Article.objects.filter(category__name=categoryname, status='p')
-        return self.set_article_subbody(article_list)
+        return article_list
 
     def get_context_data(self, **kwargs):
         # 增加额外的数据
@@ -76,7 +72,7 @@ class AuthorDetailView(ArticleListView):
 
         self.page_description = '作者文章归档: %s ' % author_name
         article_list = Article.objects.filter(author__username=author_name)
-        return self.set_article_subbody(article_list)
+        return article_list
 
     def get_context_data(self, **kwargs):
         kwargs['page_description'] = self.page_description
@@ -99,7 +95,7 @@ class TagDetailView(ArticleListView):
         tag_name = self.kwargs['tag_name']
         self.page_description = '分类标签: %s ' % tag_name
         article_list = Article.objects.filter(tags__name=tag_name)
-        return self.set_article_subbody(article_list)
+        return article_list
 
     def get_context_data(self, **kwargs):
         kwargs['page_description'] = self.page_description

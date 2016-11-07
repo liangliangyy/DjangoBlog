@@ -16,7 +16,9 @@
                           datetime="{{ article.created_time }}">
                         {% timeformat article.created_time %}
                     </time>
-                    by <a href="#">{{ article.author }}</a></p>
+                    by <a href="#">{{ article.author }}</a>
+                    <span class="views">{{ article.views }} views</span>
+                </p>
 
                 {{ article.body|custom_markdown }}
             </div><!-- /.blog-post -->

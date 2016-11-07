@@ -46,7 +46,7 @@ class Article(models.Model):
         return names
 
     def save(self, *args, **kwargs):
-        self.summary = self.summary or self.body[:120]
+        self.summary = self.summary or self.body[:settings.ARTICLE_SUB_LENGTH]
         super().save(*args, **kwargs)
 
     def viewed(self):
