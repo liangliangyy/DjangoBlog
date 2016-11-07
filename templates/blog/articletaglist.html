@@ -1,0 +1,14 @@
+<div class="panel panel-default">
+    <div class="panel-heading">标签</div>
+    <div class="panel-body">
+
+
+        {% for url,count,tag,color in article_tags_list %}
+            <a class="label label-{{ color }}" style="display: inline-block;" href="{{ url }}" title="{{ tag.name }}">
+                {{ tag.name }}
+                <span class="badge">{{ count }}</span>
+            </a>
+        {% endfor %}
+
+    </div>
+</div>

@@ -34,12 +34,11 @@ class Article(models.Model):
     def get_absolute_url(self):
         return reverse('blog:detail', kwargs={'article_id': self.pk})
 
-    def getCategoryNameTree(self):
+    def get_category_tree(self):
         names = []
 
-
         def parse(category):
-            names.append((category.name,category.get_absolute_url()))
+            names.append((category.name, category.get_absolute_url()))
             if category.parent_category:
                 parse(category.parent_category)
 
@@ -80,6 +79,12 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('blog:tag_detail', kwargs={'tag_name': self.name})
+
+    def get_article_count(self):
+        return Article.objects.filter(tags__name=self.name).distinct().count()
 
     class Meta:
         ordering = ['name']

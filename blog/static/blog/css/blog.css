@@ -174,3 +174,10 @@ h6, .h6 {
     color: #00CCFF;
     border-bottom: 4px double #ededed;
 }
+
+.article_taglist {
+    margin-top: 40px;
+    margin-bottom: auto;
+
+    border-bottom: 4px double #ededed;
+}

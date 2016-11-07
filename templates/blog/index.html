@@ -1,25 +1,44 @@
 {% extends 'base.html' %}
 {% load blog_tags %}
 
-
 {% block content %}
     <div class="row">
+        {% if page_description %}
+            <div class="col-sm-8 blog-main">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        {{ page_description }}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
 
         <div class="col-sm-8 blog-main">
 
+            {% for article in article_list %}
 
-            <div class="blog-post">
-                <a href="#" class="blog-post-title">{{ article.title }}</a>
-                {% parseCategoryName article %}
-                <p class="blog-post-meta">{% comment %}<a href="#">{{ article.category.name }}</a>{% endcomment %}
-                    <time class="entry-date"
-                          datetime="{{ article.created_time }}">
-                        {% timeformat article.created_time %}
-                    </time>
-                    by <a href="#">{{ article.author }}</a></p>
+                <div class="blog-post">
+                    <a href="{{ article.get_absolute_url }}" class="blog-post-title">{{ article.title }}</a>
 
-                {{ article.body|custom_markdown }}
-            </div><!-- /.blog-post -->
+                    <p class="blog-post-meta"><a
+                            href="{{ article.category.get_absolute_url }}">{{ article.category.name }}</a>
+                        <time class="entry-date"
+                              datetime="{{ article.created_time }}">
+                            {% comment %}{{ article.created_time|date:'Y年n月j日' }}{% endcomment %}
+                            {% timeformat article.created_time %}
+                        </time>
+                        by <a href="{{ article.author.get_absolute_url }}">{{ article.author }}</a></p>
+
+                    {{ article.body|custom_markdown }}
+                    <p class="blog-read-more">
+                        <a href="{{ article.get_absolute_url }}">
+                            Read more
+                        </a>
+                    </p>
+                </div><!-- /.blog-post -->
+
+            {% endfor %}
+
 
 
             {% comment %}<div class="blog-post">

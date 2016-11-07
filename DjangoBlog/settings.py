@@ -132,3 +132,8 @@ DATE_TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 SITE_NAME = 'Django Blog'
 SITE_DESCRIPTION = '大巧无工,重剑无锋.'
 ARTICLE_SUB_LENGTH = 300
+
+#bootstrap颜色样式
+BOOTSTRAP_COLOR_TYPES = [
+    'default', 'primary', 'success', 'info', 'warning', 'danger'
+]
