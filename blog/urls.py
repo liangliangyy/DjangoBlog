@@ -14,10 +14,11 @@
 """
 
 from django.conf.urls import url
-
+from django.views.decorators.cache import cache_page
 from . import views
 
 urlpatterns = [
+    # url(r'^$', cache_page(60 * 15)(views.IndexView.as_view()), name='index'),
     url(r'^$', views.IndexView.as_view(), name='index'),
     url(r'^article/(?P<article_id>\d+)$', views.ArticleDetailView.as_view(), name='detail'),
     url(r'^category/(?P<category_name>\w+)$', views.CategoryDetailView.as_view(), name='category_detail'),

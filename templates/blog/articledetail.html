@@ -68,8 +68,10 @@
             </nav>
 
         </div><!-- /.blog-main -->
-
-        <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
+        {% block sidebar %}
+            {% loadsidebartags %}
+        {% endblock %}
+        {% comment %}   <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
             <div class="sidebar-module sidebar-module-inset">
                 <h4>About</h4>
                 <p>Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet
@@ -100,7 +102,7 @@
                     <li><a href="#">Facebook</a></li>
                 </ol>
             </div>
-        </div><!-- /.blog-sidebar -->
+        </div><!-- /.blog-sidebar -->{% endcomment %}
 
     </div><!-- /.row -->
 {% endblock %}

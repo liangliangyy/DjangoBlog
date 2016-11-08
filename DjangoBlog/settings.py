@@ -41,14 +41,17 @@ INSTALLED_APPS = [
 
 ]
 
-MIDDLEWARE = [
+MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    #'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
+    #'django.middleware.cache.FetchFromCacheMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'DjangoBlog.urls'
@@ -65,7 +68,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'blog.context_processors.seo_processor',
+                'blog.context_processors.seo_processor'
             ],
         },
     },
@@ -82,7 +85,7 @@ DATABASES = {
         'NAME': 'djangoblog',
         'USER': 'root',
         'PASSWORD': 'root',
-        'HOST': '192.168.33.10',
+        'HOST': '192.168.21.130',
         'PORT': 3306,
     }
 }
@@ -127,13 +130,26 @@ STATICFILES = os.path.join(BASE_DIR, 'static')
 AUTH_USER_MODEL = 'accounts.BlogUser'
 
 TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
-DATE_TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
+DATE_TIME_FORMAT = '%Y-%m-%d'
 
 SITE_NAME = 'Django Blog'
 SITE_DESCRIPTION = '大巧无工,重剑无锋.'
 ARTICLE_SUB_LENGTH = 300
 
-#bootstrap颜色样式
+# bootstrap颜色样式
 BOOTSTRAP_COLOR_TYPES = [
     'default', 'primary', 'success', 'info', 'warning', 'danger'
 ]
+
+# 侧边栏文章数目
+SIDEBAR_ARTICLE_COUNT = 10
+
+# cache setting
+"""
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '192.168.21.130:11211',
+    }
+}
+"""

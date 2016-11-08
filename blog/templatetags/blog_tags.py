@@ -19,6 +19,7 @@ import markdown
 from django.template.defaultfilters import stringfilter
 from django.utils.safestring import mark_safe
 import random
+from blog.models import Article, Category, Tag
 
 register = template.Library()
 
@@ -33,6 +34,14 @@ def timeformat(data):
         return ""
 
 
+@register.simple_tag
+def datetimeformat(data):
+    try:
+        return data.strftime(settings.DATE_TIME_FORMAT)
+    except:
+        return ""
+
+
 @register.filter(is_safe=True)
 @stringfilter
 def custom_markdown(content):
@@ -43,7 +52,7 @@ def custom_markdown(content):
                                        safe_mode=True, enable_attributes=False))
 
 
-@register.inclusion_tag('blog/categorytree.html')
+@register.inclusion_tag('blog/breadcrumb.html')
 def parsecategoryname(article):
     names = article.get_category_tree()
 
@@ -65,6 +74,22 @@ def loadarticletags(article):
         ))
     return {
         'article_tags_list': tags_list
+    }
+
+
+@register.inclusion_tag('blog/sidebar.html')
+def loadsidebartags():
+    recent_articles = Article.objects.filter(status='p')[:settings.SIDEBAR_ARTICLE_COUNT]
+    sidebar_categorys = Category.objects.all()
+    most_read_articles = Article.objects.filter(status='p').order_by('-views')[:settings.SIDEBAR_ARTICLE_COUNT]
+    dates = Article.objects.datetimes('created_time', 'month', order='DESC')
+    print(dates)
+    # tags=
+    return {
+        'recent_articles': recent_articles,
+        'sidebar_categorys': sidebar_categorys,
+        'most_read_articles': most_read_articles,
+        'article_dates': dates
     }
 
 
