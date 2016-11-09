@@ -2,126 +2,68 @@
 {% load blog_tags %}
 
 {% block content %}
-    <div class="row">
-        {% if page_description %}
-            <div class="col-sm-8 blog-main">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        {{ page_description }}
-                    </div>
-                </div>
-            </div>
-        {% endif %}
-
-        <div class="col-sm-8 blog-main">
+    <div id="primary" class="site-content">
+        <div id="content" role="main">
             {% for article in article_list %}
+                {% load_article_detail article True %}
+               {% comment %} <article id="post-{{ article.pk }}"
+                         class="post-3815 post type-post status-publish format-standard hentry category-python tag-python">
+                    <header class="entry-header">
 
-                <div class="blog-post">
-                    <a href="{{ article.get_absolute_url }}" class="blog-post-title">{{ article.title }}</a>
+                        <h1 class="entry-title">
+                            <a href="{{ article.get_absolute_url }}"
+                               rel="bookmark">{{ article.title }}</a>
+                        </h1>
+                        <div class="comments-link">
+                            <a href="{{ article.get_absolute_url }}"
+                               class="ds-thread-count" data-thread-key="3815" rel="nofollow"><span class="leave-reply">发表评论</span></a>
+                            <div style="float:right">
+                                {{ article.views }} views
+                            </div>
+                        </div><!-- .comments-link -->
+                        <br/>
+                        <style type="text/css">
+                            .breadcrumb
+                            div {
+                                display: inline;
+                                font-size: 13px;
+                                margin-left: -3px;
+                            }
 
-                    <p class="blog-post-meta">
-                        <a href="{{ article.category.get_absolute_url }}">{{ article.category.name }}</a>
-                        <time class="entry-date"
-                              datetime="{{ article.created_time }}">
-                            {% timeformat article.created_time %}
-                        </time>
 
-                        by <a href="{{ article.author.get_absolute_url }}">{{ article.author }}</a>
-                        <span class="views">{{ article.views }} views</span>
-                    </p>
+                        </style>
+
+
+                    </header><!-- .entry-header -->
+
+                    <div class="entry-content">
                         {{ article.summary|custom_markdown }}
 
-                    <p class="blog-read-more">
-                        <a href="{{ article.get_absolute_url }}">
-                            Read more
-                        </a>
-                    </p>
-                </div><!-- /.blog-post -->
-
+                        <p class='read-more'><a
+                                href=' {{ article.get_absolute_url }}'>Read more</a></p>
+                    </div><!-- .entry-content -->
+                    {% loadarticlemetas article %}
+                </article><!-- #post -->{% endcomment %}
             {% endfor %}
 
 
 
-            {% comment %}<div class="blog-post">
-                <h2 class="blog-post-title">Another blog post</h2>
-                <p class="blog-post-meta">December 23, 2013 by <a href="#">Jacob</a></p>
 
-                <p>Cum sociis natoque penatibus et magnis <a href="#">dis parturient montes</a>, nascetur ridiculus mus.
-                    Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Sed posuere
-                    consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum.</p>
-                <blockquote>
-                    <p>Curabitur blandit tempus porttitor. <strong>Nullam quis risus eget urna mollis</strong> ornare
-                        vel eu leo. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                </blockquote>
-                <p>Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet
-                    fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
-                <p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo
-                    luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Morbi leo risus, porta ac
-                    consectetur ac, vestibulum at eros.</p>
-            </div><!-- /.blog-post -->
+            <nav id="nav-below" class="navigation" role="navigation">
+                <h3 class="assistive-text">文章导航</h3>
+                <div class="nav-previous"><a href="https://www.lylinux.org/page/2"><span
+                        class="meta-nav">&larr;</span> 早期文章</a></div>
+                <div class="nav-next"></div>
+            </nav><!-- .navigation -->
 
-            <div class="blog-post">
-                <h2 class="blog-post-title">New feature</h2>
-                <p class="blog-post-meta">December 14, 2013 by <a href="#">Chris</a></p>
 
-                <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean lacinia
-                    bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus,
-                    tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet
-                    risus.</p>
-                <ul>
-                    <li>Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</li>
-                    <li>Donec id elit non mi porta gravida at eget metus.</li>
-                    <li>Nulla vitae elit libero, a pharetra augue.</li>
-                </ul>
-                <p>Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet
-                    fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
-                <p>Donec ullamcorper nulla non metus auctor fringilla. Nulla vitae elit libero, a pharetra augue.</p>
-            </div><!-- /.blog-post -->{% endcomment %}
-
-            <nav>
-                <ul class="pager">
-                    <li><a href="#">Previous</a></li>
-                    <li><a href="#">Next</a></li>
-                </ul>
-            </nav>
-
-        </div><!-- /.blog-main -->
-        {% block sidebar %}
-            {% loadsidebartags %}
-        {% endblock %}
-        {% comment %}    {% block sidebar %}
-            <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
-                <div class="sidebar-module sidebar-module-inset">
-                    <h4>About</h4>
-                    <p>Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet
-                        fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
-                </div>
-                <div class="sidebar-module">
-                    <h4>Archives</h4>
-                    <ol class="list-unstyled">
-                        <li><a href="#">March 2014</a></li>
-                        <li><a href="#">February 2014</a></li>
-                        <li><a href="#">January 2014</a></li>
-                        <li><a href="#">December 2013</a></li>
-                        <li><a href="#">November 2013</a></li>
-                        <li><a href="#">October 2013</a></li>
-                        <li><a href="#">September 2013</a></li>
-                        <li><a href="#">August 2013</a></li>
-                        <li><a href="#">July 2013</a></li>
-                        <li><a href="#">June 2013</a></li>
-                        <li><a href="#">May 2013</a></li>
-                        <li><a href="#">April 2013</a></li>
-                    </ol>
-                </div>
-                <div class="sidebar-module">
-                    <h4>Elsewhere</h4>
-                    <ol class="list-unstyled">
-                        <li><a href="#">GitHub</a></li>
-                        <li><a href="#">Twitter</a></li>
-                        <li><a href="#">Facebook</a></li>
-                    </ol>
-                </div>
-            </div><!-- /.blog-sidebar -->
-        {% endblock %}{% endcomment %}
-    </div><!-- /.row -->
+        </div><!-- #content -->
+    </div><!-- #primary -->
 {% endblock %}
+
+
+{% block sidebar %}
+    {% loadsidebartags %}
+{% endblock %}
+
+

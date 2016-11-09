@@ -57,6 +57,7 @@ def custom_markdown(content):
                                        safe_mode=True, enable_attributes=False))
     """
 
+
 @register.inclusion_tag('blog/breadcrumb.html')
 def parsecategoryname(article):
     names = article.get_category_tree()
@@ -95,6 +96,21 @@ def loadsidebartags():
         'sidebar_categorys': sidebar_categorys,
         'most_read_articles': most_read_articles,
         'article_dates': dates
+    }
+
+
+@register.inclusion_tag('blog/tags/article_meta_info.html')
+def loadarticlemetas(article):
+    return {
+        'article': article
+    }
+
+
+@register.inclusion_tag('blog/tags/article_info.html')
+def load_article_detail(article, isindex):
+    return {
+        'article': article,
+        'isindex': isindex
     }
 
 

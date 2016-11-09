@@ -1,222 +1,245 @@
-{% load staticfiles %}
-
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<!--[if IE 7]>
+<html class="ie ie7" lang="zh-CN" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
+<![endif]-->
+<!--[if IE 8]>
+<html class="ie ie8" lang="zh-CN" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
+<![endif]-->
+<!--[if !(IE 7) & !(IE 8)]><!-->
+<html lang="zh-CN" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
+<!--<![endif]-->
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
-
-    <title>Blog Template for Bootstrap</title>
-
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="{% static 'blog/css/bootstrap.min.css' %}">
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <link href="{% static 'assets/css/ie10-viewport-bug-workaround.css' %}" rel="stylesheet">
-    <!-- Custom styles for this template -->
-
-    <link href="{% static 'blog/css/blog.css' %}" rel="stylesheet">
-    {% comment %}<!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>{% endcomment %}
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width"/>
+    <title>逝去日子的博客 | 大巧无工,重剑无锋</title>
+    <link rel="profile" href="http://gmpg.org/xfn/11"/>
+    <link rel="pingback" href="https://www.lylinux.org/xmlrpc.php"/>
     <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="{% static 'assets/js/html5shiv.min.js' %}"></script>
-      <script src="{% static 'assets/js/respond.min.js' %}"></script>
-    <![endif]-->
-    {% comment %}<link href="http://apps.bdimg.com/libs/highlight.js/9.1.0/styles/github.min.css" rel="stylesheet">
-    <script src="http://apps.bdimg.com/libs/highlight.js/9.1.0/highlight.min.js"></script>
-    <script>hljs.initHighlightingOnLoad();</script>{% endcomment %}
+<script src="{% static 'blog/js/html5.js' %}" type="text/javascript"></script>
+<![endif]-->
 
-    <link href="{% static 'highlight/styles/github.css' %}" rel="stylesheet">
-    <script src="{% static 'highlight/highlight.pack.js' %}" type="application/javascript"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
+
+    <link rel='dns-prefetch' href='//fonts.googleapis.com'/>
+    <link rel='dns-prefetch' href='//s.w.org'/>
+    <link rel="alternate" type="application/rss+xml" title="逝去日子的博客 &raquo; Feed" href="https://www.lylinux.org/feed"/>
+    <link rel="alternate" type="application/rss+xml" title="逝去日子的博客 &raquo; 评论Feed"
+          href="https://www.lylinux.org/comments/feed"/>
+
+
+    <link rel='stylesheet' id='twentytwelve-fonts-css'
+          href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700&#038;subset=latin,latin-ext'
+          type='text/css' media='all'/>
+    <link rel='stylesheet' id='twentytwelve-style-css' href='{% static 'blog/css/style.css' %}' type='text/css'
+          media='all'/>
+
+    <!--[if lt IE 9]>
+<link rel='stylesheet' id='twentytwelve-ie-css'  href='{% static 'blog/css/ie.css' %}' type='text/css' media='all' />
+<![endif]-->
+
+    <script type='text/javascript' src='{% static 'blog/js/jquery.js' %}' defer='defer'></script>
+    <script type='text/javascript' src='{% static 'blog/js/jquery-migrate.min.js' %}' defer='defer'></script>
+    <style type="text/css" id="syntaxhighlighteranchor"></style>
 </head>
 
-<body>
+<body class="home blog custom-font-enabled">
+<div id="page" class="hfeed site">
+    <header id="masthead" class="site-header" role="banner">
+        <hgroup>
+            <h1 class="site-title"><a href="https://www.lylinux.org/" title="逝去日子的博客" rel="home">逝去日子的博客</a></h1>
+            <h2 class="site-description">大巧无工,重剑无锋</h2>
+        </hgroup>
 
-<div class="blog-masthead">
-    <div class="container">
-        <nav class="blog-nav">
-            <a class="blog-nav-item active" href="#">Home</a>
-            <a class="blog-nav-item" href="#">New features</a>
-            <a class="blog-nav-item" href="#">Press</a>
-            <a class="blog-nav-item" href="#">New hires</a>
-            <a class="blog-nav-item" href="#">About</a>
-        </nav>
-    </div>
-</div>
+        <nav id="site-navigation" class="main-navigation" role="navigation">
+            <button class="menu-toggle">菜单</button>
+            <a class="assistive-text" href="#content" title="跳至正文">跳至正文</a>
+            <div class="menu-%e8%8f%9c%e5%8d%95-container">
+                <ul id="menu-%e8%8f%9c%e5%8d%95" class="nav-menu">
+                    <li id="menu-item-3498"
+                        class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item menu-item-home menu-item-3498">
+                        <a href="http://www.lylinux.org">首页</a></li>
+                    <li id="menu-item-7"
+                        class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7"><a
+                            href="https://www.lylinux.org/category/linux">linux</a></li>
+                    <li id="menu-item-606"
+                        class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-606">
+                        <a href="https://www.lylinux.org/category/%e7%a8%8b%e5%ba%8f%e7%8c%bf%e4%b9%8b%e8%b7%af">程序猿之路</a>
+                        <ul class="sub-menu">
+                            <li id="menu-item-607"
+                                class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-607"><a
+                                    href="https://www.lylinux.org/category/%e7%a8%8b%e5%ba%8f%e7%8c%bf%e4%b9%8b%e8%b7%af/python">python</a>
+                            </li>
+                            <li id="menu-item-608"
+                                class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-608"><a
+                                    href="https://www.lylinux.org/category/%e7%a8%8b%e5%ba%8f%e7%8c%bf%e4%b9%8b%e8%b7%af/c">c++</a>
+                            </li>
+                            <li id="menu-item-3181"
+                                class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-3181"><a
+                                    href="https://www.lylinux.org/category/%e7%a8%8b%e5%ba%8f%e7%8c%bf%e4%b9%8b%e8%b7%af/csharp">csharp</a>
+                            </li>
+                            <li id="menu-item-12"
+                                class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-12">
+                                <a href="https://www.lylinux.org/category/%e7%a8%8b%e5%ba%8f%e7%8c%bf%e4%b9%8b%e8%b7%af/javaweb/ssh%e6%a1%86%e6%9e%b6">ssh框架</a>
+                                <ul class="sub-menu">
+                                    <li id="menu-item-11"
+                                        class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-11">
+                                        <a href="https://www.lylinux.org/category/%e7%a8%8b%e5%ba%8f%e7%8c%bf%e4%b9%8b%e8%b7%af/javaweb/jspservlet">jsp/servlet</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li id="menu-item-8"
+                        class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-8"><a
+                            href="https://www.lylinux.org/category/wordpress">wordpress</a></li>
+                    <li id="menu-item-9"
+                        class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-9"><a
+                            href="https://www.lylinux.org/category/%e9%9a%8f%e7%ac%94%e6%9d%82%e8%b0%88">随笔杂谈</a></li>
+                    <li id="menu-item-603"
+                        class="menu-item menu-item-type-post_type menu-item-object-page menu-item-603"><a
+                            href="https://www.lylinux.org/link">友情链接</a></li>
+                    <li id="menu-item-604"
+                        class="menu-item menu-item-type-post_type menu-item-object-page menu-item-604"><a
+                            href="https://www.lylinux.org/%e7%95%99%e8%a8%80%e6%9d%bf">留言板</a></li>
+                    <li id="menu-item-605"
+                        class="menu-item menu-item-type-post_type menu-item-object-page menu-item-605"><a
+                            href="https://www.lylinux.org/%e5%85%b3%e4%ba%8e">关于</a></li>
+                </ul>
+            </div>
+        </nav><!-- #site-navigation -->
 
-<div class="container">
-
-    <div class="blog-header">
-        <h1 class="blog-title">
-            <a href="{% url 'blog:index' %}">
-                {{ SITE_NAME }}
-            </a>
-        </h1>
-        <p class="lead blog-description">
-            {{ SITE_DESCRIPTION }}
-        </p>
-    </div>
+    </header><!-- #masthead -->
+<div id="main" class="wrapper">
     {% block content %}
     {% endblock %}
-    {% comment %}<div class="row">
 
-        <div class="col-sm-8 blog-main">
+    {% block sidebar %}
+    {% endblock %}
 
-            <div class="blog-post">
-                <h2 class="blog-post-title">Sample blog post</h2>
-                <p class="blog-post-meta">January 1, 2014 by <a href="#">Mark</a></p>
+</div><!-- #main .wrapper -->
+    <footer id="colophon" role="contentinfo">
+        <div class="site-info">
+            Copyright&copy;&nbsp;2016&nbsp;
+            <a href="http://www.lylinux.org" target="blank">逝去日子的博客</a>
+            &nbsp;|&nbsp;
+            <a href="http://www.lylinux.org/sitemap.xml" title="SiteMap">
+                SiteMap
+            </a>
+            &nbsp;|&nbsp;
+            <a href="http://www.lylinux.org/sitemap.html" title="SiteMap">
+                Baidu SiteMap
+            </a>
+            |&nbsp; Hosting On&nbsp;
+            <a href="https://www.linode.com/?r=b0d38794d05ef8816b357a929106e89b7c6452f9" target="blank" rel="nofollow">Linode</a>
+            |&nbsp;
+            <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+            document.write(unescape("%3Cspan id='cnzz_stat_icon_3797658'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s19.cnzz.com/stat.php%3Fid%3D3797658%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
 
-                <p>This blog post shows a few different types of content that's supported and styled with Bootstrap.
-                    Basic typography, images, and code are all supported.</p>
-                <hr>
-                <p>Cum sociis natoque penatibus et magnis <a href="#">dis parturient montes</a>, nascetur ridiculus mus.
-                    Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Sed posuere
-                    consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum.</p>
-                <blockquote>
-                    <p>Curabitur blandit tempus porttitor. <strong>Nullam quis risus eget urna mollis</strong> ornare
-                        vel eu leo. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                </blockquote>
-                <p>Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet
-                    fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
-                <h2>Heading</h2>
-                <p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo
-                    luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Morbi leo risus, porta ac
-                    consectetur ac, vestibulum at eros.</p>
-                <h3>Sub-heading</h3>
-                <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-                <pre><code>Example code block</code></pre>
-                <p>Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce
-                    dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa.</p>
-                <h3>Sub-heading</h3>
-                <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean lacinia
-                    bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus,
-                    tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet
-                    risus.</p>
-                <ul>
-                    <li>Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</li>
-                    <li>Donec id elit non mi porta gravida at eget metus.</li>
-                    <li>Nulla vitae elit libero, a pharetra augue.</li>
-                </ul>
-                <p>Donec ullamcorper nulla non metus auctor fringilla. Nulla vitae elit libero, a pharetra augue.</p>
-                <ol>
-                    <li>Vestibulum id ligula porta felis euismod semper.</li>
-                    <li>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</li>
-                    <li>Maecenas sed diam eget risus varius blandit sit amet non magna.</li>
-                </ol>
-                <p>Cras mattis consectetur purus sit amet fermentum. Sed posuere consectetur est at lobortis.</p>
-            </div><!-- /.blog-post -->
+        </div>
+    </footer><!-- #colophon -->
+</div><!-- #page -->
 
-            <div class="blog-post">
-                <h2 class="blog-post-title">Another blog post</h2>
-                <p class="blog-post-meta">December 23, 2013 by <a href="#">Jacob</a></p>
+<div id="wp-auto-top">
+    <div id="wp-auto-top-top"></div>
+    <div id="wp-auto-top-bottom"></div>
+</div>
+<script> var commentPositionId = '.ds-comments:last';
+var wpAutoTopSpeed = 1;</script>
+<style>
+    #wp-auto-top {
+        position: fixed;
+        top: 45%;
+        right: 50%;
+        display: block;
+        margin-right: -540px;
+        z-index: 9999;
+    }
 
-                <p>Cum sociis natoque penatibus et magnis <a href="#">dis parturient montes</a>, nascetur ridiculus mus.
-                    Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Sed posuere
-                    consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum.</p>
-                <blockquote>
-                    <p>Curabitur blandit tempus porttitor. <strong>Nullam quis risus eget urna mollis</strong> ornare
-                        vel eu leo. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-                </blockquote>
-                <p>Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet
-                    fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
-                <p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo
-                    luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Morbi leo risus, porta ac
-                    consectetur ac, vestibulum at eros.</p>
-            </div><!-- /.blog-post -->
+    #wp-auto-top-top, #wp-auto-top-comment, #wp-auto-top-bottom {
+        background: url(https://www.lylinux.org/wp-content/plugins/wp-auto-top/img/1.png) no-repeat;
+        position: relative;
+        cursor: pointer;
+        height: 25px;
+        width: 29px;
+        margin: 10px 0 0;
+    }
 
-            <div class="blog-post">
-                <h2 class="blog-post-title">New feature</h2>
-                <p class="blog-post-meta">December 14, 2013 by <a href="#">Chris</a></p>
+    #wp-auto-top-comment {
+        background-position: left -30px;
+        height: 32px;
+    }
 
-                <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean lacinia
-                    bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus,
-                    tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet
-                    risus.</p>
-                <ul>
-                    <li>Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</li>
-                    <li>Donec id elit non mi porta gravida at eget metus.</li>
-                    <li>Nulla vitae elit libero, a pharetra augue.</li>
-                </ul>
-                <p>Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet
-                    fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
-                <p>Donec ullamcorper nulla non metus auctor fringilla. Nulla vitae elit libero, a pharetra augue.</p>
-            </div><!-- /.blog-post -->
+    #wp-auto-top-bottom {
+        background-position: left -68px;
+    }
 
-            <nav>
-                <ul class="pager">
-                    <li><a href="#">Previous</a></li>
-                    <li><a href="#">Next</a></li>
-                </ul>
-            </nav>
+    #wp-auto-top-comment:hover {
+        background-position: right -30px;
+    }
 
-        </div><!-- /.blog-main -->
+    #wp-auto-top-top:hover {
+        background-position: right 0;
+    }
 
-        <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
-            <div class="sidebar-module sidebar-module-inset">
-                <h4>About</h4>
-                <p>Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet
-                    fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
-            </div>
-            <div class="sidebar-module">
-                <h4>Archives</h4>
-                <ol class="list-unstyled">
-                    <li><a href="#">March 2014</a></li>
-                    <li><a href="#">February 2014</a></li>
-                    <li><a href="#">January 2014</a></li>
-                    <li><a href="#">December 2013</a></li>
-                    <li><a href="#">November 2013</a></li>
-                    <li><a href="#">October 2013</a></li>
-                    <li><a href="#">September 2013</a></li>
-                    <li><a href="#">August 2013</a></li>
-                    <li><a href="#">July 2013</a></li>
-                    <li><a href="#">June 2013</a></li>
-                    <li><a href="#">May 2013</a></li>
-                    <li><a href="#">April 2013</a></li>
-                </ol>
-            </div>
-            <div class="sidebar-module">
-                <h4>Elsewhere</h4>
-                <ol class="list-unstyled">
-                    <li><a href="#">GitHub</a></li>
-                    <li><a href="#">Twitter</a></li>
-                    <li><a href="#">Facebook</a></li>
-                </ol>
-            </div>
-        </div><!-- /.blog-sidebar -->
+    #wp-auto-top-bottom:hover {
+        background-position: right -68px;
+    }
+</style>
+<div id="su-footer-links" style="text-align: center;"></div>
+<link rel='stylesheet' id='wp-markdown-prettify-css'
+      href='https://www.lylinux.org/wp-content/plugins/wp-markdown/css/prettify.css?ver=1.5.1' type='text/css'
+      media='all'/>
+<script type='text/javascript'>
+    /* <![CDATA[ */
+    var JQLBSettings = {
+        "fitToScreen": "1",
+        "resizeSpeed": "400",
+        "displayDownloadLink": "0",
+        "navbarOnTop": "0",
+        "loopImages": "",
+        "resizeCenter": "",
+        "marginSize": "0",
+        "linkTarget": "_self",
+        "help": "",
+        "prevLinkTitle": "previous image",
+        "nextLinkTitle": "next image",
+        "prevLinkText": "\u00ab Previous",
+        "nextLinkText": "Next \u00bb",
+        "closeTitle": "close image gallery",
+        "image": "Image ",
+        "of": " of ",
+        "download": "Download",
+        "jqlb_overlay_opacity": "80",
+        "jqlb_overlay_color": "#000000",
+        "jqlb_overlay_close": "1",
+        "jqlb_border_width": "10",
+        "jqlb_border_color": "#ffffff",
+        "jqlb_border_radius": "0",
+        "jqlb_image_info_background_transparency": "100",
+        "jqlb_image_info_bg_color": "#ffffff",
+        "jqlb_image_info_text_color": "#000000",
+        "jqlb_image_info_text_fontsize": "10",
+        "jqlb_show_text_for_image": "1",
+        "jqlb_next_image_title": "next image",
+        "jqlb_previous_image_title": "previous image",
+        "jqlb_next_button_image": "https:\/\/www.lylinux.org\/wp-content\/plugins\/wp-lightbox-2\/styles\/images\/next.gif",
+        "jqlb_previous_button_image": "https:\/\/www.lylinux.org\/wp-content\/plugins\/wp-lightbox-2\/styles\/images\/prev.gif",
+        "jqlb_maximum_width": "",
+        "jqlb_maximum_height": "",
+        "jqlb_show_close_button": "1",
+        "jqlb_close_image_title": "close image gallery",
+        "jqlb_close_image_max_heght": "22",
+        "jqlb_image_for_close_lightbox": "https:\/\/www.lylinux.org\/wp-content\/plugins\/wp-lightbox-2\/styles\/images\/closelabel.gif",
+        "jqlb_keyboard_navigation": "1",
+        "jqlb_popup_size_fix": "0"
+    };
+    /* ]]> */
+</script>
 
-    </div><!-- /.row -->{% endcomment %}
+<script type='text/javascript'
+        src='https://www.lylinux.org/wp-content/themes/twentytwelve/js/navigation.js?ver=20140711'
+        defer='defer'></script>
 
-</div><!-- /.container -->
-
-<footer class="blog-footer">
-    <p>Blog template built for <a href="http://getbootstrap.com">Bootstrap</a> by <a
-            href="https://twitter.com/mdo">@mdo</a>.</p>
-    <p>
-        <a href="#">Back to top</a>
-    </p>
-</footer>
-
-
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="{% static 'blog/js/jquery.min.js' %}"></script>
-
-<script>window.jQuery || document.write('<script src="{% static 'assets/js/vendor/jquery.min.js' %}"><\/script>')</script>
-<link href="{% static 'blog/css/blog.css' %}" rel="stylesheet">
-<script src="{% static 'blog/js/bootstrap.min.js' %}"></script>
-
-<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<script src="{% static 'assets/js/ie10-viewport-bug-workaround.js' %}"></script>
 </body>
-</html>
 
+</html>
