@@ -30,6 +30,13 @@
       <script src="{% static 'assets/js/html5shiv.min.js' %}"></script>
       <script src="{% static 'assets/js/respond.min.js' %}"></script>
     <![endif]-->
+    {% comment %}<link href="http://apps.bdimg.com/libs/highlight.js/9.1.0/styles/github.min.css" rel="stylesheet">
+    <script src="http://apps.bdimg.com/libs/highlight.js/9.1.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>{% endcomment %}
+
+    <link href="{% static 'highlight/styles/github.css' %}" rel="stylesheet">
+    <script src="{% static 'highlight/highlight.pack.js' %}" type="application/javascript"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
 </head>
 
 <body>

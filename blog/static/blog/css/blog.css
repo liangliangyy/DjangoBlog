@@ -142,6 +142,9 @@ h6, .h6 {
 .blog-post {
     margin-bottom: 60px;
 }
+.blog-post img {
+    max-width: 100%;
+}
 
 .blog-post-title {
     margin-bottom: 5px;

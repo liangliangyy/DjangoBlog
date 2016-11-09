@@ -15,11 +15,12 @@
 
 from django import template
 from django.conf import settings
-import markdown
+import markdown2
 from django.template.defaultfilters import stringfilter
 from django.utils.safestring import mark_safe
 import random
 from blog.models import Article, Category, Tag
+from django.utils.encoding import force_text
 
 register = template.Library()
 
@@ -45,12 +46,16 @@ def datetimeformat(data):
 @register.filter(is_safe=True)
 @stringfilter
 def custom_markdown(content):
+    return mark_safe(markdown2.markdown(force_text(content),
+                                        extras=["fenced-code-blocks", "cuddled-lists", "metadata", "tables",
+                                                "spoiler"]))
+    """
     return mark_safe(markdown.markdown(content,
                                        extensions=
                                        ['markdown.extensions.fenced_code',
                                         'markdown.extensions.codehilite'],
                                        safe_mode=True, enable_attributes=False))
-
+    """
 
 @register.inclusion_tag('blog/breadcrumb.html')
 def parsecategoryname(article):
