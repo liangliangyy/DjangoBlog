@@ -15,18 +15,9 @@
             </div>
         </div><!-- .comments-link -->
         <br/>
-        <style type="text/css">
-            .breadcrumb
-            div {
-                display: inline;
-                font-size: 13px;
-                margin-left: -3px;
-            }
-
-
-        </style>
-
-
+        {% if not isindex %}
+            {% load_breadcrumb article %}
+        {% endif %}
     </header><!-- .entry-header -->
 
     <div class="entry-content">
@@ -39,5 +30,5 @@
         {% endif %}
 
     </div><!-- .entry-content -->
-    {% loadarticlemetas article %}
+    {% load_article_metas article %}
 </article><!-- #post -->

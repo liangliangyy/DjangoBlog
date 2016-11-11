@@ -6,21 +6,37 @@
         <div id="content" role="main">
             {% load_article_detail article False %}
 
-            <nav id="nav-below" class="navigation" role="navigation">
+            {% comment %}<nav id="nav-below" class="navigation" role="navigation">
                 <h3 class="assistive-text">文章导航</h3>
                 <div class="nav-previous"><a href="https://www.lylinux.org/page/2"><span
                         class="meta-nav">&larr;</span> 早期文章</a></div>
                 <div class="nav-next"></div>
-            </nav><!-- .navigation -->
+            </nav><!-- .navigation -->{% endcomment %}
 
+            <nav class="nav-single">
+                <h3 class="assistive-text">文章导航</h3>
+                {% if next_article %}
 
+                    <span class="nav-previous"><a href="{{ next_article.get_absolute_url }}" rel="prev"><span
+                            class="meta-nav">&larr;</span> {{ next_article.title }}</a></span>
+                {% endif %}
+                {% if prev_article %}
+                    <span class="nav-next"><a href="{{ prev_article.get_absolute_url }}"
+                                              rel="next">{{ prev_article.title }} <span
+                            class="meta-nav">&rarr;</span></a></span>
+                {% endif %}
+            </nav><!-- .nav-single -->
+            {% if article.commentstatus == "o" %}
+                {% load comments_tags %}
+                {% load_post_comment article %}
+            {% endif %}
         </div><!-- #content -->
     </div><!-- #primary -->
 {% endblock %}
 
 
 {% block sidebar %}
-    {% loadsidebartags %}
+    {% load_sidebar %}
 {% endblock %}
 
 

@@ -4,18 +4,23 @@ from django.conf import settings
 
 
 class Article(models.Model):
+    """文章"""
     STATUS_CHOICES = (
         ('d', '草稿'),
         ('p', '发表'),
     )
-
+    COMMENT_STATUS = (
+        ('o', '打开'),
+        ('c', '关闭'),
+    )
     title = models.CharField('标题', max_length=200)
     body = models.TextField('正文')
     created_time = models.DateTimeField('创建时间', auto_now_add=True)
     last_mod_time = models.DateTimeField('修改时间', auto_now=True)
     pub_time = models.DateTimeField('发布时间', blank=True, null=True,
                                     help_text="不指定发布时间则视为草稿，可以指定未来时间，到时将自动发布。")
-    status = models.CharField('文章状态', max_length=1, choices=STATUS_CHOICES)
+    status = models.CharField('文章状态', max_length=1, choices=STATUS_CHOICES, default='o')
+    commentstatus = models.CharField('评论状态', max_length=1, choices=COMMENT_STATUS)
     summary = models.CharField('摘要', max_length=200, blank=True, help_text="可选，若为空将摘取正文的前300个字符。")
     views = models.PositiveIntegerField('浏览量', default=0)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='作者', on_delete=models.CASCADE)
@@ -55,6 +60,7 @@ class Article(models.Model):
 
 
 class Category(models.Model):
+    """文章分类"""
     name = models.CharField('分类名', max_length=30)
     created_time = models.DateTimeField('创建时间', auto_now_add=True)
     last_mod_time = models.DateTimeField('修改时间', auto_now=True)
@@ -73,6 +79,7 @@ class Category(models.Model):
 
 
 class Tag(models.Model):
+    """文章标签"""
     name = models.CharField('标签名', max_length=30)
     created_time = models.DateTimeField('创建时间', auto_now_add=True)
     last_mod_time = models.DateTimeField('修改时间', auto_now=True)
@@ -90,3 +97,20 @@ class Tag(models.Model):
         ordering = ['name']
         verbose_name = "标签"
         verbose_name_plural = verbose_name
+
+
+class Links(models.Model):
+    """友情链接"""
+    name = models.CharField('链接名称', max_length=30)
+    link = models.URLField('链接地址')
+    sequence = models.IntegerField('排序', unique=True)
+    created_time = models.DateTimeField('创建时间', auto_now_add=True)
+    last_mod_time = models.DateTimeField('修改时间', auto_now=True)
+
+    class Meta:
+        ordering = ['sequence']
+        verbose_name = '友情链接'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.name

@@ -19,7 +19,7 @@ import markdown2
 from django.template.defaultfilters import stringfilter
 from django.utils.safestring import mark_safe
 import random
-from blog.models import Article, Category, Tag
+from blog.models import Article, Category, Tag, Links
 from django.utils.encoding import force_text
 
 register = template.Library()
@@ -58,18 +58,21 @@ def custom_markdown(content):
     """
 
 
-@register.inclusion_tag('blog/breadcrumb.html')
-def parsecategoryname(article):
+@register.inclusion_tag('blog/tags/breadcrumb.html')
+def load_breadcrumb(article):
     names = article.get_category_tree()
 
     names.append((settings.SITE_NAME, 'http://127.0.0.1:8000'))
     names = names[::-1]
-    print(names)
-    return {'names': names}
+
+    return {
+        'names': names,
+        'title': article.title
+    }
 
 
-@register.inclusion_tag('blog/articletaglist.html')
-def loadarticletags(article):
+@register.inclusion_tag('blog/tags/articletaglist.html')
+def load_articletags(article):
     tags = article.tags.all()
     tags_list = []
     for tag in tags:
@@ -83,24 +86,25 @@ def loadarticletags(article):
     }
 
 
-@register.inclusion_tag('blog/sidebar.html')
-def loadsidebartags():
+@register.inclusion_tag('blog/tags/sidebar.html')
+def load_sidebar():
     recent_articles = Article.objects.filter(status='p')[:settings.SIDEBAR_ARTICLE_COUNT]
     sidebar_categorys = Category.objects.all()
     most_read_articles = Article.objects.filter(status='p').order_by('-views')[:settings.SIDEBAR_ARTICLE_COUNT]
     dates = Article.objects.datetimes('created_time', 'month', order='DESC')
-    print(dates)
+    links = Links.objects.all()
     # tags=
     return {
         'recent_articles': recent_articles,
         'sidebar_categorys': sidebar_categorys,
         'most_read_articles': most_read_articles,
-        'article_dates': dates
+        'article_dates': dates,
+        'sidabar_links': links
     }
 
 
 @register.inclusion_tag('blog/tags/article_meta_info.html')
-def loadarticlemetas(article):
+def load_article_metas(article):
     return {
         'article': article
     }

@@ -39,14 +39,14 @@
 
     <script type='text/javascript' src='{% static 'blog/js/jquery.js' %}' defer='defer'></script>
     <script type='text/javascript' src='{% static 'blog/js/jquery-migrate.min.js' %}' defer='defer'></script>
-    <style type="text/css" id="syntaxhighlighteranchor"></style>
+
 </head>
 
 <body class="home blog custom-font-enabled">
 <div id="page" class="hfeed site">
     <header id="masthead" class="site-header" role="banner">
         <hgroup>
-            <h1 class="site-title"><a href="https://www.lylinux.org/" title="逝去日子的博客" rel="home">逝去日子的博客</a></h1>
+            <h1 class="site-title"><a href="{{ SITE_BASE_URL }}" title="{{ SITE_NAME }}" rel="home">{{ SITE_NAME }}</a></h1>
             <h2 class="site-description">大巧无工,重剑无锋</h2>
         </hgroup>
 
@@ -145,101 +145,12 @@
 </div>
 <script> var commentPositionId = '.ds-comments:last';
 var wpAutoTopSpeed = 1;</script>
-<style>
-    #wp-auto-top {
-        position: fixed;
-        top: 45%;
-        right: 50%;
-        display: block;
-        margin-right: -540px;
-        z-index: 9999;
-    }
 
-    #wp-auto-top-top, #wp-auto-top-comment, #wp-auto-top-bottom {
-        background: url(https://www.lylinux.org/wp-content/plugins/wp-auto-top/img/1.png) no-repeat;
-        position: relative;
-        cursor: pointer;
-        height: 25px;
-        width: 29px;
-        margin: 10px 0 0;
-    }
-
-    #wp-auto-top-comment {
-        background-position: left -30px;
-        height: 32px;
-    }
-
-    #wp-auto-top-bottom {
-        background-position: left -68px;
-    }
-
-    #wp-auto-top-comment:hover {
-        background-position: right -30px;
-    }
-
-    #wp-auto-top-top:hover {
-        background-position: right 0;
-    }
-
-    #wp-auto-top-bottom:hover {
-        background-position: right -68px;
-    }
-</style>
 <div id="su-footer-links" style="text-align: center;"></div>
-<link rel='stylesheet' id='wp-markdown-prettify-css'
-      href='https://www.lylinux.org/wp-content/plugins/wp-markdown/css/prettify.css?ver=1.5.1' type='text/css'
-      media='all'/>
-<script type='text/javascript'>
-    /* <![CDATA[ */
-    var JQLBSettings = {
-        "fitToScreen": "1",
-        "resizeSpeed": "400",
-        "displayDownloadLink": "0",
-        "navbarOnTop": "0",
-        "loopImages": "",
-        "resizeCenter": "",
-        "marginSize": "0",
-        "linkTarget": "_self",
-        "help": "",
-        "prevLinkTitle": "previous image",
-        "nextLinkTitle": "next image",
-        "prevLinkText": "\u00ab Previous",
-        "nextLinkText": "Next \u00bb",
-        "closeTitle": "close image gallery",
-        "image": "Image ",
-        "of": " of ",
-        "download": "Download",
-        "jqlb_overlay_opacity": "80",
-        "jqlb_overlay_color": "#000000",
-        "jqlb_overlay_close": "1",
-        "jqlb_border_width": "10",
-        "jqlb_border_color": "#ffffff",
-        "jqlb_border_radius": "0",
-        "jqlb_image_info_background_transparency": "100",
-        "jqlb_image_info_bg_color": "#ffffff",
-        "jqlb_image_info_text_color": "#000000",
-        "jqlb_image_info_text_fontsize": "10",
-        "jqlb_show_text_for_image": "1",
-        "jqlb_next_image_title": "next image",
-        "jqlb_previous_image_title": "previous image",
-        "jqlb_next_button_image": "https:\/\/www.lylinux.org\/wp-content\/plugins\/wp-lightbox-2\/styles\/images\/next.gif",
-        "jqlb_previous_button_image": "https:\/\/www.lylinux.org\/wp-content\/plugins\/wp-lightbox-2\/styles\/images\/prev.gif",
-        "jqlb_maximum_width": "",
-        "jqlb_maximum_height": "",
-        "jqlb_show_close_button": "1",
-        "jqlb_close_image_title": "close image gallery",
-        "jqlb_close_image_max_heght": "22",
-        "jqlb_image_for_close_lightbox": "https:\/\/www.lylinux.org\/wp-content\/plugins\/wp-lightbox-2\/styles\/images\/closelabel.gif",
-        "jqlb_keyboard_navigation": "1",
-        "jqlb_popup_size_fix": "0"
-    };
-    /* ]]> */
-</script>
 
-<script type='text/javascript'
-        src='https://www.lylinux.org/wp-content/themes/twentytwelve/js/navigation.js?ver=20140711'
-        defer='defer'></script>
-
+<script type="application/javascript" src="{% static 'blog/js/navigation.js' %}" defer="defer"></script>
+<link href="{% static 'highlight/styles/github-gist.css' %}" rel="stylesheet">
+<script type="application/javascript" src="{% static 'highlight/highlight.pack.js' %}"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 </body>
-
 </html>
