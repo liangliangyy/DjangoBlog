@@ -4,6 +4,7 @@ from django.conf import settings
 
 
 class Article(models.Model):
+
     """文章"""
     STATUS_CHOICES = (
         ('d', '草稿'),
@@ -20,7 +21,7 @@ class Article(models.Model):
     pub_time = models.DateTimeField('发布时间', blank=True, null=True,
                                     help_text="不指定发布时间则视为草稿，可以指定未来时间，到时将自动发布。")
     status = models.CharField('文章状态', max_length=1, choices=STATUS_CHOICES, default='o')
-    commentstatus = models.CharField('评论状态', max_length=1, choices=COMMENT_STATUS)
+    comment_status = models.CharField('评论状态', max_length=1, choices=COMMENT_STATUS)
     summary = models.CharField('摘要', max_length=200, blank=True, help_text="可选，若为空将摘取正文的前300个字符。")
     views = models.PositiveIntegerField('浏览量', default=0)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='作者', on_delete=models.CASCADE)

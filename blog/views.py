@@ -3,6 +3,7 @@ from django.shortcuts import render
 # Create your views here.
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
+from django.views.generic import UpdateView
 from django.views.generic.edit import CreateView, FormView
 from django.views.generic.dates import YearArchiveView, MonthArchiveView
 from blog.models import Article, Category, Tag
@@ -11,6 +12,7 @@ import markdown
 from django.template.defaultfilters import stringfilter
 from django.utils.safestring import mark_safe
 from django.core.exceptions import ObjectDoesNotExist
+from comments.forms import CommentForm
 
 
 class ArticleListView(ListView):
@@ -56,12 +58,28 @@ class ArticleDetailView(DetailView):
             except ObjectDoesNotExist:
                 return None
 
+        form = CommentForm()
+        if self.request.user.is_authenticated():
+            user = self.request.user
+            form.fields["email"].initial = user.email
+            form.fields["name"].initial=user.username
+
+        kwargs['form'] = form
         next_article = get_article(articleid + 1)
         prev_article = get_article(articleid - 1)
         kwargs['next_article'] = next_article
         kwargs['prev_article'] = prev_article
 
         return super(ArticleDetailView, self).get_context_data(**kwargs)
+
+    """
+    def post(self, request, *args, **kwargs):
+        form = CommentForm(request.POST)
+
+        if form.is_valid():
+            data = form.cleaned_data
+            pass
+    """
 
 
 class CategoryDetailView(ArticleListView):

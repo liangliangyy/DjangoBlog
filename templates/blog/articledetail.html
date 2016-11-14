@@ -26,9 +26,10 @@
                             class="meta-nav">&rarr;</span></a></span>
                 {% endif %}
             </nav><!-- .nav-single -->
-            {% if article.commentstatus == "o" %}
-                {% load comments_tags %}
-                {% load_post_comment article %}
+            {% if article.comment_status == "o" %}
+                {% comment %}{% load comments_tags %}
+                {% load_post_comment article from %}{% endcomment %}
+                {% include 'comments/tags/post_comment.html' %}
             {% endif %}
         </div><!-- #content -->
     </div><!-- #primary -->
