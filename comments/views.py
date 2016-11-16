@@ -44,4 +44,5 @@ class CommentPostView(FormView):
 
         comment.article = article
         comment.save(True)
-        return HttpResponseRedirect('/')
+
+        return HttpResponseRedirect(article.get_absolute_url())

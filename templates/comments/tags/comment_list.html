@@ -1,0 +1,301 @@
+<section id="comments" class="themeform">
+    {% load blog_tags %}
+
+    <h3 class="heading">{{ comment_count }} 条回复</h3>
+
+    <ul class="comment-tabs group">
+        <li class="active"><a href="#commentlist-container"><i
+                class="fa fa-comments-o"></i>评论<span>{{ comment_count }}</span></a></li>
+        <li class=""><a href="#pinglist-container"><i class="fa fa-share"></i>引用<span>0</span></a></li>
+    </ul>
+    {% if article_comments %}
+        <div id="commentlist-container" class="comment-tab" style="display: block;">
+
+            <ol class="commentlist">
+
+                {% for comment in article_comments %}
+                    <li class="comment even thread-even depth-1 parent" id="comment-{{ comment.pk }}">
+                        <div id="div-comment-{{ comment.pk }}" class="comment-body">
+                            <div class="comment-author vcard">
+                                <img alt=""
+                                     src="{{ comment.author.email|gravatar_url:150 }}"
+                                     srcset="{{ comment.author.email|gravatar_url:150 }}"
+                                     class="avatar avatar-96 photo" height="96" width="96"> <cite class="fn"><a
+                                    href="#" rel="external nofollow"
+                                    class="url">{{ comment.author.username }}</a></cite><span
+                                    class="says">说道：</span></div>
+
+                            <div class="comment-meta commentmetadata"><a
+                                    href="#">
+                                {{ comment.created_time }}</a></div>
+
+                            <p>{{ comment.body }}</p>
+
+                            <div class="reply"><a rel="nofollow" class="comment-reply-link"
+                                                  href="#"
+                                                  onclick="return addComment.moveForm( &quot;div-comment-6&quot;, &quot;6&quot;, &quot;respond&quot;, &quot;12&quot; )"
+                                                  aria-label="回复给DIYgod">回复</a></div>
+                        </div>
+                      {% comment %}  <ul class="children">
+                            <li class="comment byuser comment-author-hellcom bypostauthor odd alt depth-2"
+                                id="comment-7">
+                                <div id="div-comment-7" class="comment-body">
+                                    <div class="comment-author vcard">
+                                        <img alt=""
+                                             src="http://cn.gravatar.com/avatar/f51db6db4fcb66f4cdf10c6189dd20cf?s=96&amp;d=monsterid&amp;r=g"
+                                             srcset="http://cn.gravatar.com/avatar/f51db6db4fcb66f4cdf10c6189dd20cf?s=192&amp;d=monsterid&amp;r=g 2x"
+                                             class="avatar avatar-96 photo" height="96" width="96"> <cite
+                                            class="fn"><a href="http://www.bixiv.com/" rel="external nofollow"
+                                                          class="url">Hellcom</a></cite><span
+                                            class="says">说道：</span></div>
+
+                                    <div class="comment-meta commentmetadata"><a
+                                            href="http://www.bixiv.com/2bps/12#comment-7">
+                                        2016年11月5日 下午9:16</a></div>
+
+                                    <p><a class="comment-reply-chain" rel="nofollow"
+                                          href="#comment-6">@DIYgod</a> 么么哒😘</p>
+
+                                    <div class="reply"><a rel="nofollow" class="comment-reply-link"
+                                                          href="http://www.bixiv.com/2bps/12?replytocom=7#respond"
+                                                          onclick="return addComment.moveForm( &quot;div-comment-7&quot;, &quot;7&quot;, &quot;respond&quot;, &quot;12&quot; )"
+                                                          aria-label="回复给Hellcom">回复</a></div>
+                                </div>
+                            </li><!-- #comment-## -->
+                        </ul><!-- .children -->{% endcomment %}
+                    </li><!-- #comment-## -->
+                {% endfor %}
+               {% comment %} <li class="comment even thread-even depth-1 parent" id="comment-6">
+                    <div id="div-comment-6" class="comment-body">
+                        <div class="comment-author vcard">
+                            <img alt=""
+                                 src="http://cn.gravatar.com/avatar/2c0e7571f32704cc893de555a669865b?s=96&amp;d=monsterid&amp;r=g"
+                                 srcset="http://cn.gravatar.com/avatar/2c0e7571f32704cc893de555a669865b?s=192&amp;d=monsterid&amp;r=g 2x"
+                                 class="avatar avatar-96 photo" height="96" width="96"> <cite class="fn"><a
+                                href="https://www.anotherhome.net" rel="external nofollow"
+                                class="url">DIYgod</a></cite><span
+                                class="says">说道：</span></div>
+
+                        <div class="comment-meta commentmetadata"><a
+                                href="http://www.bixiv.com/2bps/12#comment-6">
+                            2016年11月5日 下午9:02</a></div>
+
+                        <p>棒！</p>
+
+                        <div class="reply"><a rel="nofollow" class="comment-reply-link"
+                                              href="http://www.bixiv.com/2bps/12?replytocom=6#respond"
+                                              onclick="return addComment.moveForm( &quot;div-comment-6&quot;, &quot;6&quot;, &quot;respond&quot;, &quot;12&quot; )"
+                                              aria-label="回复给DIYgod">回复</a></div>
+                    </div>
+                    <ul class="children">
+                        <li class="comment byuser comment-author-hellcom bypostauthor odd alt depth-2"
+                            id="comment-7">
+                            <div id="div-comment-7" class="comment-body">
+                                <div class="comment-author vcard">
+                                    <img alt=""
+                                         src="http://cn.gravatar.com/avatar/f51db6db4fcb66f4cdf10c6189dd20cf?s=96&amp;d=monsterid&amp;r=g"
+                                         srcset="http://cn.gravatar.com/avatar/f51db6db4fcb66f4cdf10c6189dd20cf?s=192&amp;d=monsterid&amp;r=g 2x"
+                                         class="avatar avatar-96 photo" height="96" width="96"> <cite
+                                        class="fn"><a href="http://www.bixiv.com/" rel="external nofollow"
+                                                      class="url">Hellcom</a></cite><span
+                                        class="says">说道：</span></div>
+
+                                <div class="comment-meta commentmetadata"><a
+                                        href="http://www.bixiv.com/2bps/12#comment-7">
+                                    2016年11月5日 下午9:16</a></div>
+
+                                <p><a class="comment-reply-chain" rel="nofollow"
+                                      href="#comment-6">@DIYgod</a> 么么哒😘</p>
+
+                                <div class="reply"><a rel="nofollow" class="comment-reply-link"
+                                                      href="http://www.bixiv.com/2bps/12?replytocom=7#respond"
+                                                      onclick="return addComment.moveForm( &quot;div-comment-7&quot;, &quot;7&quot;, &quot;respond&quot;, &quot;12&quot; )"
+                                                      aria-label="回复给Hellcom">回复</a></div>
+                            </div>
+                        </li><!-- #comment-## -->
+                    </ul><!-- .children -->
+                </li><!-- #comment-## -->
+
+
+                <li class="comment even thread-odd thread-alt depth-1 parent" id="comment-24">
+                    <div id="div-comment-24" class="comment-body">
+                        <div class="comment-author vcard">
+                            <img alt=""
+                                 src="http://cn.gravatar.com/avatar/f21a032d4ff906c4d7ed49670229566f?s=96&amp;d=monsterid&amp;r=g"
+                                 srcset="http://cn.gravatar.com/avatar/f21a032d4ff906c4d7ed49670229566f?s=192&amp;d=monsterid&amp;r=g 2x"
+                                 class="avatar avatar-96 photo" height="96" width="96"> <cite class="fn"><a
+                                href="http://blog.youranxz.top" rel="external nofollow"
+                                class="url">悠然</a></cite><span class="says">说道：</span></div>
+
+                        <div class="comment-meta commentmetadata"><a
+                                href="http://www.bixiv.com/2bps/12#comment-24">
+                            2016年11月6日 上午12:44</a></div>
+
+                        <p>大…大触？！</p>
+
+                        <div class="reply"><a rel="nofollow" class="comment-reply-link"
+                                              href="http://www.bixiv.com/2bps/12?replytocom=24#respond"
+                                              onclick="return addComment.moveForm( &quot;div-comment-24&quot;, &quot;24&quot;, &quot;respond&quot;, &quot;12&quot; )"
+                                              aria-label="回复给悠然">回复</a></div>
+                    </div>
+                    <ul class="children">
+                        <li class="comment byuser comment-author-hellcom bypostauthor odd alt depth-2"
+                            id="comment-29">
+                            <div id="div-comment-29" class="comment-body">
+                                <div class="comment-author vcard">
+                                    <img alt=""
+                                         src="http://cn.gravatar.com/avatar/f51db6db4fcb66f4cdf10c6189dd20cf?s=96&amp;d=monsterid&amp;r=g"
+                                         srcset="http://cn.gravatar.com/avatar/f51db6db4fcb66f4cdf10c6189dd20cf?s=192&amp;d=monsterid&amp;r=g 2x"
+                                         class="avatar avatar-96 photo" height="96" width="96"> <cite
+                                        class="fn"><a href="http://www.bixiv.com/" rel="external nofollow"
+                                                      class="url">Hellcom</a></cite><span
+                                        class="says">说道：</span></div>
+
+                                <div class="comment-meta commentmetadata"><a
+                                        href="http://www.bixiv.com/2bps/12#comment-29">
+                                    2016年11月6日 下午12:46</a></div>
+
+                                <p><a class="comment-reply-chain" rel="nofollow" href="#comment-24">@悠然</a>
+                                    刚学，这是临摹的</p>
+
+                                <div class="reply"><a rel="nofollow" class="comment-reply-link"
+                                                      href="http://www.bixiv.com/2bps/12?replytocom=29#respond"
+                                                      onclick="return addComment.moveForm( &quot;div-comment-29&quot;, &quot;29&quot;, &quot;respond&quot;, &quot;12&quot; )"
+                                                      aria-label="回复给Hellcom">回复</a></div>
+                            </div>
+                        </li><!-- #comment-## -->
+                    </ul><!-- .children -->
+                </li><!-- #comment-## -->
+                <li class="comment even thread-even depth-1 parent" id="comment-30">
+                    <div id="div-comment-30" class="comment-body">
+                        <div class="comment-author vcard">
+                            <img alt=""
+                                 src="http://cn.gravatar.com/avatar/9805e238b5d06e07ec0a6fe6db3dd863?s=96&amp;d=monsterid&amp;r=g"
+                                 srcset="http://cn.gravatar.com/avatar/9805e238b5d06e07ec0a6fe6db3dd863?s=192&amp;d=monsterid&amp;r=g 2x"
+                                 class="avatar avatar-96 photo" height="96" width="96"> <cite class="fn"><a
+                                href="https://www.meroco.net/" rel="external nofollow"
+                                class="url">みすず</a></cite><span class="says">说道：</span></div>
+
+                        <div class="comment-meta commentmetadata"><a
+                                href="http://www.bixiv.com/2bps/12#comment-30">
+                            2016年11月8日 上午11:59</a></div>
+
+                        <p>第一张吗，线条还在抖。顺便交换友链吗？</p>
+
+                        <div class="reply"><a rel="nofollow" class="comment-reply-link"
+                                              href="http://www.bixiv.com/2bps/12?replytocom=30#respond"
+                                              onclick="return addComment.moveForm( &quot;div-comment-30&quot;, &quot;30&quot;, &quot;respond&quot;, &quot;12&quot; )"
+                                              aria-label="回复给みすず">回复</a></div>
+                    </div>
+                    <ul class="children">
+                        <li class="comment byuser comment-author-hellcom bypostauthor odd alt depth-2 parent"
+                            id="comment-31">
+                            <div id="div-comment-31" class="comment-body">
+                                <div class="comment-author vcard">
+                                    <img alt=""
+                                         src="http://cn.gravatar.com/avatar/f51db6db4fcb66f4cdf10c6189dd20cf?s=96&amp;d=monsterid&amp;r=g"
+                                         srcset="http://cn.gravatar.com/avatar/f51db6db4fcb66f4cdf10c6189dd20cf?s=192&amp;d=monsterid&amp;r=g 2x"
+                                         class="avatar avatar-96 photo" height="96" width="96"> <cite
+                                        class="fn"><a href="http://www.bixiv.com/" rel="external nofollow"
+                                                      class="url">Hellcom</a></cite><span
+                                        class="says">说道：</span></div>
+
+                                <div class="comment-meta commentmetadata"><a
+                                        href="http://www.bixiv.com/2bps/12#comment-31">
+                                    2016年11月8日 下午10:34</a></div>
+
+                                <p><a class="comment-reply-chain" rel="nofollow" href="#comment-30">@みすず</a>
+                                    &gt;_&lt; 第二张，笔还没用惯。你的网站打不开啊
+                                </p>
+
+                                <div class="reply"><a rel="nofollow" class="comment-reply-link"
+                                                      href="http://www.bixiv.com/2bps/12?replytocom=31#respond"
+                                                      onclick="return addComment.moveForm( &quot;div-comment-31&quot;, &quot;31&quot;, &quot;respond&quot;, &quot;12&quot; )"
+                                                      aria-label="回复给Hellcom">回复</a></div>
+                            </div>
+                        </li><!-- #comment-## -->
+                        <li class="comment even depth-2 parent" id="comment-32">
+                            <div id="div-comment-32" class="comment-body">
+                                <div class="comment-author vcard">
+                                    <img alt=""
+                                         src="http://cn.gravatar.com/avatar/9805e238b5d06e07ec0a6fe6db3dd863?s=96&amp;d=monsterid&amp;r=g"
+                                         srcset="http://cn.gravatar.com/avatar/9805e238b5d06e07ec0a6fe6db3dd863?s=192&amp;d=monsterid&amp;r=g 2x"
+                                         class="avatar avatar-96 photo" height="96" width="96"> <cite
+                                        class="fn"><a href="https://meroco.net/" rel="external nofollow"
+                                                      class="url">みすず</a></cite><span
+                                        class="says">说道：</span></div>
+
+                                <div class="comment-meta commentmetadata"><a
+                                        href="http://www.bixiv.com/2bps/12#comment-32">
+                                    2016年11月9日 上午3:31</a></div>
+
+                                <p><a class="comment-reply-chain" rel="nofollow"
+                                      href="#comment-31">@Hellcom</a> 看了下是 CDN 的锅，现在可以啦~其实就是介绍用的跳转页。</p>
+
+                                <div class="reply"><a rel="nofollow" class="comment-reply-link"
+                                                      href="http://www.bixiv.com/2bps/12?replytocom=32#respond"
+                                                      onclick="return addComment.moveForm( &quot;div-comment-32&quot;, &quot;32&quot;, &quot;respond&quot;, &quot;12&quot; )"
+                                                      aria-label="回复给みすず">回复</a></div>
+                            </div>
+                        </li><!-- #comment-## -->
+                        <li class="comment byuser comment-author-hellcom bypostauthor odd alt depth-2 parent"
+                            id="comment-33">
+                            <div id="div-comment-33" class="comment-body">
+                                <div class="comment-author vcard">
+                                    <img alt=""
+                                         src="http://cn.gravatar.com/avatar/f51db6db4fcb66f4cdf10c6189dd20cf?s=96&amp;d=monsterid&amp;r=g"
+                                         srcset="http://cn.gravatar.com/avatar/f51db6db4fcb66f4cdf10c6189dd20cf?s=192&amp;d=monsterid&amp;r=g 2x"
+                                         class="avatar avatar-96 photo" height="96" width="96"> <cite
+                                        class="fn"><a href="http://www.bixiv.com/" rel="external nofollow"
+                                                      class="url">Hellcom</a></cite><span
+                                        class="says">说道：</span></div>
+
+                                <div class="comment-meta commentmetadata"><a
+                                        href="http://www.bixiv.com/2bps/12#comment-33">
+                                    2016年11月9日 下午9:19</a></div>
+
+                                <p><a class="comment-reply-chain" rel="nofollow" href="#comment-32">@みすず</a>
+                                    已加，加的是你博客的链接</p>
+
+                                <div class="reply"><a rel="nofollow" class="comment-reply-link"
+                                                      href="http://www.bixiv.com/2bps/12?replytocom=33#respond"
+                                                      onclick="return addComment.moveForm( &quot;div-comment-33&quot;, &quot;33&quot;, &quot;respond&quot;, &quot;12&quot; )"
+                                                      aria-label="回复给Hellcom">回复</a></div>
+                            </div>
+                        </li><!-- #comment-## -->
+                        <li class="comment even depth-2" id="comment-34">
+                            <div id="div-comment-34" class="comment-body">
+                                <div class="comment-author vcard">
+                                    <img alt=""
+                                         src="http://cn.gravatar.com/avatar/9805e238b5d06e07ec0a6fe6db3dd863?s=96&amp;d=monsterid&amp;r=g"
+                                         srcset="http://cn.gravatar.com/avatar/9805e238b5d06e07ec0a6fe6db3dd863?s=192&amp;d=monsterid&amp;r=g 2x"
+                                         class="avatar avatar-96 photo" height="96" width="96"> <cite
+                                        class="fn"><a href="https://blog.misuzu.moe/"
+                                                      rel="external nofollow"
+                                                      class="url">みすず</a></cite><span
+                                        class="says">说道：</span></div>
+
+                                <div class="comment-meta commentmetadata"><a
+                                        href="http://www.bixiv.com/2bps/12#comment-34">
+                                    2016年11月10日 上午12:54</a></div>
+
+                                <p><a class="comment-reply-chain" rel="nofollow"
+                                      href="#comment-33">@Hellcom</a> 第一个友链get~<br>
+                                    放在外页，内页还没装修好。</p>
+
+                                <div class="reply"><a rel="nofollow" class="comment-reply-link"
+                                                      href="http://www.bixiv.com/2bps/12?replytocom=34#respond"
+                                                      onclick="return addComment.moveForm( &quot;div-comment-34&quot;, &quot;34&quot;, &quot;respond&quot;, &quot;12&quot; )"
+                                                      aria-label="回复给みすず">回复</a></div>
+                            </div>
+                        </li><!-- #comment-## -->
+                    </ul><!-- .children -->
+                </li><!-- #comment-## -->
+{% endcomment %}
+            </ol><!--/.commentlist-->
+
+
+        </div>
+
+    {% endif %}
+</section>

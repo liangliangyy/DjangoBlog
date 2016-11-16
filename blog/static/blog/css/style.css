@@ -1997,3 +1997,356 @@ div {
 #wp-auto-top-bottom:hover {
     background-position: right -68px;
 }
+
+/* ------------------------------------------------------------------------- *
+ *  Comments
+/* ------------------------------------------------------------------------- */
+#comments {
+    margin-top: 20px;
+}
+
+#pinglist-container {
+    display: none;
+}
+
+.comment-tabs {
+    margin-bottom: 20px;
+    font-size: 15px;
+    border-bottom: 2px solid #e5e5e5;
+}
+
+.comment-tabs li {
+    float: left;
+    margin-bottom: -2px;
+}
+
+.comment-tabs li a {
+    display: block;
+    padding: 0 10px 10px;
+    font-weight: 600;
+    color: #aaa;
+    border-bottom: 2px solid #e5e5e5;
+}
+
+.comment-tabs li a:hover {
+    color: #444;
+    border-color: #ccc;
+}
+
+.comment-tabs li span {
+    margin-left: 8px;
+    padding: 0 6px;
+    border-radius: 4px;
+    background-color: #e5e5e5;
+}
+
+.comment-tabs li i {
+    margin-right: 6px;
+}
+
+.comment-tabs li.active a {
+    color: #e8554e;
+    border-bottom-color: #e8554e;
+}
+
+.commentlist, .pinglist {
+    margin-bottom: 20px;
+}
+
+.commentlist li, .pinglist li {
+    padding-left: 60px;
+    font-size: 14px;
+    line-height: 22px;
+    font-weight: 400;
+}
+
+.commentlist .comment-body, .pinglist li {
+    position: relative;
+    padding-bottom: 20px;
+    clear: both;
+}
+
+.commentlist .comment-author,
+.commentlist .comment-meta,
+.commentlist .comment-awaiting-moderation {
+    float: left;
+    display: block;
+    font-size: 13px;
+    line-height: 22px;
+}
+
+.commentlist .comment-author {
+    margin-right: 6px;
+}
+
+.commentlist .fn, .pinglist .ping-link {
+    color: #444;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 600;
+}
+
+.commentlist .says {
+    display: none;
+}
+
+.commentlist .avatar {
+    position: absolute;
+    left: -60px;
+    top: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 100%;
+}
+
+.commentlist .comment-meta:before, .pinglist .ping-meta:before {
+    content: "\f017";
+    vertical-align: 4%;
+    margin-right: 3px;
+    font-size: 10px;
+    font-family: FontAwesome;
+    color: #ccc;
+}
+
+.commentlist .comment-meta a, .pinglist .ping-meta {
+    color: #aaa;
+}
+
+.commentlist .reply {
+    font-size: 13px;
+    line-height: 16px;
+}
+
+.commentlist .reply a,
+.commentlist .comment-reply-chain {
+    color: #aaa;
+}
+
+.commentlist .reply a:hover,
+.commentlist .comment-reply-chain:hover {
+    color: #444;
+}
+
+.comment-awaiting-moderation {
+    color: #e8554e;
+    font-style: normal;
+}
+
+/* pings */
+.pinglist li {
+    padding-left: 0;
+}
+
+/* comment text */
+.commentlist .comment-body p {
+    margin-bottom: 8px;
+    color: #777;
+    clear: both;
+}
+
+.commentlist .comment-body strong {
+    font-weight: 600;
+}
+
+.commentlist .comment-body ol li {
+    margin-left: 2em;
+    padding: 0;
+    list-style: decimal;
+}
+
+.commentlist .comment-body ul li {
+    margin-left: 2em;
+    padding: 0;
+    list-style: square;
+}
+
+/* post author & admin comment */
+.commentlist li.bypostauthor > .comment-body:after,
+.commentlist li.comment-author-admin > .comment-body:after {
+    display: block;
+    position: absolute;
+    content: "\f040";
+    width: 12px;
+    line-height: 12px;
+    font-style: normal;
+    font-family: FontAwesome;
+    text-align: center;
+    color: #fff;
+    background-color: #e8554e;
+}
+
+.commentlist li.comment-author-admin > .comment-body:after {
+    content: "\f005"; /* star for admin */
+}
+
+.commentlist li.bypostauthor > .comment-body:after,
+.commentlist li.comment-author-admin > .comment-body:after {
+    padding: 3px;
+    top: 32px;
+    left: -28px;
+    font-size: 12px;
+    border-radius: 100%;
+}
+
+.commentlist li li.bypostauthor > .comment-body:after,
+.commentlist li li.comment-author-admin > .comment-body:after {
+    padding: 2px;
+    top: 22px;
+    left: -26px;
+    font-size: 10px;
+    border-radius: 100%;
+}
+
+/* child comment */
+.commentlist li ul {
+}
+
+.commentlist li li {
+    margin: 0;
+    padding-left: 48px;
+}
+
+.commentlist li li .avatar {
+    top: 0;
+    left: -48px;
+    width: 36px;
+    height: 36px;
+}
+
+.commentlist li li .comment-meta {
+    left: 70px;
+}
+
+/*  comments : nav
+/* ------------------------------------ */
+.comments-nav {
+    margin-bottom: 20px;
+}
+
+.comments-nav a {
+    font-weight: 600;
+}
+
+.comments-nav .nav-previous {
+    float: left;
+}
+
+.comments-nav .nav-next {
+    float: right;
+}
+
+/*  comments : form
+/* ------------------------------------ */
+.logged-in-as,
+.comment-notes,
+.form-allowed-tags {
+    display: none;
+}
+
+#respond {
+    position: relative;
+}
+
+#reply-title {
+    margin-bottom: 20px;
+}
+
+li #reply-title {
+    margin: 0 !important;
+    padding: 0;
+    height: 0;
+    font-size: 0;
+    border-top: 0;
+}
+
+#cancel-comment-reply-link {
+    display: block;
+    position: absolute;
+    bottom: 26px;
+    right: 20px;
+    font-size: 12px;
+    color: #999;
+}
+
+#cancel-comment-reply-link:hover {
+    color: #777;
+}
+
+#commentform {
+    margin-bottom: 20px;
+    padding: 10px 20px 20px;
+    border-radius: 4px;
+    background-color: #e5e5e5;
+}
+
+#commentform p.comment-form-author {
+    float: left;
+    width: 48%;
+}
+
+#commentform p.comment-form-email {
+    float: right;
+    width: 48%;
+}
+
+#commentform p.comment-form-url,
+#commentform p.comment-form-comment {
+    clear: both;
+}
+
+#commentform label {
+    display: block;
+    padding: 6px 0;
+    font-weight: 600;
+}
+
+#commentform input[type="text"],
+#commentform textarea {
+    max-width: 100%;
+    width: 100%;
+}
+
+#commentform textarea {
+    height: 100px;
+}
+
+#commentform p.form-submit {
+    margin-top: 10px;
+}
+
+.logged-in #reply-title {
+    margin-bottom: 20px;
+}
+
+.logged-in #commentform p.comment-form-comment {
+    margin-top: 10px;
+}
+
+.logged-in #commentform p.comment-form-comment label {
+    display: none;
+}
+
+.heading,
+#reply-title {
+    margin-bottom: 1em;
+    font-size: 18px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #222;
+}
+
+.heading i {
+    margin-right: 6px;
+    font-size: 22px;
+}
+
+.group:before {
+    content: "";
+    display: table;
+}
+
+.group:after {
+    content: "";
+    display: table;
+    clear: both;
+}

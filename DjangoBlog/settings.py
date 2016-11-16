@@ -144,6 +144,8 @@ BOOTSTRAP_COLOR_TYPES = [
 
 # 侧边栏文章数目
 SIDEBAR_ARTICLE_COUNT = 10
+#侧边栏评论数目
+SIDEBAR_COMMENT_COUNT = 5
 
 # cache setting
 """

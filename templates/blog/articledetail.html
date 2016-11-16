@@ -26,12 +26,15 @@
                             class="meta-nav">&rarr;</span></a></span>
                 {% endif %}
             </nav><!-- .nav-single -->
-            {% if article.comment_status == "o" %}
-                {% comment %}{% load comments_tags %}
-                {% load_post_comment article from %}{% endcomment %}
-                {% include 'comments/tags/post_comment.html' %}
-            {% endif %}
+
         </div><!-- #content -->
+        {% if article.comment_status == "o" %}
+
+            {% comment %}{% load comments_tags %}
+                {% load_post_comment article from %}{% endcomment %}
+            {% include 'comments/tags/comment_list.html' %}
+            {% include 'comments/tags/post_comment.html' %}
+        {% endif %}
     </div><!-- #primary -->
 {% endblock %}
 

@@ -21,6 +21,9 @@ from django.utils.safestring import mark_safe
 import random
 from blog.models import Article, Category, Tag, Links
 from django.utils.encoding import force_text
+import hashlib
+import urllib
+from comments.models import Comment
 
 register = template.Library()
 
@@ -93,13 +96,15 @@ def load_sidebar():
     most_read_articles = Article.objects.filter(status='p').order_by('-views')[:settings.SIDEBAR_ARTICLE_COUNT]
     dates = Article.objects.datetimes('created_time', 'month', order='DESC')
     links = Links.objects.all()
+    commment_list = Comment.objects.order_by('-id')[:settings.SIDEBAR_COMMENT_COUNT]
     # tags=
     return {
         'recent_articles': recent_articles,
         'sidebar_categorys': sidebar_categorys,
         'most_read_articles': most_read_articles,
         'article_dates': dates,
-        'sidabar_links': links
+        'sidabar_links': links,
+        'sidebar_comments': commment_list
     }
 
 
@@ -116,6 +121,26 @@ def load_article_detail(article, isindex):
         'article': article,
         'isindex': isindex
     }
+
+
+# return only the URL of the gravatar
+# TEMPLATE USE:  {{ email|gravatar_url:150 }}
+@register.filter
+def gravatar_url(email, size=40):
+    email = email.encode('utf-8')
+
+    default = "https://avatar.duoshuo.com/avatar-50/928/120117.jpg".encode('utf-8')
+
+    return "https://www.gravatar.com/avatar/%s?%s" % (
+        hashlib.md5(email.lower()).hexdigest(), urllib.parse.urlencode({'d': default, 's': str(size)}))
+
+
+# return an image tag with the gravatar
+# TEMPLATE USE:  {{ email|gravatar:150 }}
+@register.filter
+def gravatar(email, size=40):
+    url = gravatar_url(email, size)
+    return mark_safe('<img src="%s" height="%d" width="%d">' % (url, size, size))
 
 
 """

@@ -4,7 +4,6 @@ from django.conf import settings
 
 
 class Article(models.Model):
-
     """文章"""
     STATUS_CHOICES = (
         ('d', '草稿'),
@@ -58,6 +57,10 @@ class Article(models.Model):
     def viewed(self):
         self.views += 1
         self.save(update_fields=['views'])
+
+    def comment_list(self):
+        comments = self.comment_set.all()
+        parent_comments = comments.filter(parent_comment=None)
 
 
 class Category(models.Model):

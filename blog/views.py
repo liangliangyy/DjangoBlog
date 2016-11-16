@@ -13,6 +13,7 @@ from django.template.defaultfilters import stringfilter
 from django.utils.safestring import mark_safe
 from django.core.exceptions import ObjectDoesNotExist
 from comments.forms import CommentForm
+from comments.models import Comment
 
 
 class ArticleListView(ListView):
@@ -62,9 +63,13 @@ class ArticleDetailView(DetailView):
         if self.request.user.is_authenticated():
             user = self.request.user
             form.fields["email"].initial = user.email
-            form.fields["name"].initial=user.username
+            form.fields["name"].initial = user.username
 
+        article_comments = self.object.comment_set.all()
+        print(article_comments)
         kwargs['form'] = form
+        kwargs['article_comments'] = article_comments
+        kwargs['comment_count'] = len(article_comments) if article_comments else 0;
         next_article = get_article(articleid + 1)
         prev_article = get_article(articleid - 1)
         kwargs['next_article'] = next_article

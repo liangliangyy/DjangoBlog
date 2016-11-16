@@ -1,3 +1,5 @@
+
+
 <div id="comments" class="comments-area">
 
     <div id="respond" class="comment-respond">
@@ -21,7 +23,7 @@
             </p>
             <p class="comment-form-author">
                 {% if not form.name.is_hidden %}
-                {{ form.name.label_tag }}
+                    {{ form.name.label_tag }}
                 {% endif %}
                 {{ form.name }}
                 {{ form.name.errors }}
@@ -34,7 +36,7 @@
                     id="email" name="email" type="text" value="" size="30" maxlength="100"
                     aria-describedby="email-notes" aria-required='true' required='required'/>{% endcomment %}
                 {% if not form.email.is_hidden %}
-                {{ form.email.label_tag }}
+                    {{ form.email.label_tag }}
                 {% endif %}
                 {{ form.email }}
                 {{ form.email.errors }}

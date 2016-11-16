@@ -33,11 +33,22 @@
             </ul>
         </aside>
     {% endif %}
-    <aside id="ds-recent-comments-4" class="widget ds-widget-recent-comments"><h3 class="widget-title">近期评论</h3>
-        {% comment %}<ul class="ds-recent-comments" data-num-items="5" data-show-avatars="1" data-show-time="1"
+    {% if sidebar_comments %}
+        <aside id="ds-recent-comments-4" class="widget ds-widget-recent-comments"><h3 class="widget-title">近期评论</h3>
+            {% comment %}<ul class="ds-recent-comments" data-num-items="5" data-show-avatars="1" data-show-time="1"
             data-show-title="1" data-show-admin="1" data-avatar-size="30" data-excerpt-length="70"></ul>{% endcomment %}
-    </aside>
-
+            <ul id="recentcomments">
+                {% for c in sidebar_comments %}
+                    <li class="recentcomments">
+                <span class="comment-author-link">
+                    <a href="https://blog.misuzu.moe/" rel="external nofollow" class="url">{{ c.author.username }}</a></span>
+                        发表在《
+                        <a href="{{ c.article.get_absolute_url }}">{{ c.article.title }}</a>》
+                    </li>
+                {% endfor %}
+            </ul>
+        </aside>
+    {% endif %}
     {% if recent_articles %}
         <aside id="recent-posts-2" class="widget widget_recent_entries"><h3 class="widget-title">近期文章</h3>
             <ul>
