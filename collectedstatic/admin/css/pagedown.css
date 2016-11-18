@@ -1,0 +1,246 @@
+.wmd-wrapper{
+    display: inline-block;
+}
+
+.wmd-panel{
+    margin-left: 0;
+}
+
+    .wmd-panel textarea {
+        outline: 0;
+    }
+
+.wmd-button-row{
+    margin-left: 0 !important;
+}
+
+.wmd-input{
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px 6px;
+    margin-top: 0;
+}
+
+.wmd-preview-title {
+    margin: 10px 0 5px 0 !important;
+}
+
+.wmd-preview{
+    width: 625px;
+    max-height: 400px;
+    overflow-y: scroll;
+
+    box-sizing: border-box;
+    padding: 12px 14px;
+    margin: 0;
+    background: #f8f8f8;
+    border: 1px solid #eee;
+    border-radius: 4px;
+}
+
+.wmd-preview * {
+    font-family: "Roboto","Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif !important;
+}
+
+
+.wmd-preview a { 
+    color: #447e9b;
+    text-decoration:underline;
+}
+
+.wmd-preview a:link,
+.wmd-preview a:visited{
+    color: #447e9b;
+}
+
+.wmd-preview a:hover,
+.wmd-preview a:focus{
+    color: #036;
+}
+
+.wmd-preview a:active{
+    text-decoration: underline;
+}
+
+.wmd-preview a:hover,
+.wmd-preview a:active{
+    outline: 0;
+}
+
+.wmd-preview ::-moz-selection,
+.wmd-preview ::selection,
+.wmd-preview a::-moz-selection,
+.wmd-preview a::selection {
+    background: #84ADC5;
+    color: #000
+}
+
+.wmd-preview p{
+    margin: 0 0 15px;
+}
+
+.wmd-preview img{
+    max-width:100%;
+}
+
+.wmd-preview h1,
+.wmd-preview h2,
+.wmd-preview h3,
+.wmd-preview h4,
+.wmd-preview h5,
+.wmd-preview h6 {
+    margin:0 0 12px 0;
+    padding: 0;
+    color: #666;
+    font-weight: bold;
+    background: none;
+}
+
+.wmd-preview h1{ 
+    font-size: 20px;  
+}
+
+.wmd-preview h2{
+    font-size: 18px;   
+}
+
+.wmd-preview h3{
+    font-size: 17px;
+}
+
+.wmd-preview h4{
+    font-size: 16px;   
+}
+
+.wmd-preview h5{
+    font-size: 15px;
+}
+
+.wmd-preview h6{
+    font-size: 14px;
+}
+
+.wmd-preview blockquote{
+    margin: 0 0 15px 0;
+    padding-left: 1em;
+    border-left: 0.5em #ddd solid;
+}
+
+    .wmd-preview blockquote p {
+        font-style: italic;
+    }
+
+
+.wmd-preview hr {
+    display: block;
+    height: 0px;
+    border: 0;
+    font-style: italic;
+    border-bottom: 1px solid #ddd;
+    margin: 0 0 15px 0;
+    padding: 0;
+}
+
+.wmd-preview pre,
+.wmd-preview code,
+.wmd-preview kbd,
+.wmd-preview samp {
+    color: #000; 
+    font-family: Consolas, "Liberation Mono", Courier, monospace, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace !important;
+}
+
+/* Code inline */
+.wmd-preview code {
+    margin: 0 2px;
+    padding: 0px 5px;
+    border: 1px solid #ddd;
+    background-color: #f8f8f8;
+    border-radius: 2px;
+    color: #444;
+    font-size: 95%;
+}
+
+    .wmd-preview a code{
+        color: #447e9b;
+    }
+
+/* Block code */
+.wmd-preview pre{
+    white-space: pre;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    margin: 15px 0;
+    padding: 10px;
+    
+    margin: 0 0 15px 0;
+    padding-left: 1em;
+    border-left: 0.5em #ddd solid;
+    background-color: #eee;
+    border-radius: 0 4px 4px 0;
+}
+.wmd-preview pre code {
+    background-color: transparent;
+    border: 0;
+
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: none;
+}
+
+.wmd-preview b, .wmd-preview strong { font-weight: bold; }
+
+.wmd-preview dfn { font-style: italic; }
+
+.wmd-preview ins { background: #ff9; color: #000; text-decoration: none; }
+
+.wmd-preview mark { background: #ff0; color: #000; font-style: italic; font-weight: bold; }
+
+.wmd-preview sub, .wmd-preview sup { font-size: 75%; line-height: 0; position: relative; vertical-align: baseline; }
+.wmd-preview sup { top: -0.5em; }
+.wmd-preview sub { bottom: -0.25em; }
+
+.wmd-preview ul,
+.wmd-preview ol {
+    margin: 0 0 15px 15px !important;
+    padding: 0 0 0 15px !important;
+}
+
+.wmd-preview ul li {
+    list-style: disc !important;
+}
+
+.wmd-preview ul li ul,
+.wmd-preview ol li ul,
+.wmd-preview ul li ol,
+.wmd-preview ol li ol{
+    margin-bottom: 0 !important;
+}
+
+.wmd-preview li p:last-child {
+    margin:0
+}
+
+.wmd-preview dl {
+    padding: 0;
+    margin: 0 0 15px 0;
+} 
+
+    .wmd-preview dt {
+        padding: 0;
+    }
+
+    .wmd-preview dd {
+        padding-left: 30px;
+    }
+
+.wmd-preview img { border: 0; -ms-interpolation-mode: bicubic; vertical-align: middle; }
+
+.wmd-preview table { border-collapse: collapse; border-spacing: 0; }
+.wmd-preview td { vertical-align: top; }
+
+/* Inlines */
+.inline-related .wmd-input {
+    height: 150px;
+}
