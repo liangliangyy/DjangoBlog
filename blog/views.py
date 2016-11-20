@@ -8,7 +8,6 @@ from django.views.generic.edit import CreateView, FormView
 from django.views.generic.dates import YearArchiveView, MonthArchiveView
 from blog.models import Article, Category, Tag
 from django.conf import settings
-import markdown
 from django.template.defaultfilters import stringfilter
 from django.utils.safestring import mark_safe
 from django.core.exceptions import ObjectDoesNotExist
@@ -66,7 +65,9 @@ class ArticleDetailView(DetailView):
             form.fields["name"].initial = user.username
 
         article_comments = self.object.comment_set.all()
-        print(article_comments)
+
+
+        # print(article_comments)
         kwargs['form'] = form
         kwargs['article_comments'] = article_comments
         kwargs['comment_count'] = len(article_comments) if article_comments else 0;

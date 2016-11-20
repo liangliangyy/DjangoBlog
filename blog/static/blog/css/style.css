@@ -2260,8 +2260,7 @@ li #reply-title {
 }
 
 #cancel-comment-reply-link {
-    display: block;
-    position: absolute;
+    float: right;
     bottom: 26px;
     right: 20px;
     font-size: 12px;
@@ -2349,4 +2348,12 @@ li #reply-title {
     content: "";
     display: table;
     clear: both;
+}
+
+.cancel-comment {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    vertical-align: baseline;
 }

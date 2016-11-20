@@ -1,5 +1,3 @@
-
-
 <div id="comments" class="comments-area">
 
     <div id="respond" class="comment-respond">
@@ -50,12 +48,13 @@
             {{ form.parent_comment_id }}
 
             <p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="发表评论"/>
-
+                <small class="cancel-comment" id="cancel_comment" style="display: none">
+                    <a href="javascript:void(0)" id="cancel-comment-reply-link" onclick="cancel_reply()">取消回复</a>
+                </small>
             </p>
         </form>
     </div><!-- #respond -->
 
 </div><!-- #comments .comments-area -->
-
 
 

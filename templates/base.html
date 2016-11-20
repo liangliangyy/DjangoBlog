@@ -37,8 +37,9 @@
 <link rel='stylesheet' id='twentytwelve-ie-css'  href='{% static 'blog/css/ie.css' %}' type='text/css' media='all' />
 <![endif]-->
 
-    <script type='text/javascript' src='{% static 'blog/js/jquery.js' %}' defer='defer'></script>
-    <script type='text/javascript' src='{% static 'blog/js/jquery-migrate.min.js' %}' defer='defer'></script>
+    {% comment %}<script type='text/javascript' src='{% static 'blog/js/jquery.js' %}' defer='defer'></script>
+    <script type='text/javascript' src='{% static 'blog/js/jquery-migrate.min.js' %}' defer='defer'></script>{% endcomment %}
+    <script type="text/javascript" src="{% static 'blog/js/jquery-3.1.1.js' %}"></script>
 
 </head>
 
@@ -46,7 +47,8 @@
 <div id="page" class="hfeed site">
     <header id="masthead" class="site-header" role="banner">
         <hgroup>
-            <h1 class="site-title"><a href="{{ SITE_BASE_URL }}" title="{{ SITE_NAME }}" rel="home">{{ SITE_NAME }}</a></h1>
+            <h1 class="site-title"><a href="{{ SITE_BASE_URL }}" title="{{ SITE_NAME }}" rel="home">{{ SITE_NAME }}</a>
+            </h1>
             <h2 class="site-description">大巧无工,重剑无锋</h2>
         </hgroup>
 
@@ -109,14 +111,14 @@
         </nav><!-- #site-navigation -->
 
     </header><!-- #masthead -->
-<div id="main" class="wrapper">
-    {% block content %}
-    {% endblock %}
+    <div id="main" class="wrapper">
+        {% block content %}
+        {% endblock %}
 
-    {% block sidebar %}
-    {% endblock %}
+        {% block sidebar %}
+        {% endblock %}
 
-</div><!-- #main .wrapper -->
+    </div><!-- #main .wrapper -->
     <footer id="colophon" role="contentinfo">
         <div class="site-info">
             Copyright&copy;&nbsp;2016&nbsp;
@@ -152,5 +154,6 @@ var wpAutoTopSpeed = 1;</script>
 <link href="{% static 'highlight/styles/github-gist.css' %}" rel="stylesheet">
 <script type="application/javascript" src="{% static 'highlight/highlight.pack.js' %}"></script>
 <script>hljs.initHighlightingOnLoad();</script>
+<script src="{% static 'blog/js/blog.js' %}" type="application/javascript"></script>
 </body>
 </html>

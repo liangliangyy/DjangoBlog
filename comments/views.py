@@ -39,10 +39,14 @@ class CommentPostView(FormView):
         author_id = self.request.user.pk
 
         comment = form.save(False)
+        comment.article = article
 
         comment.author = BlogUser.objects.get(pk=author_id)
 
-        comment.article = article
+        if form.cleaned_data['parent_comment_id']:
+            parent_comment = Comment.objects.get(pk=form.cleaned_data['parent_comment_id'])
+            comment.parent_comment = parent_comment
+
         comment.save(True)
 
         return HttpResponseRedirect(article.get_absolute_url())

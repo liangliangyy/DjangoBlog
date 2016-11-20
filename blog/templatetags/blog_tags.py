@@ -127,6 +127,7 @@ def load_article_detail(article, isindex):
 # TEMPLATE USE:  {{ email|gravatar_url:150 }}
 @register.filter
 def gravatar_url(email, size=40):
+    """获得gravatar头像"""
     email = email.encode('utf-8')
 
     default = "https://avatar.duoshuo.com/avatar-50/928/120117.jpg".encode('utf-8')
@@ -139,10 +140,31 @@ def gravatar_url(email, size=40):
 # TEMPLATE USE:  {{ email|gravatar:150 }}
 @register.filter
 def gravatar(email, size=40):
+    """获得gravatar头像"""
     url = gravatar_url(email, size)
     return mark_safe('<img src="%s" height="%d" width="%d">' % (url, size, size))
 
 
+@register.assignment_tag
+def query(qs, **kwargs):
+    """ template tag which allows queryset filtering. Usage:
+          {% query books author=author as mybooks %}
+          {% for book in mybooks %}
+            ...
+          {% endfor %}
+    """
+    return qs.filter(**kwargs)
+
+
+
+
+"""
+article = Article.objects.get(pk=4)
+comments = Comment.objects.filter(article=article)
+for c in comments.filter(parent_comment=None):
+    datas = parse_commenttree(comments, c)
+    print(datas)
+"""
 """
 @register.tag
 def parseCategoryName(parser,token):

@@ -1,0 +1,25 @@
+{% load blog_tags %}
+<li class="comment even thread-even depth-{{ depth }} parent" id="comment-{{ comment_item.pk }}">
+    <div id="div-comment-{{ comment_item.pk }}" class="comment-body">
+        <div class="comment-author vcard">
+            <img alt=""
+                 src="{{ comment_item.author.email|gravatar_url:150 }}"
+                 srcset="{{ comment_item.author.email|gravatar_url:150 }}"
+                 class="avatar avatar-96 photo" height="96" width="96"> <cite class="fn"><a
+                href="#" rel="external nofollow"
+                class="url">{{ comment_item.author.username }}</a></cite><span
+                class="says">说道：</span></div>
+
+        <div class="comment-meta commentmetadata"><a
+                href="#">
+            {{ comment_item.created_time }}</a></div>
+
+        <p>{{ comment_item.body }}</p>
+
+        <div class="reply"><a rel="nofollow" class="comment-reply-link"
+                              href="javascript:void(0)"
+                              onclick="do_reply({{ comment_item.pk }})"
+                              aria-label="回复给{{ comment_item.author.username }}">回复</a></div>
+    </div>
+
+</li><!-- #comment-## -->
