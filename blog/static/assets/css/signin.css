@@ -1,0 +1,58 @@
+body {
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #fff;
+}
+
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+}
+.form-signin-heading {
+  margin: 0 0 15px;
+  font-size: 18px;
+  font-weight: 400;
+  color: #555;
+}
+.form-signin .checkbox {
+  margin-bottom: 10px;
+  font-weight: normal;
+}
+.form-signin .form-control {
+  position: relative;
+  height: auto;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="email"] {
+  margin-bottom: 10px;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+}
+.card {
+  width: 304px;
+  padding: 20px 25px 30px;
+  margin: 0 auto 25px;
+  background-color: #f7f7f7;
+  border-radius: 2px;
+  -webkit-box-shadow: 0 2px 2px rgba(0, 0, 0, .3);
+          box-shadow: 0 2px 2px rgba(0, 0, 0, .3);
+}
+.card-signin {
+  width: 354px;
+  padding: 40px;
+}
+.card-signin .profile-img {
+  display: block;
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 10px;
+}

@@ -1,0 +1,41 @@
+{% extends 'accountbase.html' %}
+{% load static %}
+{% block content %}
+    <div class="container">
+
+        <h2 class="form-signin-heading text-center">Sign in with your Account</h2>
+
+        <div class="card card-signin">
+            <img class="img-circle profile-img" src="{% static 'blog/img/avatar.png' %}" alt="">
+            <form class="form-signin" action="{% url 'account:register' %}" method="post">
+                {% csrf_token %}
+                {% comment %}<label for="inputEmail" class="sr-only">Email address</label>
+                <input type="email" id="inputEmail" class="form-control" placeholder="Email" required autofocus>
+                <label for="inputPassword" class="sr-only">Password</label>
+                <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>{% endcomment %}
+                {{ form.non_field_errors }}
+                {% for field in form %}
+                    {{ field }}
+                    {{ field.errors }}
+                {% endfor %}
+
+
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+
+                {% comment %}
+                 <div class="checkbox">
+                    <a class="pull-right">Need help?</a>
+                    <label>
+                        <input type="checkbox" value="remember-me"> Stay signed in
+                    </label>
+                </div>
+{% endcomment %}
+            </form>
+        </div>
+
+        <p class="text-center">
+            <a>Create an account</a>
+        </p>
+
+    </div> <!-- /container -->
+{% endblock %}

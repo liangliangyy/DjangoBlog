@@ -24,8 +24,8 @@ SECRET_KEY = '&3g0bdza#c%dm1lf%5gi&0-*53p3t0m*hmcvo29cn^$ji7je(c'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-#ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['blog.lylinux.org','127.0.0.1']
+# ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['blog.lylinux.org', '127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'pagedown',
     'blog',
     'accounts',
@@ -45,9 +46,9 @@ INSTALLED_APPS = [
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    #'django.middleware.cache.UpdateCacheMiddleware',
+    # 'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
-    #'django.middleware.cache.FetchFromCacheMiddleware',
+    # 'django.middleware.cache.FetchFromCacheMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -135,6 +136,7 @@ STATIC_URL = '/static/'
 STATICFILES = os.path.join(BASE_DIR, 'static')
 
 AUTH_USER_MODEL = 'accounts.BlogUser'
+LOGIN_URL = '/login/'
 
 TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 DATE_TIME_FORMAT = '%Y-%m-%d'
@@ -150,7 +152,7 @@ BOOTSTRAP_COLOR_TYPES = [
 
 # 侧边栏文章数目
 SIDEBAR_ARTICLE_COUNT = 10
-#侧边栏评论数目
+# 侧边栏评论数目
 SIDEBAR_COMMENT_COUNT = 5
 
 # cache setting

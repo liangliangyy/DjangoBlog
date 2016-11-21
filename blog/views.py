@@ -7,13 +7,11 @@ from django.views.generic import UpdateView
 from django.views.generic.edit import CreateView, FormView
 from django.views.generic.dates import YearArchiveView, MonthArchiveView
 from blog.models import Article, Category, Tag
-from django.conf import settings
-from django.template.defaultfilters import stringfilter
-from django.utils.safestring import mark_safe
+
 from django.core.exceptions import ObjectDoesNotExist
 from comments.forms import CommentForm
-from comments.models import Comment
 
+from django import forms
 
 class ArticleListView(ListView):
     # template_name属性用于指定使用哪个模板进行渲染
@@ -58,17 +56,21 @@ class ArticleDetailView(DetailView):
             except ObjectDoesNotExist:
                 return None
 
-        form = CommentForm()
+        comment_form = CommentForm()
+
         if self.request.user.is_authenticated():
+
+            comment_form.fields.update({
+                'email': forms.CharField(widget=forms.HiddenInput()),
+                'name': forms.CharField(widget=forms.HiddenInput()),
+            })
             user = self.request.user
-            form.fields["email"].initial = user.email
-            form.fields["name"].initial = user.username
+            comment_form.fields["email"].initial = user.email
+            comment_form.fields["name"].initial = user.username
 
         article_comments = self.object.comment_set.all()
 
-
-        # print(article_comments)
-        kwargs['form'] = form
+        kwargs['form'] = comment_form
         kwargs['article_comments'] = article_comments
         kwargs['comment_count'] = len(article_comments) if article_comments else 0;
         next_article = get_article(articleid + 1)
