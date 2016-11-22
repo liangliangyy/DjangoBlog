@@ -1,6 +1,8 @@
 from django.db import models
 from django.core.urlresolvers import reverse
 from django.conf import settings
+# from django.template.defaultfilters import slugify
+from uuslug import slugify
 
 
 class Article(models.Model):
@@ -28,6 +30,8 @@ class Article(models.Model):
     category = models.ForeignKey('Category', verbose_name='分类', on_delete=models.CASCADE)
     tags = models.ManyToManyField('Tag', verbose_name='标签集合', blank=True)
 
+    slug = models.SlugField(default='no-slug', max_length=60, blank=True)
+
     def __str__(self):
         return self.title
 
@@ -37,7 +41,15 @@ class Article(models.Model):
         verbose_name_plural = verbose_name
 
     def get_absolute_url(self):
-        return reverse('blog:detail', kwargs={'article_id': self.pk})
+
+        return reverse('blog:detail', kwargs=
+        {
+            'article_id': self.id,
+            'year': self.created_time.year,
+            'month': self.created_time.month,
+            'day': self.created_time.day,
+            'slug': self.slug
+        })
 
     def get_category_tree(self):
         names = []
@@ -52,6 +64,10 @@ class Article(models.Model):
 
     def save(self, *args, **kwargs):
         self.summary = self.summary or self.body[:settings.ARTICLE_SUB_LENGTH]
+        if not self.slug or self.slug == 'no-slug' or not self.id:
+            # Only set the slug when the object is created.
+            self.slug = slugify(self.title)
+
         super().save(*args, **kwargs)
 
     def viewed(self):
