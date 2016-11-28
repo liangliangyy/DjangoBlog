@@ -39,8 +39,8 @@ INSTALLED_APPS = [
     'pagedown',
     'blog',
     'accounts',
-    'comments'
-
+    'comments',
+    'oauth'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -165,3 +165,11 @@ CACHES = {
     }
 }
 """
+
+OAHUTH = {
+    'sina': {
+        'appkey':'3161614143',
+        'appsecret':'ee17c099317f872eeddb25204ea46721',
+        'callbackurl':'http://blog.lylinux.org/oauth/weibo'
+    }
+}

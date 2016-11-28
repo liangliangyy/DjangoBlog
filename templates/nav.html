@@ -1,0 +1,77 @@
+{% comment %}{% load blog_tags %}
+{% query nav_category_list parent_category=None as root_categorys %}
+{% for root in root_categorys %}
+    <li id="menu-item-{{ root.pk }}"
+        class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7"><a
+            href="{{ root.get_absolute_url }}">{{ root.name }}</a></li>
+    {% query nav_category_list parent_category=root as chind_categorys %}
+    {% if chind_categorys %}
+
+    {% endif %}
+{% endfor %}{% endcomment %}
+
+
+<nav id="site-navigation" class="main-navigation" role="navigation">
+    <button class="menu-toggle">菜单</button>
+    <a class="assistive-text" href="#content" title="跳至正文">跳至正文</a>
+    <div class="menu-%e8%8f%9c%e5%8d%95-container">
+        <ul id="menu-%e8%8f%9c%e5%8d%95" class="nav-menu">
+            <li id="menu-item-3498"
+                class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item menu-item-home menu-item-3498">
+                <a href="{{ SITE_BASE_URL }}">首页</a></li>
+
+            {% load blog_tags %}
+            {% query nav_category_list parent_category=None as root_categorys %}
+            {% for node in root_categorys %}
+                {% include 'nav_node.html' %}
+            {% endfor %}
+            {% comment %}
+            <li id="menu-item-7"
+                class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7"><a
+                    href="https://www.lylinux.org/category/linux">linux</a></li>
+            <li id="menu-item-606"
+                class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-606">
+                <a href="https://www.lylinux.org/category/%e7%a8%8b%e5%ba%8f%e7%8c%bf%e4%b9%8b%e8%b7%af">程序猿之路</a>
+                <ul class="sub-menu">
+                    <li id="menu-item-607"
+                        class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-607"><a
+                            href="https://www.lylinux.org/category/%e7%a8%8b%e5%ba%8f%e7%8c%bf%e4%b9%8b%e8%b7%af/python">python</a>
+                    </li>
+                    <li id="menu-item-608"
+                        class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-608"><a
+                            href="https://www.lylinux.org/category/%e7%a8%8b%e5%ba%8f%e7%8c%bf%e4%b9%8b%e8%b7%af/c">c++</a>
+                    </li>
+                    <li id="menu-item-3181"
+                        class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-3181"><a
+                            href="https://www.lylinux.org/category/%e7%a8%8b%e5%ba%8f%e7%8c%bf%e4%b9%8b%e8%b7%af/csharp">csharp</a>
+                    </li>
+                    <li id="menu-item-12"
+                        class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-12">
+                        <a href="https://www.lylinux.org/category/%e7%a8%8b%e5%ba%8f%e7%8c%bf%e4%b9%8b%e8%b7%af/javaweb/ssh%e6%a1%86%e6%9e%b6">ssh框架</a>
+                        <ul class="sub-menu">
+                            <li id="menu-item-11"
+                                class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-11">
+                                <a href="https://www.lylinux.org/category/%e7%a8%8b%e5%ba%8f%e7%8c%bf%e4%b9%8b%e8%b7%af/javaweb/jspservlet">jsp/servlet</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li id="menu-item-8"
+                class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-8"><a
+                    href="https://www.lylinux.org/category/wordpress">wordpress</a></li>
+            <li id="menu-item-9"
+                class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-9"><a
+                    href="https://www.lylinux.org/category/%e9%9a%8f%e7%ac%94%e6%9d%82%e8%b0%88">随笔杂谈</a></li>
+            <li id="menu-item-603"
+                class="menu-item menu-item-type-post_type menu-item-object-page menu-item-603"><a
+                    href="https://www.lylinux.org/link">友情链接</a></li>
+            <li id="menu-item-604"
+                class="menu-item menu-item-type-post_type menu-item-object-page menu-item-604"><a
+                    href="https://www.lylinux.org/%e7%95%99%e8%a8%80%e6%9d%bf">留言板</a></li>
+            <li id="menu-item-605"
+                class="menu-item menu-item-type-post_type menu-item-object-page menu-item-605"><a
+                    href="https://www.lylinux.org/%e5%85%b3%e4%ba%8e">关于</a></li>{% endcomment %}
+        </ul>
+    </div>
+</nav><!-- #site-navigation -->

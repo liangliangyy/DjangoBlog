@@ -1,0 +1,40 @@
+<li id="menu-item-{{ node.pk }}"
+    class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-{{ node.pk }}">
+    <a href="{{ node.get_absolute_url }}">{{ node.name }}</a>
+    {% load blog_tags %}
+    {% query nav_category_list parent_category=node as child_categorys %}
+    {% if child_categorys %}
+
+        <ul class="sub-menu">
+            {% for child in child_categorys %}
+                {% with node=child template_name="nav_node.html" %}
+                    {% include template_name %}
+                {% endwith %}
+            {% endfor %}
+            {% comment %}  <li id="menu-item-607"
+                class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-607"><a
+                    href="https://www.lylinux.org/category/%e7%a8%8b%e5%ba%8f%e7%8c%bf%e4%b9%8b%e8%b7%af/python">python</a>
+            </li>
+            <li id="menu-item-608"
+                class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-608"><a
+                    href="https://www.lylinux.org/category/%e7%a8%8b%e5%ba%8f%e7%8c%bf%e4%b9%8b%e8%b7%af/c">c++</a>
+            </li>
+            <li id="menu-item-3181"
+                class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-3181"><a
+                    href="https://www.lylinux.org/category/%e7%a8%8b%e5%ba%8f%e7%8c%bf%e4%b9%8b%e8%b7%af/csharp">csharp</a>
+            </li>
+            <li id="menu-item-12"
+                class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-12">
+                <a href="https://www.lylinux.org/category/%e7%a8%8b%e5%ba%8f%e7%8c%bf%e4%b9%8b%e8%b7%af/javaweb/ssh%e6%a1%86%e6%9e%b6">ssh框架</a>
+                <ul class="sub-menu">
+                    <li id="menu-item-11"
+                        class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-11">
+                        <a href="https://www.lylinux.org/category/%e7%a8%8b%e5%ba%8f%e7%8c%bf%e4%b9%8b%e8%b7%af/javaweb/jspservlet">jsp/servlet</a>
+                    </li>
+                </ul>
+            </li>{% endcomment %}
+        </ul>
+    {% endif %}
+</li>
+
+

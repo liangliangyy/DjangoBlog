@@ -115,6 +115,15 @@ def load_article_metas(article):
     }
 
 
+"""
+@register.inclusion_tag('nav.html')
+def load_nav_info():
+    category_list = Category.objects.all()
+    return {
+        'nav_category_list': category_list
+    }
+"""
+
 @register.inclusion_tag('blog/tags/article_info.html')
 def load_article_detail(article, isindex):
     return {
@@ -154,8 +163,6 @@ def query(qs, **kwargs):
           {% endfor %}
     """
     return qs.filter(**kwargs)
-
-
 
 
 """
