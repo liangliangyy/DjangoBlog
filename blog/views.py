@@ -7,11 +7,12 @@ from django.views.generic import UpdateView
 from django.views.generic.edit import CreateView, FormView
 from django.views.generic.dates import YearArchiveView, MonthArchiveView
 from blog.models import Article, Category, Tag
-
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.exceptions import ObjectDoesNotExist
 from comments.forms import CommentForm
-
+from django.conf import settings
 from django import forms
+
 
 class ArticleListView(ListView):
     # template_name属性用于指定使用哪个模板进行渲染
@@ -22,10 +23,13 @@ class ArticleListView(ListView):
 
     # 页面类型，分类目录或标签列表等
     page_type = ''
+    paginate_by = settings.PAGINATE_BY
+    page_kwarg = 'page'
 
 
 class IndexView(ArticleListView):
     def get_queryset(self):
+
         article_list = Article.objects.filter(status='p')
 
         # for article in article_list:
@@ -59,7 +63,6 @@ class ArticleDetailView(DetailView):
         comment_form = CommentForm()
 
         if self.request.user.is_authenticated():
-
             comment_form.fields.update({
                 'email': forms.CharField(widget=forms.HiddenInput()),
                 'name': forms.CharField(widget=forms.HiddenInput()),

@@ -155,6 +155,9 @@ SIDEBAR_ARTICLE_COUNT = 10
 # 侧边栏评论数目
 SIDEBAR_COMMENT_COUNT = 5
 
+# 分页
+PAGINATE_BY = 10
+
 # cache setting
 """
 CACHES = {
@@ -167,8 +170,8 @@ CACHES = {
 
 OAHUTH = {
     'sina': {
-        'appkey':'3161614143',
-        'appsecret':'ee17c099317f872eeddb25204ea46721',
-        'callbackurl':'http://blog.lylinux.org/oauth/weibo'
+        'appkey': '3161614143',
+        'appsecret': 'ee17c099317f872eeddb25204ea46721',
+        'callbackurl': 'http://blog.lylinux.org/oauth/weibo'
     }
 }

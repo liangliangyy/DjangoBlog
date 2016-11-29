@@ -21,7 +21,7 @@ urlpatterns = [
     # url(r'^$', cache_page(60 * 15)(views.IndexView.as_view()), name='index'),
     url(r'^$', views.IndexView.as_view(), name='index'),
     # url(r'^article/(?P<article_id>\d+)$', views.ArticleDetailView.as_view(), name='detail'),
-
+    url(r'^page/(?P<page>\d+)$', views.IndexView.as_view(), name='index_page'),
     url(r'(?P<year>\d+)/(?P<month>\d+)/(?P<day>\d+)/(?P<article_id>\d+)-(?P<slug>\S+).html$',
         views.ArticleDetailView.as_view(),
         name='detail'),
