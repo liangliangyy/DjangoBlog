@@ -113,11 +113,12 @@ def load_articletags(article):
 
 
 @register.inclusion_tag('blog/tags/sidebar.html')
-def load_sidebar():
+def load_sidebar(user):
     """
     加载侧边栏
     :return:
     """
+
     recent_articles = Article.objects.filter(status='p')[:settings.SIDEBAR_ARTICLE_COUNT]
     sidebar_categorys = Category.objects.all()
     most_read_articles = Article.objects.filter(status='p').order_by('-views')[:settings.SIDEBAR_ARTICLE_COUNT]
@@ -131,7 +132,8 @@ def load_sidebar():
         'most_read_articles': most_read_articles,
         'article_dates': dates,
         'sidabar_links': links,
-        'sidebar_comments': commment_list
+        'sidebar_comments': commment_list,
+        'user': user
     }
 
 

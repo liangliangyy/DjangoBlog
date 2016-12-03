@@ -23,14 +23,14 @@ class Article(models.Model):
                                     help_text="不指定发布时间则视为草稿，可以指定未来时间，到时将自动发布。")
     status = models.CharField('文章状态', max_length=1, choices=STATUS_CHOICES, default='o')
     comment_status = models.CharField('评论状态', max_length=1, choices=COMMENT_STATUS)
-    summary = models.CharField('摘要', max_length=200, blank=True, help_text="可选，若为空将摘取正文的前300个字符。")
+    # summary = models.CharField('摘要', max_length=200, blank=True, help_text="可选，若为空将摘取正文的前300个字符。")
     views = models.PositiveIntegerField('浏览量', default=0)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='作者', on_delete=models.CASCADE)
 
     category = models.ForeignKey('Category', verbose_name='分类', on_delete=models.CASCADE)
     tags = models.ManyToManyField('Tag', verbose_name='标签集合', blank=True)
 
-    slug = models.SlugField(default='no-slug', max_length=60, blank=True)
+    slug = models.SlugField(default='no-slug', max_length=10, blank=True)
 
     def __str__(self):
         return self.title
@@ -63,7 +63,7 @@ class Article(models.Model):
         return names
 
     def save(self, *args, **kwargs):
-        self.summary = self.summary or self.body[:settings.ARTICLE_SUB_LENGTH]
+        # self.summary = self.summary or self.body[:settings.ARTICLE_SUB_LENGTH]
         if not self.slug or self.slug == 'no-slug' or not self.id:
             # Only set the slug when the object is created.
             self.slug = slugify(self.title)

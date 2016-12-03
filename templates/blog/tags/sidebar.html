@@ -41,7 +41,8 @@
                 {% for c in sidebar_comments %}
                     <li class="recentcomments">
                 <span class="comment-author-link">
-                    <a href="https://blog.misuzu.moe/" rel="external nofollow" class="url">{{ c.author.username }}</a></span>
+                    <a href="https://blog.misuzu.moe/" rel="external nofollow"
+                       class="url">{{ c.author.username }}</a></span>
                         发表在《
                         <a href="{{ c.article.get_absolute_url }}">{{ c.article.title }}</a>》
                     </li>
@@ -73,4 +74,18 @@
             </ul>
         </aside>
     {% endif %}
+    <aside id="meta-2" class="widget widget_meta"><h3 class="widget-title">功能</h3>
+        <ul>
+            <li><a href="{{ SITE_BASE_URL }}/admin/">管理站点</a></li>
+            {% if user.is_authenticated %}
+                <li><a href="{{ SITE_BASE_URL }}/logout/">登出</a>
+                </li>
+
+            {% else %}
+                <li><a href="{% url "account:login" %}">登陆</a>
+            {% endif %}
+
+        </ul>
+    </aside>
+
 </div><!-- #secondary -->

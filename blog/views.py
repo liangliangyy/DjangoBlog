@@ -60,8 +60,9 @@ class ArticleDetailView(DetailView):
                 return None
 
         comment_form = CommentForm()
+        u = self.request.user
 
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated:
             comment_form.fields.update({
                 'email': forms.CharField(widget=forms.HiddenInput()),
                 'name': forms.CharField(widget=forms.HiddenInput()),
@@ -158,6 +159,6 @@ class TagDetailView(ArticleListView):
 def test(requests):
     post = Article.objects.all()
     for p in post:
-        #p.views += 1
+        # p.views += 1
         p.summary = p.body[:settings.ARTICLE_SUB_LENGTH]
         p.save()

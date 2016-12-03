@@ -7,7 +7,6 @@
             {% load_article_detail article False %}
 
 
-
             <nav class="nav-single">
                 <h3 class="assistive-text">文章导航</h3>
                 {% if next_article %}
@@ -35,7 +34,7 @@
 
 
 {% block sidebar %}
-    {% load_sidebar %}
+    {% load_sidebar user %}
 {% endblock %}
 
 
