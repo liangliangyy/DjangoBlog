@@ -61,8 +61,26 @@ def custom_markdown(content):
     """
 
 
+@register.filter(is_safe=True)
+@stringfilter
+def truncatechars_content(content):
+    """
+    获得文章内容的摘要
+    :param content:
+    :return:
+    """
+    from django.template.defaultfilters import truncatechars_html
+
+    return truncatechars_html(content, settings.ARTICLE_SUB_LENGTH)
+
+
 @register.inclusion_tag('blog/tags/breadcrumb.html')
 def load_breadcrumb(article):
+    """
+    获得文章面包屑
+    :param article:
+    :return:
+    """
     names = article.get_category_tree()
 
     names.append((settings.SITE_NAME, 'http://127.0.0.1:8000'))
@@ -76,6 +94,11 @@ def load_breadcrumb(article):
 
 @register.inclusion_tag('blog/tags/articletaglist.html')
 def load_articletags(article):
+    """
+    文章标签
+    :param article:
+    :return:
+    """
     tags = article.tags.all()
     tags_list = []
     for tag in tags:
@@ -91,6 +114,10 @@ def load_articletags(article):
 
 @register.inclusion_tag('blog/tags/sidebar.html')
 def load_sidebar():
+    """
+    加载侧边栏
+    :return:
+    """
     recent_articles = Article.objects.filter(status='p')[:settings.SIDEBAR_ARTICLE_COUNT]
     sidebar_categorys = Category.objects.all()
     most_read_articles = Article.objects.filter(status='p').order_by('-views')[:settings.SIDEBAR_ARTICLE_COUNT]
@@ -110,6 +137,11 @@ def load_sidebar():
 
 @register.inclusion_tag('blog/tags/article_meta_info.html')
 def load_article_metas(article):
+    """
+    获得文章meta信息
+    :param article:
+    :return:
+    """
     return {
         'article': article
     }
@@ -124,8 +156,15 @@ def load_nav_info():
     }
 """
 
+
 @register.inclusion_tag('blog/tags/article_info.html')
 def load_article_detail(article, isindex):
+    """
+    加载文章详情
+    :param article:
+    :param isindex:是否列表页，若是列表页只显示摘要
+    :return:
+    """
     return {
         'article': article,
         'isindex': isindex

@@ -1,0 +1,9 @@
+Django==1.10.3
+django-autoslug==1.9.3
+django-pagedown==0.1.1
+django-uuslug==1.1.8
+markdown2==2.3.1
+Pillow==3.4.2
+PyMySQL==0.7.9
+python-slugify==1.2.1
+requests==2.12.1

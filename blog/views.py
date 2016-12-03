@@ -29,7 +29,6 @@ class ArticleListView(ListView):
 
 class IndexView(ArticleListView):
     def get_queryset(self):
-
         article_list = Article.objects.filter(status='p')
 
         # for article in article_list:
@@ -154,3 +153,11 @@ class TagDetailView(ArticleListView):
         kwargs['page_type'] = TagDetailView.page_type
         kwargs['tag_name'] = tag_name
         return super(TagDetailView, self).get_context_data(**kwargs)
+
+
+def test(requests):
+    post = Article.objects.all()
+    for p in post:
+        #p.views += 1
+        p.summary = p.body[:settings.ARTICLE_SUB_LENGTH]
+        p.save()
