@@ -30,7 +30,7 @@ class Article(models.Model):
     category = models.ForeignKey('Category', verbose_name='分类', on_delete=models.CASCADE)
     tags = models.ManyToManyField('Tag', verbose_name='标签集合', blank=True)
 
-    slug = models.SlugField(default='no-slug', max_length=10, blank=True)
+    slug = models.SlugField(default='no-slug', max_length=60, blank=True)
 
     def __str__(self):
         return self.title

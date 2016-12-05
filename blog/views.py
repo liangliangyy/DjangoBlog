@@ -160,5 +160,5 @@ def test(requests):
     post = Article.objects.all()
     for p in post:
         # p.views += 1
-        p.summary = p.body[:settings.ARTICLE_SUB_LENGTH]
+        #p.summary = p.body[:settings.ARTICLE_SUB_LENGTH]
         p.save()
