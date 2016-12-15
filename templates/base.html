@@ -32,7 +32,7 @@
           type='text/css' media='all'/>
     <link rel='stylesheet' id='twentytwelve-style-css' href='{% static 'blog/css/style.css' %}' type='text/css'
           media='all'/>
-
+    {% comment %}<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>{% endcomment %}
     <!--[if lt IE 9]>
 <link rel='stylesheet' id='twentytwelve-ie-css'  href='{% static 'blog/css/ie.css' %}' type='text/css' media='all' />
 <![endif]-->
@@ -65,7 +65,7 @@
     </div><!-- #main .wrapper -->
     {% include 'footer.html' %}
 </div><!-- #page -->
-
+{% comment %}
 <div id="wp-auto-top">
     <div id="wp-auto-top-top"></div>
     <div id="wp-auto-top-bottom"></div>
@@ -74,8 +74,8 @@
 var wpAutoTopSpeed = 1;</script>
 
 <div id="su-footer-links" style="text-align: center;"></div>
-
-<script type="application/javascript" src="{% static 'blog/js/navigation.js' %}" defer="defer"></script>
+{% endcomment %}
+{% comment %}<script type="application/javascript" src="{% static 'blog/js/navigation.js' %}" defer="defer"></script>{% endcomment %}
 <link href="{% static 'highlight/styles/github-gist.css' %}" rel="stylesheet">
 <script type="application/javascript" src="{% static 'highlight/highlight.pack.js' %}"></script>
 <script>hljs.initHighlightingOnLoad();</script>

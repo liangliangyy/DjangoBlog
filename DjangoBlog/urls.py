@@ -15,6 +15,17 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.contrib.sitemaps.views import sitemap
+from DjangoBlog.sitemap import StaticViewSitemap, ArticleSiteMap, CategorySiteMap, TagSiteMap, UserSiteMap
+
+sitemaps = {
+
+    'blog': ArticleSiteMap,
+    'Category': CategorySiteMap,
+    'Tag': TagSiteMap,
+    'User': UserSiteMap,
+    'static': StaticViewSitemap
+}
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -22,5 +33,7 @@ urlpatterns = [
 
     url(r'', include('comments.urls', namespace='comment', app_name='comments')),
     url(r'', include('accounts.urls', namespace='account', app_name='accounts')),
-    url(r'', include('oauth.urls', namespace='oauth', app_name='oauth'))
+    url(r'', include('oauth.urls', namespace='oauth', app_name='oauth')),
+    url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps},
+        name='django.contrib.sitemaps.views.sitemap')
 ]

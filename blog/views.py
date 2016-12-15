@@ -12,6 +12,9 @@ from django.core.exceptions import ObjectDoesNotExist
 from comments.forms import CommentForm
 from django.conf import settings
 from django import forms
+from blog.wordpress_helper import wordpress_helper
+from django import http
+from django.http import HttpResponse
 
 
 class ArticleListView(ListView):
@@ -102,12 +105,20 @@ class CategoryDetailView(ArticleListView):
 
     def get_queryset(self):
         categoryname = self.kwargs['category_name']
+
+        try:
+            categoryname = categoryname.split('/')[-1]
+        except:
+            pass
         article_list = Article.objects.filter(category__name=categoryname, status='p')
         return article_list
 
     def get_context_data(self, **kwargs):
         categoryname = self.kwargs['category_name']
-
+        try:
+            categoryname = categoryname.split('/')[-1]
+        except:
+            pass
         kwargs['page_type'] = CategoryDetailView.page_type
         kwargs['tag_name'] = categoryname
         return super(CategoryDetailView, self).get_context_data(**kwargs)
@@ -158,7 +169,28 @@ class TagDetailView(ArticleListView):
 
 def test(requests):
     post = Article.objects.all()
+    import re
     for p in post:
-        # p.views += 1
-        #p.summary = p.body[:settings.ARTICLE_SUB_LENGTH]
+        p.body = re.sub('\[code lang="\w+"\]', "'''", p.body)
+        p.body = re.sub('\[/code\]', "'''", p.body)
         p.save()
+
+
+def handle_wordpress_post(request, wordpress_slug):
+    """
+    wordpress文章301永久重定向
+    :param request:
+    :param wordpress_slug:
+    :return:
+    """
+    helper = wordpress_helper()
+    postid = helper.get_postid_by_postname(wordpress_slug)
+    print(postid)
+    if postid != 0:
+        try:
+            article = Article.objects.get(wordpress_id=postid)
+            url = article.get_absolute_url()
+            return http.HttpResponsePermanentRedirect(url)
+        except ObjectDoesNotExist:
+            return HttpResponse(status=404)
+    return HttpResponse(status=404)

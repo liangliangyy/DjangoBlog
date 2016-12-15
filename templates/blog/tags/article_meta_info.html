@@ -11,7 +11,7 @@
         被贴了
         
         {% for t in article.tags.all %}
-            <a href="#" rel="tag">{{ t.name }}</a>
+            <a href="{{ t.get_absolute_url }}" rel="tag">{{ t.name }}</a>
             {% if t != article.tags.all.last %}
                 ，
             {% endif %}
@@ -20,7 +20,7 @@
         标签。
     {% endif %}
     <span class="by-author">作者是<span class="author vcard"><a class="url fn n"
-                                                             href="#"
+                                                             href="{{ article.author.get_absolute_url }}"
                                                              title="查看所有由{{ article.author.username }}发布的文章"
                                                              rel="author">
         {{ article.author.username }}
