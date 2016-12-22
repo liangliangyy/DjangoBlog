@@ -15,20 +15,24 @@ class Article(models.Model):
         ('o', '打开'),
         ('c', '关闭'),
     )
+    TYPE = (
+        ('a', '文章'),
+        ('p', '页面'),
+    )
     title = models.CharField('标题', max_length=200)
     body = models.TextField('正文')
     created_time = models.DateTimeField('创建时间', auto_now_add=True)
     last_mod_time = models.DateTimeField('修改时间', auto_now=True)
     pub_time = models.DateTimeField('发布时间', blank=True, null=True,
                                     help_text="不指定发布时间则视为草稿，可以指定未来时间，到时将自动发布。")
-    status = models.CharField('文章状态', max_length=1, choices=STATUS_CHOICES, default='o')
-    comment_status = models.CharField('评论状态', max_length=1, choices=COMMENT_STATUS)
-    # summary = models.CharField('摘要', max_length=200, blank=True, help_text="可选，若为空将摘取正文的前300个字符。")
+    status = models.CharField('文章状态', max_length=1, choices=STATUS_CHOICES, default='p')
+    comment_status = models.CharField('评论状态', max_length=1, choices=COMMENT_STATUS, default='o')
+    type = models.CharField('类型', max_length=1, choices=TYPE, default='a')
     views = models.PositiveIntegerField('浏览量', default=0)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='作者', on_delete=models.CASCADE)
 
-    category = models.ForeignKey('Category', verbose_name='分类', on_delete=models.CASCADE)
-    tags = models.ManyToManyField('Tag', verbose_name='标签集合', blank=True)
+    category = models.ForeignKey('Category', verbose_name='分类', on_delete=models.CASCADE, blank=True, null=True)
+    tags = models.ManyToManyField('Tag', verbose_name='标签集合', blank=True, null=True)
 
     slug = models.SlugField(default='no-slug', max_length=60, blank=True)
     wordpress_id = models.IntegerField()
@@ -80,6 +84,7 @@ class Article(models.Model):
         parent_comments = comments.filter(parent_comment=None)
 
 
+'''
 class BlogPage(models.Model):
     """文章"""
     STATUS_CHOICES = (
@@ -113,7 +118,6 @@ class BlogPage(models.Model):
         return self.title
 
     def get_absolute_url(self):
-
         return reverse('blog:pagedetail', kwargs=
         {
             'page_id': self.id,
@@ -138,6 +142,10 @@ class BlogPage(models.Model):
     def comment_list(self):
         comments = self.comment_set.all()
         parent_comments = comments.filter(parent_comment=None)
+
+    def get_category_tree(self):
+        return []
+'''
 
 
 class Category(models.Model):

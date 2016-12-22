@@ -19,8 +19,10 @@ from django.conf import settings
 def seo_processor(requests):
     return {
         'SITE_NAME': settings.SITE_NAME,
+        'SITE_SEO_DESCRIPTION': settings.SITE_SEO_DESCRIPTION,
         'SITE_DESCRIPTION': settings.SITE_DESCRIPTION,
         'SITE_BASE_URL': 'http://' + requests.get_host() + '/',
         'ARTICLE_SUB_LENGTH': settings.ARTICLE_SUB_LENGTH,
-        'nav_category_list': Category.objects.all()
+        'nav_category_list': Category.objects.all(),
+        # 'nav_pages': BlogPage.objects.filter(status='p')
     }

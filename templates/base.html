@@ -12,18 +12,19 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width"/>
-    <title>逝去日子的博客 | 大巧无工,重剑无锋</title>
+    {% block header %}
+    {% endblock %}
     <link rel="profile" href="http://gmpg.org/xfn/11"/>
     <link rel="pingback" href="https://www.lylinux.org/xmlrpc.php"/>
     <!--[if lt IE 9]>
-<script src="{% static 'blog/js/html5.js' %}" type="text/javascript"></script>
-<![endif]-->
-    <meta property="wb:webmaster" content="fdb053e76bf865f3"/>
+    <script src="{% static 'blog/js/html5.js' %}" type="text/javascript"></script>
+    <![endif]-->
 
     <link rel='dns-prefetch' href='//fonts.googleapis.com'/>
     <link rel='dns-prefetch' href='//s.w.org'/>
-    <link rel="alternate" type="application/rss+xml" title="逝去日子的博客 &raquo; Feed" href="https://www.lylinux.org/feed"/>
-    <link rel="alternate" type="application/rss+xml" title="逝去日子的博客 &raquo; 评论Feed"
+    <link rel="alternate" type="application/rss+xml" title="{{ SITE_NAME }} &raquo; Feed"
+          href="{{ SITE_BASE_URL }}feed"/>
+    <link rel="alternate" type="application/rss+xml" title="{{ SITE_NAME }} &raquo; 评论Feed"
           href="https://www.lylinux.org/comments/feed"/>
 
 

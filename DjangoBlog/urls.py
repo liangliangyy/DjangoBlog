@@ -17,6 +17,7 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.sitemaps.views import sitemap
 from DjangoBlog.sitemap import StaticViewSitemap, ArticleSiteMap, CategorySiteMap, TagSiteMap, UserSiteMap
+from DjangoBlog.feeds import DjangoBlogFeed
 
 sitemaps = {
 
@@ -35,5 +36,6 @@ urlpatterns = [
     url(r'', include('accounts.urls', namespace='account', app_name='accounts')),
     url(r'', include('oauth.urls', namespace='oauth', app_name='oauth')),
     url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps},
-        name='django.contrib.sitemaps.views.sitemap')
+        name='django.contrib.sitemaps.views.sitemap'),
+    url(r'^feed/$', DjangoBlogFeed())
 ]

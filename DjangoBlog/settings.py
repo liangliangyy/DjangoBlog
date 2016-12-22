@@ -143,6 +143,8 @@ DATE_TIME_FORMAT = '%Y-%m-%d'
 
 SITE_NAME = 'Django Blog'
 SITE_DESCRIPTION = '大巧无工,重剑无锋.'
+SITE_SEO_DESCRIPTION = '小站主要用来分享和记录学习经验,教程,记录个人生活的点滴以及一些随笔.欢迎大家访问小站'
+
 ARTICLE_SUB_LENGTH = 300
 
 # bootstrap颜色样式

@@ -1,6 +1,6 @@
 {% load blog_tags %}
 <footer class="entry-meta">
-    本条目发布于<a href="{{ article.get_absolute_url }}" title="下午10:54" rel="bookmark">
+    本条目发布于<a href="{{ article.get_absolute_url }}" title="{% datetimeformat article.created_time %}" rel="bookmark">
 
     <time class="entry-date"
           datetime="{{ article.created_time }}">

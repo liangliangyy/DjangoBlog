@@ -15,6 +15,23 @@ from django import forms
 from blog.wordpress_helper import wordpress_helper
 from django import http
 from django.http import HttpResponse
+from abc import ABCMeta, abstractmethod
+
+
+class SeoProcessor():
+    __metaclass__ = ABCMeta
+
+    @abstractmethod
+    def get_title(self):
+        pass
+
+    @abstractmethod
+    def get_keywords(self):
+        pass
+
+    @abstractmethod
+    def get_description(self):
+        pass
 
 
 class ArticleListView(ListView):
@@ -30,7 +47,11 @@ class ArticleListView(ListView):
     page_kwarg = 'page'
 
 
-class IndexView(ArticleListView):
+class IndexView(ArticleListView, SeoProcessor):
+    def get_title(self):
+        return '逝去日子的博客'
+    def get_keywords(self):
+        pass
     def get_queryset(self):
         article_list = Article.objects.filter(status='p')
 
@@ -54,7 +75,7 @@ class ArticleDetailView(DetailView):
         return obj
 
     def get_context_data(self, **kwargs):
-        articleid = int(self.kwargs['article_id'])
+        articleid = int(self.kwargs[self.pk_url_kwarg])
 
         def get_article(id):
             try:
@@ -94,6 +115,20 @@ class ArticleDetailView(DetailView):
             data = form.cleaned_data
             pass
     """
+
+
+'''
+class PageDetailView(ArticleDetailView):
+    model = BlogPage
+    pk_url_kwarg = 'page_id'
+
+    def get_object(self):
+        obj = super(PageDetailView, self).get_object()
+        print(obj.title)
+        obj.viewed()
+        # obj.body = markdown2.markdown(obj.body)
+        return obj
+'''
 
 
 class CategoryDetailView(ArticleListView):

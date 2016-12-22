@@ -1,5 +1,3 @@
-
-
 <nav id="site-navigation" class="main-navigation" role="navigation">
     <button class="menu-toggle">菜单</button>
     <a class="assistive-text" href="#content" title="跳至正文">跳至正文</a>
@@ -14,7 +12,15 @@
             {% for node in root_categorys %}
                 {% include 'nav_node.html' %}
             {% endfor %}
+            {% if nav_pages %}
+                {% for node in nav_pages %}
 
+                    <li id="menu-item-{{ node.pk }}"
+                        class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-{{ node.pk }}">
+                        <a href="{{ node.get_absolute_url }}">{{ node.title }}</a>
+                    </li>
+                {% endfor %}
+            {% endif %}
         </ul>
     </div>
 </nav><!-- #site-navigation -->
