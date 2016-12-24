@@ -138,14 +138,15 @@ def load_sidebar(user):
 
 
 @register.inclusion_tag('blog/tags/article_meta_info.html')
-def load_article_metas(article):
+def load_article_metas(article, user):
     """
     获得文章meta信息
     :param article:
     :return:
     """
     return {
-        'article': article
+        'article': article,
+        'user': user
     }
 
 
@@ -160,7 +161,7 @@ def load_nav_info():
 
 
 @register.inclusion_tag('blog/tags/article_info.html')
-def load_article_detail(article, isindex):
+def load_article_detail(article, isindex, user):
     """
     加载文章详情
     :param article:
@@ -169,7 +170,8 @@ def load_article_detail(article, isindex):
     """
     return {
         'article': article,
-        'isindex': isindex
+        'isindex': isindex,
+        'user': user
     }
 
 

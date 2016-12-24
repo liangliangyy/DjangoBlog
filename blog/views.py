@@ -17,7 +17,7 @@ from django import http
 from django.http import HttpResponse
 from abc import ABCMeta, abstractmethod
 
-
+"""
 class SeoProcessor():
     __metaclass__ = ABCMeta
 
@@ -32,6 +32,7 @@ class SeoProcessor():
     @abstractmethod
     def get_description(self):
         pass
+"""
 
 
 class ArticleListView(ListView):
@@ -47,11 +48,7 @@ class ArticleListView(ListView):
     page_kwarg = 'page'
 
 
-class IndexView(ArticleListView, SeoProcessor):
-    def get_title(self):
-        return '逝去日子的博客'
-    def get_keywords(self):
-        pass
+class IndexView(ArticleListView):
     def get_queryset(self):
         article_list = Article.objects.filter(status='p')
 

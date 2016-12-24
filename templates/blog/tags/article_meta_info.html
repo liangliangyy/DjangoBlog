@@ -9,7 +9,7 @@
     。属于<a href="{{ article.category.get_absolute_url }}" rel="category tag">{{ article.category.name }}</a>分类，
     {% if article.tags.all %}
         被贴了
-        
+
         {% for t in article.tags.all %}
             <a href="{{ t.get_absolute_url }}" rel="tag">{{ t.name }}</a>
             {% if t != article.tags.all.last %}
@@ -24,5 +24,9 @@
                                                              title="查看所有由{{ article.author.username }}发布的文章"
                                                              rel="author">
         {{ article.author.username }}
-    </a></span>。</span>
+    </a></span>。
+        {% if user.is_authenticated %}
+            <a href="{{ article.get_admin_url }}">编辑</a>
+        {% endif %}
+    </span>
 </footer><!-- .entry-meta -->

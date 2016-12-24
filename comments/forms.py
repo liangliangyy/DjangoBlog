@@ -44,7 +44,10 @@ class LoginCommentForm(ModelForm):
 class CommentForm(ModelForm):
     url = forms.URLField(label='网址', required=False)
     email = forms.EmailField(label='电子邮箱', required=False)
-    name = forms.CharField(label='姓名')
+    name = forms.CharField(label='姓名', widget=forms.TextInput(attrs=
+                                                              {'value': "", 'size': "30", 'maxlength': "245",
+                                                               'aria-required': 'true'}
+                                                              ))
     parent_comment_id = forms.IntegerField(widget=forms.HiddenInput, required=False)
     """
     if get_user_model().is_authenticated:
@@ -61,6 +64,7 @@ class CommentForm(ModelForm):
                 'name': forms.CharField(widget=forms.HiddenInput()),
             })
     """
+
     class Meta:
         model = Comment
         fields = ['body']

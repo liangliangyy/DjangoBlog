@@ -5,14 +5,18 @@
             <img alt=""
                  src="{{ comment_item.author.email|gravatar_url:150 }}"
                  srcset="{{ comment_item.author.email|gravatar_url:150 }}"
-                 class="avatar avatar-96 photo" height="96" width="96"> <cite class="fn"><a
-                href="#" rel="external nofollow"
-                class="url">{{ comment_item.author.username }}</a></cite><span
-                class="says">说道：</span></div>
+                 class="avatar avatar-96 photo" height="96" width="96">
+            <cite class="fn">
+                <a rel="nofollow" href="{{ comment_item.author.get_absolute_url }}" rel="external nofollow"
+                   class="url">{{ comment_item.author.username }}
+                </a>
+            </cite>
+            <span class="says">说道：</span>
+        </div>
 
-        <div class="comment-meta commentmetadata"><a
-                href="#">
-            {{ comment_item.created_time }}</a></div>
+        <div class="comment-meta commentmetadata">
+            {{ comment_item.created_time }}
+        </div>
 
         <p>{{ comment_item.body }}</p>
 

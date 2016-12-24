@@ -83,6 +83,10 @@ class Article(models.Model):
         comments = self.comment_set.all()
         parent_comments = comments.filter(parent_comment=None)
 
+    def get_admin_url(self):
+        info = (self._meta.app_label, self._meta.model_name)
+        return reverse('admin:%s_%s_change' % info, args=(self.pk,))
+
 
 '''
 class BlogPage(models.Model):

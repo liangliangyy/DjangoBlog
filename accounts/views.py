@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from django.contrib.auth.views import login
+from django.contrib.auth.views import login, logout
 from .forms import RegisterForm, LoginForm
 from django.contrib.auth import authenticate
 from django.views.generic.edit import FormView
@@ -24,6 +24,10 @@ class RegisterView(FormView):
         user.save(True)
         return HttpResponseRedirect('/')
 
+
+def LogOut(requests):
+    logout(request=requests)
+    return HttpResponseRedirect("/")
 
 
 class LoginView(FormView):

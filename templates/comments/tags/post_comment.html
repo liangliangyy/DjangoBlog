@@ -11,6 +11,7 @@
             </p>{% endcomment %}
             <p class="comment-form-comment">
                 {{ form.body.label_tag }}
+
                 {{ form.body }}
                 {{ form.body.errors }}
                 {% comment %}<label for="comment">评论</label> <textarea id="comment" name="comment"
@@ -47,7 +48,8 @@
             </p>{% endcomment %}
             {{ form.parent_comment_id }}
 
-            <p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="发表评论"/>
+            <p class="form-submit">
+                <input name="submit" type="submit" id="submit" class="submit" value="发表评论"/>
                 <small class="cancel-comment" id="cancel_comment" style="display: none">
                     <a href="javascript:void(0)" id="cancel-comment-reply-link" onclick="cancel_reply()">取消回复</a>
                 </small>

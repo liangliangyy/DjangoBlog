@@ -15,7 +15,7 @@
                 <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>{% endcomment %}
                 {{ form.non_field_errors }}
                 {% for field in form %}
-                    {{ field  }}
+                    {{ field }}
                     {{ field.errors }}
                 {% endfor %}
 
@@ -33,7 +33,7 @@
         </div>
 
         <p class="text-center">
-            <a>Create an account</a>
+            <a href="{% url "account:register" %}">Create an account</a>
         </p>
 
     </div> <!-- /container -->

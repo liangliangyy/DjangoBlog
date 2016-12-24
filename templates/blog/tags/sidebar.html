@@ -78,7 +78,7 @@
         <ul>
             <li><a href="{{ SITE_BASE_URL }}/admin/">管理站点</a></li>
             {% if user.is_authenticated %}
-                <li><a href="{{ SITE_BASE_URL }}/logout/">登出</a>
+                <li><a href="{% url "account:logout" %}">登出</a>
                 </li>
 
             {% else %}
