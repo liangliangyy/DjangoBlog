@@ -21,7 +21,7 @@
             {% endif %}
 
             {% for article in article_list %}
-                {% load_article_detail article True %}
+                {% load_article_detail article True user %}
             {% endfor %}
             {% if is_paginated %}
                 <nav id="nav-below" class="navigation" role="navigation">
