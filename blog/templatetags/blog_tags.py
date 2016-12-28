@@ -83,7 +83,7 @@ def load_breadcrumb(article):
     """
     names = article.get_category_tree()
 
-    names.append((settings.SITE_NAME, 'http://127.0.0.1:8000'))
+    names.append((settings.SITE_NAME, settings.SITE_URL))
     names = names[::-1]
 
     return {

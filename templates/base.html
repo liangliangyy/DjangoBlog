@@ -77,9 +77,14 @@ var wpAutoTopSpeed = 1;</script>
 <div id="su-footer-links" style="text-align: center;"></div>
 {% endcomment %}
 {% comment %}<script type="application/javascript" src="{% static 'blog/js/navigation.js' %}" defer="defer"></script>{% endcomment %}
-<link href="{% static 'highlight/styles/github-gist.css' %}" rel="stylesheet">
-<script type="application/javascript" src="{% static 'highlight/highlight.pack.js' %}"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-<script src="{% static 'blog/js/blog.js' %}" type="application/javascript"></script>
+
 </body>
+<footer>
+    <link href="{% static 'highlight/styles/github-gist.css' %}" rel="stylesheet">
+    <script type="application/javascript" src="{% static 'highlight/highlight.pack.js' %}"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="{% static 'blog/js/blog.js' %}" type="application/javascript"></script>
+    {% block footer %}
+    {% endblock %}
+</footer>
 </html>

@@ -46,14 +46,15 @@ INSTALLED_APPS = [
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    # 'django.middleware.cache.UpdateCacheMiddleware',
+    'django.middleware.gzip.GZipMiddleware',
+    'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.cache.FetchFromCacheMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
+    'django.middleware.http.ConditionalGetMiddleware',
 ]
 
 ROOT_URLCONF = 'DjangoBlog.urls'
@@ -142,6 +143,7 @@ TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 DATE_TIME_FORMAT = '%Y-%m-%d'
 
 SITE_NAME = 'Django Blog'
+SITE_URL = 'http://blog.lylinux.org'
 SITE_DESCRIPTION = '大巧无工,重剑无锋.'
 SITE_SEO_DESCRIPTION = '小站主要用来分享和记录学习经验,教程,记录个人生活的点滴以及一些随笔.欢迎大家访问小站'
 
@@ -159,17 +161,23 @@ SIDEBAR_COMMENT_COUNT = 5
 
 # 分页
 PAGINATE_BY = 10
-
+# http缓存时间
+CACHE_CONTROL_MAX_AGE = 2592000
 # cache setting
-"""
+
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
         'LOCATION': '192.168.21.130:11211',
+    },
+    'localmem': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
     }
 }
-"""
-
+CACHE_MIDDLEWARE_SECONDS = 360000
+CACHE_MIDDLEWARE_KEY_PREFIX = "djangoblog"
+CACHE_MIDDLEWARE_ALIAS = 'default'
 OAHUTH = {
     'sina': {
         'appkey': '3161614143',
