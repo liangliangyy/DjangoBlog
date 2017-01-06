@@ -16,6 +16,8 @@ from blog.wordpress_helper import wordpress_helper
 from django import http
 from django.http import HttpResponse
 from abc import ABCMeta, abstractmethod
+from haystack.generic_views import SearchView
+from blog.forms import BlogSearchForm
 
 """
 class SeoProcessor():
@@ -197,6 +199,31 @@ class TagDetailView(ArticleListView):
         kwargs['page_type'] = TagDetailView.page_type
         kwargs['tag_name'] = tag_name
         return super(TagDetailView, self).get_context_data(**kwargs)
+
+
+"""
+class BlogSearchView(SearchView):
+    form_class = BlogSearchForm
+    template_name = 'blog/articledetail.html'
+    model = Article
+    # template_name属性用于指定使用哪个模板进行渲染
+    template_name = 'blog/index.html'
+
+    # context_object_name属性用于给上下文变量取名（在模板中使用该名字）
+    context_object_name = 'article_list'
+
+    def get_queryset(self):
+        queryset = super(BlogSearchView, self).get_queryset()
+        # further filter queryset based on some set of criteria
+        # return queryset.filter(pub_date__gte=date(2015, 1, 1))
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        tag_name = 'search'
+        kwargs['page_type'] = 'search'
+        kwargs['tag_name'] = tag_name
+        return super(BlogSearchView, self).get_context_data(**kwargs)
+"""
 
 
 def test(requests):

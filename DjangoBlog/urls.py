@@ -37,5 +37,6 @@ urlpatterns = [
     url(r'', include('oauth.urls', namespace='oauth', app_name='oauth')),
     url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps},
         name='django.contrib.sitemaps.views.sitemap'),
-    url(r'^feed/$', DjangoBlogFeed())
+    url(r'^feed/$', DjangoBlogFeed()),
+    url(r'^search', include('haystack.urls'),name='search'),
 ]

@@ -16,6 +16,9 @@
 from django.conf.urls import url
 from django.views.decorators.cache import cache_page
 from . import views
+from haystack.forms import ModelSearchForm
+from haystack.query import SearchQuerySet
+from haystack.views import SearchView
 
 urlpatterns = [
     # url(r'^$', cache_page(60 * 15)(views.IndexView.as_view()), name='index'),
@@ -32,5 +35,7 @@ urlpatterns = [
     url(r'^author/(?P<author_name>\w+).html$', views.AuthorDetailView.as_view(), name='author_detail'),
     url(r'^tag/(?P<tag_name>.+).html$', views.TagDetailView.as_view(), name='tag_detail'),
     url(r'(?P<wordpress_slug>\w+).html$', views.handle_wordpress_post),
-    url(r'^test$', views.test)
+    url(r'^test$', views.test),
+    # url(r'^search/?$', views.BlogSearchView.as_view(), name='search_view'),
+
 ]

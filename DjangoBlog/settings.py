@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sitemaps',
     'pagedown',
+    'haystack',
     'blog',
     'accounts',
     'comments',
@@ -130,6 +131,15 @@ USE_TZ = True
 
 SITE_ROOT = os.path.dirname(os.path.abspath(__file__))
 SITE_ROOT = os.path.abspath(os.path.join(SITE_ROOT, '../'))
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'DjangoBlog.whoosh_cn_backend.WhooshEngine',
+        'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
+    },
+}
+# 自动更新搜索索引
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
 STATIC_ROOT = os.path.join(SITE_ROOT, 'collectedstatic')
 

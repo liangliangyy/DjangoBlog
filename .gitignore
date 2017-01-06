@@ -67,3 +67,4 @@ target/
 migrations/
 !migrations/__init__.py
 collectedstatic/
+DjangoBlog/whoosh_index/
