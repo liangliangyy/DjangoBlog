@@ -92,7 +92,7 @@ def load_breadcrumb(article):
     }
 
 
-@register.inclusion_tag('blog/tags/articletaglist.html')
+@register.inclusion_tag('blog/tags/article_tag_list.html')
 def load_articletags(article):
     """
     文章标签
@@ -168,6 +168,8 @@ def load_article_detail(article, isindex, user):
     :param isindex:是否列表页，若是列表页只显示摘要
     :return:
     """
+
+    print()
     return {
         'article': article,
         'isindex': isindex,

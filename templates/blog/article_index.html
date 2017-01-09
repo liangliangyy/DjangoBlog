@@ -1,9 +1,9 @@
-{% extends 'base.html' %}
+{% extends 'share_layout/base.html' %}
 {% load blog_tags %}
 {% block header %}
     <title>{{ SITE_NAME }} | {{ SITE_DESCRIPTION }}</title>
     <meta name="description" content="{{ SITE_SEO_DESCRIPTION }}"/>
-    <meta name="keywords" content="linux,apache,mysql,服务器,ubuntu,shell,java,web,javaweb,wordpress,csharp,.net,asp"/>
+    <meta name="keywords" content="{{ SITE_KEYWORDS }}"/>
     <meta property="og:type" content="blog"/>
     <meta property="og:title" content="{{ SITE_NAME }}"/>
     <meta property="og:description" content="{{ SITE_DESCRIPTION }}"/>

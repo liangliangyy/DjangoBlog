@@ -35,7 +35,6 @@ class Article(models.Model):
     tags = models.ManyToManyField('Tag', verbose_name='标签集合', blank=True)
 
     slug = models.SlugField(default='no-slug', max_length=60, blank=True)
-    wordpress_id = models.IntegerField()
 
     def __str__(self):
         return self.title
@@ -158,7 +157,7 @@ class Category(models.Model):
     created_time = models.DateTimeField('创建时间', auto_now_add=True)
     last_mod_time = models.DateTimeField('修改时间', auto_now=True)
     parent_category = models.ForeignKey('self', verbose_name="父级分类", blank=True, null=True)
-    wordpress_category_id = models.IntegerField()
+
 
     class Meta:
         ordering = ['name']
@@ -177,7 +176,7 @@ class Tag(models.Model):
     name = models.CharField('标签名', max_length=30)
     created_time = models.DateTimeField('创建时间', auto_now_add=True)
     last_mod_time = models.DateTimeField('修改时间', auto_now=True)
-    wordpress_tag_id = models.IntegerField()
+
 
     def __str__(self):
         return self.name

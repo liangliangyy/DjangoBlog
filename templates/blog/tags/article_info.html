@@ -13,9 +13,16 @@
         </h1>
         <div class="comments-link">
             {% if article.comment_status == "o" %}
-                <a href="{{ article.get_absolute_url }}#comments"
-                   class="ds-thread-count" data-thread-key="3815" rel="nofollow"><span
-                        class="leave-reply">发表评论</span></a>
+                <a href="{{ article.get_absolute_url }}#comments" class="ds-thread-count" data-thread-key="3815"
+                   rel="nofollow">
+                    <span class="leave-reply">
+                    {% if article.comment and article.comment_set.count %}
+                        {{ article.comment_set.count }}个评论
+                    {% else %}
+                        发表评论
+                    {% endif %}
+                    </span>
+                </a>
             {% endif %}
             <div style="float:right">
                 {{ article.views }} views

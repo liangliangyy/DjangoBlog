@@ -12,7 +12,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from comments.forms import CommentForm
 from django.conf import settings
 from django import forms
-from blog.wordpress_helper import wordpress_helper
 from django import http
 from django.http import HttpResponse
 from abc import ABCMeta, abstractmethod
@@ -39,7 +38,7 @@ class SeoProcessor():
 
 class ArticleListView(ListView):
     # template_name属性用于指定使用哪个模板进行渲染
-    template_name = 'blog/index.html'
+    template_name = 'blog/article_index.html'
 
     # context_object_name属性用于给上下文变量取名（在模板中使用该名字）
     context_object_name = 'article_list'
@@ -62,7 +61,7 @@ class IndexView(ArticleListView):
 
 
 class ArticleDetailView(DetailView):
-    template_name = 'blog/articledetail.html'
+    template_name = 'blog/article_detail.html'
     model = Article
     pk_url_kwarg = 'article_id'
     context_object_name = "article"
@@ -131,7 +130,7 @@ class PageDetailView(ArticleDetailView):
 
 
 class CategoryDetailView(ArticleListView):
-    # template_name = 'index.html'
+    # template_name = 'article_index.html'
     # context_object_name = 'article_list'
 
     # pk_url_kwarg = 'article_name'
@@ -201,13 +200,14 @@ class TagDetailView(ArticleListView):
         return super(TagDetailView, self).get_context_data(**kwargs)
 
 
+
 """
 class BlogSearchView(SearchView):
     form_class = BlogSearchForm
-    template_name = 'blog/articledetail.html'
+    template_name = 'blog/article_detail.html'
     model = Article
     # template_name属性用于指定使用哪个模板进行渲染
-    template_name = 'blog/index.html'
+    template_name = 'blog/article_index.html'
 
     # context_object_name属性用于给上下文变量取名（在模板中使用该名字）
     context_object_name = 'article_list'
@@ -224,32 +224,3 @@ class BlogSearchView(SearchView):
         kwargs['tag_name'] = tag_name
         return super(BlogSearchView, self).get_context_data(**kwargs)
 """
-
-
-def test(requests):
-    post = Article.objects.all()
-    import re
-    for p in post:
-        p.body = re.sub('\[code lang="\w+"\]', "'''", p.body)
-        p.body = re.sub('\[/code\]', "'''", p.body)
-        p.save()
-
-
-def handle_wordpress_post(request, wordpress_slug):
-    """
-    wordpress文章301永久重定向
-    :param request:
-    :param wordpress_slug:
-    :return:
-    """
-    helper = wordpress_helper()
-    postid = helper.get_postid_by_postname(wordpress_slug)
-    print(postid)
-    if postid != 0:
-        try:
-            article = Article.objects.get(wordpress_id=postid)
-            url = article.get_absolute_url()
-            return http.HttpResponsePermanentRedirect(url)
-        except ObjectDoesNotExist:
-            return HttpResponse(status=404)
-    return HttpResponse(status=404)

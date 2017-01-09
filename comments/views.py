@@ -12,7 +12,7 @@ from django.contrib.auth import get_user_model
 
 class CommentPostView(FormView):
     form_class = CommentForm
-    template_name = 'blog/articledetail.html'
+    template_name = 'blog/article_detail.html'
 
     def get(self, request, *args, **kwargs):
         article_id = self.kwargs['article_id']
