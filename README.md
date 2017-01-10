@@ -1,4 +1,4 @@
-#DjangoBlog
+# DjangoBlog
 
 基于`python3.5`和`Django1.10`的博客。
 
@@ -13,9 +13,10 @@ OS X / Linux 电脑，终端下执行:
     curl https://raw.github.com/pypa/pip/master/contrib/get-pip.py | python
     
 windows电脑：  
- 下载 http://peak.telecommunity.com/dist/ez_setup.py 和 https://raw.github.com/pypa/pip/master/contrib/get-pip.py 这两个文件，双击运行。
- 
- ## 运行
+ 下载 http://peak.telecommunity.com/dist/ez_setup.py 和 https://raw.github.com/pypa/pip/master/contrib/get-pip.py 这两个文件，双击运行。  
+       
+
+## 运行
  
  修改`DjangoBlog/setting.py` 修改数据库配置，如下所示：
    
@@ -30,15 +31,15 @@ windows电脑：
         }
     }
       
- ### 创建数据库
+### 创建数据库
  
  终端下执行:  
  
     ./manage.py makemigrations
     ./manage.py migrate  
- ### 开始运行：
+### 开始运行：
  执行：  
  `./manage.py runserver`
  
- 浏览器打开:http://127.0.0.1:8000/就可以看到效果了。
+ 浏览器打开: http://127.0.0.1:8000/  就可以看到效果了。
  
