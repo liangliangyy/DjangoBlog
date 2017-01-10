@@ -7,7 +7,7 @@
 
         <ul class="sub-menu">
             {% for child in child_categorys %}
-                {% with node=child template_name="nav_node.html" %}
+                {% with node=child template_name="share_layout/nav_node.html" %}
                     {% include template_name %}
                 {% endwith %}
             {% endfor %}
