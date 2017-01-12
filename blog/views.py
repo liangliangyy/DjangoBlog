@@ -208,7 +208,7 @@ def fileupload(request):
     if request.method == 'POST':
         fname = ''
         timestr = datetime.datetime.now().strftime('%Y/%m/%d')
-        basepath = os.path.join(r'image/', timestr)
+        basepath = os.path.join(r'/var/www/resource/image/', timestr)
         if not os.path.exists(basepath):
             os.makedirs(basepath)
         fname = ''
