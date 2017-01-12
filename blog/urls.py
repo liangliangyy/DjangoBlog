@@ -32,4 +32,5 @@ urlpatterns = [
     url(r'^category/(?P<category_name>\S+).html$', views.CategoryDetailView.as_view(), name='category_detail'),
     url(r'^author/(?P<author_name>\w+).html$', views.AuthorDetailView.as_view(), name='author_detail'),
     url(r'^tag/(?P<tag_name>.+).html$', views.TagDetailView.as_view(), name='tag_detail'),
+    url(r'^upload', views.fileupload, name='upload'),
 ]
