@@ -17,6 +17,9 @@ from django.http import HttpResponse
 from abc import ABCMeta, abstractmethod
 from haystack.generic_views import SearchView
 from blog.forms import BlogSearchForm
+import datetime
+from django.views.decorators.csrf import csrf_exempt
+import os
 
 """
 class SeoProcessor():
@@ -199,6 +202,25 @@ class TagDetailView(ArticleListView):
         kwargs['tag_name'] = tag_name
         return super(TagDetailView, self).get_context_data(**kwargs)
 
+
+@csrf_exempt
+def fileupload(request):
+    if request.method == 'POST':
+        fname = ''
+        timestr = datetime.datetime.now().strftime('%Y/%m/%d')
+        basepath = os.path.join(r'/var/www/resource/image/', timestr)
+        if not os.path.exists(basepath):
+            os.makedirs(basepath)
+        for filename, file in request.FILES.iteritems():
+            fname = filename
+            savepath = os.path.join(basepath, filename)
+            with open(savepath, 'wb+') as wfile:
+                for chunk in file.chunks():
+                    wfile.write(chunk)
+        return HttpResponse('https://resource.lylinux.net/' + 'image/' + timestr + '/' + fname)
+
+    else:
+        return HttpResponse("only for post")
 
 
 """

@@ -25,7 +25,7 @@ SECRET_KEY = '&3g0bdza#c%dm1lf%5gi&0-*53p3t0m*hmcvo29cn^$ji7je(c'
 DEBUG = True
 
 # ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['blog.lylinux.org', '127.0.0.1']
+ALLOWED_HOSTS = ['www.lylinux.net', '127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
