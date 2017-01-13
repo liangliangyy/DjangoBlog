@@ -1,0 +1,15 @@
+{
+  "name": "pygments-css",
+  "version": "1.0.0",
+  "description": "CSS stylesheets for pygments",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/richleland/pygments-css.git"
+  },
+  "keywords": ["pygments", "css", "highlighting"],
+  "license": "UNLICENSE",
+  "bugs": {
+    "url": "https://github.com/richleland/pygments-css/issues"
+  },
+  "homepage": "https://github.com/richleland/pygments-css#readme"
+}

@@ -1,6 +1,8 @@
 {% load blog_tags %}
 <footer class="entry-meta">
-    本条目发布于<a href="{{ article.get_absolute_url }}" title="{% datetimeformat article.created_time %}" rel="bookmark">
+    本条目发布于<a href="{{ article.get_absolute_url }}" title="{% datetimeformat article.created_time %}"
+             itemprop="datePublished" content="{% datetimeformat article.created_time %}"
+             rel="bookmark">
 
     <time class="entry-date"
           datetime="{{ article.created_time }}">
@@ -23,7 +25,12 @@
                                                              href="{{ article.author.get_absolute_url }}"
                                                              title="查看所有由{{ article.author.username }}发布的文章"
                                                              rel="author">
+        <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+
+<span itemprop="name">
+
         {{ article.author.username }}
+</span></span>
     </a></span>。
         {% if user.is_authenticated %}
             <a href="{{ article.get_admin_url }}">编辑</a>

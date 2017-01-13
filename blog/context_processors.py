@@ -19,6 +19,7 @@ from django.conf import settings
 def seo_processor(requests):
     return {
         'SITE_NAME': settings.SITE_NAME,
+        'SHOW_GOOGLE_ADSENSE': settings.SHOW_GOOGLE_ADSENSE,
         'SITE_SEO_DESCRIPTION': settings.SITE_SEO_DESCRIPTION,
         'SITE_DESCRIPTION': settings.SITE_DESCRIPTION,
         'SITE_KEYWORDS': settings.SITE_SEO_KEYWORDS,

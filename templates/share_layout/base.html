@@ -41,7 +41,7 @@
     {% comment %}<script type='text/javascript' src='{% static 'blog/js/jquery.js' %}' defer='defer'></script>
     <script type='text/javascript' src='{% static 'blog/js/jquery-migrate.min.js' %}' defer='defer'></script>{% endcomment %}
     <script type="text/javascript" src="{% static 'blog/js/jquery-3.1.1.js' %}"></script>
-
+    <link rel="stylesheet" href="{% static 'pygments/default.css' %}"/>
 </head>
 
 <body class="home blog custom-font-enabled">
@@ -80,9 +80,9 @@ var wpAutoTopSpeed = 1;</script>
 
 </body>
 <footer>
-    <link href="{% static 'highlight/styles/github-gist.css' %}" rel="stylesheet">
+    {% comment %}<link href="{% static 'highlight/styles/default.css' %}" rel="stylesheet">
     <script type="application/javascript" src="{% static 'highlight/highlight.pack.js' %}"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
+    <script>hljs.initHighlightingOnLoad();</script>{% endcomment %}
     <script src="{% static 'blog/js/blog.js' %}" type="application/javascript"></script>
     <script src="{% static 'blog/js/navigation.js' %}" type="application/javascript"></script>
     {% block footer %}

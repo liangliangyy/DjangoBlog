@@ -74,6 +74,9 @@
             </ul>
         </aside>
     {% endif %}
+    {% if show_adsense %}
+        {% include 'share_layout/adsense.html' %}
+    {% endif %}
     <aside id="meta-2" class="widget widget_meta"><h3 class="widget-title">功能</h3>
         <ul>
             <li><a href="{{ SITE_BASE_URL }}/admin/">管理站点</a></li>

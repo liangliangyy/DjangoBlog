@@ -1,0 +1,1595 @@
+
+requirements.txt
+end read
+start upload
+end upload
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Page not found at /fileupload</title>
+  <meta name="robots" content="NONE,NOARCHIVE">
+  <style type="text/css">
+    html * { padding:0; margin:0; }
+    body * { padding:10px 20px; }
+    body * * { padding:0; }
+    body { font:small sans-serif; background:#eee; }
+    body>div { border-bottom:1px solid #ddd; }
+    h1 { font-weight:normal; margin-bottom:.4em; }
+    h1 span { font-size:60%; color:#666; font-weight:normal; }
+    table { border:none; border-collapse: collapse; width:100%; }
+    td, th { vertical-align:top; padding:2px 3px; }
+    th { width:12em; text-align:right; color:#666; padding-right:.5em; }
+    #info { background:#f6f6f6; }
+    #info ol { margin: 0.5em 4em; }
+    #info ol li { font-family: monospace; }
+    #summary { background: #ffc; }
+    #explanation { background:#eee; border-bottom: 0px none; }
+  </style>
+</head>
+<body>
+  <div id="summary">
+    <h1>Page not found <span>(404)</span></h1>
+    <table class="meta">
+      <tr>
+        <th>Request Method:</th>
+        <td>POST</td>
+      </tr>
+      <tr>
+        <th>Request URL:</th>
+        <td>http://www.lylinux.net/fileupload</td>
+      </tr>
+      
+    </table>
+  </div>
+  <div id="info">
+    
+      <p>
+      Using the URLconf defined in <code>DjangoBlog.urls</code>,
+      Django tried these URL patterns, in this order:
+      </p>
+      <ol>
+        
+          <li>
+            
+                ^admin/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                ^$
+                [name='index']
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                ^page/(?P&lt;page&gt;\d+)$
+                [name='index_page']
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                ^article/(?P&lt;year&gt;\d+)/(?P&lt;month&gt;\d+)/(?P&lt;day&gt;\d+)/(?P&lt;article_id&gt;\d+)-(?P&lt;slug&gt;\S+).html$
+                [name='detail']
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                ^blogpage/(?P&lt;year&gt;\d+)/(?P&lt;month&gt;\d+)/(?P&lt;day&gt;\d+)/(?P&lt;page_id&gt;\d+)-(?P&lt;slug&gt;\S+).html$
+                [name='pagedetail']
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                ^category/(?P&lt;category_name&gt;\S+).html$
+                [name='category_detail']
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                ^author/(?P&lt;author_name&gt;\w+).html$
+                [name='author_detail']
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                ^tag/(?P&lt;tag_name&gt;.+).html$
+                [name='tag_detail']
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                ^upload
+                [name='upload']
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                ^article/(?P&lt;article_id&gt;\d+)/postcomment$
+                [name='postcomment']
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                ^login/$
+                [name='login']
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                ^register/$
+                [name='register']
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                ^logout/$
+                [name='logout']
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                ^oauth/wbauthorize/(?P&lt;sitename&gt;\w+)$
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                ^oauth/wboauthurl$
+                
+            
+          </li>
+        
+          <li>
+            
+                ^sitemap\.xml$
+                [name='django.contrib.sitemaps.views.sitemap']
+            
+          </li>
+        
+          <li>
+            
+                ^feed/$
+                
+            
+          </li>
+        
+          <li>
+            
+                ^search
+                
+            
+          </li>
+        
+      </ol>
+      <p>The current URL, <code>fileupload</code>, didn't match any of these.</p>
+    
+  </div>
+
+  <div id="explanation">
+    <p>
+      You're seeing this error because you have <code>DEBUG = True</code> in
+      your Django settings file. Change that to <code>False</code>, and Django
+      will display a standard 404 page.
+    </p>
+  </div>
+</body>
+</html>
+
+requirements.txt
+end read
+start upload
+end upload
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="robots" content="NONE,NOARCHIVE">
+  <title>AttributeError at /upload</title>
+  <style type="text/css">
+    html * { padding:0; margin:0; }
+    body * { padding:10px 20px; }
+    body * * { padding:0; }
+    body { font:small sans-serif; }
+    body>div { border-bottom:1px solid #ddd; }
+    h1 { font-weight:normal; }
+    h2 { margin-bottom:.8em; }
+    h2 span { font-size:80%; color:#666; font-weight:normal; }
+    h3 { margin:1em 0 .5em 0; }
+    h4 { margin:0 0 .5em 0; font-weight: normal; }
+    code, pre { font-size: 100%; white-space: pre-wrap; }
+    table { border:1px solid #ccc; border-collapse: collapse; width:100%; background:white; }
+    tbody td, tbody th { vertical-align:top; padding:2px 3px; }
+    thead th {
+      padding:1px 6px 1px 3px; background:#fefefe; text-align:left;
+      font-weight:normal; font-size:11px; border:1px solid #ddd;
+    }
+    tbody th { width:12em; text-align:right; color:#666; padding-right:.5em; }
+    table.vars { margin:5px 0 2px 40px; }
+    table.vars td, table.req td { font-family:monospace; }
+    table td.code { width:100%; }
+    table td.code pre { overflow:hidden; }
+    table.source th { color:#666; }
+    table.source td { font-family:monospace; white-space:pre; border-bottom:1px solid #eee; }
+    ul.traceback { list-style-type:none; color: #222; }
+    ul.traceback li.frame { padding-bottom:1em; color:#666; }
+    ul.traceback li.user { background-color:#e0e0e0; color:#000 }
+    div.context { padding:10px 0; overflow:hidden; }
+    div.context ol { padding-left:30px; margin:0 10px; list-style-position: inside; }
+    div.context ol li { font-family:monospace; white-space:pre; color:#777; cursor:pointer; padding-left: 2px; }
+    div.context ol li pre { display:inline; }
+    div.context ol.context-line li { color:#505050; background-color:#dfdfdf; padding: 3px 2px; }
+    div.context ol.context-line li span { position:absolute; right:32px; }
+    .user div.context ol.context-line li { background-color:#bbb; color:#000; }
+    .user div.context ol li { color:#666; }
+    div.commands { margin-left: 40px; }
+    div.commands a { color:#555; text-decoration:none; }
+    .user div.commands a { color: black; }
+    #summary { background: #ffc; }
+    #summary h2 { font-weight: normal; color: #666; }
+    #explanation { background:#eee; }
+    #template, #template-not-exist { background:#f6f6f6; }
+    #template-not-exist ul { margin: 0 0 10px 20px; }
+    #template-not-exist .postmortem-section { margin-bottom: 3px; }
+    #unicode-hint { background:#eee; }
+    #traceback { background:#eee; }
+    #requestinfo { background:#f6f6f6; padding-left:120px; }
+    #summary table { border:none; background:transparent; }
+    #requestinfo h2, #requestinfo h3 { position:relative; margin-left:-100px; }
+    #requestinfo h3 { margin-bottom:-1em; }
+    .error { background: #ffc; }
+    .specific { color:#cc3300; font-weight:bold; }
+    h2 span.commands { font-size:.7em;}
+    span.commands a:link {color:#5E5694;}
+    pre.exception_value { font-family: sans-serif; color: #666; font-size: 1.5em; margin: 10px 0 10px 0; }
+    .append-bottom { margin-bottom: 10px; }
+  </style>
+  
+  <script type="text/javascript">
+  //<!--
+    function getElementsByClassName(oElm, strTagName, strClassName){
+        // Written by Jonathan Snook, http://www.snook.ca/jon; Add-ons by Robert Nyman, http://www.robertnyman.com
+        var arrElements = (strTagName == "*" && document.all)? document.all :
+        oElm.getElementsByTagName(strTagName);
+        var arrReturnElements = new Array();
+        strClassName = strClassName.replace(/\-/g, "\-");
+        var oRegExp = new RegExp("(^|\s)" + strClassName + "(\s|$)");
+        var oElement;
+        for(var i=0; i<arrElements.length; i++){
+            oElement = arrElements[i];
+            if(oRegExp.test(oElement.className)){
+                arrReturnElements.push(oElement);
+            }
+        }
+        return (arrReturnElements)
+    }
+    function hideAll(elems) {
+      for (var e = 0; e < elems.length; e++) {
+        elems[e].style.display = 'none';
+      }
+    }
+    window.onload = function() {
+      hideAll(getElementsByClassName(document, 'table', 'vars'));
+      hideAll(getElementsByClassName(document, 'ol', 'pre-context'));
+      hideAll(getElementsByClassName(document, 'ol', 'post-context'));
+      hideAll(getElementsByClassName(document, 'div', 'pastebin'));
+    }
+    function toggle() {
+      for (var i = 0; i < arguments.length; i++) {
+        var e = document.getElementById(arguments[i]);
+        if (e) {
+          e.style.display = e.style.display == 'none' ? 'block': 'none';
+        }
+      }
+      return false;
+    }
+    function varToggle(link, id) {
+      toggle('v' + id);
+      var s = link.getElementsByTagName('span')[0];
+      var uarr = String.fromCharCode(0x25b6);
+      var darr = String.fromCharCode(0x25bc);
+      s.textContent = s.textContent == uarr ? darr : uarr;
+      return false;
+    }
+    function switchPastebinFriendly(link) {
+      s1 = "Switch to copy-and-paste view";
+      s2 = "Switch back to interactive view";
+      link.textContent = link.textContent.trim() == s1 ? s2: s1;
+      toggle('browserTraceback', 'pastebinTraceback');
+      return false;
+    }
+    //-->
+  </script>
+  
+</head>
+<body>
+<div id="summary">
+  <h1>AttributeError at /upload</h1>
+  <pre class="exception_value">&#39;MultiValueDict&#39; object has no attribute &#39;iteritems&#39;</pre>
+  <table class="meta">
+
+    <tr>
+      <th>Request Method:</th>
+      <td>POST</td>
+    </tr>
+    <tr>
+      <th>Request URL:</th>
+      <td>http://www.lylinux.net/upload</td>
+    </tr>
+
+    <tr>
+      <th>Django Version:</th>
+      <td>1.10.3</td>
+    </tr>
+
+    <tr>
+      <th>Exception Type:</th>
+      <td>AttributeError</td>
+    </tr>
+
+
+    <tr>
+      <th>Exception Value:</th>
+      <td><pre>&#39;MultiValueDict&#39; object has no attribute &#39;iteritems&#39;<
+error
+/Users/liangliang/1.txt
+end read
+start upload
+end upload
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="robots" content="NONE,NOARCHIVE">
+  <title>AttributeError at /upload</title>
+  <style type="text/css">
+    html * { padding:0; margin:0; }
+    body * { padding:10px 20px; }
+    body * * { padding:0; }
+    body { font:small sans-serif; }
+    body>div { border-bottom:1px solid #ddd; }
+    h1 { font-weight:normal; }
+    h2 { margin-bottom:.8em; }
+    h2 span { font-size:80%; color:#666; font-weight:normal; }
+    h3 { margin:1em 0 .5em 0; }
+    h4 { margin:0 0 .5em 0; font-weight: normal; }
+    code, pre { font-size: 100%; white-space: pre-wrap; }
+    table { border:1px solid #ccc; border-collapse: collapse; width:100%; background:white; }
+    tbody td, tbody th { vertical-align:top; padding:2px 3px; }
+    thead th {
+      padding:1px 6px 1px 3px; background:#fefefe; text-align:left;
+      font-weight:normal; font-size:11px; border:1px solid #ddd;
+    }
+    tbody th { width:12em; text-align:right; color:#666; padding-right:.5em; }
+    table.vars { margin:5px 0 2px 40px; }
+    table.vars td, table.req td { font-family:monospace; }
+    table td.code { width:100%; }
+    table td.code pre { overflow:hidden; }
+    table.source th { color:#666; }
+    table.source td { font-family:monospace; white-space:pre; border-bottom:1px solid #eee; }
+    ul.traceback { list-style-type:none; color: #222; }
+    ul.traceback li.frame { padding-bottom:1em; color:#666; }
+    ul.traceback li.user { background-color:#e0e0e0; color:#000 }
+    div.context { padding:10px 0; overflow:hidden; }
+    div.context ol { padding-left:30px; margin:0 10px; list-style-position: inside; }
+    div.context ol li { font-family:monospace; white-space:pre; color:#777; cursor:pointer; padding-left: 2px; }
+    div.context ol li pre { display:inline; }
+    div.context ol.context-line li { color:#505050; background-color:#dfdfdf; padding: 3px 2px; }
+    div.context ol.context-line li span { position:absolute; right:32px; }
+    .user div.context ol.context-line li { background-color:#bbb; color:#000; }
+    .user div.context ol li { color:#666; }
+    div.commands { margin-left: 40px; }
+    div.commands a { color:#555; text-decoration:none; }
+    .user div.commands a { color: black; }
+    #summary { background: #ffc; }
+    #summary h2 { font-weight: normal; color: #666; }
+    #explanation { background:#eee; }
+    #template, #template-not-exist { background:#f6f6f6; }
+    #template-not-exist ul { margin: 0 0 10px 20px; }
+    #template-not-exist .postmortem-section { margin-bottom: 3px; }
+    #unicode-hint { background:#eee; }
+    #traceback { background:#eee; }
+    #requestinfo { background:#f6f6f6; padding-left:120px; }
+    #summary table { border:none; background:transparent; }
+    #requestinfo h2, #requestinfo h3 { position:relative; margin-left:-100px; }
+    #requestinfo h3 { margin-bottom:-1em; }
+    .error { background: #ffc; }
+    .specific { color:#cc3300; font-weight:bold; }
+    h2 span.commands { font-size:.7em;}
+    span.commands a:link {color:#5E5694;}
+    pre.exception_value { font-family: sans-serif; color: #666; font-size: 1.5em; margin: 10px 0 10px 0; }
+    .append-bottom { margin-bottom: 10px; }
+  </style>
+  
+  <script type="text/javascript">
+  //<!--
+    function getElementsByClassName(oElm, strTagName, strClassName){
+        // Written by Jonathan Snook, http://www.snook.ca/jon; Add-ons by Robert Nyman, http://www.robertnyman.com
+        var arrElements = (strTagName == "*" && document.all)? document.all :
+        oElm.getElementsByTagName(strTagName);
+        var arrReturnElements = new Array();
+        strClassName = strClassName.replace(/\-/g, "\-");
+        var oRegExp = new RegExp("(^|\s)" + strClassName + "(\s|$)");
+        var oElement;
+        for(var i=0; i<arrElements.length; i++){
+            oElement = arrElements[i];
+            if(oRegExp.test(oElement.className)){
+                arrReturnElements.push(oElement);
+            }
+        }
+        return (arrReturnElements)
+    }
+    function hideAll(elems) {
+      for (var e = 0; e < elems.length; e++) {
+        elems[e].style.display = 'none';
+      }
+    }
+    window.onload = function() {
+      hideAll(getElementsByClassName(document, 'table', 'vars'));
+      hideAll(getElementsByClassName(document, 'ol', 'pre-context'));
+      hideAll(getElementsByClassName(document, 'ol', 'post-context'));
+      hideAll(getElementsByClassName(document, 'div', 'pastebin'));
+    }
+    function toggle() {
+      for (var i = 0; i < arguments.length; i++) {
+        var e = document.getElementById(arguments[i]);
+        if (e) {
+          e.style.display = e.style.display == 'none' ? 'block': 'none';
+        }
+      }
+      return false;
+    }
+    function varToggle(link, id) {
+      toggle('v' + id);
+      var s = link.getElementsByTagName('span')[0];
+      var uarr = String.fromCharCode(0x25b6);
+      var darr = String.fromCharCode(0x25bc);
+      s.textContent = s.textContent == uarr ? darr : uarr;
+      return false;
+    }
+    function switchPastebinFriendly(link) {
+      s1 = "Switch to copy-and-paste view";
+      s2 = "Switch back to interactive view";
+      link.textContent = link.textContent.trim() == s1 ? s2: s1;
+      toggle('browserTraceback', 'pastebinTraceback');
+      return false;
+    }
+    //-->
+  </script>
+  
+</head>
+<body>
+<div id="summary">
+  <h1>AttributeError at /upload</h1>
+  <pre class="exception_value">&#39;MultiValueDict&#39; object has no attribute &#39;iteritems&#39;</pre>
+  <table class="meta">
+
+    <tr>
+      <th>Request Method:</th>
+      <td>POST</td>
+    </tr>
+    <tr>
+      <th>Request URL:</th>
+      <td>http://www.lylinux.net/upload</td>
+    </tr>
+
+    <tr>
+      <th>Django Version:</th>
+      <td>1.10.3</td>
+    </tr>
+
+    <tr>
+      <th>Exception Type:</th>
+      <td>AttributeError</td>
+    </tr>
+
+
+    <tr>
+      <th>Exception Value:</th>
+      <td><pre>&#39;MultiValueDict&#39; object has no attribute &#39;iteritems&#39;<
+error
+/Users/liangliang/1.txt
+end read
+start upload
+end upload
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="robots" content="NONE,NOARCHIVE">
+  <title>AttributeError at /upload</title>
+  <style type="text/css">
+    html * { padding:0; margin:0; }
+    body * { padding:10px 20px; }
+    body * * { padding:0; }
+    body { font:small sans-serif; }
+    body>div { border-bottom:1px solid #ddd; }
+    h1 { font-weight:normal; }
+    h2 { margin-bottom:.8em; }
+    h2 span { font-size:80%; color:#666; font-weight:normal; }
+    h3 { margin:1em 0 .5em 0; }
+    h4 { margin:0 0 .5em 0; font-weight: normal; }
+    code, pre { font-size: 100%; white-space: pre-wrap; }
+    table { border:1px solid #ccc; border-collapse: collapse; width:100%; background:white; }
+    tbody td, tbody th { vertical-align:top; padding:2px 3px; }
+    thead th {
+      padding:1px 6px 1px 3px; background:#fefefe; text-align:left;
+      font-weight:normal; font-size:11px; border:1px solid #ddd;
+    }
+    tbody th { width:12em; text-align:right; color:#666; padding-right:.5em; }
+    table.vars { margin:5px 0 2px 40px; }
+    table.vars td, table.req td { font-family:monospace; }
+    table td.code { width:100%; }
+    table td.code pre { overflow:hidden; }
+    table.source th { color:#666; }
+    table.source td { font-family:monospace; white-space:pre; border-bottom:1px solid #eee; }
+    ul.traceback { list-style-type:none; color: #222; }
+    ul.traceback li.frame { padding-bottom:1em; color:#666; }
+    ul.traceback li.user { background-color:#e0e0e0; color:#000 }
+    div.context { padding:10px 0; overflow:hidden; }
+    div.context ol { padding-left:30px; margin:0 10px; list-style-position: inside; }
+    div.context ol li { font-family:monospace; white-space:pre; color:#777; cursor:pointer; padding-left: 2px; }
+    div.context ol li pre { display:inline; }
+    div.context ol.context-line li { color:#505050; background-color:#dfdfdf; padding: 3px 2px; }
+    div.context ol.context-line li span { position:absolute; right:32px; }
+    .user div.context ol.context-line li { background-color:#bbb; color:#000; }
+    .user div.context ol li { color:#666; }
+    div.commands { margin-left: 40px; }
+    div.commands a { color:#555; text-decoration:none; }
+    .user div.commands a { color: black; }
+    #summary { background: #ffc; }
+    #summary h2 { font-weight: normal; color: #666; }
+    #explanation { background:#eee; }
+    #template, #template-not-exist { background:#f6f6f6; }
+    #template-not-exist ul { margin: 0 0 10px 20px; }
+    #template-not-exist .postmortem-section { margin-bottom: 3px; }
+    #unicode-hint { background:#eee; }
+    #traceback { background:#eee; }
+    #requestinfo { background:#f6f6f6; padding-left:120px; }
+    #summary table { border:none; background:transparent; }
+    #requestinfo h2, #requestinfo h3 { position:relative; margin-left:-100px; }
+    #requestinfo h3 { margin-bottom:-1em; }
+    .error { background: #ffc; }
+    .specific { color:#cc3300; font-weight:bold; }
+    h2 span.commands { font-size:.7em;}
+    span.commands a:link {color:#5E5694;}
+    pre.exception_value { font-family: sans-serif; color: #666; font-size: 1.5em; margin: 10px 0 10px 0; }
+    .append-bottom { margin-bottom: 10px; }
+  </style>
+  
+  <script type="text/javascript">
+  //<!--
+    function getElementsByClassName(oElm, strTagName, strClassName){
+        // Written by Jonathan Snook, http://www.snook.ca/jon; Add-ons by Robert Nyman, http://www.robertnyman.com
+        var arrElements = (strTagName == "*" && document.all)? document.all :
+        oElm.getElementsByTagName(strTagName);
+        var arrReturnElements = new Array();
+        strClassName = strClassName.replace(/\-/g, "\-");
+        var oRegExp = new RegExp("(^|\s)" + strClassName + "(\s|$)");
+        var oElement;
+        for(var i=0; i<arrElements.length; i++){
+            oElement = arrElements[i];
+            if(oRegExp.test(oElement.className)){
+                arrReturnElements.push(oElement);
+            }
+        }
+        return (arrReturnElements)
+    }
+    function hideAll(elems) {
+      for (var e = 0; e < elems.length; e++) {
+        elems[e].style.display = 'none';
+      }
+    }
+    window.onload = function() {
+      hideAll(getElementsByClassName(document, 'table', 'vars'));
+      hideAll(getElementsByClassName(document, 'ol', 'pre-context'));
+      hideAll(getElementsByClassName(document, 'ol', 'post-context'));
+      hideAll(getElementsByClassName(document, 'div', 'pastebin'));
+    }
+    function toggle() {
+      for (var i = 0; i < arguments.length; i++) {
+        var e = document.getElementById(arguments[i]);
+        if (e) {
+          e.style.display = e.style.display == 'none' ? 'block': 'none';
+        }
+      }
+      return false;
+    }
+    function varToggle(link, id) {
+      toggle('v' + id);
+      var s = link.getElementsByTagName('span')[0];
+      var uarr = String.fromCharCode(0x25b6);
+      var darr = String.fromCharCode(0x25bc);
+      s.textContent = s.textContent == uarr ? darr : uarr;
+      return false;
+    }
+    function switchPastebinFriendly(link) {
+      s1 = "Switch to copy-and-paste view";
+      s2 = "Switch back to interactive view";
+      link.textContent = link.textContent.trim() == s1 ? s2: s1;
+      toggle('browserTraceback', 'pastebinTraceback');
+      return false;
+    }
+    //-->
+  </script>
+  
+</head>
+<body>
+<div id="summary">
+  <h1>AttributeError at /upload</h1>
+  <pre class="exception_value">&#39;MultiValueDict&#39; object has no attribute &#39;iteritems&#39;</pre>
+  <table class="meta">
+
+    <tr>
+      <th>Request Method:</th>
+      <td>POST</td>
+    </tr>
+    <tr>
+      <th>Request URL:</th>
+      <td>http://www.lylinux.net/upload</td>
+    </tr>
+
+    <tr>
+      <th>Django Version:</th>
+      <td>1.10.3</td>
+    </tr>
+
+    <tr>
+      <th>Exception Type:</th>
+      <td>AttributeError</td>
+    </tr>
+
+
+    <tr>
+      <th>Exception Value:</th>
+      <td><pre>&#39;MultiValueDict&#39; object has no attribute &#39;iteritems&#39;<
+error
+/Users/liangliang/1.txt
+end read
+start upload
+end upload
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="robots" content="NONE,NOARCHIVE">
+  <title>AttributeError at /upload</title>
+  <style type="text/css">
+    html * { padding:0; margin:0; }
+    body * { padding:10px 20px; }
+    body * * { padding:0; }
+    body { font:small sans-serif; }
+    body>div { border-bottom:1px solid #ddd; }
+    h1 { font-weight:normal; }
+    h2 { margin-bottom:.8em; }
+    h2 span { font-size:80%; color:#666; font-weight:normal; }
+    h3 { margin:1em 0 .5em 0; }
+    h4 { margin:0 0 .5em 0; font-weight: normal; }
+    code, pre { font-size: 100%; white-space: pre-wrap; }
+    table { border:1px solid #ccc; border-collapse: collapse; width:100%; background:white; }
+    tbody td, tbody th { vertical-align:top; padding:2px 3px; }
+    thead th {
+      padding:1px 6px 1px 3px; background:#fefefe; text-align:left;
+      font-weight:normal; font-size:11px; border:1px solid #ddd;
+    }
+    tbody th { width:12em; text-align:right; color:#666; padding-right:.5em; }
+    table.vars { margin:5px 0 2px 40px; }
+    table.vars td, table.req td { font-family:monospace; }
+    table td.code { width:100%; }
+    table td.code pre { overflow:hidden; }
+    table.source th { color:#666; }
+    table.source td { font-family:monospace; white-space:pre; border-bottom:1px solid #eee; }
+    ul.traceback { list-style-type:none; color: #222; }
+    ul.traceback li.frame { padding-bottom:1em; color:#666; }
+    ul.traceback li.user { background-color:#e0e0e0; color:#000 }
+    div.context { padding:10px 0; overflow:hidden; }
+    div.context ol { padding-left:30px; margin:0 10px; list-style-position: inside; }
+    div.context ol li { font-family:monospace; white-space:pre; color:#777; cursor:pointer; padding-left: 2px; }
+    div.context ol li pre { display:inline; }
+    div.context ol.context-line li { color:#505050; background-color:#dfdfdf; padding: 3px 2px; }
+    div.context ol.context-line li span { position:absolute; right:32px; }
+    .user div.context ol.context-line li { background-color:#bbb; color:#000; }
+    .user div.context ol li { color:#666; }
+    div.commands { margin-left: 40px; }
+    div.commands a { color:#555; text-decoration:none; }
+    .user div.commands a { color: black; }
+    #summary { background: #ffc; }
+    #summary h2 { font-weight: normal; color: #666; }
+    #explanation { background:#eee; }
+    #template, #template-not-exist { background:#f6f6f6; }
+    #template-not-exist ul { margin: 0 0 10px 20px; }
+    #template-not-exist .postmortem-section { margin-bottom: 3px; }
+    #unicode-hint { background:#eee; }
+    #traceback { background:#eee; }
+    #requestinfo { background:#f6f6f6; padding-left:120px; }
+    #summary table { border:none; background:transparent; }
+    #requestinfo h2, #requestinfo h3 { position:relative; margin-left:-100px; }
+    #requestinfo h3 { margin-bottom:-1em; }
+    .error { background: #ffc; }
+    .specific { color:#cc3300; font-weight:bold; }
+    h2 span.commands { font-size:.7em;}
+    span.commands a:link {color:#5E5694;}
+    pre.exception_value { font-family: sans-serif; color: #666; font-size: 1.5em; margin: 10px 0 10px 0; }
+    .append-bottom { margin-bottom: 10px; }
+  </style>
+  
+  <script type="text/javascript">
+  //<!--
+    function getElementsByClassName(oElm, strTagName, strClassName){
+        // Written by Jonathan Snook, http://www.snook.ca/jon; Add-ons by Robert Nyman, http://www.robertnyman.com
+        var arrElements = (strTagName == "*" && document.all)? document.all :
+        oElm.getElementsByTagName(strTagName);
+        var arrReturnElements = new Array();
+        strClassName = strClassName.replace(/\-/g, "\-");
+        var oRegExp = new RegExp("(^|\s)" + strClassName + "(\s|$)");
+        var oElement;
+        for(var i=0; i<arrElements.length; i++){
+            oElement = arrElements[i];
+            if(oRegExp.test(oElement.className)){
+                arrReturnElements.push(oElement);
+            }
+        }
+        return (arrReturnElements)
+    }
+    function hideAll(elems) {
+      for (var e = 0; e < elems.length; e++) {
+        elems[e].style.display = 'none';
+      }
+    }
+    window.onload = function() {
+      hideAll(getElementsByClassName(document, 'table', 'vars'));
+      hideAll(getElementsByClassName(document, 'ol', 'pre-context'));
+      hideAll(getElementsByClassName(document, 'ol', 'post-context'));
+      hideAll(getElementsByClassName(document, 'div', 'pastebin'));
+    }
+    function toggle() {
+      for (var i = 0; i < arguments.length; i++) {
+        var e = document.getElementById(arguments[i]);
+        if (e) {
+          e.style.display = e.style.display == 'none' ? 'block': 'none';
+        }
+      }
+      return false;
+    }
+    function varToggle(link, id) {
+      toggle('v' + id);
+      var s = link.getElementsByTagName('span')[0];
+      var uarr = String.fromCharCode(0x25b6);
+      var darr = String.fromCharCode(0x25bc);
+      s.textContent = s.textContent == uarr ? darr : uarr;
+      return false;
+    }
+    function switchPastebinFriendly(link) {
+      s1 = "Switch to copy-and-paste view";
+      s2 = "Switch back to interactive view";
+      link.textContent = link.textContent.trim() == s1 ? s2: s1;
+      toggle('browserTraceback', 'pastebinTraceback');
+      return false;
+    }
+    //-->
+  </script>
+  
+</head>
+<body>
+<div id="summary">
+  <h1>AttributeError at /upload</h1>
+  <pre class="exception_value">&#39;MultiValueDict&#39; object has no attribute &#39;iteritems&#39;</pre>
+  <table class="meta">
+
+    <tr>
+      <th>Request Method:</th>
+      <td>POST</td>
+    </tr>
+    <tr>
+      <th>Request URL:</th>
+      <td>http://www.lylinux.net/upload</td>
+    </tr>
+
+    <tr>
+      <th>Django Version:</th>
+      <td>1.10.3</td>
+    </tr>
+
+    <tr>
+      <th>Exception Type:</th>
+      <td>AttributeError</td>
+    </tr>
+
+
+    <tr>
+      <th>Exception Value:</th>
+      <td><pre>&#39;MultiValueDict&#39; object has no attribute &#39;iteritems&#39;<
+error
+/Users/liangliang/1.txt
+end read
+start upload
+/Users/liangliang/1.txt
+end read
+start upload
+end upload
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="robots" content="NONE,NOARCHIVE">
+  <title>AttributeError at /upload</title>
+  <style type="text/css">
+    html * { padding:0; margin:0; }
+    body * { padding:10px 20px; }
+    body * * { padding:0; }
+    body { font:small sans-serif; }
+    body>div { border-bottom:1px solid #ddd; }
+    h1 { font-weight:normal; }
+    h2 { margin-bottom:.8em; }
+    h2 span { font-size:80%; color:#666; font-weight:normal; }
+    h3 { margin:1em 0 .5em 0; }
+    h4 { margin:0 0 .5em 0; font-weight: normal; }
+    code, pre { font-size: 100%; white-space: pre-wrap; }
+    table { border:1px solid #ccc; border-collapse: collapse; width:100%; background:white; }
+    tbody td, tbody th { vertical-align:top; padding:2px 3px; }
+    thead th {
+      padding:1px 6px 1px 3px; background:#fefefe; text-align:left;
+      font-weight:normal; font-size:11px; border:1px solid #ddd;
+    }
+    tbody th { width:12em; text-align:right; color:#666; padding-right:.5em; }
+    table.vars { margin:5px 0 2px 40px; }
+    table.vars td, table.req td { font-family:monospace; }
+    table td.code { width:100%; }
+    table td.code pre { overflow:hidden; }
+    table.source th { color:#666; }
+    table.source td { font-family:monospace; white-space:pre; border-bottom:1px solid #eee; }
+    ul.traceback { list-style-type:none; color: #222; }
+    ul.traceback li.frame { padding-bottom:1em; color:#666; }
+    ul.traceback li.user { background-color:#e0e0e0; color:#000 }
+    div.context { padding:10px 0; overflow:hidden; }
+    div.context ol { padding-left:30px; margin:0 10px; list-style-position: inside; }
+    div.context ol li { font-family:monospace; white-space:pre; color:#777; cursor:pointer; padding-left: 2px; }
+    div.context ol li pre { display:inline; }
+    div.context ol.context-line li { color:#505050; background-color:#dfdfdf; padding: 3px 2px; }
+    div.context ol.context-line li span { position:absolute; right:32px; }
+    .user div.context ol.context-line li { background-color:#bbb; color:#000; }
+    .user div.context ol li { color:#666; }
+    div.commands { margin-left: 40px; }
+    div.commands a { color:#555; text-decoration:none; }
+    .user div.commands a { color: black; }
+    #summary { background: #ffc; }
+    #summary h2 { font-weight: normal; color: #666; }
+    #explanation { background:#eee; }
+    #template, #template-not-exist { background:#f6f6f6; }
+    #template-not-exist ul { margin: 0 0 10px 20px; }
+    #template-not-exist .postmortem-section { margin-bottom: 3px; }
+    #unicode-hint { background:#eee; }
+    #traceback { background:#eee; }
+    #requestinfo { background:#f6f6f6; padding-left:120px; }
+    #summary table { border:none; background:transparent; }
+    #requestinfo h2, #requestinfo h3 { position:relative; margin-left:-100px; }
+    #requestinfo h3 { margin-bottom:-1em; }
+    .error { background: #ffc; }
+    .specific { color:#cc3300; font-weight:bold; }
+    h2 span.commands { font-size:.7em;}
+    span.commands a:link {color:#5E5694;}
+    pre.exception_value { font-family: sans-serif; color: #666; font-size: 1.5em; margin: 10px 0 10px 0; }
+    .append-bottom { margin-bottom: 10px; }
+  </style>
+  
+  <script type="text/javascript">
+  //<!--
+    function getElementsByClassName(oElm, strTagName, strClassName){
+        // Written by Jonathan Snook, http://www.snook.ca/jon; Add-ons by Robert Nyman, http://www.robertnyman.com
+        var arrElements = (strTagName == "*" && document.all)? document.all :
+        oElm.getElementsByTagName(strTagName);
+        var arrReturnElements = new Array();
+        strClassName = strClassName.replace(/\-/g, "\-");
+        var oRegExp = new RegExp("(^|\s)" + strClassName + "(\s|$)");
+        var oElement;
+        for(var i=0; i<arrElements.length; i++){
+            oElement = arrElements[i];
+            if(oRegExp.test(oElement.className)){
+                arrReturnElements.push(oElement);
+            }
+        }
+        return (arrReturnElements)
+    }
+    function hideAll(elems) {
+      for (var e = 0; e < elems.length; e++) {
+        elems[e].style.display = 'none';
+      }
+    }
+    window.onload = function() {
+      hideAll(getElementsByClassName(document, 'table', 'vars'));
+      hideAll(getElementsByClassName(document, 'ol', 'pre-context'));
+      hideAll(getElementsByClassName(document, 'ol', 'post-context'));
+      hideAll(getElementsByClassName(document, 'div', 'pastebin'));
+    }
+    function toggle() {
+      for (var i = 0; i < arguments.length; i++) {
+        var e = document.getElementById(arguments[i]);
+        if (e) {
+          e.style.display = e.style.display == 'none' ? 'block': 'none';
+        }
+      }
+      return false;
+    }
+    function varToggle(link, id) {
+      toggle('v' + id);
+      var s = link.getElementsByTagName('span')[0];
+      var uarr = String.fromCharCode(0x25b6);
+      var darr = String.fromCharCode(0x25bc);
+      s.textContent = s.textContent == uarr ? darr : uarr;
+      return false;
+    }
+    function switchPastebinFriendly(link) {
+      s1 = "Switch to copy-and-paste view";
+      s2 = "Switch back to interactive view";
+      link.textContent = link.textContent.trim() == s1 ? s2: s1;
+      toggle('browserTraceback', 'pastebinTraceback');
+      return false;
+    }
+    //-->
+  </script>
+  
+</head>
+<body>
+<div id="summary">
+  <h1>AttributeError at /upload</h1>
+  <pre class="exception_value">&#39;MultiValueDict&#39; object has no attribute &#39;iteritems&#39;</pre>
+  <table class="meta">
+
+    <tr>
+      <th>Request Method:</th>
+      <td>POST</td>
+    </tr>
+    <tr>
+      <th>Request URL:</th>
+      <td>http://www.lylinux.net/upload</td>
+    </tr>
+
+    <tr>
+      <th>Django Version:</th>
+      <td>1.10.3</td>
+    </tr>
+
+    <tr>
+      <th>Exception Type:</th>
+      <td>AttributeError</td>
+    </tr>
+
+
+    <tr>
+      <th>Exception Value:</th>
+      <td><pre>&#39;MultiValueDict&#39; object has no attribute &#39;iteritems&#39;<
+/Users/liangliang/1.txt
+end read
+start upload
+end upload
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="robots" content="NONE,NOARCHIVE">
+  <title>AttributeError at /upload</title>
+  <style type="text/css">
+    html * { padding:0; margin:0; }
+    body * { padding:10px 20px; }
+    body * * { padding:0; }
+    body { font:small sans-serif; }
+    body>div { border-bottom:1px solid #ddd; }
+    h1 { font-weight:normal; }
+    h2 { margin-bottom:.8em; }
+    h2 span { font-size:80%; color:#666; font-weight:normal; }
+    h3 { margin:1em 0 .5em 0; }
+    h4 { margin:0 0 .5em 0; font-weight: normal; }
+    code, pre { font-size: 100%; white-space: pre-wrap; }
+    table { border:1px solid #ccc; border-collapse: collapse; width:100%; background:white; }
+    tbody td, tbody th { vertical-align:top; padding:2px 3px; }
+    thead th {
+      padding:1px 6px 1px 3px; background:#fefefe; text-align:left;
+      font-weight:normal; font-size:11px; border:1px solid #ddd;
+    }
+    tbody th { width:12em; text-align:right; color:#666; padding-right:.5em; }
+    table.vars { margin:5px 0 2px 40px; }
+    table.vars td, table.req td { font-family:monospace; }
+    table td.code { width:100%; }
+    table td.code pre { overflow:hidden; }
+    table.source th { color:#666; }
+    table.source td { font-family:monospace; white-space:pre; border-bottom:1px solid #eee; }
+    ul.traceback { list-style-type:none; color: #222; }
+    ul.traceback li.frame { padding-bottom:1em; color:#666; }
+    ul.traceback li.user { background-color:#e0e0e0; color:#000 }
+    div.context { padding:10px 0; overflow:hidden; }
+    div.context ol { padding-left:30px; margin:0 10px; list-style-position: inside; }
+    div.context ol li { font-family:monospace; white-space:pre; color:#777; cursor:pointer; padding-left: 2px; }
+    div.context ol li pre { display:inline; }
+    div.context ol.context-line li { color:#505050; background-color:#dfdfdf; padding: 3px 2px; }
+    div.context ol.context-line li span { position:absolute; right:32px; }
+    .user div.context ol.context-line li { background-color:#bbb; color:#000; }
+    .user div.context ol li { color:#666; }
+    div.commands { margin-left: 40px; }
+    div.commands a { color:#555; text-decoration:none; }
+    .user div.commands a { color: black; }
+    #summary { background: #ffc; }
+    #summary h2 { font-weight: normal; color: #666; }
+    #explanation { background:#eee; }
+    #template, #template-not-exist { background:#f6f6f6; }
+    #template-not-exist ul { margin: 0 0 10px 20px; }
+    #template-not-exist .postmortem-section { margin-bottom: 3px; }
+    #unicode-hint { background:#eee; }
+    #traceback { background:#eee; }
+    #requestinfo { background:#f6f6f6; padding-left:120px; }
+    #summary table { border:none; background:transparent; }
+    #requestinfo h2, #requestinfo h3 { position:relative; margin-left:-100px; }
+    #requestinfo h3 { margin-bottom:-1em; }
+    .error { background: #ffc; }
+    .specific { color:#cc3300; font-weight:bold; }
+    h2 span.commands { font-size:.7em;}
+    span.commands a:link {color:#5E5694;}
+    pre.exception_value { font-family: sans-serif; color: #666; font-size: 1.5em; margin: 10px 0 10px 0; }
+    .append-bottom { margin-bottom: 10px; }
+  </style>
+  
+  <script type="text/javascript">
+  //<!--
+    function getElementsByClassName(oElm, strTagName, strClassName){
+        // Written by Jonathan Snook, http://www.snook.ca/jon; Add-ons by Robert Nyman, http://www.robertnyman.com
+        var arrElements = (strTagName == "*" && document.all)? document.all :
+        oElm.getElementsByTagName(strTagName);
+        var arrReturnElements = new Array();
+        strClassName = strClassName.replace(/\-/g, "\-");
+        var oRegExp = new RegExp("(^|\s)" + strClassName + "(\s|$)");
+        var oElement;
+        for(var i=0; i<arrElements.length; i++){
+            oElement = arrElements[i];
+            if(oRegExp.test(oElement.className)){
+                arrReturnElements.push(oElement);
+            }
+        }
+        return (arrReturnElements)
+    }
+    function hideAll(elems) {
+      for (var e = 0; e < elems.length; e++) {
+        elems[e].style.display = 'none';
+      }
+    }
+    window.onload = function() {
+      hideAll(getElementsByClassName(document, 'table', 'vars'));
+      hideAll(getElementsByClassName(document, 'ol', 'pre-context'));
+      hideAll(getElementsByClassName(document, 'ol', 'post-context'));
+      hideAll(getElementsByClassName(document, 'div', 'pastebin'));
+    }
+    function toggle() {
+      for (var i = 0; i < arguments.length; i++) {
+        var e = document.getElementById(arguments[i]);
+        if (e) {
+          e.style.display = e.style.display == 'none' ? 'block': 'none';
+        }
+      }
+      return false;
+    }
+    function varToggle(link, id) {
+      toggle('v' + id);
+      var s = link.getElementsByTagName('span')[0];
+      var uarr = String.fromCharCode(0x25b6);
+      var darr = String.fromCharCode(0x25bc);
+      s.textContent = s.textContent == uarr ? darr : uarr;
+      return false;
+    }
+    function switchPastebinFriendly(link) {
+      s1 = "Switch to copy-and-paste view";
+      s2 = "Switch back to interactive view";
+      link.textContent = link.textContent.trim() == s1 ? s2: s1;
+      toggle('browserTraceback', 'pastebinTraceback');
+      return false;
+    }
+    //-->
+  </script>
+  
+</head>
+<body>
+<div id="summary">
+  <h1>AttributeError at /upload</h1>
+  <pre class="exception_value">&#39;MultiValueDict&#39; object has no attribute &#39;iteritems&#39;</pre>
+  <table class="meta">
+
+    <tr>
+      <th>Request Method:</th>
+      <td>POST</td>
+    </tr>
+    <tr>
+      <th>Request URL:</th>
+      <td>http://127.0.0.1:8000/upload</td>
+    </tr>
+
+    <tr>
+      <th>Django Version:</th>
+      <td>1.10.4</td>
+    </tr>
+
+    <tr>
+      <th>Exception Type:</th>
+      <td>AttributeError</td>
+    </tr>
+
+
+    <tr>
+      <th>Exception Value:</th>
+      <td><pre>&#39;MultiValueDict&#39; object has no attribute &#39;iteritems&#39;</pre></td>
+    </tr>
+
+
+    <tr>
+      <th>Exception Location:</th>
+      <td>/Users/liangliang/Source/Python/DjangoBlog/blog/views.py in fileupload, line 214</td>
+    </tr>
+
+    <tr>
+      <th>Python Executable:</th>
+      <td>/Users/liangliang/Source/Python/ENV/python3/bin/python3.6</td>
+    </tr>
+    <tr>
+      <th>Python Version:</th>
+      <td>3.6.0</td>
+    </tr>
+    <tr>
+      <th>Python Path:</th>
+      <td><pre>[&#39;/Users/liangliang/Source/Python/DjangoBlog&#39;,
+ &#39;/Users/liangliang/Source/Python/DjangoBlog&#39;,
+ &#39;/Users/liangliang/Source/Python/ENV/python3/lib/python36.zip&#39;,
+ &#39;/Users/liangliang/Source/Python/ENV/python3/lib/python3.6&#39;,
+ &#39;/Users/liangliang/Source/Python/ENV/python3/lib/python3.6/lib-dynload&#39;,
+ &#39;/usr/local/Cellar/python3/3.6.0/Frameworks/Python.framework/Versions/3.6/lib/python3.6&#39;,
+ &#39;/Users/liangliang/Source/Python/ENV/python3/lib/python3.6/site-packages&#39;]</pre></td>
+    </tr>
+    <tr>
+      <th>Server time:</th>
+  
+/Users/liangliang/1.txt
+end read
+start upload
+end upload
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="robots" content="NONE,NOARCHIVE">
+  <title>AttributeError at /upload</title>
+  <style type="text/css">
+    html * { padding:0; margin:0; }
+    body * { padding:10px 20px; }
+    body * * { padding:0; }
+    body { font:small sans-serif; }
+    body>div { border-bottom:1px solid #ddd; }
+    h1 { font-weight:normal; }
+    h2 { margin-bottom:.8em; }
+    h2 span { font-size:80%; color:#666; font-weight:normal; }
+    h3 { margin:1em 0 .5em 0; }
+    h4 { margin:0 0 .5em 0; font-weight: normal; }
+    code, pre { font-size: 100%; white-space: pre-wrap; }
+    table { border:1px solid #ccc; border-collapse: collapse; width:100%; background:white; }
+    tbody td, tbody th { vertical-align:top; padding:2px 3px; }
+    thead th {
+      padding:1px 6px 1px 3px; background:#fefefe; text-align:left;
+      font-weight:normal; font-size:11px; border:1px solid #ddd;
+    }
+    tbody th { width:12em; text-align:right; color:#666; padding-right:.5em; }
+    table.vars { margin:5px 0 2px 40px; }
+    table.vars td, table.req td { font-family:monospace; }
+    table td.code { width:100%; }
+    table td.code pre { overflow:hidden; }
+    table.source th { color:#666; }
+    table.source td { font-family:monospace; white-space:pre; border-bottom:1px solid #eee; }
+    ul.traceback { list-style-type:none; color: #222; }
+    ul.traceback li.frame { padding-bottom:1em; color:#666; }
+    ul.traceback li.user { background-color:#e0e0e0; color:#000 }
+    div.context { padding:10px 0; overflow:hidden; }
+    div.context ol { padding-left:30px; margin:0 10px; list-style-position: inside; }
+    div.context ol li { font-family:monospace; white-space:pre; color:#777; cursor:pointer; padding-left: 2px; }
+    div.context ol li pre { display:inline; }
+    div.context ol.context-line li { color:#505050; background-color:#dfdfdf; padding: 3px 2px; }
+    div.context ol.context-line li span { position:absolute; right:32px; }
+    .user div.context ol.context-line li { background-color:#bbb; color:#000; }
+    .user div.context ol li { color:#666; }
+    div.commands { margin-left: 40px; }
+    div.commands a { color:#555; text-decoration:none; }
+    .user div.commands a { color: black; }
+    #summary { background: #ffc; }
+    #summary h2 { font-weight: normal; color: #666; }
+    #explanation { background:#eee; }
+    #template, #template-not-exist { background:#f6f6f6; }
+    #template-not-exist ul { margin: 0 0 10px 20px; }
+    #template-not-exist .postmortem-section { margin-bottom: 3px; }
+    #unicode-hint { background:#eee; }
+    #traceback { background:#eee; }
+    #requestinfo { background:#f6f6f6; padding-left:120px; }
+    #summary table { border:none; background:transparent; }
+    #requestinfo h2, #requestinfo h3 { position:relative; margin-left:-100px; }
+    #requestinfo h3 { margin-bottom:-1em; }
+    .error { background: #ffc; }
+    .specific { color:#cc3300; font-weight:bold; }
+    h2 span.commands { font-size:.7em;}
+    span.commands a:link {color:#5E5694;}
+    pre.exception_value { font-family: sans-serif; color: #666; font-size: 1.5em; margin: 10px 0 10px 0; }
+    .append-bottom { margin-bottom: 10px; }
+  </style>
+  
+  <script type="text/javascript">
+  //<!--
+    function getElementsByClassName(oElm, strTagName, strClassName){
+        // Written by Jonathan Snook, http://www.snook.ca/jon; Add-ons by Robert Nyman, http://www.robertnyman.com
+        var arrElements = (strTagName == "*" && document.all)? document.all :
+        oElm.getElementsByTagName(strTagName);
+        var arrReturnElements = new Array();
+        strClassName = strClassName.replace(/\-/g, "\-");
+        var oRegExp = new RegExp("(^|\s)" + strClassName + "(\s|$)");
+        var oElement;
+        for(var i=0; i<arrElements.length; i++){
+            oElement = arrElements[i];
+            if(oRegExp.test(oElement.className)){
+                arrReturnElements.push(oElement);
+            }
+        }
+        return (arrReturnElements)
+    }
+    function hideAll(elems) {
+      for (var e = 0; e < elems.length; e++) {
+        elems[e].style.display = 'none';
+      }
+    }
+    window.onload = function() {
+      hideAll(getElementsByClassName(document, 'table', 'vars'));
+      hideAll(getElementsByClassName(document, 'ol', 'pre-context'));
+      hideAll(getElementsByClassName(document, 'ol', 'post-context'));
+      hideAll(getElementsByClassName(document, 'div', 'pastebin'));
+    }
+    function toggle() {
+      for (var i = 0; i < arguments.length; i++) {
+        var e = document.getElementById(arguments[i]);
+        if (e) {
+          e.style.display = e.style.display == 'none' ? 'block': 'none';
+        }
+      }
+      return false;
+    }
+    function varToggle(link, id) {
+      toggle('v' + id);
+      var s = link.getElementsByTagName('span')[0];
+      var uarr = String.fromCharCode(0x25b6);
+      var darr = String.fromCharCode(0x25bc);
+      s.textContent = s.textContent == uarr ? darr : uarr;
+      return false;
+    }
+    function switchPastebinFriendly(link) {
+      s1 = "Switch to copy-and-paste view";
+      s2 = "Switch back to interactive view";
+      link.textContent = link.textContent.trim() == s1 ? s2: s1;
+      toggle('browserTraceback', 'pastebinTraceback');
+      return false;
+    }
+    //-->
+  </script>
+  
+</head>
+<body>
+<div id="summary">
+  <h1>AttributeError at /upload</h1>
+  <pre class="exception_value">&#39;MultiValueDict&#39; object has no attribute &#39;iteritems&#39;</pre>
+  <table class="meta">
+
+    <tr>
+      <th>Request Method:</th>
+      <td>POST</td>
+    </tr>
+    <tr>
+      <th>Request URL:</th>
+      <td>http://127.0.0.1:8000/upload</td>
+    </tr>
+
+    <tr>
+      <th>Django Version:</th>
+      <td>1.10.4</td>
+    </tr>
+
+    <tr>
+      <th>Exception Type:</th>
+      <td>AttributeError</td>
+    </tr>
+
+
+    <tr>
+      <th>Exception Value:</th>
+      <td><pre>&#39;MultiValueDict&#39; object has no attribute &#39;iteritems&#39;</pre></td>
+    </tr>
+
+
+    <tr>
+      <th>Exception Location:</th>
+      <td>/Users/liangliang/Source/Python/DjangoBlog/blog/views.py in fileupload, line 214</td>
+    </tr>
+
+    <tr>
+      <th>Python Executable:</th>
+      <td>/Users/liangliang/Source/Python/ENV/python3/bin/python3.6</td>
+    </tr>
+    <tr>
+      <th>Python Version:</th>
+      <td>3.6.0</td>
+    </tr>
+    <tr>
+      <th>Python Path:</th>
+      <td><pre>[&#39;/Users/liangliang/Source/Python/DjangoBlog&#39;,
+ &#39;/Users/liangliang/Source/Python/DjangoBlog&#39;,
+ &#39;/Users/liangliang/Source/Python/ENV/python3/lib/python36.zip&#39;,
+ &#39;/Users/liangliang/Source/Python/ENV/python3/lib/python3.6&#39;,
+ &#39;/Users/liangliang/Source/Python/ENV/python3/lib/python3.6/lib-dynload&#39;,
+ &#39;/usr/local/Cellar/python3/3.6.0/Frameworks/Python.framework/Versions/3.6/lib/python3.6&#39;,
+ &#39;/Users/liangliang/Source/Python/ENV/python3/lib/python3.6/site-packages&#39;]</pre></td>
+    </tr>
+    <tr>
+      <th>Server time:</th>
+  
+/Users/liangliang/1.txt
+end read
+start upload
+end upload
+/Users/liangliang/1.txt
+end read
+start upload
+end upload
+/Users/liangliang/1.txt
+end read
+start upload
+end upload
+/Users/liangliang/1.txt
+end read
+start upload
+/Users/liangliang/1.txt
+end read
+start upload
+end upload
+/Users/liangliang/1.txt
+end read
+start upload
+/Users/liangliang/1.txt
+end read
+start upload
+end upload
+/Users/liangliang/1.txt
+end read
+start upload
+end upload
+/Users/liangliang/1.txt
+end read
+start upload
+end upload
+/Users/liangliang/1.txt
+end read
+start upload
+/Users/liangliang/1.txt
+end read
+start upload
+end upload
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="robots" content="NONE,NOARCHIVE">
+  <title>MultiValueDictKeyError at /upload</title>
+  <style type="text/css">
+    html * { padding:0; margin:0; }
+    body * { padding:10px 20px; }
+    body * * { padding:0; }
+    body { font:small sans-serif; }
+    body>div { border-bottom:1px solid #ddd; }
+    h1 { font-weight:normal; }
+    h2 { margin-bottom:.8em; }
+    h2 span { font-size:80%; color:#666; font-weight:normal; }
+    h3 { margin:1em 0 .5em 0; }
+    h4 { margin:0 0 .5em 0; font-weight: normal; }
+    code, pre { font-size: 100%; white-space: pre-wrap; }
+    table { border:1px solid #ccc; border-collapse: collapse; width:100%; background:white; }
+    tbody td, tbody th { vertical-align:top; padding:2px 3px; }
+    thead th {
+      padding:1px 6px 1px 3px; background:#fefefe; text-align:left;
+      font-weight:normal; font-size:11px; border:1px solid #ddd;
+    }
+    tbody th { width:12em; text-align:right; color:#666; padding-right:.5em; }
+    table.vars { margin:5px 0 2px 40px; }
+    table.vars td, table.req td { font-family:monospace; }
+    table td.code { width:100%; }
+    table td.code pre { overflow:hidden; }
+    table.source th { color:#666; }
+    table.source td { font-family:monospace; white-space:pre; border-bottom:1px solid #eee; }
+    ul.traceback { list-style-type:none; color: #222; }
+    ul.traceback li.frame { padding-bottom:1em; color:#666; }
+    ul.traceback li.user { background-color:#e0e0e0; color:#000 }
+    div.context { padding:10px 0; overflow:hidden; }
+    div.context ol { padding-left:30px; margin:0 10px; list-style-position: inside; }
+    div.context ol li { font-family:monospace; white-space:pre; color:#777; cursor:pointer; padding-left: 2px; }
+    div.context ol li pre { display:inline; }
+    div.context ol.context-line li { color:#505050; background-color:#dfdfdf; padding: 3px 2px; }
+    div.context ol.context-line li span { position:absolute; right:32px; }
+    .user div.context ol.context-line li { background-color:#bbb; color:#000; }
+    .user div.context ol li { color:#666; }
+    div.commands { margin-left: 40px; }
+    div.commands a { color:#555; text-decoration:none; }
+    .user div.commands a { color: black; }
+    #summary { background: #ffc; }
+    #summary h2 { font-weight: normal; color: #666; }
+    #explanation { background:#eee; }
+    #template, #template-not-exist { background:#f6f6f6; }
+    #template-not-exist ul { margin: 0 0 10px 20px; }
+    #template-not-exist .postmortem-section { margin-bottom: 3px; }
+    #unicode-hint { background:#eee; }
+    #traceback { background:#eee; }
+    #requestinfo { background:#f6f6f6; padding-left:120px; }
+    #summary table { border:none; background:transparent; }
+    #requestinfo h2, #requestinfo h3 { position:relative; margin-left:-100px; }
+    #requestinfo h3 { margin-bottom:-1em; }
+    .error { background: #ffc; }
+    .specific { color:#cc3300; font-weight:bold; }
+    h2 span.commands { font-size:.7em;}
+    span.commands a:link {color:#5E5694;}
+    pre.exception_value { font-family: sans-serif; color: #666; font-size: 1.5em; margin: 10px 0 10px 0; }
+    .append-bottom { margin-bottom: 10px; }
+  </style>
+  
+  <script type="text/javascript">
+  //<!--
+    function getElementsByClassName(oElm, strTagName, strClassName){
+        // Written by Jonathan Snook, http://www.snook.ca/jon; Add-ons by Robert Nyman, http://www.robertnyman.com
+        var arrElements = (strTagName == "*" && document.all)? document.all :
+        oElm.getElementsByTagName(strTagName);
+        var arrReturnElements = new Array();
+        strClassName = strClassName.replace(/\-/g, "\-");
+        var oRegExp = new RegExp("(^|\s)" + strClassName + "(\s|$)");
+        var oElement;
+        for(var i=0; i<arrElements.length; i++){
+            oElement = arrElements[i];
+            if(oRegExp.test(oElement.className)){
+                arrReturnElements.push(oElement);
+            }
+        }
+        return (arrReturnElements)
+    }
+    function hideAll(elems) {
+      for (var e = 0; e < elems.length; e++) {
+        elems[e].style.display = 'none';
+      }
+    }
+    window.onload = function() {
+      hideAll(getElementsByClassName(document, 'table', 'vars'));
+      hideAll(getElementsByClassName(document, 'ol', 'pre-context'));
+      hideAll(getElementsByClassName(document, 'ol', 'post-context'));
+      hideAll(getElementsByClassName(document, 'div', 'pastebin'));
+    }
+    function toggle() {
+      for (var i = 0; i < arguments.length; i++) {
+        var e = document.getElementById(arguments[i]);
+        if (e) {
+          e.style.display = e.style.display == 'none' ? 'block': 'none';
+        }
+      }
+      return false;
+    }
+    function varToggle(link, id) {
+      toggle('v' + id);
+      var s = link.getElementsByTagName('span')[0];
+      var uarr = String.fromCharCode(0x25b6);
+      var darr = String.fromCharCode(0x25bc);
+      s.textContent = s.textContent == uarr ? darr : uarr;
+      return false;
+    }
+    function switchPastebinFriendly(link) {
+      s1 = "Switch to copy-and-paste view";
+      s2 = "Switch back to interactive view";
+      link.textContent = link.textContent.trim() == s1 ? s2: s1;
+      toggle('browserTraceback', 'pastebinTraceback');
+      return false;
+    }
+    //-->
+  </script>
+  
+</head>
+<body>
+<div id="summary">
+  <h1>MultiValueDictKeyError at /upload</h1>
+  <pre class="exception_value">&#39;0&#39;</pre>
+  <table class="meta">
+
+    <tr>
+      <th>Request Method:</th>
+      <td>POST</td>
+    </tr>
+    <tr>
+      <th>Request URL:</th>
+      <td>http://127.0.0.1:8000/upload</td>
+    </tr>
+
+    <tr>
+      <th>Django Version:</th>
+      <td>1.10.4</td>
+    </tr>
+
+    <tr>
+      <th>Exception Type:</th>
+      <td>MultiValueDictKeyError</td>
+    </tr>
+
+
+    <tr>
+      <th>Exception Value:</th>
+      <td><pre>&#39;0&#39;</pre></td>
+    </tr>
+
+
+    <tr>
+      <th>Exception Location:</th>
+      <td>/Users/liangli
+/Users/liangliang/1.txt
+end read
+start upload

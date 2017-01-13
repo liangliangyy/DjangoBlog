@@ -923,6 +923,7 @@ article.sticky .featured-post {
     font-size: 12px;
     font-size: 0.857142857rem;
     line-height: 2;
+    background-color: rgba(0,0,0,0.04);
 }
 
 .entry-content pre,

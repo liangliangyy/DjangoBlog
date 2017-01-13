@@ -1,9 +1,10 @@
 {% load blog_tags %}
-<article id="post-{{ article.pk }}"
-         class="post-3815 post type-post status-publish format-standard hentry category-python tag-python">
+<article id="post-{{ article.pk }} "
+         class="post-3815 post type-post status-publish format-standard hentry category-python tag-python"
+        itemscope itemtype="http://schema.org/Article">
     <header class="entry-header">
 
-        <h1 class="entry-title">
+        <h1 class="entry-title" itemprop="name">
             {% if  isindex %}
                 <a href="{{ article.get_absolute_url }}"
                    rel="bookmark">{{ article.title }}</a>
@@ -34,7 +35,7 @@
         {% endif %}
     </header><!-- .entry-header -->
 
-    <div class="entry-content">
+    <div class="entry-content" itemprop="articleBody">
         {% if  isindex %}
             {{ article.body|truncatechars_content|custom_markdown }}
             <p class='read-more'><a
