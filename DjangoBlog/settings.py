@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'django.contrib.sitemaps',
     'pagedown',
     'haystack',
@@ -195,3 +196,5 @@ OAHUTH = {
         'callbackurl': 'http://blog.lylinux.org/oauth/weibo'
     }
 }
+
+SITE_ID = 2

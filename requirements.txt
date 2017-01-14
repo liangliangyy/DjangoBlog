@@ -12,3 +12,5 @@ python-slugify
 requests
 Unidecode
 Whoosh
+mistune
+pygments
