@@ -5,6 +5,7 @@ from django.conf import settings
 from uuslug import slugify
 from DjangoBlog.spider_notify import sipder_notify
 
+
 class Article(models.Model):
     """文章"""
     STATUS_CHOICES = (
@@ -71,11 +72,11 @@ class Article(models.Model):
         if not self.slug or self.slug == 'no-slug' or not self.id:
             # Only set the slug when the object is created.
             self.slug = slugify(self.title)
-        try:
-            notify = sipder_notify()
-            notify.notify(self.get_absolute_url())
-        except Exception as e:
-            print(e)
+            try:
+                notify = sipder_notify()
+                notify.notify(self.get_absolute_url())
+            except Exception as e:
+                print(e)
         super().save(*args, **kwargs)
 
     def viewed(self):

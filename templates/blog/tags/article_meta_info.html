@@ -8,18 +8,20 @@
           datetime="{{ article.created_time }}">
         {% datetimeformat article.created_time %}</time>
 </a>
-    。属于<a href="{{ article.category.get_absolute_url }}" rel="category tag">{{ article.category.name }}</a>分类，
-    {% if article.tags.all %}
-        被贴了
+    {% if article.type == 'a' %}
+        。属于<a href="{{ article.category.get_absolute_url }}" rel="category tag">{{ article.category.name }}</a>分类，
+        {% if article.tags.all %}
+            被贴了
 
-        {% for t in article.tags.all %}
-            <a href="{{ t.get_absolute_url }}" rel="tag">{{ t.name }}</a>
-            {% if t != article.tags.all.last %}
-                ，
-            {% endif %}
-        {% endfor %}
+            {% for t in article.tags.all %}
+                <a href="{{ t.get_absolute_url }}" rel="tag">{{ t.name }}</a>
+                {% if t != article.tags.all.last %}
+                    ，
+                {% endif %}
+            {% endfor %}
 
-        标签。
+            标签。
+        {% endif %}
     {% endif %}
     <span class="by-author">作者是<span class="author vcard"><a class="url fn n"
                                                              href="{{ article.author.get_absolute_url }}"
