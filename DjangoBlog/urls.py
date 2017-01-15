@@ -18,6 +18,8 @@ from django.contrib import admin
 from django.contrib.sitemaps.views import sitemap
 from DjangoBlog.sitemap import StaticViewSitemap, ArticleSiteMap, CategorySiteMap, TagSiteMap, UserSiteMap
 from DjangoBlog.feeds import DjangoBlogFeed
+from django.views.decorators.cache import cache_page
+from django.conf import settings
 
 sitemaps = {
 
@@ -35,8 +37,9 @@ urlpatterns = [
     url(r'', include('comments.urls', namespace='comment', app_name='comments')),
     url(r'', include('accounts.urls', namespace='account', app_name='accounts')),
     url(r'', include('oauth.urls', namespace='oauth', app_name='oauth')),
-    url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps},
+    url(r'^sitemap\.xml$', cache_page(60 * 60 * 10)(sitemap), {'sitemaps': sitemaps},
         name='django.contrib.sitemaps.views.sitemap'),
-    url(r'^feed/$', DjangoBlogFeed()),
-    url(r'^search', include('haystack.urls'),name='search'),
+    url(r'^feed/$', cache_page(60 * 60 * 10)(DjangoBlogFeed())),
+
+    url(r'^search', include('haystack.urls'), name='search'),
 ]

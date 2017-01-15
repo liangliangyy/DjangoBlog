@@ -153,7 +153,7 @@ LOGIN_URL = '/login/'
 TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 DATE_TIME_FORMAT = '%Y-%m-%d'
 
-SITE_NAME = 'Django Blog'
+SITE_NAME = '且听风吟'
 SITE_URL = 'http://blog.lylinux.org'
 SITE_DESCRIPTION = '大巧无工,重剑无锋.'
 SITE_SEO_DESCRIPTION = '小站主要用来分享和记录学习经验,教程,记录个人生活的点滴以及一些随笔.欢迎大家访问小站'
@@ -179,14 +179,14 @@ CACHE_CONTROL_MAX_AGE = 2592000
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '192.168.21.130:11211',
+        'LOCATION': '127.0.0.1:11211',
     },
     'localmem': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
         'LOCATION': 'unique-snowflake',
     }
 }
-CACHE_MIDDLEWARE_SECONDS = 360000
+CACHE_MIDDLEWARE_SECONDS = 60 * 60 * 10
 CACHE_MIDDLEWARE_KEY_PREFIX = "djangoblog"
 CACHE_MIDDLEWARE_ALIAS = 'default'
 OAHUTH = {
@@ -198,3 +198,4 @@ OAHUTH = {
 }
 
 SITE_ID = 2
+BAIDU_NOTIFY_URL = "http://data.zz.baidu.com/urls?site=https://www.lylinux.net&token=1uAOGrMsUm5syDGn&type=original"

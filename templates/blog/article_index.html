@@ -1,8 +1,14 @@
 {% extends 'share_layout/base.html' %}
 {% load blog_tags %}
 {% block header %}
-    <title>{{ SITE_NAME }} | {{ SITE_DESCRIPTION }}</title>
-    <meta name="description" content="{{ SITE_SEO_DESCRIPTION }}"/>
+    {% if tag_name %}
+        <title>{{ tag_name }} | {{ SITE_DESCRIPTION }}</title>
+        <meta name="description" content="{{ page_type }}:{{ tag_name }}"/>
+    {% else %}
+        <title>{{ SITE_NAME }} | {{ SITE_DESCRIPTION }}</title>
+        <meta name="description" content="{{ SITE_SEO_DESCRIPTION }}"/>
+    {% endif %}
+
     <meta name="keywords" content="{{ SITE_KEYWORDS }}"/>
     <meta property="og:type" content="blog"/>
     <meta property="og:title" content="{{ SITE_NAME }}"/>

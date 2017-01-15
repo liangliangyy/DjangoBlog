@@ -33,4 +33,5 @@ urlpatterns = [
     url(r'^author/(?P<author_name>\w+).html$', views.AuthorDetailView.as_view(), name='author_detail'),
     url(r'^tag/(?P<tag_name>.+).html$', views.TagDetailView.as_view(), name='tag_detail'),
     url(r'^upload', views.fileupload, name='upload'),
+    url(r'^refresh', views.refresh_memcache, name='refresh')
 ]

@@ -20,6 +20,7 @@ from blog.forms import BlogSearchForm
 import datetime
 from django.views.decorators.csrf import csrf_exempt
 import os
+from django.contrib.auth.decorators import login_required
 
 """
 class SeoProcessor():
@@ -222,6 +223,15 @@ def fileupload(request):
 
     else:
         return HttpResponse("only for post")
+
+
+@login_required
+def refresh_memcache(request):
+    try:
+        result = os.popen(' service memcache restart ').readline()
+        return HttpResponse(result)
+    except Exception as e:
+        return HttpResponse(e);
 
 
 """

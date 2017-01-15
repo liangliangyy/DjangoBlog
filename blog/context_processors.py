@@ -26,5 +26,5 @@ def seo_processor(requests):
         'SITE_BASE_URL': 'http://' + requests.get_host() + '/',
         'ARTICLE_SUB_LENGTH': settings.ARTICLE_SUB_LENGTH,
         'nav_category_list': Category.objects.all(),
-        # 'nav_pages': BlogPage.objects.filter(status='p')
+        'nav_pages': Article.objects.filter(type='p', status='p')
     }

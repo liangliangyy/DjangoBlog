@@ -3,7 +3,7 @@ from django.core.urlresolvers import reverse
 from django.conf import settings
 # from django.template.defaultfilters import slugify
 from uuslug import slugify
-
+from DjangoBlog.spider_notify import sipder_notify
 
 class Article(models.Model):
     """文章"""
@@ -71,7 +71,11 @@ class Article(models.Model):
         if not self.slug or self.slug == 'no-slug' or not self.id:
             # Only set the slug when the object is created.
             self.slug = slugify(self.title)
-
+        try:
+            notify = sipder_notify()
+            notify.notify(self.get_absolute_url())
+        except Exception as e:
+            print(e)
         super().save(*args, **kwargs)
 
     def viewed(self):
@@ -158,7 +162,6 @@ class Category(models.Model):
     last_mod_time = models.DateTimeField('修改时间', auto_now=True)
     parent_category = models.ForeignKey('self', verbose_name="父级分类", blank=True, null=True)
 
-
     class Meta:
         ordering = ['name']
         verbose_name = "分类"
@@ -170,13 +173,20 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        try:
+            notify = sipder_notify()
+            notify.notify(self.get_absolute_url())
+        except Exception as e:
+            print(e)
+        super().save(*args, **kwargs)
+
 
 class Tag(models.Model):
     """文章标签"""
     name = models.CharField('标签名', max_length=30)
     created_time = models.DateTimeField('创建时间', auto_now_add=True)
     last_mod_time = models.DateTimeField('修改时间', auto_now=True)
-
 
     def __str__(self):
         return self.name
@@ -191,6 +201,14 @@ class Tag(models.Model):
         ordering = ['name']
         verbose_name = "标签"
         verbose_name_plural = verbose_name
+
+    def save(self, *args, **kwargs):
+        try:
+            notify = sipder_notify()
+            notify.notify(self.get_absolute_url())
+        except Exception as e:
+            print(e)
+        super().save(*args, **kwargs)
 
 
 class Links(models.Model):
