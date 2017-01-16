@@ -55,7 +55,7 @@ class ArticleListView(ListView):
 
 class IndexView(ArticleListView):
     def get_queryset(self):
-        article_list = Article.objects.filter(type='a',status='p')
+        article_list = Article.objects.filter(type='a', status='p')
 
         # for article in article_list:
         #     article.body = article.body[0:settings.ARTICLE_SUB_LENGTH]
@@ -228,8 +228,12 @@ def fileupload(request):
 @login_required
 def refresh_memcache(request):
     try:
-        result = os.popen(' service memcached restart ').readline()
-        return HttpResponse(result)
+        if request.user.is_superuser:
+            result = os.popen(' service memcached restart ').readline()
+            return HttpResponse(result)
+        else:
+            from django.http import HttpResponseForbidden
+            return HttpResponseForbidden()
     except Exception as e:
         return HttpResponse(e);
 

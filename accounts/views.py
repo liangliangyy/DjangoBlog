@@ -10,7 +10,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib import auth
 from django.views.decorators.cache import never_cache
-
+from django.shortcuts import redirect
 
 # Create your views here.
 
@@ -24,10 +24,10 @@ class RegisterView(FormView):
         user.save(True)
         return HttpResponseRedirect('/')
 
-
+@never_cache
 def LogOut(requests):
-    logout(request=requests)
-    return HttpResponseRedirect("/")
+    logout(request=requests, next_page='index')
+    return redirect('index')
 
 
 class LoginView(FormView):

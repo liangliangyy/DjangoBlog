@@ -8,6 +8,7 @@ from django.views.generic.edit import FormView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth import get_user_model
+from django import forms
 
 
 class CommentPostView(FormView):
@@ -17,11 +18,21 @@ class CommentPostView(FormView):
     def get(self, request, *args, **kwargs):
         article_id = self.kwargs['article_id']
         url = reverse('blog:detail', kwargs={'article_id': article_id})
-        return HttpResponseRedirect(url)
+        return HttpResponseRedirect(url + "#comments")
 
     def form_invalid(self, form):
         article_id = self.kwargs['article_id']
         article = Article.objects.get(pk=article_id)
+        u = self.request.user
+
+        if self.request.user.is_authenticated:
+            form.fields.update({
+                'email': forms.CharField(widget=forms.HiddenInput()),
+                'name': forms.CharField(widget=forms.HiddenInput()),
+            })
+            user = self.request.user
+            form.fields["email"].initial = user.email
+            form.fields["name"].initial = user.username
 
         return self.render_to_response({
             'form': form,
@@ -38,7 +49,8 @@ class CommentPostView(FormView):
             email = form.cleaned_data['email']
             username = form.cleaned_data['name']
 
-            user = get_user_model().objects.create_user(username=username, email=email, password=None)
+            user = get_user_model().objects.create_user(username=username, email=email, password=None,
+                                                        nikename=username)
         author_id = user.pk
 
         comment = form.save(False)

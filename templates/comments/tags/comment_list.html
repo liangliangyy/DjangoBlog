@@ -1,12 +1,12 @@
 <section id="comments" class="themeform">
     {% load blog_tags %}
     {% load comments_tags %}
-    <h3 class="heading">{{ comment_count }} 条回复</h3>
+    {% comment %}<h3 class="heading">{{ comment_count }} 条回复</h3>{% endcomment %}
 
     <ul class="comment-tabs group">
         <li class="active"><a href="#commentlist-container"><i
                 class="fa fa-comments-o"></i>评论<span>{{ comment_count }}</span></a></li>
-        <li class=""><a href="#pinglist-container"><i class="fa fa-share"></i>引用<span>0</span></a></li>
+        {% comment %}<li class=""><a href="#pinglist-container"><i class="fa fa-share"></i>引用<span>0</span></a></li>{% endcomment %}
     </ul>
     {% if article_comments %}
         <div id="commentlist-container" class="comment-tab" style="display: block;">
