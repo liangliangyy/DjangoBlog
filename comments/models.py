@@ -4,6 +4,7 @@ from django.core.mail import send_mail
 from  blog.models import Article
 from django.core.mail import EmailMultiAlternatives
 from django.contrib.sites.models import Site
+import _thread
 
 
 # Create your models here.
@@ -24,6 +25,9 @@ class Comment(models.Model):
         verbose_name = "评论"
         verbose_name_plural = verbose_name
 
+    def send_comment_email(self, msg):
+        msg.send()
+
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         subject = '感谢您发表的评论'
@@ -43,8 +47,8 @@ class Comment(models.Model):
         msg = EmailMultiAlternatives(subject, html_content, from_email='no-reply@lylinux.net', to=[tomail])
 
         msg.content_subtype = "html"
+        _thread.start_new_thread(self.send_comment_email, (msg))
 
-        result = msg.send()
         if self.parent_comment:
             html_content = """
             您在 <a href="%s" rel="bookmark">%s</a> 的评论 <br/> %s <br/> 收到回复啦.快去看看吧
@@ -55,7 +59,7 @@ class Comment(models.Model):
             tomail = self.parent_comment.author.email
             msg = EmailMultiAlternatives(subject, html_content, from_email='no-reply@lylinux.net', to=[tomail])
             msg.content_subtype = "html"
-            result = msg.send()
+            _thread.start_new_thread(self.send_comment_email, (msg))
 
     def __str__(self):
         return self.body
