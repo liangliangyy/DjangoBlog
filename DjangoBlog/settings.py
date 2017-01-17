@@ -22,7 +22,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '&3g0bdza#c%dm1lf%5gi&0-*53p3t0m*hmcvo29cn^$ji7je(c'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
+DEBUG = False
 
 # ALLOWED_HOSTS = []
 ALLOWED_HOSTS = ['www.lylinux.net', '127.0.0.1']
@@ -200,14 +201,17 @@ OAHUTH = {
 SITE_ID = 2
 BAIDU_NOTIFY_URL = "http://data.zz.baidu.com/urls?site=https://www.lylinux.net&token=1uAOGrMsUm5syDGn&type=original"
 
-#Emial:
+# Emial:
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 EMAIL_USE_TLS = True
-#EMAIL_USE_SSL = True
+# EMAIL_USE_SSL = True
 
 EMAIL_HOST = 'smtp.exmail.qq.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = os.environ.get('DJANGO_EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('DJANGO_EMAIL_PASSWORD')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+SERVER_EMAIL = os.environ.get('DJANGO_EMAIL_USER')
+#设置debug=false 未处理异常邮件通知
+ADMINS = [('liangliang', 'liangliangyy@gmail.com')]
