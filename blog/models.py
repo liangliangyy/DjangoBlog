@@ -4,6 +4,7 @@ from django.conf import settings
 # from django.template.defaultfilters import slugify
 from uuslug import slugify
 from DjangoBlog.spider_notify import sipder_notify
+from django.contrib.sites.models import Site
 
 
 class Article(models.Model):
@@ -74,7 +75,7 @@ class Article(models.Model):
             self.slug = slugify(self.title)
             try:
                 notify = sipder_notify()
-                notify.notify(self.get_absolute_url())
+                notify.notify(self.get_full_url())
             except Exception as e:
                 print(e)
         super().save(*args, **kwargs)
@@ -90,6 +91,11 @@ class Article(models.Model):
     def get_admin_url(self):
         info = (self._meta.app_label, self._meta.model_name)
         return reverse('admin:%s_%s_change' % info, args=(self.pk,))
+
+    def get_full_url(self):
+        site = Site.objects.get_current().domain
+        article_url = "https://{site}{path}".format(site=site, path=self.get_absolute_url())
+        return article_url
 
 
 '''

@@ -18,7 +18,7 @@ from django.conf import settings
 
 
 class sipder_notify():
-    def __baidu_notify(self, url):
+    def baidu_notify(self, url):
         try:
             result = requests.post(settings.BAIDU_NOTIFY_URL, data=url)
             print(result.text)
@@ -32,5 +32,5 @@ class sipder_notify():
             print(e)
 
     def notify(self, url):
-        self.__baidu_notify(url)
+        self.baidu_notify(url)
         self.__google_notify()
