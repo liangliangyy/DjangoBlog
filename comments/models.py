@@ -47,7 +47,7 @@ class Comment(models.Model):
         msg = EmailMultiAlternatives(subject, html_content, from_email='no-reply@lylinux.net', to=[tomail])
 
         msg.content_subtype = "html"
-        _thread.start_new_thread(self.send_comment_email, (msg))
+        _thread.start_new_thread(self.send_comment_email, (msg,))
 
         if self.parent_comment:
             html_content = """
@@ -59,7 +59,7 @@ class Comment(models.Model):
             tomail = self.parent_comment.author.email
             msg = EmailMultiAlternatives(subject, html_content, from_email='no-reply@lylinux.net', to=[tomail])
             msg.content_subtype = "html"
-            _thread.start_new_thread(self.send_comment_email, (msg))
+            _thread.start_new_thread(self.send_comment_email, (msg,))
 
     def __str__(self):
         return self.body
