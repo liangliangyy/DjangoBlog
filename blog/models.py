@@ -5,9 +5,32 @@ from django.conf import settings
 from uuslug import slugify
 from DjangoBlog.spider_notify import sipder_notify
 from django.contrib.sites.models import Site
+from DjangoBlog.utils import cache_decorator
+from django.utils.functional import cached_property
+
+class BaseModel(models.Model):
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        if 'update_fields' in kwargs and len(kwargs['update_fields']) == 1 and kwargs['update_fields'][0] == 'views':
+            return
+        try:
+            notify = sipder_notify()
+            notify_url = self.get_full_url()
+            notify.baidu_notify(notify_url)
+        except Exception as ex:
+            print(ex)
+
+    def get_full_url(self):
+        site = Site.objects.get_current().domain
+        url = "https://{site}{path}".format(site=site, path=self.get_absolute_url())
+        return url
+
+    class Meta:
+        abstract = True
 
 
-class Article(models.Model):
+class Article(BaseModel):
     """文章"""
     STATUS_CHOICES = (
         ('d', '草稿'),
@@ -57,6 +80,7 @@ class Article(models.Model):
             'slug': self.slug
         })
 
+    @cache_decorator(60 * 60 * 10)
     def get_category_tree(self):
         names = []
 
@@ -73,17 +97,20 @@ class Article(models.Model):
         if not self.slug or self.slug == 'no-slug' or not self.id:
             # Only set the slug when the object is created.
             self.slug = slugify(self.title)
+            """
             try:
                 notify = sipder_notify()
                 notify.notify(self.get_full_url())
             except Exception as e:
                 print(e)
+            """
         super().save(*args, **kwargs)
 
     def viewed(self):
         self.views += 1
         self.save(update_fields=['views'])
 
+    @cache_decorator(60 * 60 * 10)
     def comment_list(self):
         comments = self.comment_set.all()
         parent_comments = comments.filter(parent_comment=None)
@@ -92,10 +119,15 @@ class Article(models.Model):
         info = (self._meta.app_label, self._meta.model_name)
         return reverse('admin:%s_%s_change' % info, args=(self.pk,))
 
-    def get_full_url(self):
-        site = Site.objects.get_current().domain
-        article_url = "https://{site}{path}".format(site=site, path=self.get_absolute_url())
-        return article_url
+    @cached_property
+    def next_article(self):
+        # 下一篇
+        return Article.objects.filter(id__gt=self.id, status=0).order_by('id').first()
+
+    @cached_property
+    def prev_article(self):
+        # 前一篇
+        return Article.objects.filter(id__lt=self.id, status=0).first()
 
 
 '''
@@ -162,7 +194,7 @@ class BlogPage(models.Model):
 '''
 
 
-class Category(models.Model):
+class Category(BaseModel):
     """文章分类"""
     name = models.CharField('分类名', max_length=30)
     created_time = models.DateTimeField('创建时间', auto_now_add=True)
@@ -180,16 +212,8 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
-        try:
-            notify = sipder_notify()
-            notify.notify(self.get_absolute_url())
-        except Exception as e:
-            print(e)
-        super().save(*args, **kwargs)
 
-
-class Tag(models.Model):
+class Tag(BaseModel):
     """文章标签"""
     name = models.CharField('标签名', max_length=30)
     created_time = models.DateTimeField('创建时间', auto_now_add=True)
@@ -201,6 +225,7 @@ class Tag(models.Model):
     def get_absolute_url(self):
         return reverse('blog:tag_detail', kwargs={'tag_name': self.name})
 
+    @cache_decorator(60 * 60 * 10)
     def get_article_count(self):
         return Article.objects.filter(tags__name=self.name).distinct().count()
 
@@ -208,14 +233,6 @@ class Tag(models.Model):
         ordering = ['name']
         verbose_name = "标签"
         verbose_name_plural = verbose_name
-
-    def save(self, *args, **kwargs):
-        try:
-            notify = sipder_notify()
-            notify.notify(self.get_absolute_url())
-        except Exception as e:
-            print(e)
-        super().save(*args, **kwargs)
 
 
 class Links(models.Model):

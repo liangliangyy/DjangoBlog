@@ -1,4 +1,5 @@
 {% load static %}
+{% load cache %}
 <!DOCTYPE html>
 <!--[if IE 7]>
 <html class="ie ie7" lang="zh-CN" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
@@ -53,16 +54,20 @@
             <h2 class="site-description">{{ SITE_DESCRIPTION }}</h2>
         </hgroup>
 
+        {% cache 36000 sidebar %}
+            {% include 'share_layout/nav.html' %}
+        {% endcache %}
 
-        {% include 'share_layout/nav.html' %}
     </header><!-- #masthead -->
     <div id="main" class="wrapper">
         {% block content %}
         {% endblock %}
 
-        {% block sidebar %}
-        {% endblock %}
+        {% cache 36000 nav %}
+            {% block sidebar %}
 
+            {% endblock %}
+        {% endcache %}
     </div><!-- #main .wrapper -->
     {% include 'share_layout/footer.html' %}
 </div><!-- #page -->

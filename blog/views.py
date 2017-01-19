@@ -74,16 +74,11 @@ class ArticleDetailView(DetailView):
         obj = super(ArticleDetailView, self).get_object()
         obj.viewed()
         # obj.body = markdown2.markdown(obj.body)
+        self.object = obj
         return obj
 
     def get_context_data(self, **kwargs):
         articleid = int(self.kwargs[self.pk_url_kwarg])
-
-        def get_article(id):
-            try:
-                return Article.objects.get(pk=id)
-            except ObjectDoesNotExist:
-                return None
 
         comment_form = CommentForm()
         u = self.request.user
@@ -102,10 +97,9 @@ class ArticleDetailView(DetailView):
         kwargs['form'] = comment_form
         kwargs['article_comments'] = article_comments
         kwargs['comment_count'] = len(article_comments) if article_comments else 0;
-        next_article = get_article(articleid + 1)
-        prev_article = get_article(articleid - 1)
-        kwargs['next_article'] = next_article
-        kwargs['prev_article'] = prev_article
+
+        kwargs['next_article'] = self.object.next_article
+        kwargs['prev_article'] = self.object.prev_article
 
         return super(ArticleDetailView, self).get_context_data(**kwargs)
 
