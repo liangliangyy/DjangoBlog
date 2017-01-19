@@ -62,9 +62,6 @@ def block_code(text, lang, inlinestyles=False, linenos=False):
 
 
 class BlogMarkDownRenderer(mistune.Renderer):
-    def image(self, src, title, text):
-        html = super.im
-
     def block_code(self, text, lang):
         # renderer has an options
         inlinestyles = self.options.get('inlinestyles')
