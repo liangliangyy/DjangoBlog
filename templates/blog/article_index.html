@@ -2,7 +2,7 @@
 {% load blog_tags %}
 {% block header %}
     {% if tag_name %}
-        <title>{{ tag_name }} | {{ SITE_DESCRIPTION }}</title>
+        <title>{{ page_type }}:{{ tag_name }} | {{ SITE_DESCRIPTION }}</title>
         <meta name="description" content="{{ page_type }}:{{ tag_name }}"/>
     {% else %}
         <title>{{ SITE_NAME }} | {{ SITE_DESCRIPTION }}</title>
