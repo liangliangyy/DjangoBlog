@@ -49,7 +49,7 @@ def datetimeformat(data):
 @register.filter(is_safe=True)
 @stringfilter
 def custom_markdown(content):
-    from DjangoBlog.common_markdown import common_markdown
+    from DjangoBlog.utils import common_markdown
     return mark_safe(common_markdown.get_markdown(content))
 
 

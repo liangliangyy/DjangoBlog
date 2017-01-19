@@ -5,18 +5,40 @@
 """
 @version: ??
 @author: liangliangyy
-@license: MIT Licence 
+@license: MIT Licence
 @contact: liangliangyy@gmail.com
 @site: https://www.lylinux.org/
 @software: PyCharm
-@file: common_markdown.py
-@time: 2017/1/14 上午2:30
+@file: utils.py
+@time: 2017/1/19 上午2:30
 """
-
+from django.core.cache import cache
+from hashlib import md5
 import mistune
 from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import html
+
+
+def cache_decorator(expiration=3 * 60):
+    def wrapper(func):
+        def news(*args, **kwargs):
+            unique_str = repr((func, args, kwargs))
+            m = md5(unique_str.encode('utf-8'))
+            key = m.hexdigest()
+            value = cache.get(key)
+            if value:
+                print('get key: ' + key)
+                return value
+            else:
+                print('set key:' + key)
+                value = func(*args, **kwargs)
+                cache.set(key, value, expiration)
+                return value
+
+        return news
+
+    return wrapper
 
 
 def block_code(text, lang, inlinestyles=False, linenos=False):
