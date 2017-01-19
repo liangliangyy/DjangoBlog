@@ -31,18 +31,17 @@ class OnlineMiddleware(object):
             return
 
         online_ips = cache.get("online_ips", [])
-
         if online_ips:
             online_ips = cache.get_many(online_ips).keys()
-
+            online_ips = list(online_ips)
         ip = get_real_ip(request)
 
         cache.set(ip, 0, 5 * 60)
 
         if ip not in online_ips:
             online_ips.append(ip)
-
-        cache.set("online_ips", online_ips)
+            s = type(online_ips)
+            cache.set("online_ips", online_ips)
 
     def process_response(self, request, response):
         cast_time = time.time() - self.start_time

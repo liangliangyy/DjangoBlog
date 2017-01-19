@@ -12,15 +12,17 @@
 @file: spider_notify.py
 @time: 2017/1/15 下午1:41
 """
+
 from django.contrib.sitemaps import ping_google
 import requests
 from django.conf import settings
 
 
 class sipder_notify():
-    def baidu_notify(self, url):
+    def baidu_notify(self, urls):
         try:
-            result = requests.post(settings.BAIDU_NOTIFY_URL, data=url)
+            data = '\n'.join(urls)
+            result = requests.post(settings.BAIDU_NOTIFY_URL, data=data)
             print(result.text)
         except Exception as e:
             print(e)
