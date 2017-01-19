@@ -23,7 +23,7 @@ SECRET_KEY = '&3g0bdza#c%dm1lf%5gi&0-*53p3t0m*hmcvo29cn^$ji7je(c'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
-DEBUG = True
+DEBUG = False
 
 # ALLOWED_HOSTS = []
 ALLOWED_HOSTS = ['www.lylinux.net', '127.0.0.1']
@@ -179,11 +179,11 @@ CACHE_CONTROL_MAX_AGE = 2592000
 # cache setting
 
 CACHES = {
-    'default': {
+    'default1': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
         'LOCATION': '127.0.0.1:11211',
     },
-    'localmem': {
+    'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
         'LOCATION': 'unique-snowflake',
     }

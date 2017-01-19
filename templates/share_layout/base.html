@@ -54,7 +54,7 @@
             <h2 class="site-description">{{ SITE_DESCRIPTION }}</h2>
         </hgroup>
 
-        {% cache 36000 sidebar %}
+        {% cache 36000 nav %}
             {% include 'share_layout/nav.html' %}
         {% endcache %}
 
@@ -63,7 +63,7 @@
         {% block content %}
         {% endblock %}
 
-        {% cache 36000 nav %}
+        {% cache 36000 sidebar %}
             {% block sidebar %}
 
             {% endblock %}
