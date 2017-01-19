@@ -58,6 +58,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.http.ConditionalGetMiddleware',
+    'blog.middleware.OnlineMiddleware'
 ]
 
 ROOT_URLCONF = 'DjangoBlog.urls'
