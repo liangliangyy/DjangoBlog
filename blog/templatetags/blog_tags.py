@@ -24,6 +24,8 @@ from django.utils.encoding import force_text
 import hashlib
 import urllib
 from comments.models import Comment
+from DjangoBlog.utils import cache_decorator, logger
+from django.core.cache import cache
 
 register = template.Library()
 
@@ -110,7 +112,6 @@ def load_sidebar(user):
     加载侧边栏
     :return:
     """
-
     recent_articles = Article.objects.filter(status='p')[:settings.SIDEBAR_ARTICLE_COUNT]
     sidebar_categorys = Category.objects.all()
     most_read_articles = Article.objects.filter(status='p').order_by('-views')[:settings.SIDEBAR_ARTICLE_COUNT]
@@ -162,8 +163,6 @@ def load_article_detail(article, isindex, user):
     :param isindex:是否列表页，若是列表页只显示摘要
     :return:
     """
-
-    print()
     return {
         'article': article,
         'isindex': isindex,

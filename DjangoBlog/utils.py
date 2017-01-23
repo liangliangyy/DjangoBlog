@@ -18,6 +18,9 @@ import mistune
 from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import html
+import logging
+
+logger = logging.getLogger('djangoblog')
 
 
 def cache_decorator(expiration=3 * 60):
@@ -28,10 +31,10 @@ def cache_decorator(expiration=3 * 60):
             key = m.hexdigest()
             value = cache.get(key)
             if value:
-                print('get key: ' + key)
+                logger.info('cache_decorator get cache %s' % func.__name__)
                 return value
             else:
-                print('set key:' + key)
+                logger.info('cache_decorator set cache %s' % func.__name__)
                 value = func(*args, **kwargs)
                 cache.set(key, value, expiration)
                 return value
