@@ -179,11 +179,11 @@ CACHE_CONTROL_MAX_AGE = 2592000
 # cache setting
 
 CACHES = {
-    'default1': {
+    'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
         'LOCATION': '127.0.0.1:11211',
     },
-    'default': {
+    'locmemcache': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
         'LOCATION': 'unique-snowflake',
     }
