@@ -20,6 +20,7 @@ from DjangoBlog.sitemap import StaticViewSitemap, ArticleSiteMap, CategorySiteMa
 from DjangoBlog.feeds import DjangoBlogFeed
 from django.views.decorators.cache import cache_page
 from django.conf import settings
+from django.conf.urls.static import static
 
 sitemaps = {
 
@@ -31,15 +32,15 @@ sitemaps = {
 }
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'', include('blog.urls', namespace='blog', app_name='blog')),
+                  url(r'^admin/', admin.site.urls),
+                  url(r'', include('blog.urls', namespace='blog', app_name='blog')),
 
-    url(r'', include('comments.urls', namespace='comment', app_name='comments')),
-    url(r'', include('accounts.urls', namespace='account', app_name='accounts')),
-    url(r'', include('oauth.urls', namespace='oauth', app_name='oauth')),
-    url(r'^sitemap\.xml$', cache_page(60 * 60 * 10)(sitemap), {'sitemaps': sitemaps},
-        name='django.contrib.sitemaps.views.sitemap'),
-    url(r'^feed/$', cache_page(60 * 60 * 10)(DjangoBlogFeed())),
+                  url(r'', include('comments.urls', namespace='comment', app_name='comments')),
+                  url(r'', include('accounts.urls', namespace='account', app_name='accounts')),
+                  url(r'', include('oauth.urls', namespace='oauth', app_name='oauth')),
+                  url(r'^sitemap\.xml$', cache_page(60 * 60 * 10)(sitemap), {'sitemaps': sitemaps},
+                      name='django.contrib.sitemaps.views.sitemap'),
+                  url(r'^feed/$', cache_page(60 * 60 * 10)(DjangoBlogFeed())),
 
-    url(r'^search', include('haystack.urls'), name='search'),
-]
+                  url(r'^search', include('haystack.urls'), name='search'),
+              ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

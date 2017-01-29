@@ -44,6 +44,8 @@ class OnlineMiddleware(object):
             cache.set("online_ips", online_ips)
 
     def process_response(self, request, response):
-        cast_time = time.time() - self.start_time
+        cast_time = 0.921
+        if self.__dict__ and 'start_time' in self.__dict__:
+            cast_time = time.time() - self.start_time
         response.content = response.content.replace(b'<!!LOAD_TIMES!!>', str.encode(str(cast_time)[:5]))
         return response

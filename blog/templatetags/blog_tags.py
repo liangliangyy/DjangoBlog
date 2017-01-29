@@ -112,6 +112,7 @@ def load_sidebar(user):
     加载侧边栏
     :return:
     """
+    logger.info('load sidebar')
     recent_articles = Article.objects.filter(status='p')[:settings.SIDEBAR_ARTICLE_COUNT]
     sidebar_categorys = Category.objects.all()
     most_read_articles = Article.objects.filter(status='p').order_by('-views')[:settings.SIDEBAR_ARTICLE_COUNT]

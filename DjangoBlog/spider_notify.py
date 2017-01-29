@@ -18,8 +18,9 @@ import requests
 from django.conf import settings
 
 
-class sipder_notify():
-    def baidu_notify(self, urls):
+class spider_notify():
+    @staticmethod
+    def baidu_notify(urls):
         try:
             data = '\n'.join(urls)
             result = requests.post(settings.BAIDU_NOTIFY_URL, data=data)
@@ -27,12 +28,15 @@ class sipder_notify():
         except Exception as e:
             print(e)
 
-    def __google_notify(self):
+    @staticmethod
+    def __google_notify():
         try:
             ping_google('/sitemap.xml')
         except Exception as e:
             print(e)
 
+    @staticmethod
     def notify(self, url):
-        self.baidu_notify(url)
-        self.__google_notify()
+
+        spider_notify.baidu_notify(url)
+        spider_notify.__google_notify()
