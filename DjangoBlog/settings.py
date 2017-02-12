@@ -283,9 +283,9 @@ STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
 )
 COMPRESS_ENABLED = True
-#COMPRESS_OFFLINE = True
+COMPRESS_OFFLINE = True
 
-"""
+
 COMPRESS_CSS_FILTERS = [
     #creates absolute urls from relative ones
     'compressor.filters.css_default.CssAbsoluteFilter',
@@ -295,4 +295,3 @@ COMPRESS_CSS_FILTERS = [
 COMPRESS_JS_FILTERS = [
     'compressor.filters.jsmin.JSMinFilter'
 ]
-"""
