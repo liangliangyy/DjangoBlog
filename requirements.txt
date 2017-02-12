@@ -15,3 +15,4 @@ Whoosh
 mistune
 pygments
 django-ipware
+django_compressor

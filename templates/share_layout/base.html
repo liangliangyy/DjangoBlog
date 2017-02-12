@@ -1,5 +1,6 @@
 {% load static %}
 {% load cache %}
+{% load compress %}
 <!DOCTYPE html>
 <!--[if IE 7]>
 <html class="ie ie7" lang="zh-CN" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
@@ -22,27 +23,28 @@
     <![endif]-->
 
     <link rel='dns-prefetch' href='//fonts.googleapis.com'/>
-    <link rel='dns-prefetch' href='//s.w.org'/>
     <link rel="alternate" type="application/rss+xml" title="{{ SITE_NAME }} &raquo; Feed"
           href="{{ SITE_BASE_URL }}feed"/>
-    <link rel="alternate" type="application/rss+xml" title="{{ SITE_NAME }} &raquo; 评论Feed"
-          href="https://www.lylinux.org/comments/feed"/>
-
 
     <link rel='stylesheet' id='twentytwelve-fonts-css'
           href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700&#038;subset=latin,latin-ext'
           type='text/css' media='all'/>
-    <link rel='stylesheet' id='twentytwelve-style-css' href='{% static 'blog/css/style.css' %}' type='text/css'
-          media='all'/>
-    {% comment %}<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>{% endcomment %}
-    <!--[if lt IE 9]>
+    {% compress css %}
+        <link rel='stylesheet' id='twentytwelve-style-css' href='{% static 'blog/css/style.css' %}' type='text/css'
+              media='all'/>
+        {% comment %}<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>{% endcomment %}
+        <!--[if lt IE 9]>
         <link rel='stylesheet' id='twentytwelve-ie-css'  href='{% static 'blog/css/ie.css' %}' type='text/css' media='all' />
     <![endif]-->
-
+        <link rel="stylesheet" href="{% static 'pygments/default.css' %}"/>
+        {% block compress_css %}
+        {% endblock %}
+    {% endcompress %}
     {% comment %}<script type='text/javascript' src='{% static 'blog/js/jquery.js' %}' defer='defer'></script>
     <script type='text/javascript' src='{% static 'blog/js/jquery-migrate.min.js' %}' defer='defer'></script>{% endcomment %}
-    <script type="text/javascript" src="{% static 'blog/js/jquery-3.1.1.js' %}"></script>
-    <link rel="stylesheet" href="{% static 'pygments/default.css' %}"/>
+    {% compress js %}
+        <script type="text/javascript" src="{% static 'blog/js/jquery-3.1.1.js' %}"></script>
+    {% endcompress %}
 </head>
 
 <body class="home blog custom-font-enabled">
@@ -88,8 +90,12 @@ var wpAutoTopSpeed = 1;</script>
     {% comment %}<link href="{% static 'highlight/styles/default.css' %}" rel="stylesheet">
     <script type="application/javascript" src="{% static 'highlight/highlight.pack.js' %}"></script>
     <script>hljs.initHighlightingOnLoad();</script>{% endcomment %}
-    <script src="{% static 'blog/js/blog.js' %}" type="application/javascript"></script>
-    <script src="{% static 'blog/js/navigation.js' %}" type="application/javascript"></script>
+    {% compress js %}
+        <script src="{% static 'blog/js/blog.js' %}" type="application/javascript"></script>
+        <script src="{% static 'blog/js/navigation.js' %}" type="application/javascript"></script>
+        {% block compress_js %}
+        {% endblock %}
+    {% endcompress %}
     {% block footer %}
     {% endblock %}
 </footer>
