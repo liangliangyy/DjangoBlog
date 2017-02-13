@@ -41,7 +41,7 @@
                 {% for c in sidebar_comments %}
                     <li class="recentcomments">
                 <span class="comment-author-link">
-                    <a href="https://blog.misuzu.moe/" rel="external nofollow"
+                    <a href="{{ c.author.get_absolute_url }}" rel="external"
                        class="url">{{ c.author.username }}</a></span>
                         发表在《
                         <a href="{{ c.article.get_absolute_url }}">{{ c.article.title }}</a>》
