@@ -19,6 +19,8 @@ from . import views
 
 urlpatterns = [
     url(r'^oauth/wbauthorize/(?P<sitename>\w+)$', views.wbauthorize),
-
     url(r'^oauth/wboauthurl$', views.wboauthurl),
+    # url(r'^oauth/wbauthorize/(?P<sitename>\w+)$', views.wbauthorize),
+    url(r'^oauth/googleoauthurl', views.googleoauthurl),
+    url(r'^oauth/googleauthorize', views.googleauthorize),
 ]

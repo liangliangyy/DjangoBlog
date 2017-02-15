@@ -22,8 +22,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '&3g0bdza#c%dm1lf%5gi&0-*53p3t0m*hmcvo29cn^$ji7je(c'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
-DEBUG = False
+DEBUG = True
+# DEBUG = False
 
 # ALLOWED_HOSTS = []
 ALLOWED_HOSTS = ['www.lylinux.net', '127.0.0.1']
@@ -197,6 +197,11 @@ OAHUTH = {
         'appkey': '3161614143',
         'appsecret': 'ee17c099317f872eeddb25204ea46721',
         'callbackurl': 'http://blog.lylinux.org/oauth/weibo'
+    },
+    'google': {
+        'appkey': os.environ.get('GOOGLE_APP_KEY'),
+        'appsecret': os.environ.get('GOOGLE_APP_SECRET'),
+        'callbackurl': 'http://www.lylinux.net/oauth/googleauthorize'
     }
 }
 
@@ -274,22 +279,20 @@ LOGGING = {
     }
 }
 
-
-
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    #other
+    # other
     'compressor.finders.CompressorFinder',
 )
 COMPRESS_ENABLED = True
-COMPRESS_OFFLINE = True
+# COMPRESS_OFFLINE = True
 
 
 COMPRESS_CSS_FILTERS = [
-    #creates absolute urls from relative ones
+    # creates absolute urls from relative ones
     'compressor.filters.css_default.CssAbsoluteFilter',
-    #css minimizer
+    # css minimizer
     'compressor.filters.cssmin.CSSMinFilter'
 ]
 COMPRESS_JS_FILTERS = [

@@ -115,3 +115,48 @@ class WBOauthManager(BaseManager):
         }
         rsp = self.do_get(self.API_URL, params)
         print(rsp)
+
+
+class GoogleOauthManager(BaseManager):
+    AUTH_URL = 'https://accounts.google.com/o/oauth2/v2/auth'
+    TOKEN_URL = 'https://www.googleapis.com/oauth2/v4/token'
+    API_URL = 'https://www.googleapis.com/oauth2/v3/userinfo'
+
+    def __init__(self, client_id, client_secret, callback_url, access_token=None, openid=None):
+        super(GoogleOauthManager, self).__init__(client_id=client_id, client_secret=client_secret,
+                                                 callback_url=callback_url, access_token=access_token, openid=openid)
+
+    def get_authorization_url(self):
+        params = {
+            'client_id': self.client_id,
+            'response_type': 'code',
+            'redirect_uri': self.callback_url,
+            'scope': 'openid email',
+        }
+        url = self.AUTH_URL + "?" + urllib.parse.urlencode(params, quote_via=urllib.parse.quote)
+        return url
+
+    def get_access_token_by_code(self, code):
+        params = {
+            'client_id': self.client_id,
+            'client_secret': self.client_secret,
+            'grant_type': 'authorization_code',
+            'code': code,
+
+            'redirect_uri': self.callback_url
+        }
+        rsp = self.do_post(self.TOKEN_URL, params)
+        print(rsp)
+        obj = json.loads(rsp)
+        self.access_token = str(obj['access_token'])
+        self.openid = str(obj['id_token'])
+
+    def get_oauth_userinfo(self):
+        if not self.is_authorized:
+            return None
+        params = {
+            'access_token': self.access_token
+        }
+        rsp = self.do_get(self.API_URL, params)
+        print(rsp)
+        return json.loads(rsp)
