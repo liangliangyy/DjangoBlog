@@ -12,6 +12,7 @@ from django.contrib import auth
 from django.views.decorators.cache import never_cache
 from django.shortcuts import redirect
 
+
 # Create your views here.
 
 class RegisterView(FormView):
@@ -20,9 +21,10 @@ class RegisterView(FormView):
 
     def form_valid(self, form):
         user = form.save(False)
-
         user.save(True)
-        return HttpResponseRedirect('/')
+        url = reverse('accounts:login')
+        return HttpResponseRedirect(url)
+
 
 @never_cache
 def LogOut(requests):

@@ -65,9 +65,8 @@
         {% block content %}
         {% endblock %}
 
-        {% cache 36000 sidebar %}
+        {% cache 36000 sidebar request.user.username %}
             {% block sidebar %}
-
             {% endblock %}
         {% endcache %}
     </div><!-- #main .wrapper -->

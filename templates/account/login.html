@@ -23,7 +23,7 @@
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
 
                 <div class="checkbox">
-                    <a class="pull-right">Need help?</a>
+                    {% comment %}<a class="pull-right">Need help?</a>{% endcomment %}
                     <label>
                         <input type="checkbox" value="remember-me"> Stay signed in
                     </label>
@@ -33,7 +33,8 @@
         </div>
 
         <p class="text-center">
-            <a href="{% url "account:register" %}">Create an account</a>
+            <a href="{% url "account:register" %}">Create Account</a>
+            |
             <a href="/">Home Page</a>
         </p>
 

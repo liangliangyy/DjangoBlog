@@ -21,6 +21,7 @@ import datetime
 from django.views.decorators.csrf import csrf_exempt
 import os
 from django.contrib.auth.decorators import login_required
+from DjangoBlog.utils import cache, cache_decorator
 
 """
 class SeoProcessor():
@@ -79,7 +80,7 @@ class ArticleDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         articleid = int(self.kwargs[self.pk_url_kwarg])
-
+        print(str(articleid) + "get_context_data")
         comment_form = CommentForm()
         u = self.request.user
 
@@ -91,6 +92,7 @@ class ArticleDetailView(DetailView):
             user = self.request.user
             comment_form.fields["email"].initial = user.email
             comment_form.fields["name"].initial = user.username
+        key = "article_comment_{}".format(articleid)
 
         article_comments = self.object.comment_set.all()
 
@@ -222,9 +224,11 @@ def fileupload(request):
 @login_required
 def refresh_memcache(request):
     try:
+
         if request.user.is_superuser:
-            result = os.popen(' service memcached restart ').readline()
-            return HttpResponse(result)
+            from DjangoBlog.utils import cache
+            cache.clear()
+            return HttpResponse("ok")
         else:
             from django.http import HttpResponseForbidden
             return HttpResponseForbidden()

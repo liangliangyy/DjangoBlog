@@ -51,9 +51,9 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.gzip.GZipMiddleware',
-    'django.middleware.cache.UpdateCacheMiddleware',
+    # 'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',
+    # 'django.middleware.cache.FetchFromCacheMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -144,6 +144,8 @@ HAYSTACK_CONNECTIONS = {
 }
 # 自动更新搜索索引
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+#允许使用用户名或密码登录
+AUTHENTICATION_BACKENDS = ['accounts.user_login_backend.EmailOrUsernameModelBackend']
 
 STATIC_ROOT = os.path.join(SITE_ROOT, 'collectedstatic')
 
@@ -157,7 +159,7 @@ TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 DATE_TIME_FORMAT = '%Y-%m-%d'
 
 SITE_NAME = '且听风吟'
-SITE_URL = 'http://blog.lylinux.org'
+SITE_URL = 'http://www.lylinux.net'
 SITE_DESCRIPTION = '大巧无工,重剑无锋.'
 SITE_SEO_DESCRIPTION = '小站主要用来分享和记录学习经验,教程,记录个人生活的点滴以及一些随笔.欢迎大家访问小站'
 SITE_SEO_KEYWORDS = 'linux,apache,mysql,服务器,ubuntu,shell,web,csharp,.net,asp,mac,swift'
@@ -196,7 +198,7 @@ OAHUTH = {
     'sina': {
         'appkey': '3161614143',
         'appsecret': 'ee17c099317f872eeddb25204ea46721',
-        'callbackurl': 'http://blog.lylinux.org/oauth/weibo'
+        'callbackurl': 'http://www.lylinux.net/oauth/weibo'
     },
     'google': {
         'appkey': os.environ.get('GOOGLE_APP_KEY'),

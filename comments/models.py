@@ -5,6 +5,7 @@ from  blog.models import Article
 from django.core.mail import EmailMultiAlternatives
 from django.contrib.sites.models import Site
 import _thread
+from DjangoBlog.utils import cache
 
 
 # Create your models here.
@@ -26,7 +27,10 @@ class Comment(models.Model):
         verbose_name_plural = verbose_name
 
     def send_comment_email(self, msg):
-        msg.send()
+        try:
+            msg.send()
+        except:
+            pass
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -47,6 +51,7 @@ class Comment(models.Model):
         msg = EmailMultiAlternatives(subject, html_content, from_email='no-reply@lylinux.net', to=[tomail])
 
         msg.content_subtype = "html"
+
         _thread.start_new_thread(self.send_comment_email, (msg,))
 
         if self.parent_comment:
@@ -59,7 +64,8 @@ class Comment(models.Model):
             tomail = self.parent_comment.author.email
             msg = EmailMultiAlternatives(subject, html_content, from_email='no-reply@lylinux.net', to=[tomail])
             msg.content_subtype = "html"
+
             _thread.start_new_thread(self.send_comment_email, (msg,))
 
-    def __str__(self):
-        return self.body
+        def __str__(self):
+            return self.body

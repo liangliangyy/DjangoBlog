@@ -9,6 +9,7 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth import get_user_model
 from django import forms
+from django.contrib import auth
 
 
 class CommentPostView(FormView):
@@ -17,7 +18,9 @@ class CommentPostView(FormView):
 
     def get(self, request, *args, **kwargs):
         article_id = self.kwargs['article_id']
-        url = reverse('blog:detail', kwargs={'article_id': article_id})
+
+        article = Article.objects.get(pk=article_id)
+        url = article.get_absolute_url()
         return HttpResponseRedirect(url + "#comments")
 
     def form_invalid(self, form):
@@ -49,20 +52,17 @@ class CommentPostView(FormView):
             email = form.cleaned_data['email']
             username = form.cleaned_data['name']
 
-            user = get_user_model().objects.create_user(username=username, email=email, password=None,
-                                                        nikename=username)
-        author_id = user.pk
-
+            user = get_user_model().objects.get_or_create(username=username, email=email)[0]
+            # auth.login(self.request, user)
         comment = form.save(False)
         comment.article = article
 
-        comment.author = get_user_model().objects.get(pk=author_id)
+        comment.author = user
 
         if form.cleaned_data['parent_comment_id']:
             parent_comment = Comment.objects.get(pk=form.cleaned_data['parent_comment_id'])
             comment.parent_comment = parent_comment
 
         comment.save(True)
-
         # return HttpResponseRedirect(article.get_absolute_url() + "#div-comment-" + comment.pk)
         return HttpResponseRedirect("%s#div-comment-%d" % (article.get_absolute_url(), comment.pk))
