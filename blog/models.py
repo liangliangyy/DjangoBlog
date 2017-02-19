@@ -68,6 +68,7 @@ class Article(BaseModel):
         ordering = ['-pub_time']
         verbose_name = "文章"
         verbose_name_plural = verbose_name
+        get_latest_by = 'created_time'
 
     def get_absolute_url(self):
 
@@ -110,10 +111,11 @@ class Article(BaseModel):
         self.views += 1
         self.save(update_fields=['views'])
 
-    @cache_decorator(60 * 60 * 10)
+    """
     def comment_list(self):
         comments = self.comment_set.all()
         parent_comments = comments.filter(parent_comment=None)
+    """
 
     def get_admin_url(self):
         info = (self._meta.app_label, self._meta.model_name)

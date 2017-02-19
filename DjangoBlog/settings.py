@@ -144,7 +144,7 @@ HAYSTACK_CONNECTIONS = {
 }
 # 自动更新搜索索引
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
-#允许使用用户名或密码登录
+# 允许使用用户名或密码登录
 AUTHENTICATION_BACKENDS = ['accounts.user_login_backend.EmailOrUsernameModelBackend']
 
 STATIC_ROOT = os.path.join(SITE_ROOT, 'collectedstatic')
@@ -194,6 +194,10 @@ CACHES = {
 CACHE_MIDDLEWARE_SECONDS = 60 * 60 * 10
 CACHE_MIDDLEWARE_KEY_PREFIX = "djangoblog"
 CACHE_MIDDLEWARE_ALIAS = 'default'
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = 'default'
+
 OAHUTH = {
     'sina': {
         'appkey': '3161614143',
@@ -207,7 +211,7 @@ OAHUTH = {
     }
 }
 
-SITE_ID = 2
+SITE_ID = 1
 BAIDU_NOTIFY_URL = "http://data.zz.baidu.com/urls?site=https://www.lylinux.net&token=1uAOGrMsUm5syDGn&type=original"
 
 # Emial:

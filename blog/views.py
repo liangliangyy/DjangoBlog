@@ -2,6 +2,8 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.views.generic.list import ListView
+from django.views.generic import TemplateView
+from django.views.decorators.cache import cache_page
 from django.views.generic.detail import DetailView
 from django.views.generic import UpdateView
 from django.views.generic.edit import CreateView, FormView
@@ -22,6 +24,9 @@ from django.views.decorators.csrf import csrf_exempt
 import os
 from django.contrib.auth.decorators import login_required
 from DjangoBlog.utils import cache, cache_decorator
+from django.utils.cache import get_cache_key
+from django.utils.decorators import classonlymethod
+from django.utils.decorators import method_decorator
 
 """
 class SeoProcessor():
@@ -41,7 +46,16 @@ class SeoProcessor():
 """
 
 
-class ArticleListView(ListView):
+class CachedTemplateView(ListView):
+    @classonlymethod
+    def as_view(cls, **initkwargs):
+        # print(request)
+
+        view = super(CachedTemplateView, cls).as_view(**initkwargs)
+        return cache_page(60 * 60 * 10)(view)
+
+
+class ArticleListView(CachedTemplateView):
     # template_name属性用于指定使用哪个模板进行渲染
     template_name = 'blog/article_index.html'
 
@@ -53,15 +67,25 @@ class ArticleListView(ListView):
     paginate_by = settings.PAGINATE_BY
     page_kwarg = 'page'
 
+    def get_cache_key(self):
+        raise NotImplementedError("implement this function")
+
 
 class IndexView(ArticleListView):
     def get_queryset(self):
+        """
+        try:
+            # _auth_user_id
+            from DjangoBlog.utils import SessionStore
+            s = SessionStore(session_key='_auth_user_id')
+            print(s)
+        except:
+            pass
+        """
         article_list = Article.objects.filter(type='a', status='p')
-
         # for article in article_list:
         #     article.body = article.body[0:settings.ARTICLE_SUB_LENGTH]
         #     # article.body = markdown2.markdown(article.body)
-
         return article_list
 
 
@@ -80,7 +104,7 @@ class ArticleDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         articleid = int(self.kwargs[self.pk_url_kwarg])
-        print(str(articleid) + "get_context_data")
+
         comment_form = CommentForm()
         u = self.request.user
 
@@ -92,7 +116,6 @@ class ArticleDetailView(DetailView):
             user = self.request.user
             comment_form.fields["email"].initial = user.email
             comment_form.fields["name"].initial = user.username
-        key = "article_comment_{}".format(articleid)
 
         article_comments = self.object.comment_set.all()
 
@@ -105,7 +128,14 @@ class ArticleDetailView(DetailView):
 
         return super(ArticleDetailView, self).get_context_data(**kwargs)
 
-    """
+    @classonlymethod
+    def as_view(cls, **initkwargs):
+        self = cls(**initkwargs)
+        keyperfix = "blogdetail"
+        return cache_page(60 * 60 * 10, key_prefix=keyperfix)(super(ArticleDetailView, cls).as_view(**initkwargs))
+
+
+"""
     def post(self, request, *args, **kwargs):
         form = CommentForm(request.POST)
 
@@ -113,7 +143,6 @@ class ArticleDetailView(DetailView):
             data = form.cleaned_data
             pass
     """
-
 
 '''
 class PageDetailView(ArticleDetailView):
@@ -135,6 +164,11 @@ class CategoryDetailView(ArticleListView):
 
     # pk_url_kwarg = 'article_name'
     page_type = "分类目录归档"
+    """
+    def get_cache_key(self):
+        categoryname = self.kwargs['category_name']
+        return "category_list:{categoryname}".format(categoryname=categoryname)
+    """
 
     def get_queryset(self):
         categoryname = self.kwargs['category_name']
@@ -162,7 +196,6 @@ class AuthorDetailView(ArticleListView):
 
     def get_queryset(self):
         author_name = self.kwargs['author_name']
-
         article_list = Article.objects.filter(author__username=author_name)
         return article_list
 
@@ -189,7 +222,6 @@ class TagDetailView(ArticleListView):
 
     def get_queryset(self):
         tag_name = self.kwargs['tag_name']
-
         article_list = Article.objects.filter(tags__name=tag_name)
         return article_list
 
