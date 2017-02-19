@@ -21,22 +21,39 @@ from pygments.formatters import html
 import logging
 
 logger = logging.getLogger('djangoblog')
+from importlib import import_module
+from django.conf import settings
+
+SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
 
 
-def cache_decorator(expiration=3 * 60, cache_key=None):
+def get_max_articleid_commentid():
+    from blog.models import Article
+    from comments.models import Comment
+    return (Article.objects.latest().pk, Comment.objects.latest().pk)
+
+
+def cache_decorator(expiration=3 * 60):
     def wrapper(func):
         def news(*args, **kwargs):
-            key = cache_key
+            key = ''
+            try:
+                view = args[0]
+                key = view.get_cache_key()
+            except:
+                key = None
+                pass
             if not key:
                 unique_str = repr((func, args, kwargs))
+
                 m = md5(unique_str.encode('utf-8'))
                 key = m.hexdigest()
             value = cache.get(key)
             if value:
-                logger.info('cache_decorator get cache %s' % func.__name__)
+                logger.info('cache_decorator get cache:%s key:%s' % (func.__name__, key))
                 return value
             else:
-                logger.info('cache_decorator set cache %s' % func.__name__)
+                logger.info('cache_decorator set cache:%s key:%s' % (func.__name__, key))
                 value = func(*args, **kwargs)
                 cache.set(key, value, expiration)
                 return value
@@ -44,6 +61,23 @@ def cache_decorator(expiration=3 * 60, cache_key=None):
         return news
 
     return wrapper
+
+
+def expire_view_cache(path, servername, serverport, key_prefix=None):
+    from django.http import HttpRequest
+    from django.utils.cache import get_cache_key
+
+    request = HttpRequest()
+    request.META = {'SERVER_NAME': servername, 'SERVER_PORT': serverport}
+    request.path = path
+
+    key = get_cache_key(request, key_prefix=key_prefix, cache=cache)
+    if key:
+        logger.info('expire_view_cache:get key:{path}'.format(path=path))
+        if cache.get(key):
+            cache.delete(key)
+        return True
+    return False
 
 
 def block_code(text, lang, inlinestyles=False, linenos=False):

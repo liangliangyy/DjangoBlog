@@ -6,12 +6,20 @@ from blog.models import Article
 from .forms import CommentForm
 from django.views.generic.edit import FormView
 from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
 from django.contrib.auth import get_user_model
 from django import forms
+
+"""
+from django.core.urlresolvers import reverse
 from django.contrib import auth
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
+from django.views.decorators.csrf import csrf_protect
+from django.contrib.auth.decorators import login_required
+"""
 
 
+# @method_decorator(login_required,name='dispatch')
 class CommentPostView(FormView):
     form_class = CommentForm
     template_name = 'blog/article_detail.html'
@@ -64,5 +72,12 @@ class CommentPostView(FormView):
             comment.parent_comment = parent_comment
 
         comment.save(True)
-        # return HttpResponseRedirect(article.get_absolute_url() + "#div-comment-" + comment.pk)
+        from DjangoBlog.utils import expire_view_cache, cache
+        from django.contrib.sites.models import Site
+        path = article.get_absolute_url()
+        site = Site.objects.get_current().domain
+
+        expire_view_cache(path, servername=site, serverport=self.request.get_port(), key_prefix='blogdetail')
+        if cache.get('seo_processor'):
+            cache.delete('seo_processor')
         return HttpResponseRedirect("%s#div-comment-%d" % (article.get_absolute_url(), comment.pk))

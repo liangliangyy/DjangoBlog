@@ -17,9 +17,14 @@ class ArticleForm(forms.ModelForm):
 class ArticlelAdmin(admin.ModelAdmin):
     form = ArticleForm
 
+    def save_model(self, request, obj, form, change):
+        super(ArticlelAdmin, self).save_model(request, obj, form, change)
+        from DjangoBlog.utils import cache
+        cache.clear()
+
 
 admin.site.register(Article, ArticlelAdmin)
-#admin.site.register(BlogPage, ArticlelAdmin)
+# admin.site.register(BlogPage, ArticlelAdmin)
 admin.site.register(Category)
 admin.site.register(Tag)
 admin.site.register(Links)
