@@ -62,13 +62,15 @@
 
     </header><!-- #masthead -->
     <div id="main" class="wrapper">
+
         {% block content %}
         {% endblock %}
 
-        {% cache 36000 sidebar request.user.username MAX_COMMENTID MAX_ARTICLEID %}
+        {% cache 36000 sidebar request.user.username %}
             {% block sidebar %}
             {% endblock %}
         {% endcache %}
+
     </div><!-- #main .wrapper -->
     {% include 'share_layout/footer.html' %}
 </div><!-- #page -->

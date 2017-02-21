@@ -45,7 +45,7 @@ class SeoProcessor():
         pass
 """
 
-
+"""
 class CachedTemplateView(ListView):
     @classonlymethod
     def as_view(cls, **initkwargs):
@@ -53,9 +53,10 @@ class CachedTemplateView(ListView):
 
         view = super(CachedTemplateView, cls).as_view(**initkwargs)
         return cache_page(60 * 60 * 10)(view)
+"""
 
 
-class ArticleListView(CachedTemplateView):
+class ArticleListView(ListView):
     # template_name属性用于指定使用哪个模板进行渲染
     template_name = 'blog/article_index.html'
 
@@ -67,25 +68,13 @@ class ArticleListView(CachedTemplateView):
     paginate_by = settings.PAGINATE_BY
     page_kwarg = 'page'
 
-    def get_cache_key(self):
-        raise NotImplementedError("implement this function")
+    def get_view_cache_key(self):
+        return self.request.get['pages']
 
 
 class IndexView(ArticleListView):
     def get_queryset(self):
-        """
-        try:
-            # _auth_user_id
-            from DjangoBlog.utils import SessionStore
-            s = SessionStore(session_key='_auth_user_id')
-            print(s)
-        except:
-            pass
-        """
         article_list = Article.objects.filter(type='a', status='p')
-        # for article in article_list:
-        #     article.body = article.body[0:settings.ARTICLE_SUB_LENGTH]
-        #     # article.body = markdown2.markdown(article.body)
         return article_list
 
 
@@ -97,6 +86,7 @@ class ArticleDetailView(DetailView):
 
     def get_object(self):
         obj = super(ArticleDetailView, self).get_object()
+
         obj.viewed()
         # obj.body = markdown2.markdown(obj.body)
         self.object = obj
@@ -128,11 +118,13 @@ class ArticleDetailView(DetailView):
 
         return super(ArticleDetailView, self).get_context_data(**kwargs)
 
+    """
     @classonlymethod
     def as_view(cls, **initkwargs):
         self = cls(**initkwargs)
         keyperfix = "blogdetail"
         return cache_page(60 * 60 * 10, key_prefix=keyperfix)(super(ArticleDetailView, cls).as_view(**initkwargs))
+    """
 
 
 """
@@ -159,20 +151,13 @@ class PageDetailView(ArticleDetailView):
 
 
 class CategoryDetailView(ArticleListView):
-    # template_name = 'article_index.html'
-    # context_object_name = 'article_list'
-
-    # pk_url_kwarg = 'article_name'
     page_type = "分类目录归档"
-    """
-    def get_cache_key(self):
-        categoryname = self.kwargs['category_name']
-        return "category_list:{categoryname}".format(categoryname=categoryname)
-    """
 
     def get_queryset(self):
-        categoryname = self.kwargs['category_name']
-
+        slug = self.kwargs['category_name']
+        category = Category.objects.get(slug=slug)
+        categoryname = category.name
+        self.categoryname = categoryname
         try:
             categoryname = categoryname.split('/')[-1]
         except:
@@ -181,7 +166,10 @@ class CategoryDetailView(ArticleListView):
         return article_list
 
     def get_context_data(self, **kwargs):
-        categoryname = self.kwargs['category_name']
+        # slug = self.kwargs['category_name']
+        # category = Category.objects.get(slug=slug)
+        # categoryname = category.name
+        categoryname = self.categoryname
         try:
             categoryname = categoryname.split('/')[-1]
         except:
@@ -221,12 +209,16 @@ class TagDetailView(ArticleListView):
     page_type = '分类标签归档'
 
     def get_queryset(self):
-        tag_name = self.kwargs['tag_name']
+        slug = self.kwargs['category_name']
+        tag = Tag.objects.get(slug=slug)
+        tag_name = tag.name
+        self.name = tag_name
         article_list = Article.objects.filter(tags__name=tag_name)
         return article_list
 
     def get_context_data(self, **kwargs):
-        tag_name = self.kwargs['tag_name']
+        # tag_name = self.kwargs['tag_name']
+        tag_name = self.name
         kwargs['page_type'] = TagDetailView.page_type
         kwargs['tag_name'] = tag_name
         return super(TagDetailView, self).get_context_data(**kwargs)
