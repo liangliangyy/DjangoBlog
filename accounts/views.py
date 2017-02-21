@@ -64,7 +64,6 @@ class LoginView(FormView):
         if form.is_valid():
             from DjangoBlog.utils import cache
             cache.clear()
-            # login(self.request, form.get_user())
             auth.login(self.request, form.get_user())
 
             return HttpResponseRedirect('/')

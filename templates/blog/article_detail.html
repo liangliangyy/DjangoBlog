@@ -1,6 +1,5 @@
 {% extends 'share_layout/base.html' %}
 {% load blog_tags %}
-
 {% block header %}
     <title>{{ article.title }} | {{ SITE_DESCRIPTION }}</title>
     <meta property="og:type" content="article"/>
@@ -16,7 +15,6 @@
     {% endfor %}
     <meta property="og:site_name" content="{{ SITE_NAME }}"/>
 {% endblock %}
-
 {% block content %}
     <div id="primary" class="site-content">
         <div id="content" role="main">
@@ -47,6 +45,7 @@
             {% include 'comments/tags/post_comment.html' %}
         {% endif %}
     </div><!-- #primary -->
+
 {% endblock %}
 
 

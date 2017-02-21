@@ -36,8 +36,8 @@ def seo_processor(requests):
             'ARTICLE_SUB_LENGTH': settings.ARTICLE_SUB_LENGTH,
             'nav_category_list': Category.objects.all(),
             'nav_pages': Article.objects.filter(type='p', status='p'),
-            'MAX_COMMENTID': Comment.objects.latest().pk,
-            'MAX_ARTICLEID': Article.objects.latest().pk
+            # 'MAX_COMMENTID': Comment.objects.latest().pk,
+            # 'MAX_ARTICLEID': Article.objects.latest().pk
         }
         cache.set(key, value, 60 * 60 * 10)
         return value
