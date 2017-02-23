@@ -17,6 +17,7 @@ install:
   - pip install python-coveralls
   - pip install coverage
 before_script:
+  - mysql -e 'create database djangoblog;'
   - python manage.py migrate
   - python manage.py collectstatic --noinput
   - python manage.py compress --force
