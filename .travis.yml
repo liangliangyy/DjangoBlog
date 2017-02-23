@@ -1,0 +1,27 @@
+language: python
+python:
+  - "3.5"
+  - "3.6"
+env:
+  matrix:
+   - DJANGO="Django<1.9"
+   - DJANGO="Django<1.10"
+   - DJANGO="Django<1.11"
+branches:
+    only:
+        - master
+# command to install dependencies
+install:
+  - pip install -r requirements.txt
+  - pip install "$DJANGO"
+  - pip install python-coveralls
+  - pip install coverage
+before_script:
+  - python manage.py migrate
+  - python manage.py collectstatic --noinput
+  - python manage.py compress --force
+# command to run tests
+script:
+    - coverage run manage.py test
+after_success:
+    - coveralls
