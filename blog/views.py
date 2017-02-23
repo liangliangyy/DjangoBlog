@@ -27,6 +27,7 @@ from DjangoBlog.utils import cache, cache_decorator
 from django.utils.cache import get_cache_key
 from django.utils.decorators import classonlymethod
 from django.utils.decorators import method_decorator
+from django.shortcuts import get_object_or_404
 
 """
 class SeoProcessor():
@@ -155,7 +156,8 @@ class CategoryDetailView(ArticleListView):
 
     def get_queryset(self):
         slug = self.kwargs['category_name']
-        category = Category.objects.get(slug=slug)
+        # category = Category.objects.get(slug=slug)
+        category = get_object_or_404(Category, slug=slug)
         categoryname = category.name
         self.categoryname = categoryname
         try:
@@ -209,8 +211,9 @@ class TagDetailView(ArticleListView):
     page_type = '分类标签归档'
 
     def get_queryset(self):
-        slug = self.kwargs['category_name']
-        tag = Tag.objects.get(slug=slug)
+        slug = self.kwargs['tag_name']
+        # tag = Tag.objects.get(slug=slug)
+        tag = get_object_or_404(Tag, slug=slug)
         tag_name = tag.name
         self.name = tag_name
         article_list = Article.objects.filter(tags__name=tag_name)
