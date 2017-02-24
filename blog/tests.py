@@ -19,6 +19,7 @@ class ArticleTest(TestCase):
         user.email = "liangliangyy@gmail.com"
         user.username = "liangliangyy"
         user.password = "liangliangyy"
+        user.set_password("liangliangyy")
         user.save()
         response = self.client.get(user.get_absolute_url())
         self.assertEqual(response.status_code, 200)
