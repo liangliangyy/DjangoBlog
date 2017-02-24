@@ -1,6 +1,8 @@
 # DjangoBlog
 
-基于`python3.5`和`Django1.10`的博客。
+基于`python3.5`和`Django1.10`的博客。   
+
+[![Build Status](https://travis-ci.org/liangliangyy/DjangoBlog.svg?branch=master)](https://travis-ci.org/liangliangyy/DjangoBlog)    
 
 ## 安装
 使用pip安装：  
