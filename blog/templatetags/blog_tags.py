@@ -25,7 +25,7 @@ import hashlib
 import urllib
 from comments.models import Comment
 from DjangoBlog.utils import cache_decorator, logger
-from django.core.cache import cache
+from DjangoBlog.utils import cache
 
 register = template.Library()
 

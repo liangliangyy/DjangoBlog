@@ -1,0 +1,36 @@
+language: python
+python:
+  - "3.5"
+  - "3.6"
+services:
+  - mysql
+env:
+  global:
+    - DJANGO_SETTINGS_MODULE="test.travis_settings"
+  matrix:
+   - DJANGO="Django==1.8"
+   - DJANGO="Django==1.9"
+   - DJANGO="Django==1.10"
+branches:
+    only:
+        - master
+# command to install dependencies
+install:
+  - pip install -r test/requirements.txt
+  - pip install "$DJANGO"
+  - pip install python-coveralls
+  - pip install coverage
+before_script:
+  - mysql -e 'CREATE DATABASE `djangoblog` /*!40100 DEFAULT CHARACTER SET utf8 */;'
+  - python manage.py makemigrations accounts
+  - python manage.py makemigrations blog
+  - python manage.py makemigrations comments
+  - python manage.py makemigrations oauth
+  - python manage.py migrate
+  - python manage.py collectstatic --noinput
+  - python manage.py compress --force
+# command to run tests
+script:
+    - coverage run manage.py test
+after_success:
+    - coveralls

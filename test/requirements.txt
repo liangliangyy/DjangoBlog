@@ -1,0 +1,17 @@
+Django
+django-autoslug
+django-haystack
+django-pagedown
+django-uuslug
+jieba
+markdown2
+Pillow
+PyMySQL
+python-slugify
+requests
+Unidecode
+Whoosh
+mistune
+pygments
+django-ipware
+django_compressor

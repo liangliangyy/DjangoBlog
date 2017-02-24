@@ -15,7 +15,7 @@
 
 import time
 from ipware.ip import get_real_ip
-from django.core.cache import cache
+from DjangoBlog.utils import cache
 
 
 class OnlineMiddleware(object):

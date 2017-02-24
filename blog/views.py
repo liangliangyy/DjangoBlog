@@ -97,14 +97,13 @@ class ArticleDetailView(DetailView):
         articleid = int(self.kwargs[self.pk_url_kwarg])
 
         comment_form = CommentForm()
-        u = self.request.user
+        user = self.request.user
 
-        if self.request.user.is_authenticated:
+        if user.is_authenticated and not user.is_anonymous and user.email and user.username:
             comment_form.fields.update({
                 'email': forms.CharField(widget=forms.HiddenInput()),
                 'name': forms.CharField(widget=forms.HiddenInput()),
             })
-            user = self.request.user
             comment_form.fields["email"].initial = user.email
             comment_form.fields["name"].initial = user.username
 
@@ -254,7 +253,7 @@ def refresh_memcache(request):
 
         if request.user.is_superuser:
             from DjangoBlog.utils import cache
-            cache.clear()
+            if cache != None: cache.clear()
             return HttpResponse("ok")
         else:
             from django.http import HttpResponseForbidden
