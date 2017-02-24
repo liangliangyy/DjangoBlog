@@ -1,5 +1,4 @@
 Django==1.10.5
-python-memcached==1.58
 django-appconf==1.0.2
 django-autoslug==1.9.3
 django-compressor==2.1.1
@@ -12,9 +11,15 @@ jieba==0.38
 markdown2==2.3.2
 mistune==0.7.3
 Pillow==4.0.0
+Pygments==2.1.3
 PyMySQL==0.7.9
+python-memcached==1.58
 python-slugify==1.2.1
+pytz==2016.10
+rcssmin==1.0.6
 requests==2.12.4
+rjsmin==1.0.12
+six==1.10.0
 sqlparse==0.2.2
 Unidecode==0.4.20
 webencodings==0.5
