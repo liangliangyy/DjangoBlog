@@ -15,10 +15,10 @@
 
 from django import template
 from django.conf import settings
-import markdown2
 from django.template.defaultfilters import stringfilter
 from django.utils.safestring import mark_safe
 import random
+from django.core.urlresolvers import reverse
 from blog.models import Article, Category, Tag, Links
 from django.utils.encoding import force_text
 import hashlib
@@ -143,6 +143,47 @@ def load_article_metas(article, user):
     return {
         'article': article,
         'user': user
+    }
+
+
+@register.inclusion_tag('blog/tags/article_pagination.html')
+def load_pagination_info(page_obj, page_type, tag_name):
+    previous_url = ''
+    next_url = ''
+    if page_type == '':
+        if page_obj.has_next():
+            next_number = page_obj.next_page_number()
+            next_url = reverse('blog:index_page', kwargs={'page': next_number})
+        if page_obj.has_previous():
+            previous_number = page_obj.previous_page_number()
+            previous_url = reverse('blog:index_page', kwargs={'page': previous_number})
+    if page_type == '分类标签归档':
+        if page_obj.has_next():
+            next_number = page_obj.next_page_number()
+            next_url = reverse('blog:tag_detail_page', kwargs={'page': next_number, 'tag_name': tag_name})
+        if page_obj.has_previous():
+            previous_number = page_obj.previous_page_number()
+            previous_url = reverse('blog:tag_detail_page', kwargs={'page': previous_number, 'tag_name': tag_name})
+    if page_type == '作者文章归档':
+        if page_obj.has_next():
+            next_number = page_obj.next_page_number()
+            next_url = reverse('blog:author_detail_page', kwargs={'page': next_number, 'author_name': tag_name})
+        if page_obj.has_previous():
+            previous_number = page_obj.previous_page_number()
+            previous_url = reverse('blog:author_detail_page', kwargs={'page': previous_number, 'author_name': tag_name})
+
+    if page_type == '分类目录归档':
+        if page_obj.has_next():
+            next_number = page_obj.next_page_number()
+            next_url = reverse('blog:category_detail_page', kwargs={'page': next_number, 'category_name': tag_name})
+        if page_obj.has_previous():
+            previous_number = page_obj.previous_page_number()
+            previous_url = reverse('blog:category_detail_page', kwargs={'page': previous_number, 'category_name': tag_name})
+
+    return {
+        'previous_url': previous_url,
+        'next_url': next_url,
+        'page_obj':page_obj
     }
 
 
