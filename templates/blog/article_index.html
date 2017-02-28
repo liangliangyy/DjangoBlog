@@ -55,9 +55,7 @@
 
 
 {% block sidebar %}
-    {% cache 36000 sidebar request.user.username %}
-        {% load_sidebar request.user %}
-    {% endcache %}
+    {% load_sidebar user %}
 {% endblock %}
 
 
