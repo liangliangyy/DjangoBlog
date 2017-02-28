@@ -68,6 +68,14 @@ def truncatechars_content(content):
     return truncatechars_html(content, settings.ARTICLE_SUB_LENGTH)
 
 
+@register.filter(is_safe=True)
+@stringfilter
+def truncate(content):
+    from django.template.defaultfilters import truncatechars
+
+    return truncatechars(content, 150)
+
+
 @register.inclusion_tag('blog/tags/breadcrumb.html')
 def load_breadcrumb(article):
     """
@@ -178,12 +186,13 @@ def load_pagination_info(page_obj, page_type, tag_name):
             next_url = reverse('blog:category_detail_page', kwargs={'page': next_number, 'category_name': tag_name})
         if page_obj.has_previous():
             previous_number = page_obj.previous_page_number()
-            previous_url = reverse('blog:category_detail_page', kwargs={'page': previous_number, 'category_name': tag_name})
+            previous_url = reverse('blog:category_detail_page',
+                                   kwargs={'page': previous_number, 'category_name': tag_name})
 
     return {
         'previous_url': previous_url,
         'next_url': next_url,
-        'page_obj':page_obj
+        'page_obj': page_obj
     }
 
 

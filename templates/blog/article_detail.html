@@ -4,7 +4,9 @@
     <title>{{ article.title }} | {{ SITE_DESCRIPTION }}</title>
     <meta property="og:type" content="article"/>
     <meta property="og:title" content="{{ article.title }}"/>
-    <meta property="og:description" content="{{ article.body|truncatewords:100 }}"/>
+
+    <meta property="og:description" content="{{ article.body|truncate }}"/>
+
     <meta property="og:url"
           content="{{ article.get_full_url }}"/>
     <meta property="article:published_time" content="{% datetimeformat article.pub_time %}"/>
