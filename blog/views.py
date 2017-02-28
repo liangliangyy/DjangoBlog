@@ -23,7 +23,7 @@ import datetime
 from django.views.decorators.csrf import csrf_exempt
 import os
 from django.contrib.auth.decorators import login_required
-from DjangoBlog.utils import cache, cache_decorator
+from DjangoBlog.utils import cache, cache_decorator, logger, get_md5
 from django.utils.cache import get_cache_key
 from django.utils.decorators import classonlymethod
 from django.utils.decorators import method_decorator
@@ -72,11 +72,68 @@ class ArticleListView(ListView):
     def get_view_cache_key(self):
         return self.request.get['pages']
 
+    @property
+    def page_number(self):
+        page_kwarg = self.page_kwarg
+        page = self.kwargs.get(page_kwarg) or self.request.GET.get(page_kwarg) or 1
+        return page
+
+    def get_queryset_cache_key(self):
+        """
+        子类重写.获得queryset的缓存key
+        """
+        raise NotImplementedError()
+
+    def get_queryset_data(self):
+        """
+        子类重写.获取queryset的数据
+        """
+        raise NotImplementedError()
+
+    def get_queryset_from_cache(self, cache_key):
+        # raise NotImplementedError()
+        value = cache.get(cache_key)
+        if value:
+            logger.info('get view cache.key:{key}'.format(key=cache_key))
+            return value
+        else:
+            article_list = self.get_queryset_data()
+            cache.set(cache_key, article_list)
+            logger.info('set view cache.key:{key}'.format(key=cache_key))
+            return article_list
+
+    def get_queryset(self):
+        key = self.get_queryset_cache_key()
+        value = self.get_queryset_from_cache(key)
+        return value
+
 
 class IndexView(ArticleListView):
-    def get_queryset(self):
+    def get_queryset_data(self):
         article_list = Article.objects.filter(type='a', status='p')
         return article_list
+
+    def get_queryset_cache_key(self):
+        cache_key = 'index_{page}'.format(page=self.page_number)
+        return cache_key
+
+    '''
+    def get_queryset(self):
+        # return self.get_queryset_data()
+        cache_key = 'index_{page}'.format(page=self.page_number)
+        return self.get_queryset_from_cache(cache_key=cache_key)
+        """
+        value = cache.get(cache_key)
+        if value:
+            logger.info('get view cache.key:{key}'.format(key=cache_key))
+            return value
+        else:
+            article_list = Article.objects.filter(type='a', status='p')
+            cache.set(cache_key, article_list)
+            logger.info('set view cache.key:{key}'.format(key=cache_key))
+            return article_list
+        """
+    '''
 
 
 class ArticleDetailView(DetailView):
@@ -107,7 +164,7 @@ class ArticleDetailView(DetailView):
             comment_form.fields["email"].initial = user.email
             comment_form.fields["name"].initial = user.username
 
-        article_comments = self.object.comment_set.all()
+        article_comments = self.object.comment_list()
 
         kwargs['form'] = comment_form
         kwargs['article_comments'] = article_comments
@@ -153,6 +210,23 @@ class PageDetailView(ArticleDetailView):
 class CategoryDetailView(ArticleListView):
     page_type = "分类目录归档"
 
+    def get_queryset_data(self):
+        slug = self.kwargs['category_name']
+        category = get_object_or_404(Category, slug=slug)
+        categoryname = category.name
+        self.categoryname = categoryname
+        article_list = Article.objects.filter(category__name=categoryname, status='p')
+        return article_list
+
+    def get_queryset_cache_key(self):
+        slug = self.kwargs['category_name']
+        category = get_object_or_404(Category, slug=slug)
+        categoryname = category.name
+        self.categoryname = categoryname
+        cache_key = 'category_list_{categoryname}_{page}'.format(categoryname=categoryname, page=self.page_number)
+        return cache_key
+
+    '''
     def get_queryset(self):
         slug = self.kwargs['category_name']
         # category = Category.objects.get(slug=slug)
@@ -163,8 +237,19 @@ class CategoryDetailView(ArticleListView):
             categoryname = categoryname.split('/')[-1]
         except:
             pass
-        article_list = Article.objects.filter(category__name=categoryname, status='p')
-        return article_list
+
+        cache_key = 'category_list_{categoryname}_{page}'.format(categoryname=categoryname, page=self.page_number)
+
+        value = cache.get(cache_key)
+        if value:
+            logger.info('get view cache.key:{key}'.format(key=cache_key))
+            return value
+        else:
+            article_list = Article.objects.filter(category__name=categoryname, status='p')
+            cache.set(cache_key, article_list)
+            logger.info('set view cache.key:{key}'.format(key=cache_key))
+            return article_list
+    '''
 
     def get_context_data(self, **kwargs):
         # slug = self.kwargs['category_name']
@@ -183,7 +268,12 @@ class CategoryDetailView(ArticleListView):
 class AuthorDetailView(ArticleListView):
     page_type = '作者文章归档'
 
-    def get_queryset(self):
+    def get_queryset_cache_key(self):
+        author_name = self.kwargs['author_name']
+        cache_key = 'author_{author_name}_{page}'.format(author_name=author_name, page=self.page_number)
+        return cache_key
+
+    def get_queryset_data(self):
         author_name = self.kwargs['author_name']
         article_list = Article.objects.filter(author__username=author_name)
         return article_list
@@ -209,14 +299,21 @@ class TagListView(ListView):
 class TagDetailView(ArticleListView):
     page_type = '分类标签归档'
 
-    def get_queryset(self):
+    def get_queryset_data(self):
         slug = self.kwargs['tag_name']
-        # tag = Tag.objects.get(slug=slug)
         tag = get_object_or_404(Tag, slug=slug)
         tag_name = tag.name
         self.name = tag_name
         article_list = Article.objects.filter(tags__name=tag_name)
         return article_list
+
+    def get_queryset_cache_key(self):
+        slug = self.kwargs['tag_name']
+        tag = get_object_or_404(Tag, slug=slug)
+        tag_name = tag.name
+        self.name = tag_name
+        cache_key = 'tag_{tag_name}_{page}'.format(tag_name=tag_name, page=self.page_number)
+        return cache_key
 
     def get_context_data(self, **kwargs):
         # tag_name = self.kwargs['tag_name']

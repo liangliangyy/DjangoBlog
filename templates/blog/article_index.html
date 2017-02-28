@@ -1,6 +1,6 @@
 {% extends 'share_layout/base.html' %}
 {% load blog_tags %}
-
+{% load cache %}
 {% block header %}
     {% if tag_name %}
         <title>{{ page_type }}:{{ tag_name }} | {{ SITE_DESCRIPTION }}</title>
@@ -55,7 +55,9 @@
 
 
 {% block sidebar %}
-    {% load_sidebar request.user %}
+    {% cache 36000 sidebar request.user.username %}
+        {% load_sidebar request.user %}
+    {% endcache %}
 {% endblock %}
 
 

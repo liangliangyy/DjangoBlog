@@ -20,13 +20,6 @@ from haystack.forms import ModelSearchForm
 from haystack.query import SearchQuerySet
 from haystack.views import SearchView
 
-
-def key_prefixer(request):
-    # if it's not there, don't cache
-    # return request.GET.get('number')
-    return "123"
-
-
 urlpatterns = [
     url(r'^$', views.IndexView.as_view(), name='index'),
     url(r'^page/(?P<page>\d+)$', views.IndexView.as_view(), name='index_page'),

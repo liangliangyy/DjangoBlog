@@ -33,6 +33,11 @@ def get_max_articleid_commentid():
     return (Article.objects.latest().pk, Comment.objects.latest().pk)
 
 
+def get_md5(str):
+    m = md5(str.encode('utf-8'))
+    return m.hexdigest()
+
+
 def cache_decorator(expiration=3 * 60):
     def wrapper(func):
         def news(*args, **kwargs):

@@ -4,7 +4,7 @@ from django.conf import settings
 from uuslug import slugify
 from DjangoBlog.spider_notify import spider_notify
 from django.contrib.sites.models import Site
-from DjangoBlog.utils import cache_decorator, logger
+from DjangoBlog.utils import cache_decorator, logger, cache
 from django.utils.functional import cached_property
 
 
@@ -114,11 +114,17 @@ class Article(BaseModel):
         self.views += 1
         self.save(update_fields=['views'])
 
-    """
     def comment_list(self):
-        comments = self.comment_set.all()
-        parent_comments = comments.filter(parent_comment=None)
-    """
+        cache_key = 'article_comments_{id}'.format(id=self.id)
+        value = cache.get(cache_key)
+        if value:
+            logger.info('get article comments:{id}'.format(id=self.id))
+            return value
+        else:
+            comments = self.comment_set.all()
+            cache.set(cache_key, comments)
+            logger.info('set article comments:{id}'.format(id=self.id))
+            return comments
 
     def get_admin_url(self):
         info = (self._meta.app_label, self._meta.model_name)

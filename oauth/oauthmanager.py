@@ -26,6 +26,8 @@ class BaseManager(metaclass=ABCMeta):
     TOKEN_URL = None
     """获取用户信息"""
     API_URL = None
+    '''icon图标名'''
+    ICON_NAME = None
 
     def __init__(self, client_id, client_secret, callback_url, access_token=None, openid=None):
         self.client_id = client_id
@@ -121,6 +123,7 @@ class GoogleOauthManager(BaseManager):
     AUTH_URL = 'https://accounts.google.com/o/oauth2/v2/auth'
     TOKEN_URL = 'https://www.googleapis.com/oauth2/v4/token'
     API_URL = 'https://www.googleapis.com/oauth2/v3/userinfo'
+    ICON_NAME = 'google'
 
     def __init__(self, client_id, client_secret, callback_url, access_token=None, openid=None):
         super(GoogleOauthManager, self).__init__(client_id=client_id, client_secret=client_secret,
