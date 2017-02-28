@@ -1,10 +1,9 @@
 {% load blog_tags %}
 <article id="post-{{ article.pk }} "
-         class="post-3815 post type-post status-publish format-standard hentry"
-         itemscope itemtype="http://schema.org/Article">
+         class="post-3815 post type-post status-publish format-standard hentry">
     <header class="entry-header">
 
-        <h1 class="entry-title" itemprop="name">
+        <h1 class="entry-title">
             {% if  isindex %}
                 <a href="{{ article.get_absolute_url }}"
                    rel="bookmark">{{ article.title }}</a>
