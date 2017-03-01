@@ -5,8 +5,8 @@
     <meta property="og:type" content="article"/>
     <meta property="og:title" content="{{ article.title }}"/>
 
-    <meta property="og:description" content="{{ article.body|truncate }}"/>
 
+    <meta property="og:description" content="{{ article.body|custom_markdown|striptags|truncatewords:20 }}"/>
     <meta property="og:url"
           content="{{ article.get_full_url }}"/>
     <meta property="article:published_time" content="{% datetimeformat article.pub_time %}"/>
