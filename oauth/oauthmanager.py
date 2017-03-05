@@ -14,12 +14,14 @@
 """
 
 from abc import ABCMeta, abstractmethod, abstractproperty
+from django.conf import settings
 import requests
 import json
 import urllib.parse
+from DjangoBlog.utils import logger
 
 
-class BaseManager(metaclass=ABCMeta):
+class BaseOauthManager(metaclass=ABCMeta):
     """获取用户授权"""
     AUTH_URL = None
     """获取token"""
@@ -29,10 +31,7 @@ class BaseManager(metaclass=ABCMeta):
     '''icon图标名'''
     ICON_NAME = None
 
-    def __init__(self, client_id, client_secret, callback_url, access_token=None, openid=None):
-        self.client_id = client_id
-        self.client_secret = client_secret
-        self.callback_url = callback_url
+    def __init__(self, access_token=None, openid=None):
         self.access_token = access_token
         self.openid = openid
 
@@ -65,14 +64,17 @@ class BaseManager(metaclass=ABCMeta):
         return rsp.text
 
 
-class WBOauthManager(BaseManager):
+class WBOauthManager(BaseOauthManager):
     AUTH_URL = 'https://api.weibo.com/oauth2/authorize'
     TOKEN_URL = 'https://api.weibo.com/oauth2/access_token'
     API_URL = 'https://api.weibo.com/2/users/show.json'
+    ICON_NAME = 'weibo'
 
-    def __init__(self, client_id, client_secret, callback_url, access_token=None, openid=None):
-        super(WBOauthManager, self).__init__(client_id=client_id, client_secret=client_secret,
-                                             callback_url=callback_url, access_token=access_token, openid=openid)
+    def __init__(self, access_token=None, openid=None):
+        self.client_id = settings.OAHUTH['sina']['appkey']
+        self.client_secret = settings.OAHUTH['sina']['appsecret']
+        self.callback_url = settings.OAHUTH['sina']['callbackurl']
+        super(WBOauthManager, self).__init__(access_token=access_token, openid=openid)
 
     def get_authorization_url(self):
         params = {
@@ -119,15 +121,17 @@ class WBOauthManager(BaseManager):
         print(rsp)
 
 
-class GoogleOauthManager(BaseManager):
+class GoogleOauthManager(BaseOauthManager):
     AUTH_URL = 'https://accounts.google.com/o/oauth2/v2/auth'
     TOKEN_URL = 'https://www.googleapis.com/oauth2/v4/token'
     API_URL = 'https://www.googleapis.com/oauth2/v3/userinfo'
     ICON_NAME = 'google'
 
-    def __init__(self, client_id, client_secret, callback_url, access_token=None, openid=None):
-        super(GoogleOauthManager, self).__init__(client_id=client_id, client_secret=client_secret,
-                                                 callback_url=callback_url, access_token=access_token, openid=openid)
+    def __init__(self, access_token=None, openid=None):
+        self.client_id = settings.OAHUTH['google']['appkey']
+        self.client_secret = settings.OAHUTH['google']['appsecret']
+        self.callback_url = settings.OAHUTH['google']['callbackurl']
+        super(GoogleOauthManager, self).__init__(access_token=access_token, openid=openid)
 
     def get_authorization_url(self):
         params = {
@@ -135,6 +139,60 @@ class GoogleOauthManager(BaseManager):
             'response_type': 'code',
             'redirect_uri': self.callback_url,
             'scope': 'openid email',
+        }
+        url = self.AUTH_URL + "?" + urllib.parse.urlencode(params, quote_via=urllib.parse.quote)
+        return url
+
+    def get_access_token_by_code(self, code):
+        params = {
+            'client_id': self.client_id,
+            'client_secret': self.client_secret,
+            'grant_type': 'authorization_code',
+            'code': code,
+
+            'redirect_uri': self.callback_url
+        }
+        rsp = self.do_post(self.TOKEN_URL, params)
+
+        obj = json.loads(rsp)
+        try:
+            self.access_token = str(obj['access_token'])
+            self.openid = str(obj['id_token'])
+            logger.info(self.ICON_NAME + ' oauth ' + rsp)
+            return self.access_token
+        except:
+            logger.info(self.ICON_NAME + ' oauth error ' + rsp)
+            return None
+
+    def get_oauth_userinfo(self):
+        if not self.is_authorized:
+            return None
+        params = {
+            'access_token': self.access_token
+        }
+        rsp = self.do_get(self.API_URL, params)
+        print(rsp)
+        return json.loads(rsp)
+
+
+class GitHubOauthManager(BaseOauthManager):
+    AUTH_URL = 'https://github.com/login/oauth/authorize'
+    TOKEN_URL = 'https://github.com/login/oauth/access_token'
+    API_URL = 'https://api.github.com/user'
+    ICON_NAME = 'github'
+
+    def __init__(self, access_token=None, openid=None):
+        self.client_id = settings.OAHUTH['github']['appkey']
+        self.client_secret = settings.OAHUTH['github']['appsecret']
+        self.callback_url = settings.OAHUTH['github']['callbackurl']
+        super(GitHubOauthManager, self).__init__(access_token=access_token, openid=openid)
+
+    def get_authorization_url(self):
+        params = {
+            'client_id': self.client_id,
+            'response_type': 'code',
+            'redirect_uri': self.callback_url,
+            'scope': 'user:email',
         }
         url = self.AUTH_URL + "?" + urllib.parse.urlencode(params, quote_via=urllib.parse.quote)
         return url

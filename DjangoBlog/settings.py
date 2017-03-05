@@ -22,8 +22,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '&3g0bdza#c%dm1lf%5gi&0-*53p3t0m*hmcvo29cn^$ji7je(c'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = True
-DEBUG = False
+DEBUG = True
+# DEBUG = False
 
 # ALLOWED_HOSTS = []
 ALLOWED_HOSTS = ['www.lylinux.net', '127.0.0.1']
@@ -51,9 +51,9 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.gzip.GZipMiddleware',
-    #'django.middleware.cache.UpdateCacheMiddleware',
+    # 'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
-    #'django.middleware.cache.FetchFromCacheMiddleware',
+    # 'django.middleware.cache.FetchFromCacheMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -208,6 +208,11 @@ OAHUTH = {
         'appkey': os.environ.get('GOOGLE_APP_KEY'),
         'appsecret': os.environ.get('GOOGLE_APP_SECRET'),
         'callbackurl': 'http://www.lylinux.net/oauth/googleauthorize'
+    },
+    'github': {
+        'appkey': os.environ.get('GITHUB_APP_KEY'),
+        'appsecret': os.environ.get('GITHUB_APP_SECRET'),
+        'callbackurl': 'http://www.lylinux.net/oauth/githubauthorize'
     }
 }
 
