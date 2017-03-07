@@ -195,24 +195,24 @@ CACHE_MIDDLEWARE_SECONDS = 60 * 60 * 10
 CACHE_MIDDLEWARE_KEY_PREFIX = "djangoblog"
 CACHE_MIDDLEWARE_ALIAS = 'default'
 
-SESSION_ENGINE = "django.contrib.sessions.backends.cache"
-SESSION_CACHE_ALIAS = 'default'
+# SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+# SESSION_CACHE_ALIAS = 'default'
 
 OAHUTH = {
     'sina': {
         'appkey': '3161614143',
         'appsecret': 'ee17c099317f872eeddb25204ea46721',
-        'callbackurl': 'http://www.lylinux.net/oauth/weibo'
+        'callbackurl': 'http://www.lylinux.net/oauth/authorize?type=weibo'
     },
     'google': {
         'appkey': os.environ.get('GOOGLE_APP_KEY'),
         'appsecret': os.environ.get('GOOGLE_APP_SECRET'),
-        'callbackurl': 'http://www.lylinux.net/oauth/googleauthorize'
+        'callbackurl': 'http://www.lylinux.net/oauth/authorize?type=google'
     },
     'github': {
         'appkey': os.environ.get('GITHUB_APP_KEY'),
         'appsecret': os.environ.get('GITHUB_APP_SECRET'),
-        'callbackurl': 'http://www.lylinux.net/oauth/githubauthorize'
+        'callbackurl': 'http://www.lylinux.net/oauth/authorize?type=github'
     }
 }
 
