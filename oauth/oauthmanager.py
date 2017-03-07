@@ -14,7 +14,7 @@
 """
 
 from abc import ABCMeta, abstractmethod, abstractproperty
-from oauth.models import oauthuser
+from oauth.models import OAuthUser
 from django.conf import settings
 import requests
 import json
@@ -226,7 +226,7 @@ class GitHubOauthManager(BaseOauthManager):
         print(rsp)
         try:
             datas = json.loads(rsp)
-            user = oauthuser()
+            user = OAuthUser()
             user.picture = datas['avatar_url']
             user.nikename = datas['name']
             user.openid = datas['id']

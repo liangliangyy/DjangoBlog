@@ -17,7 +17,10 @@ from django.conf.urls import url
 from django.views.decorators.cache import cache_page
 from . import views
 
-urlpatterns = [url(r'^oauth/authorize$', views.authorize), ]
+urlpatterns = [
+    url(r'^oauth/authorize$', views.authorize),
+    url(r'^oauth/requireemail/(?P<oauthid>\d+)', views.RequireEmailView.as_view(), name='require_email'),
+]
 
 """
 urlpatterns = [

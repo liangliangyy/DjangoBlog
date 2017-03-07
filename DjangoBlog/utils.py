@@ -19,6 +19,8 @@ from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import html
 import logging
+import _thread
+from django.core.mail import EmailMultiAlternatives
 
 logger = logging.getLogger('djangoblog')
 from importlib import import_module
@@ -120,3 +122,17 @@ class common_markdown():
 
         mdp = mistune.Markdown(escape=True, renderer=renderer)
         return mdp(value)
+
+
+def send_email(subject, html_content, tomail):
+    msg = EmailMultiAlternatives(subject, html_content, from_email='no-reply@lylinux.net', to=tomail)
+    msg.content_subtype = "html"
+
+    def send_comment_email(msg):
+        try:
+            msg.send()
+        except:
+            print('send email error')
+            pass
+
+    _thread.start_new_thread(send_comment_email, (msg,))

@@ -4,7 +4,7 @@ from django.db import models
 from django.conf import settings
 
 
-class oauthuser(models.Model):
+class OAuthUser(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='用户', blank=True, null=True)
     openid = models.CharField(max_length=50)
     nikename = models.CharField(max_length=50, verbose_name='昵称')
