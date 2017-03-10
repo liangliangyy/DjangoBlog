@@ -11,9 +11,6 @@ from DjangoBlog.utils import cache
 # Create your models here.
 
 class Comment(models.Model):
-    # url = models.URLField('地址', blank=True, null=True)
-    # email = models.EmailField('电子邮件', blank=True, null=True)
-
     body = models.TextField('正文', max_length=300)
     created_time = models.DateTimeField('创建时间', auto_now_add=True)
     last_mod_time = models.DateTimeField('修改时间', auto_now=True)

@@ -23,10 +23,6 @@ import _thread
 from django.core.mail import EmailMultiAlternatives
 
 logger = logging.getLogger('djangoblog')
-from importlib import import_module
-from django.conf import settings
-
-SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
 
 
 def get_max_articleid_commentid():

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 # Create your views here.
-from .oauthmanager import WBOauthManager, GoogleOauthManager, get_manager_by_type
+
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import get_user_model
@@ -11,6 +11,11 @@ from django.shortcuts import get_object_or_404
 from django.views.generic import FormView, RedirectView
 from oauth.forms import RequireEmailForm
 from django.core.urlresolvers import reverse
+from DjangoBlog.utils import send_email, get_md5
+from django.contrib.sites.models import Site
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponseForbidden
+from .oauthmanager import WBOauthManager, GoogleOauthManager, get_manager_by_type
 
 
 def authorize(request):
@@ -26,22 +31,33 @@ def authorize(request):
     if not rsp:
         return HttpResponseRedirect(manager.get_authorization_url())
     user = manager.get_oauth_userinfo()
-    author = None
+
     if user:
+        try:
+            user = OAuthUser.objects.get(type=type, openid=user.openid)
+        except ObjectDoesNotExist:
+            pass
         email = user.email
-        email = None
         if email:
-            author = get_user_model().objects.get(email=email)
+            author = None
+            try:
+                author = get_user_model().objects.get(email=email)
+            except ObjectDoesNotExist:
+                pass
             if not author:
-                author = get_user_model().objects.create_user(username=user.nikename, email=email)
+                author = get_user_model(). \
+                    objects.create_user(username=user.nikename + '_' + str(user.openid), email=email)
             user.author = author
             user.save()
             login(request, author)
             return HttpResponseRedirect('/')
         if not email:
-            author = get_user_model().objects.create_user(username=user.nikename)
+            # todo
+            # 未避免用户名重复，暂时使用oauth用户名+openid这种方式来创建用户
+            author = get_user_model().objects.get_or_create(username=user.nikename + '_' + str(user.openid))[0]
             user.author = author
             user.save()
+
             url = reverse('oauth:require_email', kwargs=
             {
                 'oauthid': user.id
@@ -50,13 +66,34 @@ def authorize(request):
             return HttpResponseRedirect(url)
 
 
-"""
-def require_email(request, oauthid):
-    oauthuser = get_object_or_404(OAuthUser, pk=oauthid)
-    if oauthuser.email:
+def emailconfirm(request, id, sign):
+    if not sign:
+        return HttpResponseForbidden()
+    if not get_md5(settings.SECRET_KEY + str(id) + settings.SECRET_KEY).upper() == sign.upper():
+        return HttpResponseForbidden()
+    oauthuser = get_object_or_404(OAuthUser, pk=id)
+    author = get_user_model().objects.get(pk=oauthuser.author_id)
+    if oauthuser.email and author.email:
+        login(request, author)
         return HttpResponseRedirect('/')
+    author.set_password('$%^Q1W2E3R4T5Y6,./')
+    author.email = oauthuser.email
+    author.save()
+    login(request, author)
 
-"""
+    site = Site.objects.get_current().domain
+    send_email('恭喜您绑定成功!', '''
+     <p>恭喜您，您已经成功绑定您的邮箱，您可以使用{type}来直接免密码登录本网站.欢迎您继续关注本站，地址是</p>
+
+                <a href="{url}" rel="bookmark">{url}</a>
+
+                再次感谢您！
+                <br />
+                如果上面链接无法打开，请将此链接复制至浏览器。
+                {url}
+    '''.format(type=oauthuser.type, url='http://' + site), [oauthuser.email, ])
+
+    return HttpResponseRedirect('/')
 
 
 class RequireEmailView(FormView):
@@ -90,8 +127,18 @@ class RequireEmailView(FormView):
         email = form.cleaned_data['email']
         oauthid = form.cleaned_data['oauthid']
         oauthuser = get_object_or_404(OAuthUser, pk=oauthid)
-        from DjangoBlog.utils import send_email
-        url = '123'
+        oauthuser.email = email
+        oauthuser.save()
+        sign = get_md5(settings.SECRET_KEY + str(oauthuser.id) + settings.SECRET_KEY)
+        site = Site.objects.get_current().domain
+        if settings.DEBUG:
+            site = '127.0.0.1:8000'
+        path = reverse('oauth:email_confirm', kwargs={
+            'id': oauthid,
+            'sign': sign
+        })
+        url = "http://{site}{path}".format(site=site, path=path)
+        print(url)
         content = """
                 <p>请点击下面链接绑定您的邮箱</p>
 

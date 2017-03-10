@@ -9,17 +9,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth import get_user_model
 from django import forms
 
-"""
-from django.core.urlresolvers import reverse
-from django.contrib import auth
-from django.utils.decorators import method_decorator
-from django.views.decorators.cache import never_cache
-from django.views.decorators.csrf import csrf_protect
-from django.contrib.auth.decorators import login_required
-"""
 
-
-# @method_decorator(login_required,name='dispatch')
 class CommentPostView(FormView):
     form_class = CommentForm
     template_name = 'blog/article_detail.html'

@@ -20,6 +20,7 @@ from . import views
 urlpatterns = [
     url(r'^oauth/authorize$', views.authorize),
     url(r'^oauth/requireemail/(?P<oauthid>\d+)', views.RequireEmailView.as_view(), name='require_email'),
+    url(r'^oauth/emailconfirm/(?P<id>\d+)/(?P<sign>\S+)', views.emailconfirm, name='email_confirm'),
 ]
 
 """

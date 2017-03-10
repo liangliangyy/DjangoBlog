@@ -172,8 +172,20 @@ class GoogleOauthManager(BaseOauthManager):
             'access_token': self.access_token
         }
         rsp = self.do_get(self.API_URL, params)
-        print(rsp)
-        return json.loads(rsp)
+        try:
+            print(rsp)
+            datas = json.loads(rsp)
+            user = OAuthUser()
+            user.picture = datas['picture']
+            user.nikename = datas['name']
+            user.openid = datas['sub']
+            user.type = 'google'
+            if datas['email']:
+                user.email = datas['email']
+            return user
+        except:
+            logger.info('google oauth error.rsp:' + rsp)
+            return None
 
 
 class GitHubOauthManager(BaseOauthManager):
