@@ -45,7 +45,17 @@
             {% comment %}{% load comments_tags %}
                 {% load_post_comment article from %}{% endcomment %}
             {% include 'comments/tags/comment_list.html' %}
-            {% include 'comments/tags/post_comment.html' %}
+            {% if user.is_authenticated %}
+                {% include 'comments/tags/post_comment.html' %}
+            {% else %}
+                <div class="comments-area">
+                    <h3 class="comment-meta">您还没有登录，请您<a href="{% url "account:login" %}">登录</a>后发表评论。</h3>
+
+                    {% load oauth_tags %}
+                    {% load_oauth_applications %}
+
+                </div>
+            {% endif %}
         {% endif %}
     </div><!-- #primary -->
 

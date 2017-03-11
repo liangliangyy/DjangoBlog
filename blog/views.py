@@ -29,33 +29,6 @@ from django.utils.decorators import classonlymethod
 from django.utils.decorators import method_decorator
 from django.shortcuts import get_object_or_404
 
-"""
-class SeoProcessor():
-    __metaclass__ = ABCMeta
-
-    @abstractmethod
-    def get_title(self):
-        pass
-
-    @abstractmethod
-    def get_keywords(self):
-        pass
-
-    @abstractmethod
-    def get_description(self):
-        pass
-"""
-
-"""
-class CachedTemplateView(ListView):
-    @classonlymethod
-    def as_view(cls, **initkwargs):
-        # print(request)
-
-        view = super(CachedTemplateView, cls).as_view(**initkwargs)
-        return cache_page(60 * 60 * 10)(view)
-"""
-
 
 class ArticleListView(ListView):
     # template_name属性用于指定使用哪个模板进行渲染
@@ -117,24 +90,6 @@ class IndexView(ArticleListView):
         cache_key = 'index_{page}'.format(page=self.page_number)
         return cache_key
 
-    '''
-    def get_queryset(self):
-        # return self.get_queryset_data()
-        cache_key = 'index_{page}'.format(page=self.page_number)
-        return self.get_queryset_from_cache(cache_key=cache_key)
-        """
-        value = cache.get(cache_key)
-        if value:
-            logger.info('get view cache.key:{key}'.format(key=cache_key))
-            return value
-        else:
-            article_list = Article.objects.filter(type='a', status='p')
-            cache.set(cache_key, article_list)
-            logger.info('set view cache.key:{key}'.format(key=cache_key))
-            return article_list
-        """
-    '''
-
 
 class ArticleDetailView(DetailView):
     template_name = 'blog/article_detail.html'
@@ -175,37 +130,6 @@ class ArticleDetailView(DetailView):
 
         return super(ArticleDetailView, self).get_context_data(**kwargs)
 
-    """
-    @classonlymethod
-    def as_view(cls, **initkwargs):
-        self = cls(**initkwargs)
-        keyperfix = "blogdetail"
-        return cache_page(60 * 60 * 10, key_prefix=keyperfix)(super(ArticleDetailView, cls).as_view(**initkwargs))
-    """
-
-
-"""
-    def post(self, request, *args, **kwargs):
-        form = CommentForm(request.POST)
-
-        if form.is_valid():
-            data = form.cleaned_data
-            pass
-    """
-
-'''
-class PageDetailView(ArticleDetailView):
-    model = BlogPage
-    pk_url_kwarg = 'page_id'
-
-    def get_object(self):
-        obj = super(PageDetailView, self).get_object()
-        print(obj.title)
-        obj.viewed()
-        # obj.body = markdown2.markdown(obj.body)
-        return obj
-'''
-
 
 class CategoryDetailView(ArticleListView):
     page_type = "分类目录归档"
@@ -226,35 +150,8 @@ class CategoryDetailView(ArticleListView):
         cache_key = 'category_list_{categoryname}_{page}'.format(categoryname=categoryname, page=self.page_number)
         return cache_key
 
-    '''
-    def get_queryset(self):
-        slug = self.kwargs['category_name']
-        # category = Category.objects.get(slug=slug)
-        category = get_object_or_404(Category, slug=slug)
-        categoryname = category.name
-        self.categoryname = categoryname
-        try:
-            categoryname = categoryname.split('/')[-1]
-        except:
-            pass
-
-        cache_key = 'category_list_{categoryname}_{page}'.format(categoryname=categoryname, page=self.page_number)
-
-        value = cache.get(cache_key)
-        if value:
-            logger.info('get view cache.key:{key}'.format(key=cache_key))
-            return value
-        else:
-            article_list = Article.objects.filter(category__name=categoryname, status='p')
-            cache.set(cache_key, article_list)
-            logger.info('set view cache.key:{key}'.format(key=cache_key))
-            return article_list
-    '''
-
     def get_context_data(self, **kwargs):
-        # slug = self.kwargs['category_name']
-        # category = Category.objects.get(slug=slug)
-        # categoryname = category.name
+
         categoryname = self.categoryname
         try:
             categoryname = categoryname.split('/')[-1]
@@ -360,25 +257,18 @@ def refresh_memcache(request):
 
 
 """
-class BlogSearchView(SearchView):
-    form_class = BlogSearchForm
-    template_name = 'blog/article_detail.html'
-    model = Article
-    # template_name属性用于指定使用哪个模板进行渲染
-    template_name = 'blog/article_index.html'
+class SeoProcessor():
+    __metaclass__ = ABCMeta
 
-    # context_object_name属性用于给上下文变量取名（在模板中使用该名字）
-    context_object_name = 'article_list'
+    @abstractmethod
+    def get_title(self):
+        pass
 
-    def get_queryset(self):
-        queryset = super(BlogSearchView, self).get_queryset()
-        # further filter queryset based on some set of criteria
-        # return queryset.filter(pub_date__gte=date(2015, 1, 1))
-        return queryset
+    @abstractmethod
+    def get_keywords(self):
+        pass
 
-    def get_context_data(self, **kwargs):
-        tag_name = 'search'
-        kwargs['page_type'] = 'search'
-        kwargs['tag_name'] = tag_name
-        return super(BlogSearchView, self).get_context_data(**kwargs)
+    @abstractmethod
+    def get_description(self):
+        pass
 """

@@ -17,7 +17,7 @@
     {% block header %}
     {% endblock %}
     <link rel="profile" href="http://gmpg.org/xfn/11"/>
-    {% comment %}<link rel="pingback" href="https://www.lylinux.org/xmlrpc.php"/>{% endcomment %}
+
     <!--[if lt IE 9]>
     <script src="{% static 'blog/js/html5.js' %}" type="text/javascript"></script>
     <![endif]-->
@@ -32,11 +32,13 @@
     {% compress css %}
         <link rel='stylesheet' id='twentytwelve-style-css' href='{% static 'blog/css/style.css' %}' type='text/css'
               media='all'/>
+        <link href="{% static 'blog/css/oauth_style.css' %}" rel="stylesheet">
         {% comment %}<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>{% endcomment %}
         <!--[if lt IE 9]>
         <link rel='stylesheet' id='twentytwelve-ie-css'  href='{% static 'blog/css/ie.css' %}' type='text/css' media='all' />
     <![endif]-->
         <link rel="stylesheet" href="{% static 'pygments/default.css' %}"/>
+        <link rel="stylesheet" href="{% static 'blog/css/nprogress.css' %}">
         {% block compress_css %}
         {% endblock %}
     {% endcompress %}
@@ -44,6 +46,7 @@
     <script type='text/javascript' src='{% static 'blog/js/jquery-migrate.min.js' %}' defer='defer'></script>{% endcomment %}
     {% compress js %}
         <script type="text/javascript" src="{% static 'blog/js/jquery-3.1.1.js' %}"></script>
+        <script type="text/javascript" src="{% static 'blog/js/nprogress.js' %}"></script>
     {% endcompress %}
 </head>
 

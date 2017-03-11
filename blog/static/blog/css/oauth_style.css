@@ -1,0 +1,305 @@
+
+.icon-sn-google {
+    background-position: 0 -28px;
+}
+
+.icon-sn-bg-google {
+    background-color: #4285f4;
+    background-position: 0 0;
+}
+
+.fa-sn-google {
+    color: #4285f4;
+}
+
+.icon-sn-github {
+    background-position: -28px -28px;
+}
+
+.icon-sn-bg-github {
+    background-color: #333;
+    background-position: -28px 0;
+}
+
+.fa-sn-github {
+    color: #333;
+}
+
+.icon-sn-weibo {
+    background-position: -56px -28px;
+}
+
+.icon-sn-bg-weibo {
+    background-color: #e90d24;
+    background-position: -56px 0;
+}
+
+.fa-sn-weibo {
+    color: #e90d24;
+}
+
+.icon-sn-qq {
+    background-position: -84px -28px;
+}
+
+.icon-sn-bg-qq {
+    background-color: #0098e6;
+    background-position: -84px 0;
+}
+
+.fa-sn-qq {
+    color: #0098e6;
+}
+
+.icon-sn-twitter {
+    background-position: -112px -28px;
+}
+
+.icon-sn-bg-twitter {
+    background-color: #50abf1;
+    background-position: -112px 0;
+}
+
+.fa-sn-twitter {
+    color: #50abf1;
+}
+
+.icon-sn-facebook {
+    background-position: -140px -28px;
+}
+
+.icon-sn-bg-facebook {
+    background-color: #4862a3;
+    background-position: -140px 0;
+}
+
+.fa-sn-facebook {
+    color: #4862a3;
+}
+
+.icon-sn-renren {
+    background-position: -168px -28px;
+}
+
+.icon-sn-bg-renren {
+    background-color: #197bc8;
+    background-position: -168px 0;
+}
+
+.fa-sn-renren {
+    color: #197bc8;
+}
+
+.icon-sn-tqq {
+    background-position: -196px -28px;
+}
+
+.icon-sn-bg-tqq {
+    background-color: #1f9ed2;
+    background-position: -196px 0;
+}
+
+.fa-sn-tqq {
+    color: #1f9ed2;
+}
+
+.icon-sn-douban {
+    background-position: -224px -28px;
+}
+
+.icon-sn-bg-douban {
+    background-color: #279738;
+    background-position: -224px 0;
+}
+
+.fa-sn-douban {
+    color: #279738;
+}
+
+.icon-sn-weixin {
+    background-position: -252px -28px;
+}
+
+.icon-sn-bg-weixin {
+    background-color: #00b500;
+    background-position: -252px 0;
+}
+
+.fa-sn-weixin {
+    color: #00b500;
+}
+
+.icon-sn-dotted {
+    background-position: -280px -28px;
+}
+
+.icon-sn-bg-dotted {
+    background-color: #eee;
+    background-position: -280px 0;
+}
+
+.fa-sn-dotted {
+    color: #eee;
+}
+
+.icon-sn-site {
+    background-position: -308px -28px;
+}
+
+.icon-sn-bg-site {
+    background-color: #00b500;
+    background-position: -308px 0;
+}
+
+.fa-sn-site {
+    color: #00b500;
+}
+
+.icon-sn-linkedin {
+    background-position: -336px -28px;
+}
+
+.icon-sn-bg-linkedin {
+    background-color: #0077b9;
+    background-position: -336px 0;
+}
+
+.fa-sn-linkedin {
+    color: #0077b9;
+}
+
+[class*=icon-sn-] {
+    display: inline-block;
+    background-image: url('../img/icon-sn.svg');
+    background-repeat: no-repeat;
+    width: 28px;
+    height: 28px;
+    vertical-align: middle;
+    background-size: auto 56px;
+}
+
+[class*=icon-sn-]:hover {
+    opacity: .8;
+    filter: alpha(opacity=80);
+}
+
+.btn-sn-google {
+    background: #4285f4;
+}
+
+.btn-sn-google:active, .btn-sn-google:focus, .btn-sn-google:hover {
+    background: #2a75f3;
+}
+
+.btn-sn-github {
+    background: #333;
+}
+
+.btn-sn-github:active, .btn-sn-github:focus, .btn-sn-github:hover {
+    background: #262626;
+}
+
+.btn-sn-weibo {
+    background: #e90d24;
+}
+
+.btn-sn-weibo:active, .btn-sn-weibo:focus, .btn-sn-weibo:hover {
+    background: #d10c20;
+}
+
+.btn-sn-qq {
+    background: #0098e6;
+}
+
+.btn-sn-qq:active, .btn-sn-qq:focus, .btn-sn-qq:hover {
+    background: #0087cd;
+}
+
+.btn-sn-twitter {
+    background: #50abf1;
+}
+
+.btn-sn-twitter:active, .btn-sn-twitter:focus, .btn-sn-twitter:hover {
+    background: #38a0ef;
+}
+
+.btn-sn-facebook {
+    background: #4862a3;
+}
+
+.btn-sn-facebook:active, .btn-sn-facebook:focus, .btn-sn-facebook:hover {
+    background: #405791;
+}
+
+.btn-sn-renren {
+    background: #197bc8;
+}
+
+.btn-sn-renren:active, .btn-sn-renren:focus, .btn-sn-renren:hover {
+    background: #166db1;
+}
+
+.btn-sn-tqq {
+    background: #1f9ed2;
+}
+
+.btn-sn-tqq:active, .btn-sn-tqq:focus, .btn-sn-tqq:hover {
+    background: #1c8dbc;
+}
+
+.btn-sn-douban {
+    background: #279738;
+}
+
+.btn-sn-douban:active, .btn-sn-douban:focus, .btn-sn-douban:hover {
+    background: #228330;
+}
+
+.btn-sn-weixin {
+    background: #00b500;
+}
+
+.btn-sn-weixin:active, .btn-sn-weixin:focus, .btn-sn-weixin:hover {
+    background: #009c00;
+}
+
+.btn-sn-dotted {
+    background: #eee;
+}
+
+.btn-sn-dotted:active, .btn-sn-dotted:focus, .btn-sn-dotted:hover {
+    background: #e1e1e1;
+}
+
+.btn-sn-site {
+    background: #00b500;
+}
+
+.btn-sn-site:active, .btn-sn-site:focus, .btn-sn-site:hover {
+    background: #009c00;
+}
+
+.btn-sn-linkedin {
+    background: #0077b9;
+}
+
+.btn-sn-linkedin:active, .btn-sn-linkedin:focus, .btn-sn-linkedin:hover {
+    background: #0067a0;
+}
+
+[class*=btn-sn-], [class*=btn-sn-]:active, [class*=btn-sn-]:focus, [class*=btn-sn-]:hover {
+    border: none;
+    color: #fff;
+}
+
+.btn-sn-more {
+    padding: 0;
+}
+
+.btn-sn-more, .btn-sn-more:active, .btn-sn-more:hover {
+    box-shadow: none;
+}
+
+[class*=btn-sn-] [class*=icon-sn-] {
+    background-color: transparent;
+}

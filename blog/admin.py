@@ -16,6 +16,11 @@ class ArticleForm(forms.ModelForm):
 
 class ArticlelAdmin(admin.ModelAdmin):
     form = ArticleForm
+    list_display = ('id', 'title', 'author', 'created_time', 'views', 'status', 'type')
+    list_display_links = ('id', 'title')
+    list_filter = ('author', 'status', 'type', 'category', 'tags')
+    filter_horizontal = ('tags',)
+    exclude = ('slug', 'created_time')
 
     def save_model(self, request, obj, form, change):
         super(ArticlelAdmin, self).save_model(request, obj, form, change)
@@ -23,8 +28,16 @@ class ArticlelAdmin(admin.ModelAdmin):
         cache.clear()
 
 
+class TagAdmin(admin.ModelAdmin):
+    exclude = ('slug',)
+
+
+class CategoryAdmin(admin.ModelAdmin):
+    exclude = ('slug',)
+
+
 admin.site.register(Article, ArticlelAdmin)
 # admin.site.register(BlogPage, ArticlelAdmin)
-admin.site.register(Category)
-admin.site.register(Tag)
+admin.site.register(Category, CategoryAdmin)
+admin.site.register(Tag, TagAdmin)
 admin.site.register(Links)

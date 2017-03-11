@@ -19,14 +19,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '&3g0bdza#c%dm1lf%5gi&0-*53p3t0m*hmcvo29cn^$ji7je(c'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = True
+# DEBUG = True
 DEBUG = False
 
 # ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['www.lylinux.net', '127.0.0.1']
+ALLOWED_HOSTS = ['www.lylinux.net', '127.0.0.1', 'example.com']
 # Application definition
 
 INSTALLED_APPS = [
@@ -51,9 +51,9 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.gzip.GZipMiddleware',
-    #'django.middleware.cache.UpdateCacheMiddleware',
+    # 'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
-    #'django.middleware.cache.FetchFromCacheMiddleware',
+    # 'django.middleware.cache.FetchFromCacheMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -195,19 +195,24 @@ CACHE_MIDDLEWARE_SECONDS = 60 * 60 * 10
 CACHE_MIDDLEWARE_KEY_PREFIX = "djangoblog"
 CACHE_MIDDLEWARE_ALIAS = 'default'
 
-SESSION_ENGINE = "django.contrib.sessions.backends.cache"
-SESSION_CACHE_ALIAS = 'default'
+# SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+# SESSION_CACHE_ALIAS = 'default'
 
 OAHUTH = {
     'sina': {
         'appkey': '3161614143',
         'appsecret': 'ee17c099317f872eeddb25204ea46721',
-        'callbackurl': 'http://www.lylinux.net/oauth/weibo'
+        'callbackurl': 'http://www.lylinux.net/oauth/authorize?type=weibo'
     },
     'google': {
         'appkey': os.environ.get('GOOGLE_APP_KEY'),
         'appsecret': os.environ.get('GOOGLE_APP_SECRET'),
-        'callbackurl': 'http://www.lylinux.net/oauth/googleauthorize'
+        'callbackurl': 'http://www.lylinux.net/oauth/authorize?type=google'
+    },
+    'github': {
+        'appkey': os.environ.get('GITHUB_APP_KEY'),
+        'appsecret': os.environ.get('GITHUB_APP_SECRET'),
+        'callbackurl': 'http://www.lylinux.net/oauth/authorize?type=github'
     }
 }
 

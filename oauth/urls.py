@@ -18,9 +18,17 @@ from django.views.decorators.cache import cache_page
 from . import views
 
 urlpatterns = [
+    url(r'^oauth/authorize$', views.authorize),
+    url(r'^oauth/requireemail/(?P<oauthid>\d+)', views.RequireEmailView.as_view(), name='require_email'),
+    url(r'^oauth/emailconfirm/(?P<id>\d+)/(?P<sign>\S+)', views.emailconfirm, name='email_confirm'),
+]
+
+"""
+urlpatterns = [
     url(r'^oauth/wbauthorize/(?P<sitename>\w+)$', views.wbauthorize),
     url(r'^oauth/wboauthurl$', views.wboauthurl),
     # url(r'^oauth/wbauthorize/(?P<sitename>\w+)$', views.wbauthorize),
     url(r'^oauth/googleoauthurl', views.googleoauthurl),
     url(r'^oauth/googleauthorize', views.googleauthorize),
 ]
+"""

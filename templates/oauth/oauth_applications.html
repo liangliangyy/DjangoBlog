@@ -1,0 +1,10 @@
+<div class="widget-login">
+    <small>
+        快捷登录:
+    </small>
+    {% for icon,url in apps %}
+        <a href="{{ url }}" rel="nofollow">
+            <span class="icon-sn-{{ icon }}"></span>
+        </a>
+    {% endfor %}
+</div>
