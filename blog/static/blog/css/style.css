@@ -1998,6 +1998,9 @@ div {
 #wp-auto-top-bottom:hover {
     background-position: right -68px;
 }
+.widget-login{
+    margin-top: 15px!important;
+}
 
 /* ------------------------------------------------------------------------- *
  *  Comments
