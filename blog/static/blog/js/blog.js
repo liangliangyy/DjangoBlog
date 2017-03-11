@@ -17,3 +17,14 @@ function cancel_reply() {
     $("#id_parent_comment_id").val('')
     $("#commentform").appendTo($("#respond"));
 }
+
+NProgress.start();
+NProgress.set(0.4);
+//Increment
+var interval = setInterval(function () {
+    NProgress.inc();
+}, 1000);
+$(document).ready(function () {
+    NProgress.done();
+    clearInterval(interval);
+});
