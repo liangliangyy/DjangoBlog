@@ -132,3 +132,10 @@ def send_email(subject, html_content, tomail):
             pass
 
     _thread.start_new_thread(send_comment_email, (msg,))
+
+
+def parse_dict_to_url(dict):
+    from urllib.parse import quote
+    url = '&'.join(['{}={}'.format(quote(k, safe='/'), quote(v, safe='/'))
+                    for k, v in dict.items()])
+    return url

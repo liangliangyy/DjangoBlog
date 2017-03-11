@@ -19,7 +19,7 @@ from django.conf import settings
 import requests
 import json
 import urllib.parse
-from DjangoBlog.utils import logger
+from DjangoBlog.utils import logger, parse_dict_to_url
 
 
 class BaseOauthManager(metaclass=ABCMeta):
@@ -87,7 +87,7 @@ class WBOauthManager(BaseOauthManager):
         return url
 
     def get_access_token_by_code(self, code):
-        print(code)
+
         params = {
             'client_id': self.client_id,
             'client_secret': self.client_secret,
@@ -96,7 +96,7 @@ class WBOauthManager(BaseOauthManager):
             'redirect_uri': self.callback_url
         }
         rsp = self.do_post(self.TOKEN_URL, params)
-        print(rsp)
+
         # return rsp
 
         obj = json.loads(rsp)
@@ -119,7 +119,7 @@ class WBOauthManager(BaseOauthManager):
             'access_token': self.access_token
         }
         rsp = self.do_get(self.API_URL, params)
-        print(rsp)
+
 
 
 class GoogleOauthManager(BaseOauthManager):
@@ -141,7 +141,8 @@ class GoogleOauthManager(BaseOauthManager):
             'redirect_uri': self.callback_url,
             'scope': 'openid email',
         }
-        url = self.AUTH_URL + "?" + urllib.parse.urlencode(params, quote_via=urllib.parse.quote)
+        # url = self.AUTH_URL + "?" + urllib.parse.urlencode(params, quote_via=urllib.parse.quote)
+        url = self.AUTH_URL + "?" +  urllib.parse.urlencode(params)
         return url
 
     def get_access_token_by_code(self, code):
@@ -173,7 +174,7 @@ class GoogleOauthManager(BaseOauthManager):
         }
         rsp = self.do_get(self.API_URL, params)
         try:
-            print(rsp)
+
             datas = json.loads(rsp)
             user = OAuthUser()
             user.picture = datas['picture']
@@ -207,7 +208,8 @@ class GitHubOauthManager(BaseOauthManager):
             'redirect_uri': self.callback_url,
             'scope': 'user'
         }
-        url = self.AUTH_URL + "?" + urllib.parse.urlencode(params, quote_via=urllib.parse.quote)
+        # url = self.AUTH_URL + "?" + urllib.parse.urlencode(params, quote_via=urllib.parse.quote)
+        url = self.AUTH_URL + "?" +  urllib.parse.urlencode(params)
         return url
 
     def get_access_token_by_code(self, code):
@@ -220,7 +222,7 @@ class GitHubOauthManager(BaseOauthManager):
             'redirect_uri': self.callback_url
         }
         rsp = self.do_post(self.TOKEN_URL, params)
-        print(rsp)
+
         try:
             from urllib import parse
             r = parse.parse_qs(rsp)
@@ -235,7 +237,7 @@ class GitHubOauthManager(BaseOauthManager):
             'access_token': self.access_token
         }
         rsp = self.do_get(self.API_URL, params)
-        print(rsp)
+
         try:
             datas = json.loads(rsp)
             user = OAuthUser()
