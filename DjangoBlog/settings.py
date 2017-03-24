@@ -200,8 +200,8 @@ CACHE_MIDDLEWARE_ALIAS = 'default'
 
 OAHUTH = {
     'sina': {
-        'appkey': '3161614143',
-        'appsecret': 'ee17c099317f872eeddb25204ea46721',
+        'appkey': os.environ.get('SINA_APP_KEY'),
+        'appsecret': os.environ.get('SINA_APP_SECRET'),
         'callbackurl': 'http://www.lylinux.net/oauth/authorize?type=weibo'
     },
     'google': {
