@@ -30,6 +30,9 @@ class Comment(models.Model):
         except:
             pass
 
+    def __str__(self):
+        return self.body
+
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         subject = '感谢您发表的评论'
