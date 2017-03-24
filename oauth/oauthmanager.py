@@ -96,15 +96,9 @@ class WBOauthManager(BaseOauthManager):
             'redirect_uri': self.callback_url
         }
         rsp = self.do_post(self.TOKEN_URL, params)
-
-        # return rsp
-
-        obj = json.loads(rsp)
-        self.access_token = str(obj['access_token'])
-        self.openid = str(obj['uid'])
-        return self.get_oauth_userinfo()
-
+        print(rsp)
         try:
+            obj = json.loads(rsp)
             self.access_token = str(obj['access_token'])
             self.openid = str(obj['uid'])
             return self.get_oauth_userinfo()
@@ -119,7 +113,20 @@ class WBOauthManager(BaseOauthManager):
             'access_token': self.access_token
         }
         rsp = self.do_get(self.API_URL, params)
+        try:
 
+            datas = json.loads(rsp)
+            user = OAuthUser()
+            user.picture = datas['avatar_large']
+            user.nikename = datas['screen_name']
+            user.openid = datas['id']
+            user.type = 'weibo'
+            if 'email' in datas and datas['email']:
+                user.email = datas['email']
+            return user
+        except:
+            logger.info('weibo oauth error.rsp:' + rsp)
+            return None
 
 
 class GoogleOauthManager(BaseOauthManager):
@@ -142,7 +149,7 @@ class GoogleOauthManager(BaseOauthManager):
             'scope': 'openid email',
         }
         # url = self.AUTH_URL + "?" + urllib.parse.urlencode(params, quote_via=urllib.parse.quote)
-        url = self.AUTH_URL + "?" +  urllib.parse.urlencode(params)
+        url = self.AUTH_URL + "?" + urllib.parse.urlencode(params)
         return url
 
     def get_access_token_by_code(self, code):
@@ -209,7 +216,7 @@ class GitHubOauthManager(BaseOauthManager):
             'scope': 'user'
         }
         # url = self.AUTH_URL + "?" + urllib.parse.urlencode(params, quote_via=urllib.parse.quote)
-        url = self.AUTH_URL + "?" +  urllib.parse.urlencode(params)
+        url = self.AUTH_URL + "?" + urllib.parse.urlencode(params)
         return url
 
     def get_access_token_by_code(self, code):
