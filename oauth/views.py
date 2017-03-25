@@ -54,8 +54,8 @@ def authorize(request):
         if not email:
             # todo
             # 未避免用户名重复，暂时使用oauth用户名+openid这种方式来创建用户
-            author = get_user_model().objects.get_or_create(username=user.nikename + '_' + str(user.openid))[0]
-            user.author = author
+            #author = get_user_model().objects.get_or_create(username=user.nikename + '_' + str(user.openid))[0]
+            #user.author = author
             user.save()
 
             url = reverse('oauth:require_email', kwargs=
