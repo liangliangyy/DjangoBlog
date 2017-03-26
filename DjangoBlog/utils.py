@@ -111,7 +111,7 @@ class BlogMarkDownRenderer(mistune.Renderer):
         return block_code(text, lang, inlinestyles, linenos)
 
 
-class common_markdown():
+class CommonMarkdown():
     @staticmethod
     def get_markdown(value):
         renderer = BlogMarkDownRenderer(inlinestyles=False)

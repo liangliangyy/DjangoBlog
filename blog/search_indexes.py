@@ -21,7 +21,6 @@ class ArticleIndex(indexes.SearchIndex, indexes.Indexable):
     # title = indexes.CharField(document=True, use_template=True)
     text = indexes.CharField(document=True, use_template=True)
 
-
     def get_model(self):
         return Article
 

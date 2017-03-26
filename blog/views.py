@@ -123,7 +123,7 @@ class ArticleDetailView(DetailView):
 
         kwargs['form'] = comment_form
         kwargs['article_comments'] = article_comments
-        kwargs['comment_count'] = len(article_comments) if article_comments else 0;
+        kwargs['comment_count'] = len(article_comments) if article_comments else 0
 
         kwargs['next_article'] = self.object.next_article
         kwargs['prev_article'] = self.object.prev_article
@@ -137,9 +137,13 @@ class CategoryDetailView(ArticleListView):
     def get_queryset_data(self):
         slug = self.kwargs['category_name']
         category = get_object_or_404(Category, slug=slug)
+
         categoryname = category.name
         self.categoryname = categoryname
-        article_list = Article.objects.filter(category__name=categoryname, status='p')
+        categorynames = list(map(lambda c: c.name, category.get_sub_categorys()))
+        print(categorynames)
+        # article_list = Article.objects.filter(category__name=categoryname, status='p')
+        article_list = Article.objects.filter(category__name__in=categorynames, status='p')
         return article_list
 
     def get_queryset_cache_key(self):
@@ -247,28 +251,11 @@ def refresh_memcache(request):
 
         if request.user.is_superuser:
             from DjangoBlog.utils import cache
-            if cache != None: cache.clear()
+            if cache and cache is not None:
+                cache.clear()
             return HttpResponse("ok")
         else:
             from django.http import HttpResponseForbidden
             return HttpResponseForbidden()
     except Exception as e:
-        return HttpResponse(e);
-
-
-"""
-class SeoProcessor():
-    __metaclass__ = ABCMeta
-
-    @abstractmethod
-    def get_title(self):
-        pass
-
-    @abstractmethod
-    def get_keywords(self):
-        pass
-
-    @abstractmethod
-    def get_description(self):
-        pass
-"""
+        return HttpResponse(e)

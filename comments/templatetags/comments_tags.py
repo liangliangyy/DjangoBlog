@@ -30,7 +30,6 @@ def parse_commenttree(commentlist, comment):
     datas = []
 
     def parse(c):
-
         childs = commentlist.filter(parent_comment=c)
         for child in childs:
             datas.append(child)
@@ -43,31 +42,8 @@ def parse_commenttree(commentlist, comment):
 @register.inclusion_tag('comments/tags/comment_item.html')
 def show_comment_item(comment, ischild):
     """评论"""
-    depth = 1 if ischild else 2;
+    depth = 1 if ischild else 2
     return {
         'comment_item': comment,
         'depth': depth
     }
-
-
-"""
-@register.simple_tag(name='get_comment_count')
-def GetCommentCount(parser, token):
-    commentcount = Comment.objects.filter(article__author_id=token).count()
-    return "0" if commentcount == 0 else str(commentcount) + " comments"
-
-
-
-@register.inclusion_tag('comments/tags/post_comment.html')
-def load_post_comment(article, lastform=None):
-    if not lastform:
-        form = CommentForm()
-        form.article_id = article.id
-        form.parent_comment_id = ''
-    else:
-        form = lastform
-    return {
-        'article': article,
-        'form': form
-    }
-"""

@@ -19,6 +19,7 @@ from accounts.models import BlogUser
 from django.contrib.sitemaps import GenericSitemap
 from django.core.urlresolvers import reverse
 
+
 class StaticViewSitemap(Sitemap):
     priority = 0.5
     changefreq = 'daily'

@@ -15,3 +15,7 @@ class OAuthUser(models.Model):
 
     def __str__(self):
         return self.nikename
+
+    class Meta:
+        verbose_name = 'oauth用户'
+        verbose_name_plural = verbose_name
