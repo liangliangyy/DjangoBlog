@@ -15,7 +15,7 @@ from DjangoBlog.utils import send_email, get_md5
 from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseForbidden
-from .oauthmanager import WBOauthManager, GoogleOauthManager, get_manager_by_type
+from .oauthmanager import get_manager_by_type
 
 
 def authorize(request):
@@ -54,15 +54,14 @@ def authorize(request):
         if not email:
             # todo
             # 未避免用户名重复，暂时使用oauth用户名+openid这种方式来创建用户
-            #author = get_user_model().objects.get_or_create(username=user.nikename + '_' + str(user.openid))[0]
-            #user.author = author
+            # author = get_user_model().objects.get_or_create(username=user.nikename + '_' + str(user.openid))[0]
+            # user.author = author
             user.save()
 
-            url = reverse('oauth:require_email', kwargs=
-            {
+            url = reverse('oauth:require_email', kwargs={
                 'oauthid': user.id
             })
-            print(url)
+
             return HttpResponseRedirect(url)
 
 
@@ -138,7 +137,7 @@ class RequireEmailView(FormView):
             'sign': sign
         })
         url = "http://{site}{path}".format(site=site, path=path)
-        print(url)
+
         content = """
                 <p>请点击下面链接绑定您的邮箱</p>
 
@@ -151,56 +150,3 @@ class RequireEmailView(FormView):
                 """.format(url=url)
         send_email('绑定您的电子邮箱', content, [email, ])
         return HttpResponseRedirect('/')
-
-
-"""
-def wbauthorize(request, sitename):
-    manager = WBOauthManager(client_id=settings.OAHUTH['sina']['appkey'],
-                             client_secret=settings.OAHUTH['sina']['appsecret'],
-                             callback_url=settings.OAHUTH['sina']['callbackurl'])
-    code = request.GET.get('code', None)
-    rsp = manager.get_access_token_by_code(code)
-    print(rsp)
-    return HttpResponse(rsp)
-
-
-def wboauthurl(request):
-    manager = WBOauthManager(client_id=settings.OAHUTH['sina']['appkey'],
-                             client_secret=settings.OAHUTH['sina']['appsecret'],
-                             callback_url=settings.OAHUTH['sina']['callbackurl'])
-    url = manager.get_authorization_url()
-    return HttpResponse(url)
-
-
-def googleoauthurl(request):
-    manager = GoogleOauthManager()
-    url = manager.get_authorization_url()
-    return HttpResponse(url)
-
-
-def googleauthorize(request):
-    manager = GoogleOauthManager()
-    code = request.GET.get('code', None)
-    rsp = manager.get_access_token_by_code(code)
-    if not rsp:
-        return HttpResponseRedirect(manager.get_authorization_url())
-    user = manager.get_oauth_userinfo()
-    if user:
-        email = user['email']
-        if email:
-            author = get_user_model().objects.get(email=email)
-            if not author:
-                author = get_user_model().objects.create_user(username=user["name"], email=email)
-            if not GoogleUserInfo.objects.filter(author_id=author.pk):
-                userinfo = GoogleUserInfo()
-                userinfo.author = author
-                userinfo.picture = user["picture"]
-                userinfo.token = manager.access_token
-                userinfo.openid = manager.openid
-                userinfo.nikename = user["name"]
-                userinfo.save()
-            login(request, author)
-        else:
-            pass
-    return HttpResponseRedirect('/')
-"""

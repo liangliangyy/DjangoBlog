@@ -38,11 +38,11 @@ class BaseOauthManager(metaclass=ABCMeta):
 
     @property
     def is_access_token_set(self):
-        return self.access_token != None
+        return self.access_token is not None
 
     @property
     def is_authorized(self):
-        return self.is_access_token_set and self.access_token != None and self.openid != None
+        return self.is_access_token_set and self.access_token is not None and self.openid is not None
 
     @abstractmethod
     def get_authorization_url(self):

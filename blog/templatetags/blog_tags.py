@@ -51,8 +51,8 @@ def datetimeformat(data):
 @register.filter(is_safe=True)
 @stringfilter
 def custom_markdown(content):
-    from DjangoBlog.utils import common_markdown
-    return mark_safe(common_markdown.get_markdown(content))
+    from DjangoBlog.utils import CommonMarkdown
+    return mark_safe(CommonMarkdown.get_markdown(content))
 
 
 @register.filter(is_safe=True)
@@ -228,7 +228,7 @@ def gravatar_url(email, size=40):
     """获得gravatar头像"""
     email = email.encode('utf-8')
 
-    default = "https://avatar.duoshuo.com/avatar-50/928/120117.jpg".encode('utf-8')
+    default = "https://resource.lylinux.net/image/2017/03/26/120117.jpg".encode('utf-8')
 
     return "https://www.gravatar.com/avatar/%s?%s" % (
         hashlib.md5(email.lower()).hexdigest(), urllib.parse.urlencode({'d': default, 's': str(size)}))
@@ -253,38 +253,3 @@ def query(qs, **kwargs):
     """
     return qs.filter(**kwargs)
 
-
-"""
-article = Article.objects.get(pk=4)
-comments = Comment.objects.filter(article=article)
-for c in comments.filter(parent_comment=None):
-    datas = parse_commenttree(comments, c)
-    print(datas)
-"""
-"""
-@register.tag
-def parseCategoryName(parser,token):
-    tag_name, category = token.split_contents()
-    print(category)
-    print(tag_name)
-    return CategoryNametag(category)
-
-class CategoryNametag(template.Node):
-    def __init__(self,category):
-        self.category=category
-        self.names=[]
-
-
-    def parseCategory(self,category):
-        self.names.append(category.name)
-        if category.parent_category:
-            self.parseCategory(category.parent_category)
-
-
-    def render(self, context):
-        self.parseCategory(self.category)
-        print(self.names)
-        return " > ".join(self.names)
-
-        #if self.category.parent_category:
-"""

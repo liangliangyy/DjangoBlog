@@ -74,7 +74,7 @@ class CommentPostView(FormView):
         comment_cache_key = 'article_comments_{id}'.format(id=article_id)
         cache.delete(comment_cache_key)
         from django.core.cache.utils import make_template_fragment_key
-        username = self.request.user.username if self.request.user  else ''
+        username = self.request.user.username if self.request.user else ''
         key = make_template_fragment_key('sidebar', [username])
         cache.delete(key)
         return HttpResponseRedirect("%s#div-comment-%d" % (article.get_absolute_url(), comment.pk))

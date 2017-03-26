@@ -63,7 +63,7 @@ class LoginView(FormView):
 
         if form.is_valid():
             from DjangoBlog.utils import cache
-            if cache != None:
+            if cache and cache is not None:
                 cache.clear()
             auth.login(self.request, form.get_user())
 

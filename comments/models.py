@@ -1,10 +1,10 @@
 from django.db import models
 from django.conf import settings
 from django.core.mail import send_mail
-from  blog.models import Article
 from django.core.mail import EmailMultiAlternatives
 from django.contrib.sites.models import Site
 import _thread
+from blog.models import Article
 from DjangoBlog.utils import cache
 
 

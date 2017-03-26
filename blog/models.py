@@ -2,7 +2,7 @@ from django.db import models
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from uuslug import slugify
-from DjangoBlog.spider_notify import spider_notify
+from DjangoBlog.spider_notify import SpiderNotify
 from django.contrib.sites.models import Site
 from DjangoBlog.utils import cache_decorator, logger, cache
 from django.utils.functional import cached_property
@@ -22,7 +22,7 @@ class BaseModel(models.Model):
             return
         try:
             notify_url = self.get_full_url()
-            spider_notify.baidu_notify([notify_url])
+            SpiderNotify.baidu_notify([notify_url])
         except Exception as ex:
             logger.error("notify sipder", ex)
             print(ex)
@@ -75,8 +75,7 @@ class Article(BaseModel):
 
     def get_absolute_url(self):
 
-        return reverse('blog:detail', kwargs=
-        {
+        return reverse('blog:detail', kwargs={
             'article_id': self.id,
             'year': self.created_time.year,
             'month': self.created_time.month,
@@ -86,14 +85,9 @@ class Article(BaseModel):
 
     @cache_decorator(60 * 60 * 10)
     def get_category_tree(self):
-        names = []
+        tree = self.category.get_category_tree()
+        names = list(map(lambda c: (c.name, c.get_absolute_url()), tree))
 
-        def parse(category):
-            names.append((category.name, category.get_absolute_url()))
-            if category.parent_category:
-                parse(category.parent_category)
-
-        parse(self.category)
         return names
 
     def save(self, *args, **kwargs):
@@ -158,6 +152,43 @@ class Category(BaseModel):
 
     def __str__(self):
         return self.name
+
+    @cache_decorator(60 * 60 * 10)
+    def get_category_tree(self):
+        """
+        递归获得分类目录的父级
+        :return: 
+        """
+        categorys = []
+
+        def parse(category):
+            categorys.append(category)
+            if category.parent_category:
+                parse(category.parent_category)
+
+        parse(self)
+        return categorys
+
+    @cache_decorator(60 * 60 * 10)
+    def get_sub_categorys(self):
+        """
+        获得当前分类目录所有子集
+        :return: 
+        """
+        categorys = []
+        all_categorys = Category.objects.all()
+
+        def parse(category):
+            if category not in categorys:
+                categorys.append(category)
+            childs = all_categorys.filter(parent_category=category)
+            for child in childs:
+                if category not in categorys:
+                    categorys.append(child)
+                parse(child)
+
+        parse(self)
+        return categorys
 
 
 class Tag(BaseModel):

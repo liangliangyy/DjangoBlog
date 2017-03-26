@@ -15,7 +15,7 @@
 
 from django.core.management.base import BaseCommand, CommandError
 from blog.models import Article, Tag, Category
-from DjangoBlog.spider_notify import spider_notify
+from DjangoBlog.spider_notify import SpiderNotify
 from django.contrib.sites.models import Site
 
 site = Site.objects.get_current().domain
@@ -50,5 +50,5 @@ class Command(BaseCommand):
                 urls.append(self.get_full_url(url))
 
         self.stdout.write(self.style.SUCCESS('start notify %d urls' % len(urls)))
-        spider_notify.baidu_notify(urls)
+        SpiderNotify.baidu_notify(urls)
         self.stdout.write(self.style.SUCCESS('finish notify'))
