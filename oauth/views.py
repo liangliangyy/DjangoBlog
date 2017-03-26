@@ -45,8 +45,12 @@ def authorize(request):
             except ObjectDoesNotExist:
                 pass
             if not author:
-                author = get_user_model(). \
-                    objects.create_user(username=user.nikename + '_' + str(user.openid), email=email)
+                result = get_user_model().objects.get_or_create(email=user.email)
+                author = result[0]
+                if result[1]:
+                    author.username = user.nikename + '_' + str(user.openid)
+                    author.save()
+                
             user.author = author
             user.save()
             login(request, author)
@@ -71,13 +75,22 @@ def emailconfirm(request, id, sign):
     if not get_md5(settings.SECRET_KEY + str(id) + settings.SECRET_KEY).upper() == sign.upper():
         return HttpResponseForbidden()
     oauthuser = get_object_or_404(OAuthUser, pk=id)
-    author = get_user_model().objects.get(pk=oauthuser.author_id)
+    author = None
+    if oauthuser.author:
+        author = get_user_model().objects.get(pk=oauthuser.author_id)
+    else:
+        result = get_user_model().objects.get_or_create(email=oauthuser.email)
+        author = result[0]
+        if result[1]:
+            author.username = oauthuser.nikename + '_' + str(oauthuser.openid)
+            author.save()
+    """
     if oauthuser.email and author.email:
         login(request, author)
         return HttpResponseRedirect('/')
-    author.set_password('$%^Q1W2E3R4T5Y6,./')
-    author.email = oauthuser.email
-    author.save()
+    """
+    oauthuser.author = author
+    oauthuser.save()
     login(request, author)
 
     site = Site.objects.get_current().domain
