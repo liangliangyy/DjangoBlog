@@ -13,15 +13,15 @@ OS X / Linux 电脑，终端下执行:
 
     curl http://peak.telecommunity.com/dist/ez_setup.py | python
     curl https://raw.github.com/pypa/pip/master/contrib/get-pip.py | python
-    
+
 windows电脑：  
  下载 http://peak.telecommunity.com/dist/ez_setup.py 和 https://raw.github.com/pypa/pip/master/contrib/get-pip.py 这两个文件，双击运行。  
-       
+
 
 ## 运行
- 
+
  修改`DjangoBlog/setting.py` 修改数据库配置，如下所示：
-   
+
      DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
@@ -32,16 +32,23 @@ windows电脑：
             'PORT': 3306,
         }
     }
-      
+
 ### 创建数据库
- 
+
  终端下执行:  
- 
+
     ./manage.py makemigrations
     ./manage.py migrate  
+### 创建测试数据
+终端下执行:  
+
+    ./manage.py create_testdata
 ### 开始运行：
  执行：  
  `./manage.py runserver`
- 
+
+
+
+
+
  浏览器打开: http://127.0.0.1:8000/  就可以看到效果了。
- 
