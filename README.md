@@ -17,6 +17,18 @@ OS X / Linux 电脑，终端下执行:
 windows电脑：  
  下载 http://peak.telecommunity.com/dist/ez_setup.py 和 https://raw.github.com/pypa/pip/master/contrib/get-pip.py 这两个文件，双击运行。  
 
+### 配置
+配置都是在`setting.py`中.
+
+很多`setting`配置我都是卸载环境变量里面的.并没有提交到`github`中来.例如`SECRET_KEY`,`OAHUTH`,`mysql`以及邮件部分的配置等.你可以直接修改代码成你自己的,或者在环境变量里面加入对应的配置就可以了.
+
+`test`目录中的文件都是为了`travis`自动化测试使用的.不用去关注.或者直接使用.这样就可以集成`travis`自动化测试了.
+
+`bin`目录是在`linux`环境中使用`Nginx`+`Gunicorn`+`virtualenv`+`supervisor`来部署的.可以参考我的文章:
+
+>[使用Nginx+Gunicorn+virtualenv+supervisor来部署django项目](https://www.lylinux.org/%E4%BD%BF%E7%94%A8nginxgunicornvirtualenvsupervisor%E6%9D%A5%E9%83%A8%E7%BD%B2django%E9%A1%B9%E7%9B%AE.html)
+
+有详细的部署介绍.
 
 ## 运行
 
@@ -43,6 +55,7 @@ windows电脑：
 终端下执行:  
 
     ./manage.py create_testdata
+
 ### 开始运行：
  执行：  
  `./manage.py runserver`
