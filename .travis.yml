@@ -1,5 +1,6 @@
 language: python
 python:
+  - "3.4"
   - "3.5"
   - "3.6"
 services:
@@ -8,7 +9,9 @@ env:
   global:
     - DJANGO_SETTINGS_MODULE="test.travis_settings"
   matrix:
-   - DJANGO="Django>1.8"
+   - DJANGO="Django==1.8"
+   - DJANGO="Django==1.9"
+   - DJANGO="Django==1.10"
 branches:
     only:
         - master
