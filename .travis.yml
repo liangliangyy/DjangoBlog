@@ -8,9 +8,7 @@ env:
   global:
     - DJANGO_SETTINGS_MODULE="test.travis_settings"
   matrix:
-   - DJANGO="Django==1.8"
-   - DJANGO="Django==1.9"
-   - DJANGO="Django==1.10"
+   - DJANGO="Django>1.8"
 branches:
     only:
         - master
