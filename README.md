@@ -20,7 +20,7 @@ windows电脑：
 ### 配置
 配置都是在`setting.py`中.
 
-很多`setting`配置我都是卸载环境变量里面的.并没有提交到`github`中来.例如`SECRET_KEY`,`OAHUTH`,`mysql`以及邮件部分的配置等.你可以直接修改代码成你自己的,或者在环境变量里面加入对应的配置就可以了.
+很多`setting`配置我都是写在环境变量里面的.并没有提交到`github`中来.例如`SECRET_KEY`,`OAHUTH`,`mysql`以及邮件部分的配置等.你可以直接修改代码成你自己的,或者在环境变量里面加入对应的配置就可以了.
 
 `test`目录中的文件都是为了`travis`自动化测试使用的.不用去关注.或者直接使用.这样就可以集成`travis`自动化测试了.
 
@@ -51,6 +51,11 @@ windows电脑：
 
     ./manage.py makemigrations
     ./manage.py migrate  
+### 创建超级用户
+
+ 终端下执行:  
+
+    ./manage.py createsuperuser
 ### 创建测试数据
 终端下执行:  
 
