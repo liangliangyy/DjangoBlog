@@ -3,6 +3,7 @@ from blog.models import Article, Category, Tag
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
 import datetime
+from accounts.models import BlogUser
 
 
 # Create your tests here.
@@ -13,12 +14,8 @@ class ArticleTest(TestCase):
         self.factory = RequestFactory()
 
     def test_validate_article(self):
-        from accounts.models import BlogUser
         site = Site.objects.get_current().domain
-        user = BlogUser()
-        user.email = "liangliangyy@gmail.com"
-        user.username = "liangliangyy"
-        user.password = "liangliangyy"
+        user = BlogUser.objects.get_or_create(email="liangliangyy@gmail.com", username="liangliangyy")[0]
         user.set_password("liangliangyy")
         user.save()
         response = self.client.get(user.get_absolute_url())
@@ -32,6 +29,9 @@ class ArticleTest(TestCase):
 
         response = self.client.get(category.get_absolute_url())
         self.assertEqual(response.status_code, 200)
+        tag = Tag()
+        tag.name = "nicetag"
+        tag.save()
 
         article = Article()
         article.title = "nicetitle"
@@ -40,6 +40,26 @@ class ArticleTest(TestCase):
         article.category = category
         article.type = 'a'
         article.status = 'p'
+
         article.save()
+        self.assertEqual(0, article.tags.count())
+        article.tags.add(tag)
+        article.save()
+        self.assertEqual(1, article.tags.count())
+
         response = self.client.get(article.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get(tag.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
+
+    def test_validate_feed(self):
+        user = BlogUser.objects.get_or_create(email="liangliangyy12@gmail.com", username="liangliangyy")[0]
+        user.set_password("liangliangyy")
+        user.save()
+
+        response = self.client.get('/feed/')
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get('/sitemap.xml')
         self.assertEqual(response.status_code, 200)

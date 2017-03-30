@@ -68,7 +68,13 @@ class CommentPostView(FormView):
         site = Site.objects.get_current().domain
         if site.find(':') > 0:
             site = site[0:site.find(':')]
-        expire_view_cache(path, servername=site, serverport=self.request.get_port(), key_prefix='blogdetail')
+        port = 80
+        try:
+            # django1.8 没有这个方法...
+            port = self.request.get_port()
+        except:
+            pass
+        expire_view_cache(path, servername=site, serverport=port, key_prefix='blogdetail')
         if cache.get('seo_processor'):
             cache.delete('seo_processor')
         comment_cache_key = 'article_comments_{id}'.format(id=article_id)

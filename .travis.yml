@@ -23,6 +23,8 @@ install:
   - pip install coverage
 before_script:
   - mysql -e 'CREATE DATABASE `djangoblog` /*!40100 DEFAULT CHARACTER SET utf8 */;'
+  - python manage.py makemigrations
+  - python manage.py makemigrations sites
   - python manage.py makemigrations accounts
   - python manage.py makemigrations blog
   - python manage.py makemigrations comments
