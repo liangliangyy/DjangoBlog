@@ -13,8 +13,10 @@
 @time: 2017/1/19 上午2:30
 """
 from django.core.cache import cache
+from django.contrib.sites.models import Site
 from hashlib import md5
 import mistune
+from mistune import escape, escape_link
 from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import html
@@ -109,6 +111,28 @@ class BlogMarkDownRenderer(mistune.Renderer):
         inlinestyles = self.options.get('inlinestyles')
         linenos = self.options.get('linenos')
         return block_code(text, lang, inlinestyles, linenos)
+
+    def autolink(self, link, is_email=False):
+        text = link = escape(link)
+
+        if is_email:
+            link = 'mailto:%s' % link
+        if not link:
+            link = "#"
+        site = Site.objects.get_current()
+        nofollow = "" if link.find(site.domain) > 0 else "rel='nofollow'"
+        return '<a href="%s" %s>%s</a>' % (link, nofollow, text)
+
+    def link(self, link, title, text):
+        link = escape_link(link, quote=True)
+        site = Site.objects.get_current()
+        nofollow = "" if link.find(site.domain) > 0 else "rel='nofollow'"
+        if not link:
+            link = "#"
+        if not title:
+            return '<a href="%s" %s>%s</a>' % (link, nofollow, text)
+        title = escape(title, quote=True)
+        return '<a href="%s" title="%s" %s>%s</a>' % (link, title, nofollow, text)
 
 
 class CommonMarkdown():

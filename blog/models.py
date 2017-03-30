@@ -21,8 +21,9 @@ class BaseModel(models.Model):
         if 'update_fields' in kwargs and len(kwargs['update_fields']) == 1 and kwargs['update_fields'][0] == 'views':
             return
         try:
-            notify_url = self.get_full_url()
-            SpiderNotify.baidu_notify([notify_url])
+            if not settings.TESTING:
+                notify_url = self.get_full_url()
+                SpiderNotify.baidu_notify([notify_url])
         except Exception as ex:
             logger.error("notify sipder", ex)
             print(ex)
