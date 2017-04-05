@@ -75,7 +75,15 @@ class Article(BaseModel):
         get_latest_by = 'created_time'
 
     def get_absolute_url(self):
+        return reverse('blog:detailbyid', kwargs={
+            'article_id': self.id,
+            'year': self.created_time.year,
+            'month': self.created_time.month,
+            'day': self.created_time.day
+        })
 
+        # todo remove
+        """
         return reverse('blog:detail', kwargs={
             'article_id': self.id,
             'year': self.created_time.year,
@@ -83,6 +91,7 @@ class Article(BaseModel):
             'day': self.created_time.day,
             'slug': self.slug
         })
+        """
 
     @cache_decorator(60 * 60 * 10)
     def get_category_tree(self):

@@ -7,7 +7,13 @@
                  srcset="{{ comment_item.author.email|gravatar_url:150 }}"
                  class="avatar avatar-96 photo" height="96" width="96">
             <cite class="fn">
-                <a rel="nofollow" href="{{ comment_item.author.get_absolute_url }}" rel="external nofollow"
+                <a rel="nofollow"
+                {% if comment_item.author.is_superuser %}
+                   href="{{ comment_item.author.get_absolute_url }}"
+                {% else %}
+                   href="#"
+                {% endif %}
+                   rel="external nofollow"
                    class="url">{{ comment_item.author.username }}
                 </a>
             </cite>
