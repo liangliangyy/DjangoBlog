@@ -121,6 +121,7 @@ class WBOauthManager(BaseOauthManager):
             user.nikename = datas['screen_name']
             user.openid = datas['id']
             user.type = 'weibo'
+            user.token = self.access_token
             if 'email' in datas and datas['email']:
                 user.email = datas['email']
             return user
@@ -187,6 +188,7 @@ class GoogleOauthManager(BaseOauthManager):
             user.picture = datas['picture']
             user.nikename = datas['name']
             user.openid = datas['sub']
+            user.token = self.access_token
             user.type = 'google'
             if datas['email']:
                 user.email = datas['email']
@@ -252,6 +254,7 @@ class GitHubOauthManager(BaseOauthManager):
             user.nikename = datas['name']
             user.openid = datas['id']
             user.type = 'github'
+            user.token = self.access_token
             if datas['email']:
                 user.email = datas['email']
 

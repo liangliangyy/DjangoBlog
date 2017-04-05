@@ -28,6 +28,7 @@ from django.utils.cache import get_cache_key
 from django.utils.decorators import classonlymethod
 from django.utils.decorators import method_decorator
 from django.shortcuts import get_object_or_404
+from django.http import HttpResponseRedirect
 
 
 class ArticleListView(ListView):
@@ -101,9 +102,17 @@ class ArticleDetailView(DetailView):
         obj = super(ArticleDetailView, self).get_object()
 
         obj.viewed()
-        # obj.body = markdown2.markdown(obj.body)
         self.object = obj
         return obj
+
+    def dispatch(self, request, *args, **kwargs):
+        # todo remove
+        slug = self.kwargs['slug'] if 'slug' in self.kwargs else ''
+        if slug:
+            obj = super(ArticleDetailView, self).get_object()
+            return HttpResponseRedirect(obj.get_absolute_url())
+        else:
+            return super(ArticleDetailView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         articleid = int(self.kwargs[self.pk_url_kwarg])

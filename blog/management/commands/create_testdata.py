@@ -33,12 +33,19 @@ class Command(BaseCommand):
         category = Category.objects.get_or_create(name='category', parent_category=pcategory)[0]
 
         category.save()
+
         for i in range(1, 10):
             article = Article.objects.get_or_create(category=category,
                                                     title='nice title ' + str(i),
                                                     body='nice content ' + str(i),
                                                     author=user
-                                                    )
+                                                    )[0]
+            tag = Tag()
+            tag.name = "nicetag" + str(i)
+            tag.save()
+            article.tags.add(tag)
+            article.save()
+
         from DjangoBlog.utils import cache
         cache.clear()
         self.stdout.write(self.style.SUCCESS('created test datas \n'))
