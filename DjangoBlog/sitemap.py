@@ -69,7 +69,7 @@ class UserSiteMap(Sitemap):
     priority = "0.3"
 
     def items(self):
-        return BlogUser.objects.all()
+        return list(set(map(lambda x: x.author, Article.objects.all())))
 
     def lastmod(self, obj):
         return obj.date_joined

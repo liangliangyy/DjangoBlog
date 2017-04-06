@@ -4,6 +4,24 @@ from django.contrib import admin
 from .models import Article, Category, Tag, Links
 from pagedown.widgets import AdminPagedownWidget
 from django import forms
+from django.utils.translation import ugettext_lazy as _
+
+
+class ArticleListFilter(admin.SimpleListFilter):
+    title = _("作者")
+    parameter_name = 'author'
+
+    def lookups(self, request, model_admin):
+        authors = list(set(map(lambda x: x.author, Article.objects.all())))
+        for author in authors:
+            yield (author.id, _(author.username))
+
+    def queryset(self, request, queryset):
+        id = self.value()
+        if id:
+            return queryset.filter(author__id__exact=id)
+        else:
+            return queryset
 
 
 class ArticleForm(forms.ModelForm):
@@ -18,7 +36,7 @@ class ArticlelAdmin(admin.ModelAdmin):
     form = ArticleForm
     list_display = ('id', 'title', 'author', 'created_time', 'views', 'status', 'type')
     list_display_links = ('id', 'title')
-    list_filter = ('author', 'status', 'type', 'category', 'tags')
+    list_filter = (ArticleListFilter, 'status', 'type', 'category', 'tags')
     filter_horizontal = ('tags',)
     exclude = ('slug', 'created_time')
 
