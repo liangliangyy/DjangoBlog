@@ -69,16 +69,16 @@ class AccountTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
         response = self.client.get(reverse('account:logout'))
-        self.assertEqual(response.status_code, 302)
+        self.assertIn(response.status_code, [301, 302])
 
         response = self.client.get(article.get_admin_url())
-        self.assertEqual(response.status_code, 302)
+        self.assertIn(response.status_code, [301, 302])
 
         response = self.client.post(reverse('account:login'), {
             'username': 'user1233',
             'password': 'password123'
         })
-        self.assertEqual(response.status_code, 302)
+        self.assertIn(response.status_code, [301, 302])
 
         response = self.client.get(article.get_admin_url())
         self.assertEqual(response.status_code, 200)
