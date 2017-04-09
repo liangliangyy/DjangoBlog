@@ -4,6 +4,7 @@ from django.contrib import admin
 from .models import Article, Category, Tag, Links
 from pagedown.widgets import AdminPagedownWidget
 from django import forms
+from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -39,6 +40,11 @@ class ArticlelAdmin(admin.ModelAdmin):
     list_filter = (ArticleListFilter, 'status', 'type', 'category', 'tags')
     filter_horizontal = ('tags',)
     exclude = ('slug', 'created_time')
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(ArticlelAdmin, self).get_form(request, obj, **kwargs)
+        form.base_fields['author'].queryset = get_user_model().objects.filter(is_superuser=True)
+        return form
 
     def save_model(self, request, obj, form, change):
         super(ArticlelAdmin, self).save_model(request, obj, form, change)
