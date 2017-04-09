@@ -27,8 +27,6 @@ class ArticleTest(TestCase):
         category.last_mod_time = datetime.datetime.now()
         category.save()
 
-        response = self.client.get(category.get_absolute_url())
-        self.assertEqual(response.status_code, 200)
         tag = Tag()
         tag.name = "nicetag"
         tag.save()
@@ -52,6 +50,12 @@ class ArticleTest(TestCase):
 
         response = self.client.get(tag.get_absolute_url())
         self.assertEqual(response.status_code, 200)
+
+        response = self.client.get(category.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
+
+        from DjangoBlog.spider_notify import SpiderNotify
+        SpiderNotify.baidu_notify([article.get_full_url()])
 
     def test_validate_feed(self):
         user = BlogUser.objects.get_or_create(email="liangliangyy12@gmail.com", username="liangliangyy")[0]

@@ -128,7 +128,17 @@ def load_sidebar(user):
     links = Links.objects.all()
     commment_list = Comment.objects.order_by('-id')[:settings.SIDEBAR_COMMENT_COUNT]
     show_adsense = settings.SHOW_GOOGLE_ADSENSE
-    # tags=
+    # 标签云 计算字体大小
+    # 根据总数计算出平均值 大小为 (数目/平均值)*步长
+    increment = 10
+    tags = Tag.objects.all()
+    sidebar_tags = None
+    if tags:
+        s = list(map(lambda t: (t, t.get_article_count()), tags))
+        count = sum(map(lambda t: t[1], s))
+        dd = count / len(tags)
+        sidebar_tags = list(map(lambda x: (x[0], x[1], (x[1] / dd) * increment), s))
+
     return {
         'recent_articles': recent_articles,
         'sidebar_categorys': sidebar_categorys,
@@ -137,7 +147,8 @@ def load_sidebar(user):
         'sidabar_links': links,
         'sidebar_comments': commment_list,
         'user': user,
-        'show_adsense': show_adsense
+        'show_adsense': show_adsense,
+        'sidebar_tags': sidebar_tags
     }
 
 
@@ -252,4 +263,3 @@ def query(qs, **kwargs):
           {% endfor %}
     """
     return qs.filter(**kwargs)
-

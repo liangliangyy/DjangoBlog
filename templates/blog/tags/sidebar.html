@@ -77,6 +77,18 @@
     {% if show_adsense %}
         {% include 'share_layout/adsense.html' %}
     {% endif %}
+    {% if sidebar_tags %}
+        <aside id="tag_cloud-2" class="widget widget_tag_cloud"><h3 class="widget-title">标签云</h3>
+            <div class="tagcloud">
+                {% for tag,count,size in sidebar_tags %}
+                    <a href="{{ tag.get_absolute_url }}"
+                       class="tag-link-{{ tag.id }} tag-link-position-{{ tag.id }}"
+                       style="font-size: {{ size }}pt;" title="{{ count }}个话题"> {{ tag.name }}
+                    </a>
+                {% endfor %}
+            </div>
+        </aside>
+    {% endif %}
     <aside id="text-2" class="widget widget_text"><h3 class="widget-title">欢迎您star或者fork本站源代码</h3>
         <div class="textwidget">
 

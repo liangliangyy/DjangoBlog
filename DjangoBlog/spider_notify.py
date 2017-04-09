@@ -36,7 +36,7 @@ class SpiderNotify():
             print(e)
 
     @staticmethod
-    def notify(self, url):
+    def notify(url):
 
         SpiderNotify.baidu_notify(url)
         SpiderNotify.__google_notify()
