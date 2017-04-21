@@ -33,6 +33,9 @@ def authorize(request):
     user = manager.get_oauth_userinfo()
 
     if user:
+        if not user.nikename:
+            import datetime
+            user.nikename = "djangoblog" + datetime.datetime.now().strftime('%Y%m%f%H%m%s')
         try:
             token = user.token
             user = OAuthUser.objects.get(type=type, openid=user.openid)

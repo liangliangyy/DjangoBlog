@@ -1,34 +1,20 @@
 from django.shortcuts import render
 
 # Create your views here.
+import os
+import datetime
 from django.views.generic.list import ListView
-from django.views.generic import TemplateView
-from django.views.decorators.cache import cache_page
 from django.views.generic.detail import DetailView
-from django.views.generic import UpdateView
-from django.views.generic.edit import CreateView, FormView
-from django.views.generic.dates import YearArchiveView, MonthArchiveView
-from blog.models import Article, Category, Tag
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.core.exceptions import ObjectDoesNotExist
-from comments.forms import CommentForm
 from django.conf import settings
 from django import forms
-from django import http
 from django.http import HttpResponse
-from abc import ABCMeta, abstractmethod
-from haystack.generic_views import SearchView
-from blog.forms import BlogSearchForm
-import datetime
-from django.views.decorators.csrf import csrf_exempt
-import os
-from django.contrib.auth.decorators import login_required
-from DjangoBlog.utils import cache, cache_decorator, logger, get_md5
-from django.utils.cache import get_cache_key
-from django.utils.decorators import classonlymethod
-from django.utils.decorators import method_decorator
-from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
+from DjangoBlog.utils import cache, logger
+from django.shortcuts import get_object_or_404
+from blog.models import Article, Category, Tag
+from comments.forms import CommentForm
 
 
 class ArticleListView(ListView):
@@ -100,23 +86,12 @@ class ArticleDetailView(DetailView):
 
     def get_object(self):
         obj = super(ArticleDetailView, self).get_object()
-
         obj.viewed()
         self.object = obj
         return obj
 
-    def dispatch(self, request, *args, **kwargs):
-        # todo remove
-        slug = self.kwargs['slug'] if 'slug' in self.kwargs else ''
-        if slug:
-            obj = super(ArticleDetailView, self).get_object()
-            return HttpResponseRedirect(obj.get_absolute_url())
-        else:
-            return super(ArticleDetailView, self).dispatch(request, *args, **kwargs)
-
     def get_context_data(self, **kwargs):
         articleid = int(self.kwargs[self.pk_url_kwarg])
-
         comment_form = CommentForm()
         user = self.request.user
 
@@ -150,8 +125,6 @@ class CategoryDetailView(ArticleListView):
         categoryname = category.name
         self.categoryname = categoryname
         categorynames = list(map(lambda c: c.name, category.get_sub_categorys()))
-
-        # article_list = Article.objects.filter(category__name=categoryname, status='p')
         article_list = Article.objects.filter(category__name__in=categorynames, status='p')
         return article_list
 

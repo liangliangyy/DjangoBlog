@@ -24,13 +24,6 @@ urlpatterns = [
     url(r'^$', views.IndexView.as_view(), name='index'),
     url(r'^page/(?P<page>\d+)$', views.IndexView.as_view(), name='index_page'),
 
-    # 为了兼容之前的错误url，后续去掉
-    # todo remove
-    url(r'^article/(?P<year>\d+)/(?P<month>\d+)/(?P<day>\d+)/(?P<article_id>\d+)-(?P<slug>\S+).html$',
-        # cache_page(60 * 60 * 10, key_prefix="blogdetail")(views.ArticleDetailView.as_view()),
-        views.ArticleDetailView.as_view(),
-        name='detail'),
-
     url(r'^article/(?P<year>\d+)/(?P<month>\d+)/(?P<day>\d+)/(?P<article_id>\d+).html$',
         views.ArticleDetailView.as_view(),
         name='detailbyid'),
