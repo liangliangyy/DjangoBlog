@@ -124,7 +124,7 @@ class BlogMarkDownRenderer(mistune.Renderer):
         return '<a href="%s" %s>%s</a>' % (link, nofollow, text)
 
     def link(self, link, title, text):
-        link = escape_link(link, quote=True)
+        link = escape_link(link)
         site = Site.objects.get_current()
         nofollow = "" if link.find(site.domain) > 0 else "rel='nofollow'"
         if not link:
