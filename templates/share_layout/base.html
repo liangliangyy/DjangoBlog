@@ -44,10 +44,7 @@
     {% endcompress %}
     {% comment %}<script type='text/javascript' src='{% static 'blog/js/jquery.js' %}' defer='defer'></script>
     <script type='text/javascript' src='{% static 'blog/js/jquery-migrate.min.js' %}' defer='defer'></script>{% endcomment %}
-    {% compress js %}
-        <script type="text/javascript" src="{% static 'blog/js/jquery-3.1.1.js' %}"></script>
-        <script type="text/javascript" src="{% static 'blog/js/nprogress.js' %}"></script>
-    {% endcompress %}
+
 </head>
 
 <body class="home blog custom-font-enabled">
@@ -95,6 +92,8 @@ var wpAutoTopSpeed = 1;</script>
     <script type="application/javascript" src="{% static 'highlight/highlight.pack.js' %}"></script>
     <script>hljs.initHighlightingOnLoad();</script>{% endcomment %}
     {% compress js %}
+        <script type="text/javascript" src="{% static 'blog/js/jquery-3.1.1.js' %}"></script>
+        <script type="text/javascript" src="{% static 'blog/js/nprogress.js' %}"></script>
         <script src="{% static 'blog/js/blog.js' %}" type="application/javascript"></script>
         <script src="{% static 'blog/js/navigation.js' %}" type="application/javascript"></script>
         {% block compress_js %}
