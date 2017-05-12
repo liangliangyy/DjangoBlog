@@ -21,7 +21,7 @@ python-memcached==1.58
 python-slugify==1.2.4
 pytz==2017.2
 rcssmin==1.0.6
-requests==2.13.0
+requests==2.14.2
 rjsmin==1.0.12
 six==1.10.0
 sqlparse==0.2.3
