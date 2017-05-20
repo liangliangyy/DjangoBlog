@@ -209,19 +209,29 @@ class TagDetailView(ArticleListView):
 @csrf_exempt
 def fileupload(request):
     if request.method == 'POST':
-        fname = ''
-        timestr = datetime.datetime.now().strftime('%Y/%m/%d')
-        basepath = os.path.join(r'/var/www/resource/image/', timestr)
-        if not os.path.exists(basepath):
-            os.makedirs(basepath)
-        fname = ''
+        response = []
         for filename in request.FILES:
-            fname = filename
+            timestr = datetime.datetime.now().strftime('%Y/%m/%d')
+            imgextensions = ['jpg', 'png', 'jpeg', 'bmp']
+            fname = u''.join(str(filename))
+
+            isimage = len([i for i in imgextensions if fname.find(i) >= 0]) > 0
+            basepath = os.path.join(r'/Users/liangliang/resource/' + 'files' if not isimage else'image' + '/',
+                                    timestr)
+            url = 'https://resource.lylinux.net/{type}/{timestr}/{filename}'.format(
+                type='files' if not isimage else'image', timestr=timestr, filename=filename)
+            if not os.path.exists(basepath):
+                os.makedirs(basepath)
             savepath = os.path.join(basepath, filename)
             with open(savepath, 'wb+') as wfile:
                 for chunk in request.FILES[filename].chunks():
                     wfile.write(chunk)
-        return HttpResponse('https://resource.lylinux.net/' + 'image/' + timestr + '/' + fname)
+            if isimage:
+                from PIL import Image
+                image = Image.open(savepath)
+                image.save(savepath, quality=20, optimize=True)
+            response.append(url)
+        return HttpResponse(response)
 
     else:
         return HttpResponse("only for post")

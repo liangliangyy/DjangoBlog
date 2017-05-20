@@ -130,14 +130,14 @@ def load_sidebar(user):
     show_adsense = settings.SHOW_GOOGLE_ADSENSE
     # 标签云 计算字体大小
     # 根据总数计算出平均值 大小为 (数目/平均值)*步长
-    increment = 10
+    increment = 5
     tags = Tag.objects.all()
     sidebar_tags = None
     if tags:
         s = list(map(lambda t: (t, t.get_article_count()), tags))
         count = sum(map(lambda t: t[1], s))
         dd = count / len(tags)
-        sidebar_tags = list(map(lambda x: (x[0], x[1], (x[1] / dd) * increment), s))
+        sidebar_tags = list(map(lambda x: (x[0], x[1], (x[1] / dd) * increment + 10), s))
 
     return {
         'recent_articles': recent_articles,

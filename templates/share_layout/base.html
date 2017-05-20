@@ -36,15 +36,12 @@
         {% comment %}<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>{% endcomment %}
         <!--[if lt IE 9]>
         <link rel='stylesheet' id='twentytwelve-ie-css'  href='{% static 'blog/css/ie.css' %}' type='text/css' media='all' />
-    <![endif]-->
+        <![endif]-->
         <link rel="stylesheet" href="{% static 'pygments/default.css' %}"/>
         <link rel="stylesheet" href="{% static 'blog/css/nprogress.css' %}">
         {% block compress_css %}
         {% endblock %}
     {% endcompress %}
-    {% comment %}<script type='text/javascript' src='{% static 'blog/js/jquery.js' %}' defer='defer'></script>
-    <script type='text/javascript' src='{% static 'blog/js/jquery-migrate.min.js' %}' defer='defer'></script>{% endcomment %}
-
 </head>
 
 <body class="home blog custom-font-enabled">
@@ -74,23 +71,9 @@
     </div><!-- #main .wrapper -->
     {% include 'share_layout/footer.html' %}
 </div><!-- #page -->
-{% comment %}
-<div id="wp-auto-top">
-    <div id="wp-auto-top-top"></div>
-    <div id="wp-auto-top-bottom"></div>
-</div>
-<script> var commentPositionId = '.ds-comments:last';
-var wpAutoTopSpeed = 1;</script>
-
-<div id="su-footer-links" style="text-align: center;"></div>
-{% endcomment %}
-{% comment %}<script type="application/javascript" src="{% static 'blog/js/navigation.js' %}" defer="defer"></script>{% endcomment %}
 
 </body>
 <footer>
-    {% comment %}<link href="{% static 'highlight/styles/default.css' %}" rel="stylesheet">
-    <script type="application/javascript" src="{% static 'highlight/highlight.pack.js' %}"></script>
-    <script>hljs.initHighlightingOnLoad();</script>{% endcomment %}
     {% compress js %}
         <script type="text/javascript" src="{% static 'blog/js/jquery-3.1.1.js' %}"></script>
         <script type="text/javascript" src="{% static 'blog/js/nprogress.js' %}"></script>
