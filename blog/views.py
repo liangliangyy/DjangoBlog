@@ -216,8 +216,9 @@ def fileupload(request):
             fname = u''.join(str(filename))
 
             isimage = len([i for i in imgextensions if fname.find(i) >= 0]) > 0
-            basepath = os.path.join(r'/var/www/resource/' + 'files' if not isimage else'image' + '/',
-                                    timestr)
+
+            basepath = r'/var/www/resource/{type}/{timestr}'.format(
+                type='files' if not isimage else'image', timestr=timestr)
             url = 'https://resource.lylinux.net/{type}/{timestr}/{filename}'.format(
                 type='files' if not isimage else'image', timestr=timestr, filename=filename)
             if not os.path.exists(basepath):
