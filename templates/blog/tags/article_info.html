@@ -38,7 +38,7 @@
 
     <div class="entry-content" itemprop="articleBody">
         {% if  isindex %}
-            {{ article.body|truncatechars_content|custom_markdown }}
+            {{ article.body|custom_markdown|truncatechars_content }}
             <p class='read-more'><a
                     href=' {{ article.get_absolute_url }}'>Read more</a></p>
         {% else %}

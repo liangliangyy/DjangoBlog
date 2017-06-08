@@ -71,9 +71,9 @@ def truncatechars_content(content):
 @register.filter(is_safe=True)
 @stringfilter
 def truncate(content):
-    from django.template.defaultfilters import truncatechars
+    from django.utils.html import strip_tags
 
-    return truncatechars(content, 150)
+    return strip_tags(content)[:150]
 
 
 @register.inclusion_tag('blog/tags/breadcrumb.html')
