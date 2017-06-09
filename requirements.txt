@@ -1,5 +1,5 @@
 appdirs==1.4.3
-Django==1.11.1
+Django==1.11.2
 django-appconf==1.0.2
 django-autoslug==1.9.3
 django-compressor==2.1.1
@@ -21,7 +21,7 @@ python-memcached==1.58
 python-slugify==1.2.4
 pytz==2017.2
 rcssmin==1.0.6
-requests==2.14.2
+requests==2.17.3
 rjsmin==1.0.12
 six==1.10.0
 sqlparse==0.2.3
