@@ -8,11 +8,11 @@
                  class="avatar avatar-96 photo" height="96" width="96">
             <cite class="fn">
                 <a rel="nofollow"
-                {% if comment_item.author.is_superuser %}
+                        {% if comment_item.author.is_superuser %}
                    href="{{ comment_item.author.get_absolute_url }}"
-                {% else %}
+                        {% else %}
                    href="#"
-                {% endif %}
+                        {% endif %}
                    rel="external nofollow"
                    class="url">{{ comment_item.author.username }}
                 </a>
@@ -24,7 +24,7 @@
             {{ comment_item.created_time }}
         </div>
 
-        <p>{{ comment_item.body }}</p>
+        <p>{{ comment_item.body |custom_markdown }}</p>
 
         <div class="reply"><a rel="nofollow" class="comment-reply-link"
                               href="javascript:void(0)"

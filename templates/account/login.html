@@ -19,7 +19,7 @@
                     {{ field.errors }}
                 {% endfor %}
 
-
+                <input type="hidden" name="next" value="{{ redirect_to }}">
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
 
                 <div class="checkbox">

@@ -58,6 +58,14 @@ class LoginView(FormView):
 
         return super(LoginView, self).dispatch(request, *args, **kwargs)
 
+    def get_context_data(self, **kwargs):
+        redirect_to = self.request.GET.get(self.redirect_field_name)
+        if redirect_to is None:
+            redirect_to = '/'
+        kwargs['redirect_to'] = redirect_to
+
+        return super(LoginView, self).get_context_data(**kwargs)
+
     def form_valid(self, form):
         form = AuthenticationForm(data=self.request.POST, request=self.request)
 
@@ -65,16 +73,19 @@ class LoginView(FormView):
             from DjangoBlog.utils import cache
             if cache and cache is not None:
                 cache.clear()
+            print(self.redirect_field_name)
+            redirect_to = self.request.GET.get(self.redirect_field_name)
             auth.login(self.request, form.get_user())
-
-            return HttpResponseRedirect('/')
+            return super(LoginView, self).form_valid(form)
+            # return HttpResponseRedirect('/')
         else:
             return self.render_to_response({
                 'form': form
             })
 
     def get_success_url(self):
-        redirect_to = self.request.GET.get(self.redirectfieldname)
+        print(self.redirect_field_name)
+        redirect_to = self.request.POST.get(self.redirect_field_name)
         if not is_safe_url(url=redirect_to, host=self.request.get_host()):
             redirect_to = self.success_url
         return redirect_to
