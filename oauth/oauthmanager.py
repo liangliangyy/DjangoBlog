@@ -45,7 +45,7 @@ class BaseOauthManager(metaclass=ABCMeta):
         return self.is_access_token_set and self.access_token is not None and self.openid is not None
 
     @abstractmethod
-    def get_authorization_url(self):
+    def get_authorization_url(self, nexturl='/'):
         pass
 
     @abstractmethod
@@ -77,11 +77,11 @@ class WBOauthManager(BaseOauthManager):
         self.callback_url = settings.OAHUTH['sina']['callbackurl']
         super(WBOauthManager, self).__init__(access_token=access_token, openid=openid)
 
-    def get_authorization_url(self):
+    def get_authorization_url(self, nexturl='/'):
         params = {
             'client_id': self.client_id,
             'response_type': 'code',
-            'redirect_uri': self.callback_url
+            'redirect_uri': self.callback_url + '&next_url=' + nexturl
         }
         url = self.AUTH_URL + "?" + urllib.parse.urlencode(params)
         return url
@@ -142,7 +142,7 @@ class GoogleOauthManager(BaseOauthManager):
         self.callback_url = settings.OAHUTH['google']['callbackurl']
         super(GoogleOauthManager, self).__init__(access_token=access_token, openid=openid)
 
-    def get_authorization_url(self):
+    def get_authorization_url(self, nexturl='/'):
         params = {
             'client_id': self.client_id,
             'response_type': 'code',
@@ -210,11 +210,11 @@ class GitHubOauthManager(BaseOauthManager):
         self.callback_url = settings.OAHUTH['github']['callbackurl']
         super(GitHubOauthManager, self).__init__(access_token=access_token, openid=openid)
 
-    def get_authorization_url(self):
+    def get_authorization_url(self, nexturl='/'):
         params = {
             'client_id': self.client_id,
             'response_type': 'code',
-            'redirect_uri': self.callback_url,
+            'redirect_uri': self.callback_url + '&next_url=' + nexturl,
             'scope': 'user'
         }
         # url = self.AUTH_URL + "?" + urllib.parse.urlencode(params, quote_via=urllib.parse.quote)

@@ -18,6 +18,21 @@ from django.http import HttpResponseForbidden
 from .oauthmanager import get_manager_by_type
 
 
+def oauthlogin(request):
+    type = request.GET.get('type', None)
+    if not type:
+        return HttpResponseRedirect('/')
+    manager = get_manager_by_type(type)
+    if not manager:
+        return HttpResponseRedirect('/')
+    nexturl = request.GET.get('next_url', None)
+    print(nexturl)
+    if not nexturl or nexturl == '/login/':
+        nexturl = '/'
+    authorizeurl = manager.get_authorization_url(nexturl)
+    return HttpResponseRedirect(authorizeurl)
+
+
 def authorize(request):
     manager = None
     type = request.GET.get('type', None)
@@ -28,8 +43,11 @@ def authorize(request):
         return HttpResponseRedirect('/')
     code = request.GET.get('code', None)
     rsp = manager.get_access_token_by_code(code)
+    nexturl = request.GET.get('next_url', None)
+    if not nexturl:
+        nexturl = '/'
     if not rsp:
-        return HttpResponseRedirect(manager.get_authorization_url())
+        return HttpResponseRedirect(manager.get_authorization_url(nexturl))
     user = manager.get_oauth_userinfo()
 
     if user:
@@ -60,7 +78,7 @@ def authorize(request):
             user.author = author
             user.save()
             login(request, author)
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect(nexturl)
         if not email:
             # todo
             # 未避免用户名重复，暂时使用oauth用户名+openid这种方式来创建用户
@@ -74,7 +92,7 @@ def authorize(request):
 
             return HttpResponseRedirect(url)
     else:
-        return HttpResponseRedirect('/')
+        return HttpResponseRedirect(nexturl)
 
 
 def emailconfirm(request, id, sign):
