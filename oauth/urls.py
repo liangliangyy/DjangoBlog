@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^oauth/requireemail/(?P<oauthid>\d+).html', views.RequireEmailView.as_view(), name='require_email'),
     url(r'^oauth/emailconfirm/(?P<id>\d+)/(?P<sign>\S+).html', views.emailconfirm, name='email_confirm'),
     url(r'^oauth/bindsuccess/(?P<oauthid>\d+).html', views.bindsuccess, name='bindsuccess'),
+    url(r'^oauth/oauthlogin$', views.oauthlogin,name='oauthlogin')
 ]
 
 """

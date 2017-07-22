@@ -8,3 +8,4 @@ omit =
     *whoosh_cn_backend*
     *apps*
     *commands*
+    *oauth*
