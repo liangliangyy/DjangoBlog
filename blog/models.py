@@ -2,7 +2,7 @@ from django.db import models
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from uuslug import slugify
-from DjangoBlog.spider_notify import SpiderNotify
+
 from django.contrib.sites.models import Site
 from DjangoBlog.utils import cache_decorator, logger, cache
 from django.utils.functional import cached_property
@@ -12,21 +12,15 @@ class BaseModel(models.Model):
     slug = models.SlugField(default='no-slug', max_length=60, blank=True)
 
     def save(self, *args, **kwargs):
+        from DjangoBlog.blog_signals import article_save_signal
         if not self.slug or self.slug == 'no-slug' or not self.id:
-            # Only set the slug when the object is created.
             slug = self.title if 'title' in self.__dict__ else self.name
             self.slug = slugify(slug)
         super().save(*args, **kwargs)
-
-        if 'update_fields' in kwargs and len(kwargs['update_fields']) == 1 and kwargs['update_fields'][0] == 'views':
-            return
-        try:
-            if not settings.TESTING:
-                notify_url = self.get_full_url()
-                SpiderNotify.baidu_notify([notify_url])
-        except Exception as ex:
-            logger.error("notify sipder", ex)
-            print(ex)
+        # type = self.__class__.__name__
+        is_update_views = 'update_fields' in kwargs and len(kwargs['update_fields']) == 1 and kwargs['update_fields'][
+                                                                                                  0] == 'views'
+        article_save_signal.send(sender=self.__class__, is_update_views=is_update_views, id=self.id)
 
     def get_full_url(self):
         site = Site.objects.get_current().domain
@@ -82,17 +76,6 @@ class Article(BaseModel):
             'day': self.created_time.day
         })
 
-        # todo remove
-        """
-        return reverse('blog:detail', kwargs={
-            'article_id': self.id,
-            'year': self.created_time.year,
-            'month': self.created_time.month,
-            'day': self.created_time.day,
-            'slug': self.slug
-        })
-        """
-
     @cache_decorator(60 * 60 * 10)
     def get_category_tree(self):
         tree = self.category.get_category_tree()
@@ -101,17 +84,10 @@ class Article(BaseModel):
         return names
 
     def save(self, *args, **kwargs):
-        # self.summary = self.summary or self.body[:settings.ARTICLE_SUB_LENGTH]
         if not self.slug or self.slug == 'no-slug' or not self.id:
             # Only set the slug when the object is created.
             self.slug = slugify(self.title)
-            """
-            try:
-                notify = sipder_notify()
-                notify.notify(self.get_full_url())
-            except Exception as e:
-                print(e)
-            """
+
         super().save(*args, **kwargs)
 
     def viewed(self):

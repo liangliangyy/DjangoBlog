@@ -62,25 +62,14 @@ class CommentPostView(FormView):
             comment.parent_comment = parent_comment
 
         comment.save(True)
-        from DjangoBlog.utils import expire_view_cache, cache
-        from django.contrib.sites.models import Site
-        path = article.get_absolute_url()
-        site = Site.objects.get_current().domain
-        if site.find(':') > 0:
-            site = site[0:site.find(':')]
+
+        from DjangoBlog.blog_signals import comment_save_signal
         port = 80
         try:
             # django1.8 没有这个方法...
             port = self.request.get_port()
         except:
             pass
-        expire_view_cache(path, servername=site, serverport=port, key_prefix='blogdetail')
-        if cache.get('seo_processor'):
-            cache.delete('seo_processor')
-        comment_cache_key = 'article_comments_{id}'.format(id=article_id)
-        cache.delete(comment_cache_key)
-        from django.core.cache.utils import make_template_fragment_key
         username = self.request.user.username if self.request.user else ''
-        key = make_template_fragment_key('sidebar', [username])
-        cache.delete(key)
+        comment_save_signal.send(sender=self.__class__, comment_id=comment.id, username=username, serverport=port)
         return HttpResponseRedirect("%s#div-comment-%d" % (article.get_absolute_url(), comment.pk))

@@ -23,6 +23,7 @@ from pygments.formatters import html
 import logging
 import _thread
 from django.core.mail import EmailMultiAlternatives
+from django.conf import settings
 
 logger = logging.getLogger('djangoblog')
 
@@ -144,18 +145,10 @@ class CommonMarkdown():
         return mdp(value)
 
 
-def send_email(subject, html_content, tomail):
-    msg = EmailMultiAlternatives(subject, html_content, from_email='no-reply@lylinux.net', to=tomail)
+def send_email(emailto, title, content):
+    msg = EmailMultiAlternatives(title, content, from_email=settings.DEFAULT_FROM_EMAIL, to=emailto)
     msg.content_subtype = "html"
-
-    def send_comment_email(msg):
-        try:
-            msg.send()
-        except:
-            print('send email error')
-            pass
-
-    _thread.start_new_thread(send_comment_email, (msg,))
+    _thread.start_new_thread(msg.send, (msg,))
 
 
 def parse_dict_to_url(dict):
