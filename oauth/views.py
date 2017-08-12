@@ -80,12 +80,7 @@ def authorize(request):
             login(request, author)
             return HttpResponseRedirect(nexturl)
         if not email:
-            # todo
-            # 未避免用户名重复，暂时使用oauth用户名+openid这种方式来创建用户
-            # author = get_user_model().objects.get_or_create(username=user.nikename + '_' + str(user.openid))[0]
-            # user.author = author
             user.save()
-
             url = reverse('oauth:require_email', kwargs={
                 'oauthid': user.id
             })
@@ -120,7 +115,7 @@ def emailconfirm(request, id, sign):
     login(request, author)
 
     site = Site.objects.get_current().domain
-    send_email('恭喜您绑定成功!', '''
+    content = '''
      <p>恭喜您，您已经成功绑定您的邮箱，您可以使用{type}来直接免密码登录本网站.欢迎您继续关注本站，地址是</p>
 
                 <a href="{url}" rel="bookmark">{url}</a>
@@ -129,7 +124,9 @@ def emailconfirm(request, id, sign):
                 <br />
                 如果上面链接无法打开，请将此链接复制至浏览器。
                 {url}
-    '''.format(type=oauthuser.type, url='http://' + site), [oauthuser.email, ])
+    '''.format(type=oauthuser.type, url='http://' + site)
+
+    send_email(emailto=[oauthuser.email, ], title='恭喜您绑定成功!', content=content)
     url = reverse('oauth:bindsuccess', kwargs={
         'oauthid': id
     })
@@ -190,7 +187,7 @@ class RequireEmailView(FormView):
                 如果上面链接无法打开，请将此链接复制至浏览器。
                 {url}
                 """.format(url=url)
-        send_email('绑定您的电子邮箱', content, [email, ])
+        send_email(emailto=[email, ], title='绑定您的电子邮箱', content=content)
         url = reverse('oauth:bindsuccess', kwargs={
             'oauthid': oauthid
         })
