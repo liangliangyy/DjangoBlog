@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'accounts',
     'comments',
     'oauth',
+    'servermanager',
     'compressor'
 ]
 
