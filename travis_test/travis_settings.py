@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'accounts',
     'comments',
     'oauth',
+    'servermanager',
     'compressor'
 ]
 
@@ -235,7 +236,8 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 SERVER_EMAIL = os.environ.get('DJANGO_EMAIL_USER')
 # 设置debug=false 未处理异常邮件通知
 ADMINS = [('liangliang', 'liangliangyy@gmail.com')]
-
+# 微信管理员密码(两次md5获得)
+WXADMIN = '995F03AC401D6CABABAEF756FC4D43C7'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
