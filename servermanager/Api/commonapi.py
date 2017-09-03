@@ -32,7 +32,8 @@ class TuLing():
 
     def getdata(self, content):
         requrl = self.__build_req_url(content)
-        res = self.UserAgent(requrl)
+        res = self.UserAgent(requrl).decode('utf-8')
+        logger.info(res)
         try:
             jsons = json.loads(res, encoding='utf-8')
             if str(jsons["code"]) == '100000':
