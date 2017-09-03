@@ -147,7 +147,7 @@ class CommandHandler():
     def get_help(self):
         rsp = ''
         for cmd in self.commands:
-            rsp += '{c}:{d}\n'.format(c=cmd.command, d=cmd.describe)
+            rsp += '{c}:{d}\n'.format(c=cmd.title, d=cmd.describe)
         return rsp
 
 
