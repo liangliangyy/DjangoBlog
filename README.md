@@ -16,7 +16,7 @@
 - 集成`django-compressor`，自动压缩`css`，`js`。
 - 基于`python3`,支持`Django`多版本。`Django`的1.8,1.9,1.10,1.11均测试通过。
 - 网站异常邮件提醒，若有未捕捉到的异常会自动发送提醒邮件。
-
+- 集成了微信公众号功能，现在可以使用微信公众号来管理你的vps了。
 ## 安装
 使用pip安装：  
 `pip install -r requirements.txt`
