@@ -22,6 +22,12 @@ class MemcacheStorage(SessionStorage):
         self.prefix = prefix
         self.cache = cache
 
+    @property
+    def is_available(self):
+        value = "1"
+        self.set('checkavaliable', value=value)
+        return value == self.get('checkavaliable')
+
     def key_name(self, s):
         return '{prefix}{s}'.format(prefix=self.prefix, s=s)
 
