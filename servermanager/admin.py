@@ -5,7 +5,7 @@ from .models import commands
 
 
 class CommandsAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('title', 'command', 'describe')
 
 
 admin.site.register(commands, CommandsAdmin)

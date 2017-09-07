@@ -39,6 +39,5 @@ class TuLing():
             if str(jsons["code"]) == '100000':
                 return jsons["text"]
         except Exception as e:
-            print(e)
             logger.warn(e)
         return "哎呀，出错啦。"

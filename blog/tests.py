@@ -2,6 +2,9 @@ from django.test import Client, RequestFactory, TestCase
 from blog.models import Article, Category, Tag
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
+from blog.forms import BlogSearchForm
+from django.core.paginator import Paginator
+from blog.templatetags.blog_tags import load_pagination_info, load_articletags
 import datetime
 from accounts.models import BlogUser
 
@@ -54,6 +57,29 @@ class ArticleTest(TestCase):
         response = self.client.get(category.get_absolute_url())
         self.assertEqual(response.status_code, 200)
 
+        response = self.client.get('/search', {'q': 'django'})
+        self.assertEqual(response.status_code, 200)
+        s = load_articletags(article)
+        self.assertIsNotNone(s)
+
+        p = Paginator(Article.objects.all(), 2)
+        s = load_pagination_info(p.page(1), '', '')
+        self.assertIsNotNone(s)
+
+        p = Paginator(Tag.objects.all(), 2)
+        s = load_pagination_info(p.page(1), '分类标签归档', 'tagname')
+        self.assertIsNotNone(s)
+
+        p = Paginator(BlogUser.objects.all(), 2)
+        s = load_pagination_info(p.page(1), '作者文章归档', 'username')
+        self.assertIsNotNone(s)
+
+        p = Paginator(Category.objects.all(), 2)
+        s = load_pagination_info(p.page(1), '分类目录归档', 'categoryname')
+        self.assertIsNotNone(s)
+
+        f = BlogSearchForm()
+        f.search()
         from DjangoBlog.spider_notify import SpiderNotify
         SpiderNotify.baidu_notify([article.get_full_url()])
 
