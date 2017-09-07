@@ -9,3 +9,4 @@ omit =
     *apps*
     *commands*
     *oauth*
+    *travis_test*
