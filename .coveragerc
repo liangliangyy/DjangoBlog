@@ -10,3 +10,4 @@ omit =
     *commands*
     *oauth*
     *travis_test*
+    *settings.py*
