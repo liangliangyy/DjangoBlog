@@ -164,7 +164,7 @@ SITE_NAME = '且听风吟'
 SITE_URL = 'http://www.lylinux.net'
 SITE_DESCRIPTION = '大巧无工,重剑无锋.'
 SITE_SEO_DESCRIPTION = '小站主要用来分享和记录学习经验,教程,记录个人生活的点滴以及一些随笔.欢迎大家访问小站'
-SITE_SEO_KEYWORDS = 'linux,apache,mysql,服务器,ubuntu,shell,web,csharp,.net,asp,mac,swift'
+SITE_SEO_KEYWORDS = 'linux,apache,mysql,服务器,ubuntu,shell,web,csharp,.net,asp,mac,swift,python,django'
 ARTICLE_SUB_LENGTH = 300
 SHOW_GOOGLE_ADSENSE = False
 # bootstrap颜色样式
@@ -186,10 +186,12 @@ CACHE_CONTROL_MAX_AGE = 2592000
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'TIMEOUT': 10800,
         'LOCATION': '127.0.0.1:11211',
     },
     'locmemcache': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'TIMEOUT': 10800,
         'LOCATION': 'unique-snowflake',
     }
 }

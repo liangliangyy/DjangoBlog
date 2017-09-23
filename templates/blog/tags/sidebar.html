@@ -41,8 +41,7 @@
                 {% for c in sidebar_comments %}
                     <li class="recentcomments">
                 <span class="comment-author-link">
-                    <a href="{{ c.author.get_absolute_url }}" rel="external"
-                       class="url">{{ c.author.username }}</a></span>
+                    {{ c.author.username }}</span>
                         发表在《
                         <a href="{{ c.article.get_absolute_url }}">{{ c.article.title }}</a>》
                     </li>
@@ -112,5 +111,5 @@
 
         </ul>
     </aside>
-<div id="rocket" class="show" title="点我返回顶部"></div>
+    <div id="rocket" class="show" title="点我返回顶部"></div>
 </div><!-- #secondary -->
