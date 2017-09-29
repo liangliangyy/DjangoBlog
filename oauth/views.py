@@ -53,7 +53,7 @@ def authorize(request):
     if user:
         if not user.nikename:
             import datetime
-            user.nikename = "djangoblog" + datetime.datetime.now().strftime('%y%m%d%I')
+            user.nikename = "djangoblog" + datetime.datetime.now().strftime('%y%m%d%I%M%S')
         try:
             token = user.token
             user = OAuthUser.objects.get(type=type, openid=user.openid)
@@ -72,7 +72,7 @@ def authorize(request):
                 result = get_user_model().objects.get_or_create(email=user.email)
                 author = result[0]
                 if result[1]:
-                    author.username = user.nikename + '_' + str(user.openid)
+                    author.username = user.nikename
                     author.save()
 
             user.author = author
@@ -103,7 +103,7 @@ def emailconfirm(request, id, sign):
         result = get_user_model().objects.get_or_create(email=oauthuser.email)
         author = result[0]
         if result[1]:
-            author.username = oauthuser.nikename + '_' + str(oauthuser.openid)
+            author.username = oauthuser.nikename
             author.save()
     """
     if oauthuser.email and author.email:
