@@ -216,6 +216,11 @@ OAHUTH = {
         'appkey': 'githubappkey',
         'appsecret': 'githubappsecret',
         'callbackurl': 'http://www.lylinux.net/oauth/authorize?type=github'
+    },
+    'facebook': {
+        'appkey': 'facebookappkey',
+        'appsecret': 'facebookappsecret',
+        'callbackurl': 'http://www.lylinux.net/oauth/authorize?type=facebook'
     }
 }
 

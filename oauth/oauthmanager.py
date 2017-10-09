@@ -264,6 +264,88 @@ class GitHubOauthManager(BaseOauthManager):
             return None
 
 
+class FaceBookOauthManager(BaseOauthManager):
+    AUTH_URL = 'https://www.facebook.com/v2.10/dialog/oauth'
+    TOKEN_URL = 'https://graph.facebook.com/v2.10/oauth/access_token'
+    API_URL = 'https://graph.facebook.com/me'
+    ICON_NAME = 'facebook'
+
+    def __init__(self, access_token=None, openid=None):
+        self.client_id = settings.OAHUTH['facebook']['appkey']
+        self.client_secret = settings.OAHUTH['facebook']['appsecret']
+        self.callback_url = settings.OAHUTH['facebook']['callbackurl']
+        super(FaceBookOauthManager, self).__init__(access_token=access_token, openid=openid)
+
+    def get_authorization_url(self, nexturl='/'):
+        params = {
+            'client_id': self.client_id,
+            'response_type': 'code',
+            'redirect_uri': self.callback_url,  # + '&next_url=' + nexturl,
+            'scope': 'email,public_profile'
+        }
+        url = self.AUTH_URL + "?" + urllib.parse.urlencode(params)
+        return url
+
+    def get_access_token_by_code(self, code):
+        params = {
+            'client_id': self.client_id,
+            'client_secret': self.client_secret,
+            # 'grant_type': 'authorization_code',
+            'code': code,
+
+            'redirect_uri': self.callback_url
+        }
+        rsp = self.do_post(self.TOKEN_URL, params)
+
+        try:
+            obj = json.loads(rsp)
+            token = str(obj['access_token'])
+            self.access_token = token
+            return self.access_token
+        except:
+            return None
+
+    def get_oauth_userinfo(self):
+        params = {
+            'access_token': self.access_token,
+            'fields': 'id,name,picture,email'
+        }
+        try:
+            rsp = self.do_get(self.API_URL, params)
+            datas = json.loads(rsp)
+            user = OAuthUser()
+            user.nikename = datas['name']
+            user.openid = datas['id']
+            user.type = 'facebook'
+            user.token = self.access_token
+            if datas['email']:
+                user.email = datas['email']
+            if datas['picture'] and datas['picture']['data'] and datas['picture']['data']['url']:
+                user.picture = str(datas['picture']['data']['url'])
+            return user
+        except Exception as e:
+            logger.warn(e)
+            return None
+
+        """
+        params = {
+            'input_token': self.access_token,
+            'access_token': self.client_id + '|' + self.client_secret
+        }
+        url = 'https://graph.facebook.com/debug_token'  # + urllib.parse.urlencode(params)
+        rsp = self.do_get(url, params)
+        try:
+            obj = json.loads(rsp)
+            userid = str(obj["data"]["user_id"])
+            url = 'https://graph.facebook.com/v2.6/' + userid
+            params = {'access_token': self.access_token}
+            rsp = self.do_get(url, params)
+            print(rsp)
+        except:
+            pass
+        """
+
+
 def get_oauth_apps():
     applications = BaseOauthManager.__subclasses__()
     return list(map(lambda x: x(), applications))

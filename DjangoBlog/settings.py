@@ -217,6 +217,11 @@ OAHUTH = {
         'appkey': os.environ.get('GITHUB_APP_KEY'),
         'appsecret': os.environ.get('GITHUB_APP_SECRET'),
         'callbackurl': 'http://www.lylinux.net/oauth/authorize?type=github'
+    },
+    'facebook': {
+        'appkey': os.environ.get('FACEBOOK_APP_KEY'),
+        'appsecret': os.environ.get('FACEBOOK_APP_SECRET'),
+        'callbackurl': 'http://www.lylinux.net/oauth/authorize?type=facebook'
     }
 }
 
