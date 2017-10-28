@@ -5,6 +5,8 @@ from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 import datetime
 from accounts.models import BlogUser
+from comments.templatetags.comments_tags import *
+from DjangoBlog.utils import get_max_articleid_commentid
 
 
 # Create your tests here.
@@ -59,3 +61,36 @@ class CommentsTest(TestCase):
 
         article = Article.objects.get(pk=article.pk)
         self.assertEqual(len(article.comment_list()), 1)
+        parent_comment_id = article.comment_list()[0].id
+
+        response = self.client.post(commenturl,
+                                    {
+                                        'body': '''
+                                        # Title1  
+        
+        ```python
+        import os
+        ```  
+        
+        [url](https://www.lylinux.org/)  
+          
+        [ddd](http://www.baidu.com)  
+        
+        
+        ''',
+                                        'email': user.email,
+                                        'name': user.username,
+                                        'parent_comment_id': parent_comment_id
+                                    })
+
+        self.assertEqual(response.status_code, 302)
+
+        article = Article.objects.get(pk=article.pk)
+        self.assertEqual(len(article.comment_list()), 2)
+        comment = Comment.objects.get(id=parent_comment_id)
+        tree = parse_commenttree(article.comment_list(), comment)
+        self.assertEqual(len(tree), 1)
+        data = show_comment_item(comment, True)
+        self.assertIsNotNone(data)
+        s = get_max_articleid_commentid()
+        self.assertIsNotNone(s)

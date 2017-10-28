@@ -31,10 +31,10 @@ class TuLing():
         return rsp.content
 
     def getdata(self, content):
-        requrl = self.__build_req_url(content)
-        res = self.UserAgent(requrl).decode('utf-8')
-        logger.info(res)
         try:
+            requrl = self.__build_req_url(content)
+            res = self.UserAgent(requrl).decode('utf-8')
+
             jsons = json.loads(res, encoding='utf-8')
             if str(jsons["code"]) == '100000':
                 return jsons["text"]

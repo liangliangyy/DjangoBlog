@@ -7,6 +7,9 @@ from django.core.paginator import Paginator
 from blog.templatetags.blog_tags import load_pagination_info, load_articletags
 import datetime
 from accounts.models import BlogUser
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.conf import settings
+import os
 
 
 # Create your tests here.
@@ -20,6 +23,8 @@ class ArticleTest(TestCase):
         site = Site.objects.get_current().domain
         user = BlogUser.objects.get_or_create(email="liangliangyy@gmail.com", username="liangliangyy")[0]
         user.set_password("liangliangyy")
+        user.is_staff = True
+        user.is_superuser = True
         user.save()
         response = self.client.get(user.get_absolute_url())
         self.assertEqual(response.status_code, 200)
@@ -50,7 +55,8 @@ class ArticleTest(TestCase):
 
         response = self.client.get(article.get_absolute_url())
         self.assertEqual(response.status_code, 200)
-
+        from DjangoBlog.spider_notify import SpiderNotify
+        SpiderNotify.notify(article.get_absolute_url())
         response = self.client.get(tag.get_absolute_url())
         self.assertEqual(response.status_code, 200)
 
@@ -80,8 +86,11 @@ class ArticleTest(TestCase):
 
         f = BlogSearchForm()
         f.search()
+        self.client.login(username='liangliangyy', password='liangliangyy')
         from DjangoBlog.spider_notify import SpiderNotify
         SpiderNotify.baidu_notify([article.get_full_url()])
+        rsp = self.client.get('/refresh/')
+        self.assertEqual(rsp.status_code, 200)
 
     def test_validate_feed(self):
         user = BlogUser.objects.get_or_create(email="liangliangyy12@gmail.com", username="liangliangyy")[0]
@@ -93,3 +102,22 @@ class ArticleTest(TestCase):
 
         response = self.client.get('/sitemap.xml')
         self.assertEqual(response.status_code, 200)
+
+    def test_image(self):
+        import requests
+        rsp = requests.get('https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2909203028,3998034658&fm=96')
+        imagepath = os.path.join(settings.BASE_DIR, 'django.jpg')
+        with open(imagepath, 'wb') as file:
+            file.write(rsp.content)
+        with open(imagepath, 'rb') as file:
+            imgfile = SimpleUploadedFile('django.jpg', file.read(), content_type='image/jpg')
+            form_data = {'django.jpg': imgfile}
+            rsp = self.client.post('/upload', form_data, follow=True)
+
+            self.assertEqual(rsp.status_code, 200)
+        """
+        data = SimpleUploadedFile(imagepath, b'file_content', content_type='image/jpg')
+        rsp = self.client.post('/upload', {'django.jpg': data})
+        self.assertEqual(rsp.status_code, 200)
+        SimpleUploadedFile()
+        """
