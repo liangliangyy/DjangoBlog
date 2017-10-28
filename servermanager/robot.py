@@ -196,6 +196,8 @@ class MessageHandler():
             return "输入管理员密码"
         if self.userinfo.isAdmin and not self.userinfo.isPasswordSet:
             passwd = settings.WXADMIN
+            if settings.TESTING:
+                passwd='123'
             if passwd.upper() == get_md5(get_md5(info)).upper():
                 self.userinfo.isPasswordSet = True
                 self.savesession()

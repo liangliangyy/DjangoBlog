@@ -219,6 +219,8 @@ def fileupload(request):
 
             basepath = r'/var/www/resource/{type}/{timestr}'.format(
                 type='files' if not isimage else'image', timestr=timestr)
+            if settings.TESTING:
+                basepath = settings.BASE_DIR + '/uploads'
             url = 'https://resource.lylinux.net/{type}/{timestr}/{filename}'.format(
                 type='files' if not isimage else'image', timestr=timestr, filename=filename)
             if not os.path.exists(basepath):

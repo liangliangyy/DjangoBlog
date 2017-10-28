@@ -7,6 +7,7 @@ from blog.models import Category, Article
 from .robot import search, category, recents
 from werobot.messages.messages import TextMessage
 from .robot import MessageHandler, CommandHandler
+from servermanager.Api.commonapi import TuLing
 
 
 # Create your tests here.
@@ -14,6 +15,11 @@ class ServerManagerTest(TestCase):
     def setUp(self):
         self.client = Client()
         self.factory = RequestFactory()
+
+    def test_tuling(self):
+        t = TuLing()
+        content = t.getdata('test')
+        self.assertIsNotNone(content)
 
     def test_validate_comment(self):
         site = Site.objects.get_current().domain
@@ -63,4 +69,12 @@ class ServerManagerTest(TestCase):
         msghandler.userinfo.isAdmin = True
         msghandler.handler()
         s.content = 'y'
+        msghandler.handler()
+        s.content='idcard:12321233'
+        msghandler.handler()
+        s.content='weather:上海'
+        msghandler.handler()
+        s.content='admin'
+        msghandler.handler()
+        s.content='123'
         msghandler.handler()
