@@ -117,6 +117,7 @@ class WBOauthManager(BaseOauthManager):
 
             datas = json.loads(rsp)
             user = OAuthUser()
+            user.matedata = rsp
             user.picture = datas['avatar_large']
             user.nikename = datas['screen_name']
             user.openid = datas['id']
@@ -185,6 +186,7 @@ class GoogleOauthManager(BaseOauthManager):
 
             datas = json.loads(rsp)
             user = OAuthUser()
+            user.matedata = rsp
             user.picture = datas['picture']
             user.nikename = datas['name']
             user.openid = datas['sub']
@@ -255,6 +257,7 @@ class GitHubOauthManager(BaseOauthManager):
             user.openid = datas['id']
             user.type = 'github'
             user.token = self.access_token
+            user.matedata = rsp
             if datas['email']:
                 user.email = datas['email']
 
@@ -318,6 +321,7 @@ class FaceBookOauthManager(BaseOauthManager):
             user.openid = datas['id']
             user.type = 'facebook'
             user.token = self.access_token
+            user.matedata = rsp
             if datas['email']:
                 user.email = datas['email']
             if datas['picture'] and datas['picture']['data'] and datas['picture']['data']['url']:
@@ -326,24 +330,6 @@ class FaceBookOauthManager(BaseOauthManager):
         except Exception as e:
             logger.warn(e)
             return None
-
-        """
-        params = {
-            'input_token': self.access_token,
-            'access_token': self.client_id + '|' + self.client_secret
-        }
-        url = 'https://graph.facebook.com/debug_token'  # + urllib.parse.urlencode(params)
-        rsp = self.do_get(url, params)
-        try:
-            obj = json.loads(rsp)
-            userid = str(obj["data"]["user_id"])
-            url = 'https://graph.facebook.com/v2.6/' + userid
-            params = {'access_token': self.access_token}
-            rsp = self.do_get(url, params)
-            print(rsp)
-        except:
-            pass
-        """
 
 
 def get_oauth_apps():
