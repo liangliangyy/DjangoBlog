@@ -26,7 +26,6 @@ def oauthlogin(request):
     if not manager:
         return HttpResponseRedirect('/')
     nexturl = request.GET.get('next_url', None)
-    print(nexturl)
     if not nexturl or nexturl == '/login/':
         nexturl = '/'
     authorizeurl = manager.get_authorization_url(nexturl)

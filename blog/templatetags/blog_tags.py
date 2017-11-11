@@ -133,7 +133,7 @@ def load_sidebar(user):
     increment = 5
     tags = Tag.objects.all()
     sidebar_tags = None
-    if tags:
+    if tags and len(tags) > 0:
         s = list(map(lambda t: (t, t.get_article_count()), tags))
         count = sum(map(lambda t: t[1], s))
         dd = count / len(tags)

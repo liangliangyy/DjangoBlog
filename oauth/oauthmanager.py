@@ -96,7 +96,6 @@ class WBOauthManager(BaseOauthManager):
             'redirect_uri': self.callback_url
         }
         rsp = self.do_post(self.TOKEN_URL, params)
-        print(rsp)
         try:
             obj = json.loads(rsp)
             self.access_token = str(obj['access_token'])
