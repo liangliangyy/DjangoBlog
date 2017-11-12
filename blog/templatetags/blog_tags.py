@@ -25,7 +25,8 @@ import hashlib
 import urllib
 from comments.models import Comment
 from DjangoBlog.utils import cache_decorator, logger
-from DjangoBlog.utils import cache
+from django.contrib.auth import get_user_model
+from oauth.models import OAuthUser
 
 register = template.Library()
 
@@ -237,6 +238,11 @@ def load_article_detail(article, isindex, user):
 @register.filter
 def gravatar_url(email, size=40):
     """获得gravatar头像"""
+    usermodels = OAuthUser.objects.filter(email=email)
+    if usermodels:
+        o = list(filter(lambda x: x.picture is not None, usermodels))
+        if o:
+            return o[0].picture
     email = email.encode('utf-8')
 
     default = "https://resource.lylinux.net/image/2017/03/26/120117.jpg".encode('utf-8')
