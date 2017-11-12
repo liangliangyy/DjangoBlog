@@ -91,6 +91,9 @@ class ArticleTest(TestCase):
         SpiderNotify.baidu_notify([article.get_full_url()])
         rsp = self.client.get('/refresh/')
         self.assertEqual(rsp.status_code, 200)
+        from blog.templatetags.blog_tags import gravatar_url, gravatar
+        u = gravatar_url('liangliangyy@gmail.com')
+        u = gravatar('liangliangyy@gmail.com')
 
     def test_validate_feed(self):
         user = BlogUser.objects.get_or_create(email="liangliangyy12@gmail.com", username="liangliangyy")[0]
