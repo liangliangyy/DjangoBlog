@@ -9,7 +9,7 @@
 - 支持文章全文搜索。
 - 完整的评论功能，包括发表回复评论，以及评论的邮件提醒，支持`Markdown`。
 - 侧边栏功能，最新文章，最多阅读，标签云等。
-- 支持Oauth登陆，现已有Google,GitHub,微博登录。
+- 支持Oauth登陆，现已有Google,GitHub,facebook,微博登录。
 - 支持`Memcache`缓存，支持缓存自动刷新。
 - 简单的SEO功能，新建文章等会自动通知Google和百度。
 - 集成了简单的图床功能。
@@ -78,7 +78,11 @@ windows电脑：
 终端下执行:  
 
     ./manage.py create_testdata
+### 收集静态文件
+终端下执行:  
 
+    ./manage.py collectstatic --noinput
+    ./manage.py compress --force
 ### 开始运行：
  执行：  
  `./manage.py runserver`
