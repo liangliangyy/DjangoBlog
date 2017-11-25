@@ -254,3 +254,19 @@ def refresh_memcache(request):
             return HttpResponseForbidden()
     except Exception as e:
         return HttpResponse(e)
+
+
+def page_not_found_view(request):
+    url = request.get_full_path()
+    return render(request, 'blog/error_page.html',
+                  {'message': '哎呀，您访问的地址 ' + url + ' 是一个未知的地方。请点击首页看看别的？', 'statuscode': '404'})
+
+
+def server_error_view(request):
+    return render(request, 'blog/error_page.html',
+                  {'message': '哎呀，出错了，我已经收集到了错误信息，之后会抓紧抢修，请点击首页看看别的？', 'statuscode': '500'})
+
+
+def permission_denied_view(request):
+    return render(request, 'blog/error_page.html',
+                  {'message': '哎呀，您没有权限访问此页面，请点击首页看看别的？', 'statuscode': '403'})
