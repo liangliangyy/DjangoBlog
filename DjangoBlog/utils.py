@@ -107,7 +107,7 @@ def block_code(text, lang, inlinestyles=False, linenos=False):
 
 
 class BlogMarkDownRenderer(mistune.Renderer):
-    def block_code(self, text, lang):
+    def block_code(self, text, lang=None):
         # renderer has an options
         inlinestyles = self.options.get('inlinestyles')
         linenos = self.options.get('linenos')

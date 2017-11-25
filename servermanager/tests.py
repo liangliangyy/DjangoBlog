@@ -63,10 +63,9 @@ class ServerManagerTest(TestCase):
         s.source = 'u'
         s.content = 'test'
         msghandler = MessageHandler(s, {})
-        d = msghandler.is_admin
-        e = msghandler.is_password_set
-        msghandler.userinfo.isPasswordSet = True
-        msghandler.userinfo.isAdmin = True
+
+        #msghandler.userinfo.isPasswordSet = True
+        #msghandler.userinfo.isAdmin = True
         msghandler.handler()
         s.content = 'y'
         msghandler.handler()
@@ -77,4 +76,7 @@ class ServerManagerTest(TestCase):
         s.content='admin'
         msghandler.handler()
         s.content='123'
+        msghandler.handler()
+
+        s.content = 'exit'
         msghandler.handler()
