@@ -124,3 +124,6 @@ class ArticleTest(TestCase):
         self.assertEqual(rsp.status_code, 200)
         SimpleUploadedFile()
         """
+    def test_errorpage(self):
+        self.client.get('/eee')
+        self.client.get('/refresh_memcache')

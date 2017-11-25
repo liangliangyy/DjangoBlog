@@ -31,6 +31,9 @@ sitemaps = {
     'static': StaticViewSitemap
 }
 
+handler404 = 'blog.views.page_not_found_view'
+handler500 = 'blog.views.server_error_view'
+
 urlpatterns = [
                   url(r'^admin/', admin.site.urls),
                   url(r'', include('blog.urls', namespace='blog', app_name='blog')),
