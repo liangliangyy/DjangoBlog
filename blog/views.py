@@ -84,7 +84,7 @@ class ArticleDetailView(DetailView):
     pk_url_kwarg = 'article_id'
     context_object_name = "article"
 
-    def get_object(self):
+    def get_object(self, queryset=None):
         obj = super(ArticleDetailView, self).get_object()
         obj.viewed()
         self.object = obj
