@@ -19,7 +19,7 @@
 - 集成了微信公众号功能，现在可以使用微信公众号来管理你的vps了。
 ## 安装
 使用pip安装：  
-`pip install -r requirements.txt`
+`pip install -Ur requirements.txt`
 
 如果你没有pip，使用如下方式安装：    
 OS X / Linux 电脑，终端下执行:  
