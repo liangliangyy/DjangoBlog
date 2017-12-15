@@ -42,8 +42,8 @@ urlpatterns = [
     url(r'^author/(?P<author_name>\w+)/(?P<page>\d+).html$', views.AuthorDetailView.as_view(),
         name='author_detail_page'),
 
-    url(r'^tag/(?P<tag_name>.+).html$', views.TagDetailView.as_view(), name='tag_detail'),
-    url(r'^tag/(?P<tag_name>.+)/(?P<page>\d+).html$', views.TagDetailView.as_view(), name='tag_detail_page'),
+    url(r'^tag/(?P<tag_name>[\w-]+).html$', views.TagDetailView.as_view(), name='tag_detail'),
+    url(r'^tag/(?P<tag_name>[\w-]+)/(?P<page>\d+).html$', views.TagDetailView.as_view(), name='tag_detail_page'),
 
     url(r'^upload', views.fileupload, name='upload'),
     url(r'^refresh', views.refresh_memcache, name='refresh')
