@@ -73,15 +73,15 @@ class ArticleTest(TestCase):
         self.assertIsNotNone(s)
 
         p = Paginator(Tag.objects.all(), 2)
-        s = load_pagination_info(p.page(1), '分类标签归档', 'tagname')
+        s = load_pagination_info(p.page(1), '分类标签归档', tag.slug)
         self.assertIsNotNone(s)
 
         p = Paginator(BlogUser.objects.all(), 2)
-        s = load_pagination_info(p.page(1), '作者文章归档', 'username')
+        s = load_pagination_info(p.page(1), '作者文章归档', 'liangliangyy')
         self.assertIsNotNone(s)
 
         p = Paginator(Category.objects.all(), 2)
-        s = load_pagination_info(p.page(1), '分类目录归档', 'categoryname')
+        s = load_pagination_info(p.page(1), '分类目录归档', category.slug)
         self.assertIsNotNone(s)
 
         f = BlogSearchForm()
