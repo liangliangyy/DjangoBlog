@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Article, Category, Tag, Links
+from .models import Article, Category, Tag, Links, SideBar
 from pagedown.widgets import AdminPagedownWidget
 from django import forms
 from django.contrib.auth import get_user_model
@@ -64,8 +64,13 @@ class LinksAdmin(admin.ModelAdmin):
     exclude = ('last_mod_time', 'created_time')
 
 
+class SideBarAdmin(admin.ModelAdmin):
+    list_display = ('name', 'content', 'is_enable', 'sequence')
+    exclude = ('last_mod_time', 'created_time')
+
+
 admin.site.register(Article, ArticlelAdmin)
-# admin.site.register(BlogPage, ArticlelAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(Links, LinksAdmin)
+admin.site.register(SideBar, SideBarAdmin)
