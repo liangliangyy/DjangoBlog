@@ -1,5 +1,5 @@
 from django.test import Client, RequestFactory, TestCase
-from blog.models import Article, Category, Tag
+from blog.models import Article, Category, Tag, SideBar
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
 from blog.forms import BlogSearchForm
@@ -29,6 +29,13 @@ class ArticleTest(TestCase):
         response = self.client.get(user.get_absolute_url())
         self.assertEqual(response.status_code, 200)
 
+        s = SideBar()
+        s.sequence = 1
+        s.name = 'test'
+        s.content = 'test content'
+        s.is_enable = True
+        s.save()
+
         category = Category()
         category.name = "category"
         category.created_time = datetime.datetime.now()
@@ -53,6 +60,17 @@ class ArticleTest(TestCase):
         article.save()
         self.assertEqual(1, article.tags.count())
 
+        for i in range(20):
+            article = Article()
+            article.title = "nicetitle" + str(i)
+            article.body = "nicetitle" + str(i)
+            article.author = user
+            article.category = category
+            article.type = 'a'
+            article.status = 'p'
+            article.save()
+            article.tags.add(tag)
+            article.save()
         response = self.client.get(article.get_absolute_url())
         self.assertEqual(response.status_code, 200)
         from DjangoBlog.spider_notify import SpiderNotify
@@ -69,20 +87,16 @@ class ArticleTest(TestCase):
         self.assertIsNotNone(s)
 
         p = Paginator(Article.objects.all(), 2)
-        s = load_pagination_info(p.page(1), '', '')
-        self.assertIsNotNone(s)
+        self.__check_pagination__(p, '', '')
 
-        p = Paginator(Tag.objects.all(), 2)
-        s = load_pagination_info(p.page(1), '分类标签归档', tag.slug)
-        self.assertIsNotNone(s)
+        p = Paginator(Article.objects.filter(tags=tag), 2)
+        self.__check_pagination__(p, '分类标签归档', tag.slug)
 
-        p = Paginator(BlogUser.objects.all(), 2)
-        s = load_pagination_info(p.page(1), '作者文章归档', 'liangliangyy')
-        self.assertIsNotNone(s)
+        p = Paginator(Article.objects.filter(author__username='liangliangyy'), 2)
+        self.__check_pagination__(p, '作者文章归档', 'liangliangyy')
 
-        p = Paginator(Category.objects.all(), 2)
-        s = load_pagination_info(p.page(1), '分类目录归档', category.slug)
-        self.assertIsNotNone(s)
+        p = Paginator(Article.objects.filter(category=category), 2)
+        self.__check_pagination__(p, '分类目录归档', category.slug)
 
         f = BlogSearchForm()
         f.search()
@@ -94,6 +108,21 @@ class ArticleTest(TestCase):
         from blog.templatetags.blog_tags import gravatar_url, gravatar
         u = gravatar_url('liangliangyy@gmail.com')
         u = gravatar('liangliangyy@gmail.com')
+
+    def __check_pagination__(self, p, type, value):
+        s = load_pagination_info(p.page(1), type, value)
+        self.assertIsNotNone(s)
+        response = self.client.get(s['previous_url'])
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get(s['next_url'])
+        self.assertEqual(response.status_code, 200)
+
+        s = load_pagination_info(p.page(2), type, value)
+        self.assertIsNotNone(s)
+        response = self.client.get(s['previous_url'])
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get(s['next_url'])
+        self.assertEqual(response.status_code, 200)
 
     def test_validate_feed(self):
         user = BlogUser.objects.get_or_create(email="liangliangyy12@gmail.com", username="liangliangyy")[0]
@@ -124,6 +153,7 @@ class ArticleTest(TestCase):
         self.assertEqual(rsp.status_code, 200)
         SimpleUploadedFile()
         """
+
     def test_errorpage(self):
         self.client.get('/eee')
         self.client.get('/refresh_memcache')

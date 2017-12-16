@@ -211,3 +211,21 @@ class Links(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class SideBar(models.Model):
+    """侧边栏,可以展示一些html内容"""
+    name = models.CharField('标题', max_length=100)
+    content = models.TextField("内容")
+    sequence = models.IntegerField('排序', unique=True)
+    is_enable = models.BooleanField('是否启用', default=True)
+    created_time = models.DateTimeField('创建时间', default=now)
+    last_mod_time = models.DateTimeField('修改时间', default=now)
+
+    class Meta:
+        ordering = ['sequence']
+        verbose_name = '侧边栏'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.name

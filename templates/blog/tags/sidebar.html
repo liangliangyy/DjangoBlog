@@ -8,6 +8,17 @@
             </div>
         </form>
     </aside>
+    {% if extra_sidebars %}
+        {% for sidebar in extra_sidebars %}
+
+            <aside class="widget_text widget widget_custom_html"><h3 class="widget-title">
+                {{ sidebar.name }}</h3>
+                <div class="textwidget custom-html-widget">
+                    {{ sidebar.content }}
+                </div>
+            </aside>
+        {% endfor %}
+    {% endif %}
     {% if most_read_articles %}
 
         <aside id="views-4" class="widget widget_views"><h3 class="widget-title">Views</h3>

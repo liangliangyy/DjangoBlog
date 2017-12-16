@@ -19,7 +19,7 @@ from django.template.defaultfilters import stringfilter
 from django.utils.safestring import mark_safe
 import random
 from django.core.urlresolvers import reverse
-from blog.models import Article, Category, Tag, Links
+from blog.models import Article, Category, Tag, Links, SideBar
 from django.utils.encoding import force_text
 from django.shortcuts import get_object_or_404
 import hashlib
@@ -125,6 +125,7 @@ def load_sidebar(user):
     logger.info('load sidebar')
     recent_articles = Article.objects.filter(status='p')[:settings.SIDEBAR_ARTICLE_COUNT]
     sidebar_categorys = Category.objects.all()
+    extra_sidebars = SideBar.objects.filter(is_enable=True).order_by('sequence')
     most_read_articles = Article.objects.filter(status='p').order_by('-views')[:settings.SIDEBAR_ARTICLE_COUNT]
     dates = Article.objects.datetimes('created_time', 'month', order='DESC')
     links = Links.objects.all()
@@ -150,7 +151,8 @@ def load_sidebar(user):
         'sidebar_comments': commment_list,
         'user': user,
         'show_adsense': show_adsense,
-        'sidebar_tags': sidebar_tags
+        'sidebar_tags': sidebar_tags,
+        'extra_sidebars': extra_sidebars
     }
 
 
