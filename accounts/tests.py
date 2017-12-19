@@ -56,7 +56,14 @@ class AccountTest(TestCase):
         user.is_superuser = True
         user.is_staff = True
         user.save()
+        category = Category()
+        category.name = "categoryaaa"
+        category.created_time = datetime.datetime.now()
+        category.last_mod_time = datetime.datetime.now()
+        category.save()
+
         article = Article()
+        article.category = category
         article.title = "nicetitle333"
         article.body = "nicecontentttt"
         article.author = user
