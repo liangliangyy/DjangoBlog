@@ -33,13 +33,38 @@ class ArticleForm(forms.ModelForm):
         fields = '__all__'
 
 
+def makr_article_publish(modeladmin, request, queryset):
+    queryset.update(status='p')
+
+
+def draft_article(modeladmin, request, queryset):
+    queryset.update(status='d')
+
+
+def close_article_commentstatus(modeladmin, request, queryset):
+    queryset.update(comment_status='c')
+
+
+def open_article_commentstatus(modeladmin, request, queryset):
+    queryset.update(comment_status='o')
+
+
+makr_article_publish.short_description = '发布选中文章'
+draft_article.short_description = '选中文章设置为草稿'
+close_article_commentstatus.short_description = '关闭文章评论'
+open_article_commentstatus.short_description = '打开文章评论'
+
+
 class ArticlelAdmin(admin.ModelAdmin):
+    search_fields = ('body',)
     form = ArticleForm
     list_display = ('id', 'title', 'author', 'created_time', 'views', 'status', 'type')
     list_display_links = ('id', 'title')
     list_filter = (ArticleListFilter, 'status', 'type', 'category', 'tags')
     filter_horizontal = ('tags',)
     exclude = ('slug', 'created_time', 'last_mod_time')
+    view_on_site = True
+    actions = [makr_article_publish, draft_article, close_article_commentstatus, open_article_commentstatus]
 
     def get_form(self, request, obj=None, **kwargs):
         form = super(ArticlelAdmin, self).get_form(request, obj, **kwargs)
@@ -50,6 +75,15 @@ class ArticlelAdmin(admin.ModelAdmin):
         super(ArticlelAdmin, self).save_model(request, obj, form, change)
         from DjangoBlog.utils import cache
         cache.clear()
+
+    def get_view_on_site_url(self, obj=None):
+        if obj:
+            url = obj.get_full_url()
+            return url
+        else:
+            from django.contrib.sites.models import Site
+            site = Site.objects.get_current().domain
+            return site
 
 
 class TagAdmin(admin.ModelAdmin):

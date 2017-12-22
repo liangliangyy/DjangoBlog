@@ -30,7 +30,7 @@ def parse_commenttree(commentlist, comment):
     datas = []
 
     def parse(c):
-        childs = commentlist.filter(parent_comment=c)
+        childs = commentlist.filter(parent_comment=c, is_enable=True)
         for child in childs:
             datas.append(child)
             parse(child)

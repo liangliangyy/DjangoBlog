@@ -129,7 +129,7 @@ def load_sidebar(user):
     most_read_articles = Article.objects.filter(status='p').order_by('-views')[:settings.SIDEBAR_ARTICLE_COUNT]
     dates = Article.objects.datetimes('created_time', 'month', order='DESC')
     links = Links.objects.all()
-    commment_list = Comment.objects.order_by('-id')[:settings.SIDEBAR_COMMENT_COUNT]
+    commment_list = Comment.objects.filter(is_enable=True).order_by('-id')[:settings.SIDEBAR_COMMENT_COUNT]
     show_adsense = settings.SHOW_GOOGLE_ADSENSE
     # 标签云 计算字体大小
     # 根据总数计算出平均值 大小为 (数目/平均值)*步长
