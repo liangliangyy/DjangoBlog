@@ -54,12 +54,12 @@ def authorize(request):
             import datetime
             user.nikename = "djangoblog" + datetime.datetime.now().strftime('%y%m%d%I%M%S')
         try:
-            token = user.token
             user = OAuthUser.objects.get(type=type, openid=user.openid)
-            if token:
-                user.token = token
         except ObjectDoesNotExist:
             pass
+        # facebook的token过长
+        if type == 'facebook':
+            user.token = ''
         email = user.email
         if email:
             author = None
