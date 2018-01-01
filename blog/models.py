@@ -10,7 +10,7 @@ from django.utils.timezone import now
 
 
 class BaseModel(models.Model):
-    slug = models.SlugField(default='no-slug', max_length=60, blank=True)
+    slug = models.SlugField(default='no-slug', max_length=160, blank=True)
     created_time = models.DateTimeField('创建时间', default=now)
     last_mod_time = models.DateTimeField('修改时间', default=now)
 
