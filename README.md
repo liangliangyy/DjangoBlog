@@ -1,8 +1,8 @@
 # DjangoBlog
 
-基于`python3.5`和`Django1.10`的博客。   
+基于`python3.5`和`Django2.0`的博客。   
 
-[![Build Status](https://travis-ci.org/liangliangyy/DjangoBlog.svg?branch=master)](https://travis-ci.org/liangliangyy/DjangoBlog) [![Coverage Status](https://coveralls.io/repos/github/liangliangyy/DjangoBlog/badge.svg?branch=master)](https://coveralls.io/github/liangliangyy/DjangoBlog?branch=master) [![Requirements Status](https://requires.io/github/liangliangyy/DjangoBlog/requirements.svg?branch=master)](https://requires.io/github/liangliangyy/DjangoBlog/requirements/?branch=master)  [![license](https://img.shields.io/github/license/liangliangyy/djangoblog.svg)]() [![GitHub release](https://img.shields.io/github/release/liangliangyy/djangoblog.svg)]() [![python3.5](https://img.shields.io/badge/python-3.5-brightgreen.svg)]() [![django1.10](https://img.shields.io/badge/django-1.10-brightgreen.svg)]()     
+[![Build Status](https://travis-ci.org/liangliangyy/DjangoBlog.svg?branch=master)](https://travis-ci.org/liangliangyy/DjangoBlog) [![Coverage Status](https://coveralls.io/repos/github/liangliangyy/DjangoBlog/badge.svg?branch=master)](https://coveralls.io/github/liangliangyy/DjangoBlog?branch=master) [![Requirements Status](https://requires.io/github/liangliangyy/DjangoBlog/requirements.svg?branch=master)](https://requires.io/github/liangliangyy/DjangoBlog/requirements/?branch=master)  [![license](https://img.shields.io/github/license/liangliangyy/djangoblog.svg)]() [![GitHub release](https://img.shields.io/github/release/liangliangyy/djangoblog.svg)]() [![python3.5](https://img.shields.io/badge/python-3.5-brightgreen.svg)]() [![django1.10](https://img.shields.io/badge/django-2.0-brightgreen.svg)]()     
 
 ## 主要功能：
 - 文章，页面，分类目录，标签的添加，删除，编辑等。文章及页面支持`Markdown`，支持代码高亮。
@@ -14,7 +14,6 @@
 - 简单的SEO功能，新建文章等会自动通知Google和百度。
 - 集成了简单的图床功能。
 - 集成`django-compressor`，自动压缩`css`，`js`。
-- 基于`python3`,支持`Django`多版本。`Django`的1.8,1.9,1.10,1.11均测试通过。
 - 网站异常邮件提醒，若有未捕捉到的异常会自动发送提醒邮件。
 - 集成了微信公众号功能，现在可以使用微信公众号来管理你的vps了。
 ## 安装

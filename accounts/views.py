@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.views.generic import FormView, RedirectView
 from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.views.decorators.csrf import csrf_protect

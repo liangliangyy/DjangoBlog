@@ -22,7 +22,7 @@ from comments.forms import CommentForm
 register = template.Library()
 
 
-@register.assignment_tag
+@register.simple_tag
 def parse_commenttree(commentlist, comment):
     """获得当前评论子评论的列表
         用法: {% parse_commenttree article_comments comment as childcomments %}

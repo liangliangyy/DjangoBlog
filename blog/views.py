@@ -218,11 +218,11 @@ def fileupload(request):
             isimage = len([i for i in imgextensions if fname.find(i) >= 0]) > 0
 
             basepath = r'/var/www/resource/{type}/{timestr}'.format(
-                type='files' if not isimage else'image', timestr=timestr)
+                type='files' if not isimage else 'image', timestr=timestr)
             if settings.TESTING:
                 basepath = settings.BASE_DIR + '/uploads'
             url = 'https://resource.lylinux.net/{type}/{timestr}/{filename}'.format(
-                type='files' if not isimage else'image', timestr=timestr, filename=filename)
+                type='files' if not isimage else 'image', timestr=timestr, filename=filename)
             if not os.path.exists(basepath):
                 os.makedirs(basepath)
             savepath = os.path.join(basepath, filename)
@@ -256,17 +256,23 @@ def refresh_memcache(request):
         return HttpResponse(e)
 
 
-def page_not_found_view(request):
+def page_not_found_view(request, exception):
+    if exception:
+        logger.error(exception)
     url = request.get_full_path()
     return render(request, 'blog/error_page.html',
                   {'message': '哎呀，您访问的地址 ' + url + ' 是一个未知的地方。请点击首页看看别的？', 'statuscode': '404'})
 
 
-def server_error_view(request):
+def server_error_view(request, exception):
+    if exception:
+        logger.error(exception)
     return render(request, 'blog/error_page.html',
                   {'message': '哎呀，出错了，我已经收集到了错误信息，之后会抓紧抢修，请点击首页看看别的？', 'statuscode': '500'})
 
 
-def permission_denied_view(request):
+def permission_denied_view(request, exception):
+    if exception:
+        logger.error(exception)
     return render(request, 'blog/error_page.html',
                   {'message': '哎呀，您没有权限访问此页面，请点击首页看看别的？', 'statuscode': '403'})

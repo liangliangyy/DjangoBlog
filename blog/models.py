@@ -1,5 +1,5 @@
 from django.db import models
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.conf import settings
 from uuslug import slugify
 
@@ -125,7 +125,7 @@ class Article(BaseModel):
 class Category(BaseModel):
     """文章分类"""
     name = models.CharField('分类名', max_length=30, unique=True)
-    parent_category = models.ForeignKey('self', verbose_name="父级分类", blank=True, null=True)
+    parent_category = models.ForeignKey('self', verbose_name="父级分类", blank=True, null=True, on_delete=models.CASCADE)
 
     class Meta:
         ordering = ['name']

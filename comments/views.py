@@ -46,7 +46,7 @@ class CommentPostView(FormView):
 
         article_id = self.kwargs['article_id']
         article = Article.objects.get(pk=article_id)
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             email = form.cleaned_data['email']
             username = form.cleaned_data['name']
 
@@ -64,12 +64,8 @@ class CommentPostView(FormView):
         comment.save(True)
 
         from DjangoBlog.blog_signals import comment_save_signal
-        port = 80
-        try:
-            # django1.8 没有这个方法...
-            port = self.request.get_port()
-        except:
-            pass
+
+        port = self.request.get_port()
         username = self.request.user.username if self.request.user else ''
         comment_save_signal.send(sender=self.__class__, comment_id=comment.id, username=username, serverport=port)
         return HttpResponseRedirect("%s#div-comment-%d" % (article.get_absolute_url(), comment.pk))

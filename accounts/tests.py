@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
 import datetime
 from accounts.models import BlogUser
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 
 # Create your tests here.

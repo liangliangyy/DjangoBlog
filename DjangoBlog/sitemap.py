@@ -17,7 +17,7 @@ from django.contrib.sitemaps import Sitemap
 from blog.models import Article, Category, Tag
 from accounts.models import BlogUser
 from django.contrib.sitemaps import GenericSitemap
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 
 class StaticViewSitemap(Sitemap):

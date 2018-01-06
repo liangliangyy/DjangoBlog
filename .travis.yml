@@ -9,18 +9,12 @@ services:
 env:
   global:
     - DJANGO_SETTINGS_MODULE="travis_test.travis_settings"
-  matrix:
-   - DJANGO="Django==1.8"
-   - DJANGO="Django==1.9"
-   - DJANGO="Django==1.10"
-   - DJANGO="Django==1.11"
 branches:
     only:
         - master
 # command to install dependencies
 install:
   - pip install -r travis_test/requirements.txt
-  - pip install "$DJANGO"
   - pip install python-coveralls
   - pip install coverage
 before_script:

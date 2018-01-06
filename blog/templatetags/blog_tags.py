@@ -18,7 +18,7 @@ from django.conf import settings
 from django.template.defaultfilters import stringfilter
 from django.utils.safestring import mark_safe
 import random
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from blog.models import Article, Category, Tag, Links, SideBar
 from django.utils.encoding import force_text
 from django.shortcuts import get_object_or_404
@@ -266,7 +266,7 @@ def gravatar(email, size=40):
     return mark_safe('<img src="%s" height="%d" width="%d">' % (url, size, size))
 
 
-@register.assignment_tag
+@register.simple_tag
 def query(qs, **kwargs):
     """ template tag which allows queryset filtering. Usage:
           {% query books author=author as mybooks %}
@@ -275,3 +275,5 @@ def query(qs, **kwargs):
           {% endfor %}
     """
     return qs.filter(**kwargs)
+
+
