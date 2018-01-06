@@ -13,11 +13,12 @@
 @time: 2017/8/27 上午2:27
 """
 
-from django.conf.urls import url
+from django.urls import path
 from werobot.contrib.django import make_view
 from .robot import robot
 
+app_name = "servermanager"
 urlpatterns = [
-    url(r'^robot/', make_view(robot)),
+    path(r'robot', make_view(robot)),
 
 ]

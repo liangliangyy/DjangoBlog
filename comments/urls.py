@@ -13,10 +13,11 @@
 @time: 2016/11/12 下午3:03
 """
 
-from django.conf.urls import url
+from django.urls import path
 from . import views
 
+app_name = "comments"
 urlpatterns = [
-    # url(r'^postcomment/(?P<article_id>\d+)$', views.CommentPostView.as_view(), name='postcomment'),
-    url(r'^article/(?P<article_id>\d+)/postcomment$', views.CommentPostView.as_view(), name='postcomment'),
+    # url(r'^po456stcomment/(?P<article_id>\d+)$', views.CommentPostView.as_view(), name='postcomment'),
+    path('article/<int:article_id>/postcomment', views.CommentPostView.as_view(), name='postcomment'),
 ]
