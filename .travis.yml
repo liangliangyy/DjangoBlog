@@ -15,7 +15,6 @@ branches:
 # command to install dependencies
 install:
   - pip install -r travis_test/requirements.txt
-  - pip install "$DJANGO"
   - pip install python-coveralls
   - pip install coverage
 before_script:
