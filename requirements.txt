@@ -23,7 +23,7 @@ Pillow==5.0.0
 Pygments==2.2.0
 PyMySQL==0.8.0
 pyparsing==2.2.0
-python-memcached==1.58
+python-memcached==1.59
 python-slugify==1.2.4
 pytz==2017.3
 rcssmin==1.0.6
