@@ -21,6 +21,7 @@ from DjangoBlog.feeds import DjangoBlogFeed
 from django.views.decorators.cache import cache_page
 from django.conf import settings
 from django.conf.urls.static import static
+from DjangoBlog.admin_site import admin_site
 
 sitemaps = {
 
@@ -35,7 +36,7 @@ handler404 = 'blog.views.page_not_found_view'
 handler500 = 'blog.views.server_error_view'
 
 urlpatterns = [
-                  url(r'^admin/', admin.site.urls),
+                  url(r'^admin/', admin_site.urls),
                   url(r'', include('blog.urls', namespace='blog')),
 
                   url(r'', include('comments.urls', namespace='comment')),

@@ -119,6 +119,9 @@
             {% else %}
                 <li><a href="{% url "account:login" %}">登录</a>
             {% endif %}
+            {% if user.is_superuser %}
+                <li><a href="{% url "blog:refresh" %}" target="_blank">刷新缓存</a></li>
+            {% endif %}
             <li><a href="http://gitbook.lylinux.net" target="_blank" rel="nofollow">GitBook</a></li>
         </ul>
     </aside>

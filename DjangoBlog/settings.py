@@ -31,7 +31,8 @@ ALLOWED_HOSTS = ['www.lylinux.net', '127.0.0.1', 'example.com']
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    # 'django.contrib.admin',
+    'django.contrib.admin.apps.SimpleAdminConfig',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
