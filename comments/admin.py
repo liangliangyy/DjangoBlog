@@ -1,5 +1,4 @@
 from django.contrib import admin
-
 # Register your models here.
 from .models import Comment
 
@@ -22,6 +21,3 @@ class CommentAdmin(admin.ModelAdmin):
     list_filter = ('author', 'article', 'is_enable')
     exclude = ('created_time', 'last_mod_time')
     actions = [disable_commentstatus, enable_commentstatus]
-
-
-admin.site.register(Comment, CommentAdmin)
