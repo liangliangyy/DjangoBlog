@@ -94,14 +94,4 @@ windows电脑：
  ## 问题相关
 
  有任何问题欢迎提Issue,或者将问题描述发送至我邮箱 `liangliangyy#gmail.com`.我会尽快解答.推荐提交Issue方式.
-## 捐赠
-如果您觉得本项目对您有所帮助，欢迎您请我喝杯咖啡，您的支持是我最大的动力，您可以扫描下方二维码为我付款，谢谢。
-### 支付宝：
-<div  align="center">
-<img src="https://resource.lylinux.net/image/2017/12/16/IMG_0207.jpg" width="300" height="300" />
-</div>
 
-### 微信：
-<div  align="center">
-<img src="https://resource.lylinux.net/image/2017/12/16/IMG_0206.jpg" width="300" height="300" />
-</div>
