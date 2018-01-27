@@ -1,6 +1,6 @@
 appdirs==1.4.3
 bottle==0.12.13
-certifi==2017.11.5
+certifi==2018.1.18
 chardet==3.0.4
 coverage==4.4.2
 Django==2.0.1
@@ -9,7 +9,7 @@ django-autoslug==1.9.3
 django-compressor==2.2
 django-debug-toolbar==1.9.1
 django-haystack==2.6.1
-django-ipware==1.1.6
+django-ipware==2.0.1
 django-pagedown==1.0.4
 django-uuslug==1.1.8
 idna==2.6
@@ -17,7 +17,7 @@ jieba==0.39
 jsonpickle==0.9.5
 markdown2==2.3.5
 mistune==0.8.3
-olefile==0.44
+olefile==0.45.1
 packaging==16.8
 Pillow==5.0.0
 Pygments==2.2.0

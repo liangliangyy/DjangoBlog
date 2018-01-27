@@ -206,6 +206,20 @@ class TagDetailView(ArticleListView):
         return super(TagDetailView, self).get_context_data(**kwargs)
 
 
+class ArchivesView(ArticleListView):
+    page_type = '文章归档'
+    paginate_by = None
+    page_kwarg = None
+    template_name = 'blog/article_archives.html'
+
+    def get_queryset_data(self):
+        return Article.objects.filter(status='p').all()
+
+    def get_queryset_cache_key(self):
+        cache_key = 'archives'
+        return cache_key
+
+
 @csrf_exempt
 def fileupload(request):
     if request.method == 'POST':

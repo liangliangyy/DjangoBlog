@@ -9,6 +9,7 @@ import datetime
 from accounts.models import BlogUser
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.conf import settings
+from django.urls import reverse
 import os
 
 
@@ -85,6 +86,9 @@ class ArticleTest(TestCase):
         self.assertEqual(response.status_code, 200)
         s = load_articletags(article)
         self.assertIsNotNone(s)
+
+        response = self.client.get(reverse('blog:archives'))
+        self.assertEqual(response.status_code, 200)
 
         p = Paginator(Article.objects.all(), 2)
         self.__check_pagination__(p, '', '')
