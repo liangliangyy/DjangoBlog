@@ -2,8 +2,8 @@ appdirs==1.4.3
 bottle==0.12.13
 certifi==2018.1.18
 chardet==3.0.4
-coverage==4.4.2
-Django==2.0.1
+coverage==4.5
+Django==2.0.2
 django-appconf==1.0.2
 django-autoslug==1.9.3
 django-compressor==2.2
