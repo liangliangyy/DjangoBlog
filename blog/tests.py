@@ -87,6 +87,13 @@ class ArticleTest(TestCase):
         s = load_articletags(article)
         self.assertIsNotNone(s)
 
+        rsp = self.client.get('/refresh')
+        self.assertEqual(rsp.status_code, 302)
+
+        self.client.login(username='liangliangyy', password='liangliangyy')
+        rsp = self.client.get('/refresh')
+        self.assertEqual(rsp.status_code, 200)
+
         response = self.client.get(reverse('blog:archives'))
         self.assertEqual(response.status_code, 200)
 
@@ -107,8 +114,7 @@ class ArticleTest(TestCase):
         self.client.login(username='liangliangyy', password='liangliangyy')
         from DjangoBlog.spider_notify import SpiderNotify
         SpiderNotify.baidu_notify([article.get_full_url()])
-        rsp = self.client.get('/refresh/')
-        self.assertEqual(rsp.status_code, 200)
+
         from blog.templatetags.blog_tags import gravatar_url, gravatar
         u = gravatar_url('liangliangyy@gmail.com')
         u = gravatar('liangliangyy@gmail.com')
@@ -132,6 +138,10 @@ class ArticleTest(TestCase):
         user = BlogUser.objects.get_or_create(email="liangliangyy12@gmail.com", username="liangliangyy")[0]
         user.set_password("liangliangyy")
         user.save()
+        self.client.login(username='liangliangyy', password='liangliangyy')
+
+        rsp = self.client.get('/refresh')
+        self.assertEqual(rsp.status_code, 403)
 
         response = self.client.get('/feed/')
         self.assertEqual(response.status_code, 200)
@@ -159,5 +169,5 @@ class ArticleTest(TestCase):
         """
 
     def test_errorpage(self):
-        self.client.get('/eee')
-        self.client.get('/refresh_memcache')
+        rsp = self.client.get('/eee')
+        self.assertEqual(rsp.status_code, 404)
