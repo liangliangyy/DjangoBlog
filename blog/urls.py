@@ -34,7 +34,7 @@ urlpatterns = [
          name='category_detail_page'),
 
     path(r'author/<author_name>.html', views.AuthorDetailView.as_view(), name='author_detail'),
-    path(r'author/<author_name>/<int:page>).html', views.AuthorDetailView.as_view(),
+    path(r'author/<author_name>/<int:page>.html', views.AuthorDetailView.as_view(),
          name='author_detail_page'),
 
     path(r'tag/<slug:tag_name>.html', views.TagDetailView.as_view(), name='tag_detail'),
