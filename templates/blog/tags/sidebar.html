@@ -54,7 +54,7 @@
                 <span class="comment-author-link">
                     {{ c.author.username }}</span>
                         发表在《
-                        <a href="{{ c.article.get_absolute_url }}">{{ c.article.title }}</a>》
+                        <a href="{{ c.article.get_absolute_url }}#comment-{{ c.pk }}">{{ c.article.title }}</a>》
                     </li>
                 {% endfor %}
             </ul>
