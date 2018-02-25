@@ -12,6 +12,22 @@ class OwnTrackLogTest(TestCase):
         self.factory = RequestFactory()
 
     def test_own_track_log(self):
+        o = {
+            'tid': 12,
+            'lat': 123.123,
+            'lon': 134.341
+        }
+        self.client.post('/owntracks/logtracks', json.dumps(o), content_type='application/json')
+        length = len(OwnTrackLog.objects.all())
+        self.assertEqual(length, 1)
+
+        o = {
+            'tid': 12,
+            'lat': 123.123
+        }
+        self.client.post('/owntracks/logtracks', json.dumps(o), content_type='application/json')
+        length = len(OwnTrackLog.objects.all())
+        self.assertEqual(length, 1)
         user = BlogUser.objects.create_superuser(email="liangliangyy1@gmail.com",
                                                  username="liangliangyy1", password="liangliangyy1")
 

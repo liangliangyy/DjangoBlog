@@ -15,7 +15,7 @@ from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 def manage_owntrack_log(request):
     try:
-        s = json.loads(request.body)
+        s = json.loads(request.read().decode('utf-8'))
         tid = s['tid']
         lat = s['lat']
         lon = s['lon']
