@@ -10,6 +10,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+import requests
 
 
 @csrf_exempt
@@ -19,6 +20,7 @@ def manage_owntrack_log(request):
         tid = s['tid']
         lat = s['lat']
         lon = s['lon']
+
         logger.info('tid:{tid}.lat:{lat}.lon:{lon}'.format(tid=tid, lat=lat, lon=lon))
         if tid and lat and lon:
             m = OwnTrackLog()
@@ -39,6 +41,22 @@ def show_maps(request):
     return render(request, 'owntracks/show_maps.html')
 
 
+def convert_to_amap(locations):
+    datas = ';'.join(map(lambda x: str(x.lon) + ',' + str(x.lat), locations))
+
+    key = '8440a376dfc9743d8924bf0ad141f28e'
+    api = 'http://restapi.amap.com/v3/assistant/coordinate/convert'
+    query = {
+        'key': key,
+        'locations': datas,
+        'coordsys': 'gps'
+    }
+    rsp = requests.get(url=api, params=query)
+    logger.info(type(rsp.text))
+    result = json.loads(rsp.text)
+    return result['locations']
+
+
 @login_required
 def get_datas(request):
     models = OwnTrackLog.objects.all()
@@ -49,11 +67,9 @@ def get_datas(request):
             d = dict()
             d["name"] = tid
             paths = list()
-            for i in item:
-                path = list()
-                path.append(i.lon)
-                path.append(i.lat)
-                paths.append(path)
+            locations = convert_to_amap(item)
+            for i in locations.split(';'):
+                paths.append(i.split(','))
             d["path"] = paths
             result.append(d)
-    return JsonResponse(result, safe=False)
+        return JsonResponse(result, safe=False)
