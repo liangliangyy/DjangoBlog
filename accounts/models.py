@@ -8,7 +8,6 @@ from django.utils.timezone import now
 # Create your models here.
 
 class BlogUser(AbstractUser):
-    nickname = models.CharField('昵称', max_length=50, blank=True)
     nickname = models.CharField('昵称', max_length=100, blank=True)
     mugshot = models.ImageField('头像', upload_to='upload/mugshots', blank=True)
     created_time = models.DateTimeField('创建时间', default=now)

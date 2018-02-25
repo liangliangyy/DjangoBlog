@@ -19,6 +19,7 @@ from accounts.admin import *
 from oauth.admin import *
 from servermanager.admin import *
 from comments.admin import *
+from owntracks.admin import *
 
 
 class DjangoBlogAdminSite(AdminSite):
@@ -57,3 +58,5 @@ admin_site.register(BlogUser, BlogUserAdmin)
 admin_site.register(Comment, CommentAdmin)
 
 admin_site.register(OAuthUser, OAuthUserAdmin)
+
+admin_site.register(OwnTrackLog, OwnTrackLogsAdmin)
