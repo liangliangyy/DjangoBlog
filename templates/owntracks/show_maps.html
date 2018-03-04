@@ -98,7 +98,7 @@
 
         $('<div id="loadingTip">加载数据，请稍候...</div>').appendTo(document.body);
 
-        $.getJSON('/owntracks/get_datas', function (d) {
+        $.getJSON('/owntracks/get_datas?date={{ date }}', function (d) {
 
             if (!d || !d.length) {
                 $("#loadingTip").text("没有数据...")
@@ -120,7 +120,7 @@
             d.forEach(function (item, index) {
                 var navg1 = pathSimplifierIns.createPathNavigator(index, {
                     loop: true,
-                    speed: 1000000,
+                    speed: 1000,
                 });
 
                 navg1.start();

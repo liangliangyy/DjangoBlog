@@ -2,6 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 import json
+import datetime
 from itertools import groupby
 from django.http import HttpResponse
 from .models import OwnTrackLog
@@ -38,7 +39,27 @@ def manage_owntrack_log(request):
 
 @login_required
 def show_maps(request):
-    return render(request, 'owntracks/show_maps.html')
+    if request.user.is_superuser:
+        defaultdate = str(datetime.datetime.now().date())
+        date = request.GET.get('date', defaultdate)
+        context = {
+            'date': date
+        }
+        return render(request, 'owntracks/show_maps.html', context)
+    else:
+        from django.http import HttpResponseForbidden
+        return HttpResponseForbidden()
+
+
+@login_required
+def show_log_dates(request):
+    dates = OwnTrackLog.objects.values_list('created_time', flat=True)
+    results = list(set(map(lambda x: x.strftime('%Y-%m-%d'), dates)))
+
+    context = {
+        'results': results
+    }
+    return render(request, 'owntracks/show_log_dates.html', context)
 
 
 def convert_to_amap(locations):
@@ -52,14 +73,20 @@ def convert_to_amap(locations):
         'coordsys': 'gps'
     }
     rsp = requests.get(url=api, params=query)
-    logger.info(type(rsp.text))
+
     result = json.loads(rsp.text)
     return result['locations']
 
 
 @login_required
 def get_datas(request):
-    models = OwnTrackLog.objects.all()
+    now = datetime.datetime.now()
+    querydate = datetime.datetime(now.year, now.month, now.day, 0, 0, 0)
+    if request.GET.get('date', None):
+        date = list(map(lambda x: int(x), request.GET.get('date').split('-')))
+        querydate = datetime.datetime(date[0], date[1], date[2], 0, 0, 0)
+    nextdate = querydate + datetime.timedelta(days=1)
+    models = OwnTrackLog.objects.filter(created_time__range=(querydate, nextdate))
     result = list()
     if models and len(models):
         for tid, item in groupby(sorted(models, key=lambda k: k.tid), key=lambda k: k.tid):
@@ -72,4 +99,4 @@ def get_datas(request):
                 paths.append(i.split(','))
             d["path"] = paths
             result.append(d)
-        return JsonResponse(result, safe=False)
+    return JsonResponse(result, safe=False)
