@@ -54,7 +54,7 @@ def show_maps(request):
 @login_required
 def show_log_dates(request):
     dates = OwnTrackLog.objects.values_list('created_time', flat=True)
-    results = list(set(map(lambda x: x.strftime('%Y-%m-%d'), dates)))
+    results = list(sorted(set(map(lambda x: x.strftime('%Y-%m-%d'), dates))))
 
     context = {
         'results': results
@@ -63,7 +63,7 @@ def show_log_dates(request):
 
 
 def convert_to_amap(locations):
-    datas = ';'.join(map(lambda x: str(x.lon) + ',' + str(x.lat), locations))
+    datas = ';'.join(set(map(lambda x: str(x.lon) + ',' + str(x.lat), locations)))
 
     key = '8440a376dfc9743d8924bf0ad141f28e'
     api = 'http://restapi.amap.com/v3/assistant/coordinate/convert'
@@ -80,11 +80,14 @@ def convert_to_amap(locations):
 
 @login_required
 def get_datas(request):
-    now = datetime.datetime.now()
-    querydate = datetime.datetime(now.year, now.month, now.day, 0, 0, 0)
+    import django.utils.timezone
+    from django.utils.timezone import utc
+
+    now = django.utils.timezone.now().replace(tzinfo=utc)
+    querydate = django.utils.timezone.datetime(now.year, now.month, now.day, 0, 0, 0)
     if request.GET.get('date', None):
         date = list(map(lambda x: int(x), request.GET.get('date').split('-')))
-        querydate = datetime.datetime(date[0], date[1], date[2], 0, 0, 0)
+        querydate = django.utils.timezone.datetime(date[0], date[1], date[2], 0, 0, 0)
     nextdate = querydate + datetime.timedelta(days=1)
     models = OwnTrackLog.objects.filter(created_time__range=(querydate, nextdate))
     result = list()
