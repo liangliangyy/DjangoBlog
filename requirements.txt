@@ -3,7 +3,7 @@ bottle==0.12.13
 certifi==2018.1.18
 chardet==3.0.4
 coverage==4.5.1
-Django==2.0.2
+Django==2.0.3
 django-appconf==1.0.2
 django-autoslug==1.9.3
 django-compressor==2.2

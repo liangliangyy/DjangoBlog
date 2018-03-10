@@ -3,7 +3,7 @@ bottle==0.12.13
 certifi==2018.1.18
 chardet==3.0.4
 coverage==4.5.1
-Django==2.0.2
+Django==2.0.3
 django-appconf==1.0.2
 django-autoslug==1.9.3
 django-compressor==2.2
@@ -18,7 +18,7 @@ jsonpickle==0.9.6
 markdown2==2.3.5
 mistune==0.8.3
 olefile==0.45.1
-packaging==16.8
+packaging==17.1
 Pillow==5.0.0
 Pygments==2.2.0
 PyMySQL==0.8.0

@@ -51,6 +51,8 @@ def article_save_callback(sender, **kwargs):
 @receiver(comment_save_signal)
 def comment_save_callback(sender, **kwargs):
     from comments.models import Comment
+    if settings.DEBUG:
+        return
 
     serverport = kwargs['serverport']
     username = kwargs['username']
