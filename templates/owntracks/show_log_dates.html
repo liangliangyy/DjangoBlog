@@ -9,7 +9,7 @@
 <ul>
     {% for date in results %}
         <li>
-            <a href="{% url 'owntracks:show_maps' %}?date={{ date }}">{{ date }}</a>
+            <a href="{% url 'owntracks:show_maps' %}?date={{ date }}" target="_blank">{{ date }}</a>
         </li>
     {% endfor %}
 </ul>

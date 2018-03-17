@@ -3,6 +3,7 @@ from django.shortcuts import render
 # Create your views here.
 import json
 import datetime
+import itertools
 from itertools import groupby
 from django.http import HttpResponse
 from .models import OwnTrackLog
@@ -63,19 +64,26 @@ def show_log_dates(request):
 
 
 def convert_to_amap(locations):
-    datas = ';'.join(set(map(lambda x: str(x.lon) + ',' + str(x.lat), locations)))
+    convert_result = []
+    it = iter(locations)
 
-    key = '8440a376dfc9743d8924bf0ad141f28e'
-    api = 'http://restapi.amap.com/v3/assistant/coordinate/convert'
-    query = {
-        'key': key,
-        'locations': datas,
-        'coordsys': 'gps'
-    }
-    rsp = requests.get(url=api, params=query)
+    item = list(itertools.islice(it, 30))
+    while item:
+        datas = ';'.join(set(map(lambda x: str(x.lon) + ',' + str(x.lat), item)))
 
-    result = json.loads(rsp.text)
-    return result['locations']
+        key = '8440a376dfc9743d8924bf0ad141f28e'
+        api = 'http://restapi.amap.com/v3/assistant/coordinate/convert'
+        query = {
+            'key': key,
+            'locations': datas,
+            'coordsys': 'gps'
+        }
+        rsp = requests.get(url=api, params=query)
+        result = json.loads(rsp.text)
+        convert_result.append(result['locations'])
+        item = list(itertools.islice(it, 30))
+
+    return ";".join(convert_result)
 
 
 @login_required
@@ -97,7 +105,7 @@ def get_datas(request):
             d = dict()
             d["name"] = tid
             paths = list()
-            locations = convert_to_amap(item)
+            locations = convert_to_amap(sorted(item, key=lambda x: x.created_time))
             for i in locations.split(';'):
                 paths.append(i.split(','))
             d["path"] = paths
