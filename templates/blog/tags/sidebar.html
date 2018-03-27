@@ -1,3 +1,4 @@
+{% load blog_tags %}
 <div id="secondary" class="widget-area" role="complementary">
     <aside id="search-2" class="widget widget_search">
         <form role="search" method="get" id="searchform" class="searchform" action="/search">
@@ -14,7 +15,7 @@
             <aside class="widget_text widget widget_custom_html"><h3 class="widget-title">
                 {{ sidebar.name }}</h3>
                 <div class="textwidget custom-html-widget">
-                    {{ sidebar.content }}
+                    {{ sidebar.content|custom_markdown }}
                 </div>
             </aside>
         {% endfor %}
