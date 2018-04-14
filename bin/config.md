@@ -45,6 +45,7 @@ OAHUTH = {
 }
 ```
 将对应的appkey和appsecret修改为你自己的，将`callbackurl`的域名也修改为你的域名。
+## Update Oauth配置部分已经修改到配置表中
 
 ## owntracks：
 owntracks是一个位置追踪软件，可以定时的将你的坐标提交到你的服务器上，现在简单的支持owntracks功能，需要安装owntracks的app，然后将api地址设置为:

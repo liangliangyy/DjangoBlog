@@ -26,9 +26,9 @@ from django.contrib.sites.models import Site
 class DjangoBlogFeed(Feed):
     feed_type = Rss201rev2Feed
 
-    description = settings.SITE_DESCRIPTION
+    description = '大巧无工,重剑无锋.'
     feed_url = 'https://www.lylinux.net/feed'
-    title = "%s %s " % (settings.SITE_NAME, settings.SITE_DESCRIPTION)
+    title = "且听风吟 大巧无工,重剑无锋. "
     link = "https://www.lylinux.net"
 
     def author_name(self):
@@ -48,7 +48,7 @@ class DjangoBlogFeed(Feed):
 
     def feed_copyright(self):
         # print(Site.objects.get_current().name)
-        return "Copyright© 2017  " + settings.SITE_NAME
+        return "Copyright© 2018 且听风吟"
 
     def item_link(self, item):
         return item.get_absolute_url()

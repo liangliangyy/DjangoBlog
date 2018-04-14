@@ -28,6 +28,7 @@ from comments.models import Comment
 from DjangoBlog.utils import cache_decorator, logger
 from django.contrib.auth import get_user_model
 from oauth.models import OAuthUser
+from django.contrib.sites.models import Site
 
 register = template.Library()
 
@@ -66,8 +67,9 @@ def truncatechars_content(content):
     :return:
     """
     from django.template.defaultfilters import truncatechars_html
-
-    return truncatechars_html(content, settings.ARTICLE_SUB_LENGTH)
+    from DjangoBlog.utils import get_blog_setting
+    blogsetting = get_blog_setting()
+    return truncatechars_html(content, blogsetting.article_sub_length)
 
 
 @register.filter(is_safe=True)
@@ -86,8 +88,10 @@ def load_breadcrumb(article):
     :return:
     """
     names = article.get_category_tree()
-
-    names.append((settings.SITE_NAME, settings.SITE_URL))
+    from DjangoBlog.utils import get_blog_setting
+    blogsetting = get_blog_setting()
+    site = Site.objects.get_current().domain
+    names.append((blogsetting.sitename, site))
     names = names[::-1]
 
     return {
