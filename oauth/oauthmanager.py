@@ -79,7 +79,7 @@ class WBOauthManager(BaseOauthManager):
         config = self.get_config()
         self.client_id = config.appkey if config else ''
         self.client_secret = config.appsecret if config else ''
-        self.callback_url = config.callbackurl if config else ''
+        self.callback_url = config.callback_url if config else ''
         super(WBOauthManager, self).__init__(access_token=access_token, openid=openid)
 
     def get_authorization_url(self, nexturl='/'):
@@ -145,7 +145,7 @@ class GoogleOauthManager(BaseOauthManager):
         config = self.get_config()
         self.client_id = config.appkey if config else ''
         self.client_secret = config.appsecret if config else ''
-        self.callback_url = config.callbackurl if config else ''
+        self.callback_url = config.callback_url if config else ''
         super(GoogleOauthManager, self).__init__(access_token=access_token, openid=openid)
 
     def get_authorization_url(self, nexturl='/'):
@@ -215,7 +215,7 @@ class GitHubOauthManager(BaseOauthManager):
         config = self.get_config()
         self.client_id = config.appkey if config else ''
         self.client_secret = config.appsecret if config else ''
-        self.callback_url = config.callbackurl if config else ''
+        self.callback_url = config.callback_url if config else ''
         super(GitHubOauthManager, self).__init__(access_token=access_token, openid=openid)
 
     def get_authorization_url(self, nexturl='/'):
@@ -283,7 +283,7 @@ class FaceBookOauthManager(BaseOauthManager):
         config = self.get_config()
         self.client_id = config.appkey if config else ''
         self.client_secret = config.appsecret if config else ''
-        self.callback_url = config.callbackurl if config else ''
+        self.callback_url = config.callback_url if config else ''
         super(FaceBookOauthManager, self).__init__(access_token=access_token, openid=openid)
 
     def get_authorization_url(self, nexturl='/'):
@@ -345,7 +345,7 @@ def get_oauth_apps():
         return []
     configtypes = [x.type for x in configs]
     applications = BaseOauthManager.__subclasses__()
-    apps = [x for x in applications if configtypes.index(x().ICON_NAME.lower()) >= 0]
+    apps = [x() for x in applications if configtypes.index(x().ICON_NAME.lower()) >= 0]
     return apps
 
 
