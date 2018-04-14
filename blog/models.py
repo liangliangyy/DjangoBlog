@@ -3,6 +3,8 @@ from django.urls import reverse
 from django.conf import settings
 from uuslug import slugify
 
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 from django.contrib.sites.models import Site
 from DjangoBlog.utils import cache_decorator, logger, cache
 from django.utils.functional import cached_property
@@ -229,3 +231,33 @@ class SideBar(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class BlogSettings(models.Model):
+    '''站点设置 '''
+    sitename = models.CharField("网站名称", max_length=200, null=False, blank=False, default='')
+    site_description = models.TextField("网站描述", max_length=1000, null=False, blank=False, default='')
+    site_seo_description = models.TextField("网站SEO描述", max_length=1000, null=False, blank=False, default='')
+    site_keywords = models.TextField("网站关键字", max_length=1000, null=False, blank=False, default='')
+    article_sub_length = models.IntegerField("文章摘要长度", default=300)
+    sidebar_article_count = models.IntegerField("侧边栏文章数目", default=10)
+    sidebar_comment_count = models.IntegerField("侧边栏评论数目", default=5)
+    show_google_adsense = models.BooleanField('是否显示谷歌广告', default=False)
+    google_adsense_codes = models.TextField('广告内容', max_length=2000, null=True)
+    open_site_comment = models.BooleanField('是否打开网站评论功能', default=True)
+
+    class Meta:
+        verbose_name = '网站配置'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.sitename
+
+    def clean(self):
+        if BlogSettings.objects.exclude(id=self.id).count():
+            raise ValidationError(_('只能有一个配置'))
+
+    def save(self, *args, **kwargs):
+        from DjangoBlog.utils import cache
+        cache.clear()
+        super().save(*args, **kwargs)

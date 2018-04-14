@@ -156,3 +156,28 @@ def parse_dict_to_url(dict):
     url = '&'.join(['{}={}'.format(quote(k, safe='/'), quote(v, safe='/'))
                     for k, v in dict.items()])
     return url
+
+
+def get_blog_setting():
+    value = cache.get('get_blog_setting')
+    if value:
+        logger.info('get cache get_blog_setting')
+        return value
+    else:
+        from blog.models import BlogSettings
+        if not BlogSettings.objects.count():
+            setting = BlogSettings()
+            setting.sitename = 'DjangoBlog'
+            setting.site_description = '基于Django的博客系统'
+            setting.site_seo_description = '基于Django的博客系统'
+            setting.site_keywords = 'Django,Python'
+            setting.article_sub_length = 300
+            setting.sidebar_article_count = 10
+            setting.sidebar_comment_count = 5
+            setting.show_google_adsense = False
+            setting.open_site_comment = True
+            setting.save()
+        value = BlogSettings.objects.first()
+        logger.info('set cache get_blog_setting')
+        cache.set('get_blog_setting', value)
+        return value

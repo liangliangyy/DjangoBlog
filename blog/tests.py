@@ -151,7 +151,7 @@ class ArticleTest(TestCase):
 
     def test_image(self):
         import requests
-        rsp = requests.get('https://ss2.baidu.com/6ONYsjip0QIZ8tyhnq/it/u=2909203028,3998034658&fm=96')
+        rsp = requests.get('https://www.lylinux.net/static/blog/img/avatar.png')
         imagepath = os.path.join(settings.BASE_DIR, 'django.jpg')
         with open(imagepath, 'wb') as file:
             file.write(rsp.content)

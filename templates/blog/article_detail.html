@@ -40,7 +40,7 @@
             {% endif %}
 
         </div><!-- #content -->
-        {% if article.comment_status == "o" %}
+        {% if article.comment_status == "o" and OPEN_SITE_COMMENT %}
 
             {% comment %}{% load comments_tags %}
                 {% load_post_comment article from %}{% endcomment %}
@@ -53,7 +53,7 @@
                             href="{% url "account:login" %}?next={{ request.get_full_path }}">登录</a>后发表评论。</h3>
 
                     {% load oauth_tags %}
-                    {% load_oauth_applications request%}
+                    {% load_oauth_applications request %}
 
                 </div>
             {% endif %}
