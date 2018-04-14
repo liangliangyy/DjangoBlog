@@ -12,7 +12,7 @@
             {% endif %}
         </h1>
         <div class="comments-link">
-            {% if article.comment_status == "o" %}
+            {% if article.comment_status == "o" and open_site_comment %}
                 <a href="{{ article.get_absolute_url }}#comments" class="ds-thread-count" data-thread-key="3815"
                    rel="nofollow">
                     <span class="leave-reply">

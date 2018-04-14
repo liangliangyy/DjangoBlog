@@ -50,6 +50,7 @@ admin_site.register(Category, CategoryAdmin)
 admin_site.register(Tag, TagAdmin)
 admin_site.register(Links, LinksAdmin)
 admin_site.register(SideBar, SideBarAdmin)
+admin_site.register(BlogSettings, BlogSettingsAdmin)
 
 admin_site.register(commands, CommandsAdmin)
 
@@ -58,5 +59,6 @@ admin_site.register(BlogUser, BlogUserAdmin)
 admin_site.register(Comment, CommentAdmin)
 
 admin_site.register(OAuthUser, OAuthUserAdmin)
+admin_site.register(OAuthConfig, OAuthConfigAdmin)
 
 admin_site.register(OwnTrackLog, OwnTrackLogsAdmin)

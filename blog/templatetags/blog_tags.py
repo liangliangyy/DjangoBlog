@@ -123,14 +123,16 @@ def load_sidebar(user):
     :return:
     """
     logger.info('load sidebar')
-    recent_articles = Article.objects.filter(status='p')[:settings.SIDEBAR_ARTICLE_COUNT]
+    from DjangoBlog.utils import get_blog_setting
+    blogsetting = get_blog_setting()
+    recent_articles = Article.objects.filter(status='p')[:blogsetting.sidebar_article_count]
     sidebar_categorys = Category.objects.all()
     extra_sidebars = SideBar.objects.filter(is_enable=True).order_by('sequence')
-    most_read_articles = Article.objects.filter(status='p').order_by('-views')[:settings.SIDEBAR_ARTICLE_COUNT]
+    most_read_articles = Article.objects.filter(status='p').order_by('-views')[:blogsetting.sidebar_article_count]
     dates = Article.objects.datetimes('created_time', 'month', order='DESC')
     links = Links.objects.all()
-    commment_list = Comment.objects.filter(is_enable=True).order_by('-id')[:settings.SIDEBAR_COMMENT_COUNT]
-    show_adsense = settings.SHOW_GOOGLE_ADSENSE
+    commment_list = Comment.objects.filter(is_enable=True).order_by('-id')[:blogsetting.sidebar_comment_count]
+    # show_adsense = settings.SHOW_GOOGLE_ADSENSE
     # 标签云 计算字体大小
     # 根据总数计算出平均值 大小为 (数目/平均值)*步长
     increment = 5
@@ -150,7 +152,9 @@ def load_sidebar(user):
         'sidabar_links': links,
         'sidebar_comments': commment_list,
         'user': user,
-        'show_adsense': show_adsense,
+        'show_google_adsense': blogsetting.show_google_adsense,
+        'google_adsense_codes': blogsetting.google_adsense_codes,
+        'open_site_comment': blogsetting.open_site_comment,
         'sidebar_tags': sidebar_tags,
         'extra_sidebars': extra_sidebars
     }
@@ -232,10 +236,14 @@ def load_article_detail(article, isindex, user):
     :param isindex:是否列表页，若是列表页只显示摘要
     :return:
     """
+    from DjangoBlog.utils import get_blog_setting
+    blogsetting = get_blog_setting()
+
     return {
         'article': article,
         'isindex': isindex,
-        'user': user
+        'user': user,
+        'open_site_comment': blogsetting.open_site_comment,
     }
 
 
@@ -275,5 +283,3 @@ def query(qs, **kwargs):
           {% endfor %}
     """
     return qs.filter(**kwargs)
-
-

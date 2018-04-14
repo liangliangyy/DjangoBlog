@@ -45,7 +45,7 @@
             </ul>
         </aside>
     {% endif %}
-    {% if sidebar_comments %}
+    {% if sidebar_comments and  open_site_comment %}
         <aside id="ds-recent-comments-4" class="widget ds-widget-recent-comments"><h3 class="widget-title">近期评论</h3>
             {% comment %}<ul class="ds-recent-comments" data-num-items="5" data-show-avatars="1" data-show-time="1"
             data-show-title="1" data-show-admin="1" data-avatar-size="30" data-excerpt-length="70"></ul>{% endcomment %}
@@ -85,8 +85,12 @@
             </ul>
         </aside>
     {% endif %}
-    {% if show_adsense %}
-        {% include 'share_layout/adsense.html' %}
+    {% if show_google_adsense %}
+        <aside id="text-2" class="widget widget_text"><h3 class="widget-title">Google AdSense</h3>
+            <div class="textwidget">
+                {{ google_adsense_codes|safe }}
+            </div>
+        </aside>
     {% endif %}
     {% if sidebar_tags %}
         <aside id="tag_cloud-2" class="widget widget_tag_cloud"><h3 class="widget-title">标签云</h3>

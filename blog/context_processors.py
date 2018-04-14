@@ -12,10 +12,10 @@
 @file: context_processors.py
 @time: 2016/11/6 下午4:23
 """
-from .models import Category, Article, Tag
+from .models import Category, Article, Tag, BlogSettings
 from django.conf import settings
 from comments.models import Comment
-from DjangoBlog.utils import logger, cache
+from DjangoBlog.utils import logger, cache, get_blog_setting
 
 
 def seo_processor(requests):
@@ -26,18 +26,20 @@ def seo_processor(requests):
         return value
     else:
         logger.info('set processor cache.')
+        setting = get_blog_setting()
         value = {
-            'SITE_NAME': settings.SITE_NAME,
-            'SHOW_GOOGLE_ADSENSE': settings.SHOW_GOOGLE_ADSENSE,
-            'SITE_SEO_DESCRIPTION': settings.SITE_SEO_DESCRIPTION,
-            'SITE_DESCRIPTION': settings.SITE_DESCRIPTION,
-            'SITE_KEYWORDS': settings.SITE_SEO_KEYWORDS,
+            'SITE_NAME': setting.sitename,
+            'SHOW_GOOGLE_ADSENSE': setting.show_google_adsense,
+            'GOOGLE_ADSENSE_CODES': setting.google_adsense_codes,
+            'SITE_SEO_DESCRIPTION': setting.site_seo_description,
+            'SITE_DESCRIPTION': setting.site_description,
+            'SITE_KEYWORDS': setting.site_keywords,
             'SITE_BASE_URL': requests.scheme + '://' + requests.get_host() + '/',
-            'ARTICLE_SUB_LENGTH': settings.ARTICLE_SUB_LENGTH,
+            'ARTICLE_SUB_LENGTH': setting.article_sub_length,
             'nav_category_list': Category.objects.all(),
             'nav_pages': Article.objects.filter(type='p', status='p'),
-            # 'MAX_COMMENTID': Comment.objects.latest().pk,
-            # 'MAX_ARTICLEID': Article.objects.latest().pk
+            'OPEN_SITE_COMMENT': setting.open_site_comment,
+
         }
         cache.set(key, value, 60 * 60 * 10)
         return value

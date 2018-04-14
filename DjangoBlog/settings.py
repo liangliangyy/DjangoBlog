@@ -27,7 +27,7 @@ DEBUG = False
 TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 
 # ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['www.lylinux.net', '127.0.0.1', 'example.com']
+ALLOWED_HOSTS = ['*', 'www.lylinux.net', '127.0.0.1', 'example.com']
 # Application definition
 
 INSTALLED_APPS = [
@@ -162,22 +162,10 @@ LOGIN_URL = '/login/'
 TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 DATE_TIME_FORMAT = '%Y-%m-%d'
 
-SITE_NAME = '且听风吟'
-SITE_URL = 'http://www.lylinux.net'
-SITE_DESCRIPTION = '大巧无工,重剑无锋.'
-SITE_SEO_DESCRIPTION = '小站主要用来分享和记录学习经验,教程,记录个人生活的点滴以及一些随笔.'
-SITE_SEO_KEYWORDS = 'linux,apache,mysql,服务器,ubuntu,shell,web,csharp,.net,asp,mac,swift,python,django'
-ARTICLE_SUB_LENGTH = 300
-SHOW_GOOGLE_ADSENSE = False
 # bootstrap颜色样式
 BOOTSTRAP_COLOR_TYPES = [
     'default', 'primary', 'success', 'info', 'warning', 'danger'
 ]
-
-# 侧边栏文章数目
-SIDEBAR_ARTICLE_COUNT = 10
-# 侧边栏评论数目
-SIDEBAR_COMMENT_COUNT = 5
 
 # 分页
 PAGINATE_BY = 10
@@ -195,35 +183,6 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
         'TIMEOUT': 10800,
         'LOCATION': 'unique-snowflake',
-    }
-}
-# CACHE_MIDDLEWARE_SECONDS = 60 * 60 * 10
-# CACHE_MIDDLEWARE_KEY_PREFIX = "djangoblog"
-# CACHE_MIDDLEWARE_ALIAS = 'default'
-
-# SESSION_ENGINE = "django.contrib.sessions.backends.cache"
-# SESSION_CACHE_ALIAS = 'default'
-
-OAHUTH = {
-    'sina': {
-        'appkey': os.environ.get('SINA_APP_KEY'),
-        'appsecret': os.environ.get('SINA_APP_SECRET'),
-        'callbackurl': 'http://www.lylinux.net/oauth/authorize?type=weibo'
-    },
-    'google': {
-        'appkey': os.environ.get('GOOGLE_APP_KEY'),
-        'appsecret': os.environ.get('GOOGLE_APP_SECRET'),
-        'callbackurl': 'http://www.lylinux.net/oauth/authorize?type=google'
-    },
-    'github': {
-        'appkey': os.environ.get('GITHUB_APP_KEY'),
-        'appsecret': os.environ.get('GITHUB_APP_SECRET'),
-        'callbackurl': 'http://www.lylinux.net/oauth/authorize?type=github'
-    },
-    'facebook': {
-        'appkey': os.environ.get('FACEBOOK_APP_KEY'),
-        'appsecret': os.environ.get('FACEBOOK_APP_SECRET'),
-        'callbackurl': 'http://www.lylinux.net/oauth/authorize?type=facebook'
     }
 }
 

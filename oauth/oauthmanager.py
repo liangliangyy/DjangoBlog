@@ -14,7 +14,7 @@
 """
 
 from abc import ABCMeta, abstractmethod, abstractproperty
-from oauth.models import OAuthUser
+from oauth.models import OAuthUser, OAuthConfig
 from django.conf import settings
 import requests
 import json
@@ -64,6 +64,10 @@ class BaseOauthManager(metaclass=ABCMeta):
         rsp = requests.post(url, params)
         return rsp.text
 
+    def get_config(self):
+        value = OAuthConfig.objects.filter(type=self.ICON_NAME)
+        return value[0] if value else None
+
 
 class WBOauthManager(BaseOauthManager):
     AUTH_URL = 'https://api.weibo.com/oauth2/authorize'
@@ -72,9 +76,10 @@ class WBOauthManager(BaseOauthManager):
     ICON_NAME = 'weibo'
 
     def __init__(self, access_token=None, openid=None):
-        self.client_id = settings.OAHUTH['sina']['appkey']
-        self.client_secret = settings.OAHUTH['sina']['appsecret']
-        self.callback_url = settings.OAHUTH['sina']['callbackurl']
+        config = self.get_config()
+        self.client_id = config.appkey if config else ''
+        self.client_secret = config.appsecret if config else ''
+        self.callback_url = config.callbackurl if config else ''
         super(WBOauthManager, self).__init__(access_token=access_token, openid=openid)
 
     def get_authorization_url(self, nexturl='/'):
@@ -137,9 +142,10 @@ class GoogleOauthManager(BaseOauthManager):
     ICON_NAME = 'google'
 
     def __init__(self, access_token=None, openid=None):
-        self.client_id = settings.OAHUTH['google']['appkey']
-        self.client_secret = settings.OAHUTH['google']['appsecret']
-        self.callback_url = settings.OAHUTH['google']['callbackurl']
+        config = self.get_config()
+        self.client_id = config.appkey if config else ''
+        self.client_secret = config.appsecret if config else ''
+        self.callback_url = config.callbackurl if config else ''
         super(GoogleOauthManager, self).__init__(access_token=access_token, openid=openid)
 
     def get_authorization_url(self, nexturl='/'):
@@ -206,9 +212,10 @@ class GitHubOauthManager(BaseOauthManager):
     ICON_NAME = 'github'
 
     def __init__(self, access_token=None, openid=None):
-        self.client_id = settings.OAHUTH['github']['appkey']
-        self.client_secret = settings.OAHUTH['github']['appsecret']
-        self.callback_url = settings.OAHUTH['github']['callbackurl']
+        config = self.get_config()
+        self.client_id = config.appkey if config else ''
+        self.client_secret = config.appsecret if config else ''
+        self.callback_url = config.callbackurl if config else ''
         super(GitHubOauthManager, self).__init__(access_token=access_token, openid=openid)
 
     def get_authorization_url(self, nexturl='/'):
@@ -273,9 +280,10 @@ class FaceBookOauthManager(BaseOauthManager):
     ICON_NAME = 'facebook'
 
     def __init__(self, access_token=None, openid=None):
-        self.client_id = settings.OAHUTH['facebook']['appkey']
-        self.client_secret = settings.OAHUTH['facebook']['appsecret']
-        self.callback_url = settings.OAHUTH['facebook']['callbackurl']
+        config = self.get_config()
+        self.client_id = config.appkey if config else ''
+        self.client_secret = config.appsecret if config else ''
+        self.callback_url = config.callbackurl if config else ''
         super(FaceBookOauthManager, self).__init__(access_token=access_token, openid=openid)
 
     def get_authorization_url(self, nexturl='/'):
@@ -332,8 +340,13 @@ class FaceBookOauthManager(BaseOauthManager):
 
 
 def get_oauth_apps():
+    configs = OAuthConfig.objects.filter(is_enable=True).all()
+    if not configs:
+        return []
+    configtypes = [x.type for x in configs]
     applications = BaseOauthManager.__subclasses__()
-    return list(map(lambda x: x(), applications))
+    apps = [x for x in applications if configtypes.index(x().ICON_NAME.lower()) >= 0]
+    return apps
 
 
 def get_manager_by_type(type):
