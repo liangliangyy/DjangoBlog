@@ -14,7 +14,9 @@
         |&nbsp; Hosting On&nbsp;
         <a href="https://www.linode.com/?r=b0d38794d05ef8816b357a929106e89b7c6452f9" target="blank" rel="nofollow">Linode</a>
         |&nbsp;
-        {% include 'share_layout/analyticscode.html' %}
+        <a href="https://tongji.baidu.com/sc-web/3478620/home/ico?siteId=11261596" target="_blank"
+           rel="nofollow">百度统计</a>
+        {% comment %}{% include 'share_layout/analyticscode.html' %}{% endcomment %}
 
     </div>
     <div class="site-info" style="text-align: center">
@@ -27,6 +29,14 @@
         |
         本页面加载耗时:<!!LOAD_TIMES!!>s
     </div>
+    {% if BEIAN_CODE %}
+        <div class="site-info" style="text-align: center">
+            <a href="http://www.miitbeian.gov.cn/" rel="nofollow" target="_blank">{{ BEIAN_CODE }}</a>
+        </div>
+    {% endif %}
+    {% if ANALYTICS_CODE %}
+        {{ ANALYTICS_CODE| safe }}
+    {% endif %}
 </footer><!-- #colophon -->
 
 
