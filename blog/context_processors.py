@@ -39,6 +39,8 @@ def seo_processor(requests):
             'nav_category_list': Category.objects.all(),
             'nav_pages': Article.objects.filter(type='p', status='p'),
             'OPEN_SITE_COMMENT': setting.open_site_comment,
+            'BEIAN_CODE': setting.beiancode,
+            'ANALYTICS_CODE': setting.analyticscode,
 
         }
         cache.set(key, value, 60 * 60 * 10)

@@ -243,9 +243,10 @@ class BlogSettings(models.Model):
     sidebar_article_count = models.IntegerField("侧边栏文章数目", default=10)
     sidebar_comment_count = models.IntegerField("侧边栏评论数目", default=5)
     show_google_adsense = models.BooleanField('是否显示谷歌广告', default=False)
-    google_adsense_codes = models.TextField('广告内容', max_length=2000, null=True)
+    google_adsense_codes = models.TextField('广告内容', max_length=2000, null=True, blank=True, default='')
     open_site_comment = models.BooleanField('是否打开网站评论功能', default=True)
-
+    beiancode = models.CharField('备案号', max_length=2000, null=True, blank=True, default='')
+    analyticscode=models.TextField("网站统计代码", max_length=1000, null=False, blank=False, default='')
     class Meta:
         verbose_name = '网站配置'
         verbose_name_plural = verbose_name

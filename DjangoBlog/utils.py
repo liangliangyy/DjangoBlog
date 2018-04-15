@@ -176,6 +176,8 @@ def get_blog_setting():
             setting.sidebar_comment_count = 5
             setting.show_google_adsense = False
             setting.open_site_comment = True
+            setting.analyticscode = ''
+            setting.beiancode = ''
             setting.save()
         value = BlogSettings.objects.first()
         logger.info('set cache get_blog_setting')
