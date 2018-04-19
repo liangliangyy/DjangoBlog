@@ -16,7 +16,7 @@ class OAuthUser(models.Model):
     picture = models.CharField(max_length=350, blank=True, null=True)
     type = models.CharField(blank=False, null=False, max_length=50)
     email = models.CharField(max_length=50, null=True, blank=True)
-    matedata = models.CharField(max_length=2000, null=True, blank=True)
+    matedata = models.CharField(max_length=3000, null=True, blank=True)
     created_time = models.DateTimeField('创建时间', default=now)
     last_mod_time = models.DateTimeField('修改时间', default=now)
 
