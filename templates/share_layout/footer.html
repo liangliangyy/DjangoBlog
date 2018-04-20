@@ -31,7 +31,14 @@
     </div>
     {% if BEIAN_CODE %}
         <div class="site-info" style="text-align: center">
-            <a href="http://www.miitbeian.gov.cn/" rel="nofollow" target="_blank">{{ BEIAN_CODE }}</a>
+            <a href="http://www.miitbeian.gov.cn/" rel="nofollow" target="_blank">
+                <p style=" height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">
+                    {{ BEIAN_CODE }}
+                </p>
+            </a>
+            {% if BEIAN_CODE_GONGAN %}
+                {{ BEIAN_CODE_GONGAN |safe }}
+            {% endif %}
         </div>
     {% endif %}
     {% if ANALYTICS_CODE %}
