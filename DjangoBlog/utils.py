@@ -148,7 +148,23 @@ class CommonMarkdown():
 def send_email(emailto, title, content):
     msg = EmailMultiAlternatives(title, content, from_email=settings.DEFAULT_FROM_EMAIL, to=emailto)
     msg.content_subtype = "html"
-    _thread.start_new_thread(msg.send, (msg,))
+
+    def sendmsg_withlog():
+        from servermanager.models import EmailSendLog
+        log = EmailSendLog()
+        log.title = title
+        log.content = content
+        log.emailto = ','.join(emailto)
+
+        try:
+            result = msg.send()
+            log.send_result = result > 0
+        except Exception as e:
+            logger.error(e)
+            log.send_result = False
+        log.save()
+
+    _thread.start_new_thread(sendmsg_withlog, ())
 
 
 def parse_dict_to_url(dict):

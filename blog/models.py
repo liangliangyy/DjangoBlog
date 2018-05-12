@@ -261,6 +261,6 @@ class BlogSettings(models.Model):
             raise ValidationError(_('只能有一个配置'))
 
     def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
         from DjangoBlog.utils import cache
         cache.clear()
-        super().save(*args, **kwargs)
