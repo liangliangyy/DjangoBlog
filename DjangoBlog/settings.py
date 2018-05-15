@@ -192,11 +192,11 @@ BAIDU_NOTIFY_URL = "http://data.zz.baidu.com/urls?site=https://www.lylinux.net&t
 # Emial:
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-EMAIL_USE_TLS = True
-# EMAIL_USE_SSL = True
+#EMAIL_USE_TLS = True
+EMAIL_USE_SSL = True
 
-EMAIL_HOST = 'smtp.zoho.com'
-EMAIL_PORT = 587
+EMAIL_HOST = 'smtp.mxhichina.com'
+EMAIL_PORT = 465
 EMAIL_HOST_USER = os.environ.get('DJANGO_EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('DJANGO_EMAIL_PASSWORD')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
