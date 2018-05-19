@@ -27,9 +27,8 @@ class DjangoBlogFeed(Feed):
     feed_type = Rss201rev2Feed
 
     description = '大巧无工,重剑无锋.'
-    feed_url = 'https://www.lylinux.net/feed'
     title = "且听风吟 大巧无工,重剑无锋. "
-    link = "https://www.lylinux.net"
+    link = "/feed/"
 
     def author_name(self):
         return get_user_model().objects.first().nickname
