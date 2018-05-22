@@ -151,13 +151,13 @@ class ArticleTest(TestCase):
 
     def test_image(self):
         import requests
-        rsp = requests.get('https://www.lylinux.net/static/blog/img/avatar.png')
-        imagepath = os.path.join(settings.BASE_DIR, 'django.jpg')
+        rsp = requests.get('https://www.python.org/static/img/python-logo@2x.png')
+        imagepath = os.path.join(settings.BASE_DIR, 'python.png')
         with open(imagepath, 'wb') as file:
             file.write(rsp.content)
         with open(imagepath, 'rb') as file:
-            imgfile = SimpleUploadedFile('django.jpg', file.read(), content_type='image/jpg')
-            form_data = {'django.jpg': imgfile}
+            imgfile = SimpleUploadedFile('python.png', file.read(), content_type='image/jpg')
+            form_data = {'python.png': imgfile}
             rsp = self.client.post('/upload', form_data, follow=True)
 
             self.assertEqual(rsp.status_code, 200)
