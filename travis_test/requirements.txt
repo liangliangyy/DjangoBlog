@@ -21,7 +21,7 @@ olefile==0.45.1
 packaging==17.1
 Pillow==5.1.0
 Pygments==2.2.0
-PyMySQL==0.8.0
+PyMySQL==0.8.1
 pyparsing==2.2.0
 python-slugify==1.2.5
 pytz==2018.4
@@ -33,6 +33,6 @@ sqlparse==0.2.4
 Unidecode==1.0.22
 urllib3==1.22
 webencodings==0.5.1
-WeRoBot==1.4.0
+WeRoBot==1.4.1
 Whoosh==2.7.4
 xmltodict==0.11.0
