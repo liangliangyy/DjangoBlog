@@ -116,9 +116,9 @@
     </aside>
     <aside id="meta-2" class="widget widget_meta"><h3 class="widget-title">功能</h3>
         <ul>
-            <li><a href="{{ SITE_BASE_URL }}/admin/">管理站点</a></li>
+            <li><a href="{{ SITE_BASE_URL }}/admin/" rel="nofollow">管理站点</a></li>
             {% if user.is_authenticated %}
-                <li><a href="{% url "account:logout" %}">登出</a>
+                <li><a href="{% url "account:logout" %}" rel="nofollow">登出</a>
                 </li>
 
             {% else %}

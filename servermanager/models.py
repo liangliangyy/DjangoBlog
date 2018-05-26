@@ -30,3 +30,4 @@ class EmailSendLog(models.Model):
     class Meta:
         verbose_name = '邮件发送log'
         verbose_name_plural = verbose_name
+        ordering = ['-created_time']

@@ -36,7 +36,7 @@
                     {{ BEIAN_CODE }}
                 </p>
             </a>
-            {% if BEIAN_CODE_GONGAN %}
+            {% if BEIAN_CODE_GONGAN and SHOW_GONGAN_CODE %}
                 {{ BEIAN_CODE_GONGAN |safe }}
             {% endif %}
         </div>
