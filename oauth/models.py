@@ -26,6 +26,7 @@ class OAuthUser(models.Model):
     class Meta:
         verbose_name = 'oauth用户'
         verbose_name_plural = verbose_name
+        ordering = ['-created_time']
 
 
 class OAuthConfig(models.Model):
@@ -53,3 +54,4 @@ class OAuthConfig(models.Model):
     class Meta:
         verbose_name = 'oauth配置'
         verbose_name_plural = verbose_name
+        ordering = ['-created_time']

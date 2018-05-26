@@ -41,7 +41,8 @@ def seo_processor(requests):
             'OPEN_SITE_COMMENT': setting.open_site_comment,
             'BEIAN_CODE': setting.beiancode,
             'ANALYTICS_CODE': setting.analyticscode,
-            "BEIAN_CODE_GONGAN": setting.gongan_beiancode
+            "BEIAN_CODE_GONGAN": setting.gongan_beiancode,
+            "SHOW_GONGAN_CODE": setting.show_gongan_code
 
         }
         cache.set(key, value, 60 * 60 * 10)

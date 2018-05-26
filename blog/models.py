@@ -247,6 +247,7 @@ class BlogSettings(models.Model):
     open_site_comment = models.BooleanField('是否打开网站评论功能', default=True)
     beiancode = models.CharField('备案号', max_length=2000, null=True, blank=True, default='')
     analyticscode = models.TextField("网站统计代码", max_length=1000, null=False, blank=False, default='')
+    show_gongan_code = models.BooleanField('是否显示公安备案号', default=False, null=False)
     gongan_beiancode = models.TextField('公安备案号', max_length=2000, null=True, blank=True, default='')
 
     class Meta:
