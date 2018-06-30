@@ -34,7 +34,7 @@ def manage_owntrack_log(request):
         else:
             return HttpResponse('data error')
     except Exception as e:
-        logger.warn(e)
+        logger.error(e)
         return HttpResponse('error')
 
 
