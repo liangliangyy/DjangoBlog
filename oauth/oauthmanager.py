@@ -106,7 +106,8 @@ class WBOauthManager(BaseOauthManager):
             self.access_token = str(obj['access_token'])
             self.openid = str(obj['uid'])
             return self.get_oauth_userinfo()
-        except:
+        except Exception as e:
+            logger.error(e)
             return None
 
     def get_oauth_userinfo(self):
@@ -130,8 +131,9 @@ class WBOauthManager(BaseOauthManager):
             if 'email' in datas and datas['email']:
                 user.email = datas['email']
             return user
-        except:
-            logger.info('weibo oauth error.rsp:' + rsp)
+        except Exception as e:
+            logger.error(e)
+            logger.error('weibo oauth error.rsp:' + rsp)
             return None
 
 
@@ -176,8 +178,9 @@ class GoogleOauthManager(BaseOauthManager):
             self.openid = str(obj['id_token'])
             logger.info(self.ICON_NAME + ' oauth ' + rsp)
             return self.access_token
-        except:
-            logger.info(self.ICON_NAME + ' oauth error ' + rsp)
+        except Exception as e:
+            logger.error(e)
+            logger.error(self.ICON_NAME + ' oauth error ' + rsp)
             return None
 
     def get_oauth_userinfo(self):
@@ -200,8 +203,9 @@ class GoogleOauthManager(BaseOauthManager):
             if datas['email']:
                 user.email = datas['email']
             return user
-        except:
-            logger.info('google oauth error.rsp:' + rsp)
+        except Exception as e:
+            logger.error(e)
+            logger.error('google oauth error.rsp:' + rsp)
             return None
 
 
@@ -245,7 +249,8 @@ class GitHubOauthManager(BaseOauthManager):
             r = parse.parse_qs(rsp)
             self.access_token = (r['access_token'][0])
             return self.access_token
-        except:
+        except Exception as e:
+            logger.error(e)
             return None
 
     def get_oauth_userinfo(self):
@@ -268,8 +273,9 @@ class GitHubOauthManager(BaseOauthManager):
                 user.email = datas['email']
 
             return user
-        except:
-            logger.info('github oauth error.rsp:' + rsp)
+        except Exception as e:
+            logger.error(e)
+            logger.error('github oauth error.rsp:' + rsp)
             return None
 
 
@@ -312,7 +318,8 @@ class FaceBookOauthManager(BaseOauthManager):
             token = str(obj['access_token'])
             self.access_token = token
             return self.access_token
-        except:
+        except Exception as e:
+            logger.error(e)
             return None
 
     def get_oauth_userinfo(self):
@@ -335,7 +342,7 @@ class FaceBookOauthManager(BaseOauthManager):
                 user.picture = str(datas['picture']['data']['url'])
             return user
         except Exception as e:
-            logger.warn(e)
+            logger.error(e)
             return None
 
 

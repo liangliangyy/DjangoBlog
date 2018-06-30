@@ -39,7 +39,8 @@ def timeformat(data):
         return data.strftime(settings.TIME_FORMAT)
         # print(data.strftime(settings.TIME_FORMAT))
         # return "ddd"
-    except:
+    except Exception as e:
+        logger.error(e)
         return ""
 
 
@@ -47,7 +48,8 @@ def timeformat(data):
 def datetimeformat(data):
     try:
         return data.strftime(settings.DATE_TIME_FORMAT)
-    except:
+    except Exception as e:
+        logger.error(e)
         return ""
 
 
