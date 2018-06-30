@@ -26,6 +26,7 @@ pyparsing==2.2.0
 python-memcached==1.59
 python-slugify==1.2.5
 pytz==2018.4
+raven==6.9.0
 rcssmin==1.0.6
 requests==2.18.4
 rjsmin==1.0.12
