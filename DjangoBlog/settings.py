@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 import sys
 import os
+import raven
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -30,6 +31,17 @@ TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 ALLOWED_HOSTS = ['*', 'www.lylinux.net', '127.0.0.1', 'example.com']
 # Application definition
 
+
+SITE_ROOT = os.path.dirname(os.path.abspath(__file__))
+SITE_ROOT = os.path.abspath(os.path.join(SITE_ROOT, '../'))
+
+RAVEN_CONFIG = {
+    'dsn': os.environ.get('SENTRY_DSN'),
+    # If you are using git, you can also automatically configure the
+    # release based on the git info.
+    'release': raven.fetch_git_sha(os.path.abspath(SITE_ROOT)),
+}
+
 INSTALLED_APPS = [
     # 'django.contrib.admin',
     'django.contrib.admin.apps.SimpleAdminConfig',
@@ -40,6 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.sitemaps',
+    'raven.contrib.django.raven_compat',
     'pagedown',
     'haystack',
     'blog',
@@ -138,9 +151,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 
-SITE_ROOT = os.path.dirname(os.path.abspath(__file__))
-SITE_ROOT = os.path.abspath(os.path.join(SITE_ROOT, '../'))
-
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'DjangoBlog.whoosh_cn_backend.WhooshEngine',
@@ -193,7 +203,7 @@ BAIDU_NOTIFY_URL = "http://data.zz.baidu.com/urls?site=https://www.lylinux.net&t
 # Emial:
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-#EMAIL_USE_TLS = True
+# EMAIL_USE_TLS = True
 EMAIL_USE_SSL = True
 
 EMAIL_HOST = 'smtp.mxhichina.com'
@@ -206,15 +216,20 @@ SERVER_EMAIL = os.environ.get('DJANGO_EMAIL_USER')
 ADMINS = [('liangliang', 'liangliangyy@gmail.com')]
 # 微信管理员密码(两次md5获得)
 WXADMIN = '995F03AC401D6CABABAEF756FC4D43C7'
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'root': {
+        'level': 'WARNING',
+        'handlers': ['sentry', 'console', 'log_file'],
+    },
     'formatters': {
         'verbose': {
             'format': '[%(asctime)s] %(levelname)s [%(name)s.%(funcName)s:%(lineno)d] %(message)s',
         },
         'simple': {
-            'format': '%(levelname)s %(asctime)s %(message)s'
+            'format': '[%(asctime)s] %(levelname)s [%(name)s.%(funcName)s:%(lineno)d] %(message)s',
         },
     },
     'filters': {
@@ -229,7 +244,7 @@ LOGGING = {
         'log_file': {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': 'djangoblog.log',
+            'filename': 'xiaobiaobai.log',
             'maxBytes': 16777216,  # 16 MB
             'formatter': 'verbose'
         },
@@ -246,17 +261,32 @@ LOGGING = {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
-        }
+        },
+        'sentry': {
+            'level': 'ERROR',  # To capture more than ERROR, change to WARNING, INFO, etc.
+            'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
+            'tags': {'custom-tag': 'x'},
+        },
     },
     'loggers': {
-        'djangoblog': {
+        'xiaobiaobai': {
             'handlers': ['log_file', 'console'],
             'level': 'INFO',
             'propagate': True,
         },
         'django.request': {
-            'handlers': ['mail_admins'],
+            'handlers': ['mail_admins', 'sentry'],
             'level': 'ERROR',
+            'propagate': False,
+        },
+        'raven': {
+            'level': 'DEBUG',
+            'handlers': ['console'],
+            'propagate': False,
+        },
+        'sentry.errors': {
+            'level': 'DEBUG',
+            'handlers': ['console'],
             'propagate': False,
         },
     }
