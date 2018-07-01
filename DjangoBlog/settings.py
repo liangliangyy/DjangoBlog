@@ -226,11 +226,8 @@ LOGGING = {
     },
     'formatters': {
         'verbose': {
-            'format': '[%(asctime)s] %(levelname)s [%(name)s.%(funcName)s:%(lineno)d] %(message)s',
-        },
-        'simple': {
-            'format': '[%(asctime)s] %(levelname)s [%(name)s.%(funcName)s:%(lineno)d] %(message)s',
-        },
+            'format': '[%(asctime)s] %(levelname)s [%(name)s.%(funcName)s:%(lineno)d %(module)s] %(message)s',
+        }
     },
     'filters': {
         'require_debug_false': {
@@ -244,7 +241,7 @@ LOGGING = {
         'log_file': {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': 'xiaobiaobai.log',
+            'filename': 'djangoblog.log',
             'maxBytes': 16777216,  # 16 MB
             'formatter': 'verbose'
         },
@@ -252,7 +249,7 @@ LOGGING = {
             'level': 'DEBUG',
             'filters': ['require_debug_true'],
             'class': 'logging.StreamHandler',
-            'formatter': 'simple'
+            'formatter': 'verbose'
         },
         'null': {
             'class': 'logging.NullHandler',
@@ -269,8 +266,8 @@ LOGGING = {
         },
     },
     'loggers': {
-        'xiaobiaobai': {
-            'handlers': ['log_file', 'console'],
+        'djangoblog': {
+            'handlers': ['log_file', 'console', 'sentry'],
             'level': 'INFO',
             'propagate': True,
         },
