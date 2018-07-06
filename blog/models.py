@@ -2,14 +2,15 @@ from django.db import models
 from django.urls import reverse
 from django.conf import settings
 from uuslug import slugify
-
+import logging
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.contrib.sites.models import Site
-from DjangoBlog.utils import cache_decorator, logger, cache
+from DjangoBlog.utils import cache_decorator, cache
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 
+logger = logging.getLogger(__name__)
 
 class BaseModel(models.Model):
     slug = models.SlugField(default='no-slug', max_length=160, blank=True)

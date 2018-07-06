@@ -25,10 +25,13 @@ from django.shortcuts import get_object_or_404
 import hashlib
 import urllib
 from comments.models import Comment
-from DjangoBlog.utils import cache_decorator, logger
+from DjangoBlog.utils import cache_decorator
 from django.contrib.auth import get_user_model
 from oauth.models import OAuthUser
 from django.contrib.sites.models import Site
+import logging
+
+logger = logging.getLogger(__name__)
 
 register = template.Library()
 

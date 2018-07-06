@@ -16,9 +16,13 @@
 import django.dispatch
 from django.dispatch import receiver
 from django.conf import settings
-from DjangoBlog.utils import cache, send_email, expire_view_cache, logger
+from DjangoBlog.utils import cache, send_email, expire_view_cache
 from DjangoBlog.spider_notify import SpiderNotify
 from django.contrib.sites.models import Site
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 comment_save_signal = django.dispatch.Signal(providing_args=["comment_id", "username", "serverport"])
 article_save_signal = django.dispatch.Signal(providing_args=['id', 'is_update_views'])

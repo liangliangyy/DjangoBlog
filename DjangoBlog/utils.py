@@ -25,7 +25,7 @@ import _thread
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 
-logger = logging.getLogger('djangoblog')
+logger = logging.getLogger(__name__)
 
 
 def get_max_articleid_commentid():

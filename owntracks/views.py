@@ -7,12 +7,14 @@ import itertools
 from itertools import groupby
 from django.http import HttpResponse
 from .models import OwnTrackLog
-from DjangoBlog.utils import logger
+import logging
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 import requests
+
+logger = logging.getLogger(__name__)
 
 
 @csrf_exempt

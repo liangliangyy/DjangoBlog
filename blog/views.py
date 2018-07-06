@@ -11,10 +11,13 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
-from DjangoBlog.utils import cache, logger
+from DjangoBlog.utils import cache
 from django.shortcuts import get_object_or_404
 from blog.models import Article, Category, Tag
 from comments.forms import CommentForm
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class ArticleListView(ListView):

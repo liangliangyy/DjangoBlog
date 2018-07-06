@@ -1,7 +1,6 @@
 from django.db import models
 from django.conf import settings
 from blog.models import Article
-from DjangoBlog.utils import logger
 from django.utils.timezone import now
 
 
