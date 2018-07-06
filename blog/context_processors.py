@@ -15,7 +15,10 @@
 from .models import Category, Article, Tag, BlogSettings
 from django.conf import settings
 from comments.models import Comment
-from DjangoBlog.utils import logger, cache, get_blog_setting
+from DjangoBlog.utils import cache, get_blog_setting
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def seo_processor(requests):

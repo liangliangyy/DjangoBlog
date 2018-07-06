@@ -14,7 +14,9 @@
 """
 import requests
 import json
-from DjangoBlog.utils import logger
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class TuLing():

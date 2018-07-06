@@ -18,8 +18,11 @@ from oauth.models import OAuthUser, OAuthConfig
 from django.conf import settings
 import requests
 import json
+import logging
 import urllib.parse
-from DjangoBlog.utils import logger, parse_dict_to_url
+from DjangoBlog.utils import parse_dict_to_url
+
+logger = logging.getLogger(__name__)
 
 
 class BaseOauthManager(metaclass=ABCMeta):
