@@ -24,6 +24,10 @@ import logging
 import _thread
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
+import requests
+import datetime
+import uuid
+import os
 
 logger = logging.getLogger(__name__)
 
@@ -200,3 +204,26 @@ def get_blog_setting():
         logger.info('set cache get_blog_setting')
         cache.set('get_blog_setting', value)
         return value
+
+
+def save_user_avatar(url):
+    try:
+        rsp = requests.get(url)
+        if rsp.status_code == 200:
+            setting = get_blog_setting()
+
+            basepath = r'{basedir}/avatar/'.format(basedir=setting.resource_path)
+            if not os.path.exists(basepath):
+                os.makedirs(basepath)
+
+            imgextensions = ['.jpg', '.png', 'jpeg', '.gif']
+            isimage = len([i for i in imgextensions if url.endswith(i)]) > 0
+            ext = os.path.splitext(url)[1] if isimage else '.jpg'
+            savefilename = str(uuid.uuid4().hex) + ext
+            logger.info('保存用户头像:' + basepath + savefilename)
+            with open(basepath + savefilename, 'wb+') as file:
+                file.write(rsp.content)
+            return 'https://resource.lylinux.net/avatar/' + savefilename
+    except Exception as e:
+        logger.error(e)
+        return url
