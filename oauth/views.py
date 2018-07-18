@@ -11,7 +11,7 @@ from django.shortcuts import get_object_or_404
 from django.views.generic import FormView, RedirectView
 from oauth.forms import RequireEmailForm
 from django.urls import reverse
-from DjangoBlog.utils import send_email, get_md5
+from DjangoBlog.utils import send_email, get_md5, save_user_avatar
 from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseForbidden
@@ -50,6 +50,8 @@ def authorize(request):
     user = manager.get_oauth_userinfo()
 
     if user:
+        if user.picture:
+            user.picture = save_user_avatar(user.picture)
         if not user.nikename:
             import datetime
             user.nikename = "djangoblog" + datetime.datetime.now().strftime('%y%m%d%I%M%S')

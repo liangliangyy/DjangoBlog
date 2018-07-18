@@ -12,6 +12,7 @@ from django.utils.timezone import now
 
 logger = logging.getLogger(__name__)
 
+
 class BaseModel(models.Model):
     slug = models.SlugField(default='no-slug', max_length=160, blank=True)
     created_time = models.DateTimeField('创建时间', default=now)
@@ -250,6 +251,7 @@ class BlogSettings(models.Model):
     analyticscode = models.TextField("网站统计代码", max_length=1000, null=False, blank=False, default='')
     show_gongan_code = models.BooleanField('是否显示公安备案号', default=False, null=False)
     gongan_beiancode = models.TextField('公安备案号', max_length=2000, null=True, blank=True, default='')
+    resource_path = models.CharField("静态文件保存地址", max_length=300, null=False, default='/var/www/resource/')
 
     class Meta:
         verbose_name = '网站配置'
