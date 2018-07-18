@@ -25,7 +25,7 @@ from django.shortcuts import get_object_or_404
 import hashlib
 import urllib
 from comments.models import Comment
-from DjangoBlog.utils import cache_decorator
+from DjangoBlog.utils import cache_decorator, cache
 from django.contrib.auth import get_user_model
 from oauth.models import OAuthUser
 from django.contrib.sites.models import Site
@@ -262,17 +262,23 @@ def load_article_detail(article, isindex, user):
 @register.filter
 def gravatar_url(email, size=40):
     """获得gravatar头像"""
-    usermodels = OAuthUser.objects.filter(email=email)
-    if usermodels:
-        o = list(filter(lambda x: x.picture is not None, usermodels))
-        if o:
-            return o[0].picture
-    email = email.encode('utf-8')
+    cachekey = 'gravatat/' + email
+    if cache.get(cachekey):
+        return cache.get(cachekey)
+    else:
+        usermodels = OAuthUser.objects.filter(email=email)
+        if usermodels:
+            o = list(filter(lambda x: x.picture is not None, usermodels))
+            if o:
+                return o[0].picture
+        email = email.encode('utf-8')
 
-    default = "https://resource.lylinux.net/image/2017/03/26/120117.jpg".encode('utf-8')
+        default = "https://resource.lylinux.net/image/2017/03/26/120117.jpg".encode('utf-8')
 
-    return "https://www.gravatar.com/avatar/%s?%s" % (
-        hashlib.md5(email.lower()).hexdigest(), urllib.parse.urlencode({'d': default, 's': str(size)}))
+        url = "https://www.gravatar.com/avatar/%s?%s" % (
+            hashlib.md5(email.lower()).hexdigest(), urllib.parse.urlencode({'d': default, 's': str(size)}))
+        cache.set(cachekey, url, 60 * 60 * 10)
+        return url
 
 
 # return an image tag with the gravatar
