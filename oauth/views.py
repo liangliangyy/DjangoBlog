@@ -53,6 +53,8 @@ def authorize(request):
     user = manager.get_oauth_userinfo()
     logger.info('user:' + user.nikename)
     if user:
+        if user.picture:
+            user.picture = save_user_avatar(user.picture)
         if not user.nikename:
             import datetime
             user.nikename = "djangoblog" + datetime.datetime.now().strftime('%y%m%d%I%M%S')
@@ -61,8 +63,6 @@ def authorize(request):
         except ObjectDoesNotExist:
             pass
         # facebook的token过长
-        if user.picture:
-            user.picture = save_user_avatar(user.picture)
         if type == 'facebook':
             user.token = ''
         email = user.email
