@@ -355,7 +355,7 @@ def get_oauth_apps():
         return []
     configtypes = [x.type for x in configs]
     applications = BaseOauthManager.__subclasses__()
-    apps = [x() for x in applications if configtypes.index(x().ICON_NAME.lower()) >= 0]
+    apps = [x() for x in applications if x().ICON_NAME.lower() in configtypes]
     return apps
 
 

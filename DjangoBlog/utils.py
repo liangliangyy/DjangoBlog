@@ -208,7 +208,7 @@ def get_blog_setting():
 
 def save_user_avatar(url):
     try:
-        rsp = requests.get(url)
+        rsp = requests.get(url, timeout=2)
         if rsp.status_code == 200:
             setting = get_blog_setting()
 
