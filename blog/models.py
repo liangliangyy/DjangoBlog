@@ -14,15 +14,15 @@ logger = logging.getLogger(__name__)
 
 
 class BaseModel(models.Model):
-    slug = models.SlugField(default='no-slug', max_length=160, blank=True)
     created_time = models.DateTimeField('创建时间', default=now)
     last_mod_time = models.DateTimeField('修改时间', default=now)
 
     def save(self, *args, **kwargs):
         from DjangoBlog.blog_signals import article_save_signal
-        if not self.slug or self.slug == 'no-slug' or not self.id:
-            slug = self.title if 'title' in self.__dict__ else self.name
-            self.slug = slugify(slug)
+        if not isinstance(self, Article):
+            if not self.slug or self.slug == 'no-slug' or not self.id:
+                slug = self.title if 'title' in self.__dict__ else self.name
+                self.slug = slugify(slug)
         super().save(*args, **kwargs)
         # type = self.__class__.__name__
         is_update_views = 'update_fields' in kwargs and len(kwargs['update_fields']) == 1 and kwargs['update_fields'][
@@ -89,10 +89,6 @@ class Article(BaseModel):
         return names
 
     def save(self, *args, **kwargs):
-        if not self.slug or self.slug == 'no-slug' or not self.id:
-            # Only set the slug when the object is created.
-            self.slug = slugify(self.title)
-
         super().save(*args, **kwargs)
 
     def viewed(self):
@@ -130,6 +126,7 @@ class Category(BaseModel):
     """文章分类"""
     name = models.CharField('分类名', max_length=30, unique=True)
     parent_category = models.ForeignKey('self', verbose_name="父级分类", blank=True, null=True, on_delete=models.CASCADE)
+    slug = models.SlugField(default='no-slug', max_length=60, blank=True)
 
     class Meta:
         ordering = ['name']
@@ -183,6 +180,7 @@ class Category(BaseModel):
 class Tag(BaseModel):
     """文章标签"""
     name = models.CharField('标签名', max_length=30, unique=True)
+    slug = models.SlugField(default='no-slug', max_length=60, blank=True)
 
     def __str__(self):
         return self.name
