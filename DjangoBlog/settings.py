@@ -19,7 +19,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+SECRET_KEY = 'n9ceqv38)#&mwuat@(mjb_p%em$e8$qyr#fw9ot!=ba6lijx-6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -27,13 +27,12 @@ DEBUG = True
 TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 
 # ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['*', 'www.lylinux.net', '127.0.0.1', 'example.com']
+ALLOWED_HOSTS = ['*', '127.0.0.1', 'example.com']
 # Application definition
 
 
 SITE_ROOT = os.path.dirname(os.path.abspath(__file__))
 SITE_ROOT = os.path.abspath(os.path.join(SITE_ROOT, '../'))
-
 
 INSTALLED_APPS = [
     # 'django.contrib.admin',
@@ -45,7 +44,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.sitemaps',
-    'raven.contrib.django.raven_compat',
     'pagedown',
     'haystack',
     'blog',
@@ -214,8 +212,8 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'root': {
-        'level': 'WARNING',
-        'handlers': ['sentry', 'console', 'log_file'],
+        'level': 'INFO',
+        'handlers': ['console', 'log_file'],
     },
     'formatters': {
         'verbose': {
@@ -251,34 +249,19 @@ LOGGING = {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
-        },
-        'sentry': {
-            'level': 'ERROR',  # To capture more than ERROR, change to WARNING, INFO, etc.
-            'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
-            'tags': {'custom-tag': 'x'},
-        },
+        }
     },
     'loggers': {
         'djangoblog': {
-            'handlers': ['log_file', 'console', 'sentry'],
+            'handlers': ['log_file', 'console'],
             'level': 'INFO',
             'propagate': True,
         },
         'django.request': {
-            'handlers': ['mail_admins', 'sentry'],
+            'handlers': ['mail_admins'],
             'level': 'ERROR',
             'propagate': False,
-        },
-        'raven': {
-            'level': 'DEBUG',
-            'handlers': ['console'],
-            'propagate': False,
-        },
-        'sentry.errors': {
-            'level': 'DEBUG',
-            'handlers': ['console'],
-            'propagate': False,
-        },
+        }
     }
 }
 
