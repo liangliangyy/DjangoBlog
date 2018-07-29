@@ -57,11 +57,11 @@ open_article_commentstatus.short_description = '打开文章评论'
 class ArticlelAdmin(admin.ModelAdmin):
     search_fields = ('body',)
     form = ArticleForm
-    list_display = ('id', 'title', 'author', 'created_time', 'views', 'status', 'type','article_order')
+    list_display = ('id', 'title', 'author', 'created_time', 'views', 'status', 'type', 'article_order')
     list_display_links = ('id', 'title')
     list_filter = (ArticleListFilter, 'status', 'type', 'category', 'tags')
     filter_horizontal = ('tags',)
-    exclude = ('slug', 'created_time', 'last_mod_time')
+    exclude = ('created_time', 'last_mod_time')
     view_on_site = True
     actions = [makr_article_publish, draft_article, close_article_commentstatus, open_article_commentstatus]
 
