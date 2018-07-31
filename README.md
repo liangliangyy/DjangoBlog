@@ -59,8 +59,11 @@ windows电脑：
     }
 
 ### 创建数据库
-
- 终端下执行:
+mysql数据库中执行:
+```sql
+CREATE DATABASE `djangoblog` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */;
+```
+ 然后终端下执行:
 
     ./manage.py makemigrations
     ./manage.py migrate
