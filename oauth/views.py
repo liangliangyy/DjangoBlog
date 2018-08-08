@@ -51,7 +51,6 @@ def authorize(request):
     if not rsp:
         return HttpResponseRedirect(manager.get_authorization_url(nexturl))
     user = manager.get_oauth_userinfo()
-    logger.info('user:' + user.nikename)
     if user:
         if user.picture:
             user.picture = save_user_avatar(user.picture)
