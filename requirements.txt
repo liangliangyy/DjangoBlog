@@ -6,14 +6,14 @@ cffi==1.11.5
 chardet==3.0.4
 coverage==4.5.1
 cryptography==2.2.2
-Django==2.0.7
+Django==2.1
 django-appconf==1.0.2
 django-autoslug==1.9.3
 django-compressor==2.2
 django-debug-toolbar==1.9.1
 django-haystack==2.8.1
 django-ipware==2.1.0
-django-pagedown==1.0.5
+django-pagedown==1.0.6
 django-uuslug==1.1.8
 idna==2.6
 jieba==0.39
