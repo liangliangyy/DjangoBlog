@@ -5,7 +5,7 @@ certifi==2018.4.16
 cffi==1.11.5
 chardet==3.0.4
 coverage==4.5.1
-cryptography==2.2.2
+cryptography==2.3.1
 Django==2.1
 django-appconf==1.0.2
 django-autoslug==1.9.3
