@@ -76,10 +76,10 @@ class ArticlelAdmin(admin.ModelAdmin):
 
     link_to_category.short_description = '分类目录'
 
-    # def get_form(self, request, obj=None, **kwargs):
-    #     form = super(ArticlelAdmin, self).get_form(request, obj, **kwargs)
-    #     form.base_fields['author'].queryset = get_user_model().objects.filter(is_superuser=True)
-    #     return form
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(ArticlelAdmin, self).get_form(request, obj, **kwargs)
+        form.base_fields['author'].queryset = get_user_model().objects.filter(is_superuser=True)
+        return form
 
     def save_model(self, request, obj, form, change):
         super(ArticlelAdmin, self).save_model(request, obj, form, change)
