@@ -1,12 +1,12 @@
 appdirs==1.4.3
 asn1crypto==0.24.0
 bottle==0.12.13
-certifi==2018.4.16
+certifi==2018.8.24
 cffi==1.11.5
 chardet==3.0.4
 coverage==4.5.1
 cryptography==2.3.1
-Django==2.1
+Django==2.1.1
 django-appconf==1.0.2
 django-autoslug==1.9.3
 django-compressor==2.2
@@ -15,7 +15,7 @@ django-haystack==2.8.1
 django-ipware==2.1.0
 django-pagedown==1.0.6
 django-uuslug==1.1.8
-idna==2.6
+idna==2.7
 jieba==0.39
 jsonpickle==0.9.6
 markdown2==2.3.5
@@ -27,7 +27,7 @@ pycparser==2.18
 Pygments==2.2.0
 PyMySQL==0.9.2
 pyparsing==2.2.0
-python-slugify==1.2.5
+python-slugify==1.2.6
 pytz==2018.5
 raven==6.9.0
 rcssmin==1.0.6
