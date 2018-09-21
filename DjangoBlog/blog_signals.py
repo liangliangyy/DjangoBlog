@@ -16,9 +16,11 @@
 import django.dispatch
 from django.dispatch import receiver
 from django.conf import settings
-from DjangoBlog.utils import cache, send_email, expire_view_cache
+from DjangoBlog.utils import cache, send_email, expire_view_cache, get_blog_setting
 from DjangoBlog.spider_notify import SpiderNotify
 from django.contrib.sites.models import Site
+from oauth.models import OAuthUser
+from django.core.mail import EmailMultiAlternatives
 
 import logging
 
@@ -27,6 +29,43 @@ logger = logging.getLogger(__name__)
 comment_save_signal = django.dispatch.Signal(providing_args=["comment_id", "username", "serverport"])
 article_save_signal = django.dispatch.Signal(providing_args=['id', 'is_update_views'])
 user_login_logout_signal = django.dispatch.Signal(providing_args=['id', 'type'])
+oauth_user_login_signal = django.dispatch.Signal(providing_args=['id'])
+send_email_signal = django.dispatch.Signal(providing_args=['emailto', 'title', 'content'])
+
+
+@receiver(send_email_signal)
+def send_email_callback(sender, **kwargs):
+    emailto = kwargs['emailto']
+    title = kwargs['title']
+    content = kwargs['content']
+
+    msg = EmailMultiAlternatives(title, content, from_email=settings.DEFAULT_FROM_EMAIL, to=emailto)
+    msg.content_subtype = "html"
+
+    from servermanager.models import EmailSendLog
+    log = EmailSendLog()
+    log.title = title
+    log.content = content
+    log.emailto = ','.join(emailto)
+
+    try:
+        result = msg.send()
+        log.send_result = result > 0
+    except Exception as e:
+        logger.error(e)
+        log.send_result = False
+    log.save()
+
+
+@receiver(oauth_user_login_signal)
+def oauth_user_login_callback(sender, **kwargs):
+    id = kwargs['id']
+    oauthuser = OAuthUser.objects.get(id=id)
+    setting = get_blog_setting()
+    if oauthuser.picture and not oauthuser.picture.startswith(setting.resource_path):
+        from DjangoBlog.utils import save_user_avatar
+        oauthuser.picture = save_user_avatar(oauthuser.picture)
+        oauthuser.save()
 
 
 @receiver(article_save_signal)
@@ -49,14 +88,14 @@ def article_save_callback(sender, **kwargs):
                 SpiderNotify.baidu_notify([notify_url])
             except Exception as ex:
                 logger.error("notify sipder", ex)
-                print(ex)
+
+    from DjangoBlog.utils import cache
+    cache.clear()
 
 
 @receiver(comment_save_signal)
 def comment_save_callback(sender, **kwargs):
     from comments.models import Comment
-    if settings.DEBUG:
-        return
 
     serverport = kwargs['serverport']
     username = kwargs['username']
@@ -103,4 +142,5 @@ def comment_save_callback(sender, **kwargs):
     from django.core.cache.utils import make_template_fragment_key
 
     key = make_template_fragment_key('sidebar', [username])
+    logger.info('delete sidebar key:' + key)
     cache.delete(key)

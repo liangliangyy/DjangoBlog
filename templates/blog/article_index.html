@@ -31,20 +31,6 @@
             {% endfor %}
             {% if is_paginated %}
                 {% load_pagination_info page_obj page_type tag_name %}
-                {% comment %} <nav id="nav-below" class="navigation" role="navigation">
-                    <h3 class="assistive-text">文章导航</h3>
-                    {% if page_obj.has_next %}
-                        <div class="nav-previous"><a
-                                href="{{ SITE_BASE_URL }}page/{{ page_obj.next_page_number }}"><span
-                                class="meta-nav">&larr;</span> 早期文章</a></div>
-                    {% endif %}
-                    {% if page_obj.has_previous %}
-                        <div class="nav-next"><a href="{{ SITE_BASE_URL }}page/{{ page_obj.previous_page_number }}">较新文章
-                            <span
-                                    class="meta-nav">→</span></a>
-                        </div>
-                    {% endif %}
-                </nav><!-- .navigation -->{% endcomment %}
 
             {% endif %}
         </div><!-- #content -->

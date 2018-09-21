@@ -58,7 +58,7 @@ open_article_commentstatus.short_description = '打开文章评论'
 
 class ArticlelAdmin(admin.ModelAdmin):
     list_per_page = 20
-    search_fields = ('body','title')
+    search_fields = ('body', 'title')
     form = ArticleForm
     list_display = (
         'id', 'title', 'author', 'link_to_category', 'created_time', 'views', 'status', 'type', 'article_order')
@@ -83,8 +83,6 @@ class ArticlelAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         super(ArticlelAdmin, self).save_model(request, obj, form, change)
-        from DjangoBlog.utils import cache
-        cache.clear()
 
     def get_view_on_site_url(self, obj=None):
         if obj:

@@ -16,6 +16,9 @@
 from django.contrib.sitemaps import ping_google
 import requests
 from django.conf import settings
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class SpiderNotify():
@@ -26,14 +29,14 @@ class SpiderNotify():
             result = requests.post(settings.BAIDU_NOTIFY_URL, data=data)
             print(result.text)
         except Exception as e:
-            print(e)
+            logger.error(e)
 
     @staticmethod
     def __google_notify():
         try:
             ping_google('/sitemap.xml')
         except Exception as e:
-            print(e)
+            logger.error(e)
 
     @staticmethod
     def notify(url):
