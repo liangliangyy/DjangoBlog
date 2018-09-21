@@ -111,13 +111,9 @@ def emailconfirm(request, id, sign):
         if result[1]:
             author.username = oauthuser.nikename
             author.save()
-    """
-    if oauthuser.email and author.email:
-        login(request, author)
-        return HttpResponseRedirect('/')
-    """
     oauthuser.author = author
     oauthuser.save()
+    oauth_user_login_signal.send(sender=emailconfirm.__class__, id=oauthuser.id)
     login(request, author)
 
     site = Site.objects.get_current().domain

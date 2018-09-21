@@ -20,6 +20,8 @@ from DjangoBlog.utils import cache, send_email, expire_view_cache, get_blog_sett
 from DjangoBlog.spider_notify import SpiderNotify
 from django.contrib.sites.models import Site
 from oauth.models import OAuthUser
+from django.core.mail import EmailMultiAlternatives
+
 import logging
 
 logger = logging.getLogger(__name__)
@@ -28,6 +30,31 @@ comment_save_signal = django.dispatch.Signal(providing_args=["comment_id", "user
 article_save_signal = django.dispatch.Signal(providing_args=['id', 'is_update_views'])
 user_login_logout_signal = django.dispatch.Signal(providing_args=['id', 'type'])
 oauth_user_login_signal = django.dispatch.Signal(providing_args=['id'])
+send_email_signal = django.dispatch.Signal(providing_args=['emailto', 'title', 'content'])
+
+
+@receiver(send_email_signal)
+def send_email_callback(sender, **kwargs):
+    emailto = kwargs['emailto']
+    title = kwargs['title']
+    content = kwargs['content']
+
+    msg = EmailMultiAlternatives(title, content, from_email=settings.DEFAULT_FROM_EMAIL, to=emailto)
+    msg.content_subtype = "html"
+
+    from servermanager.models import EmailSendLog
+    log = EmailSendLog()
+    log.title = title
+    log.content = content
+    log.emailto = ','.join(emailto)
+
+    try:
+        result = msg.send()
+        log.send_result = result > 0
+    except Exception as e:
+        logger.error(e)
+        log.send_result = False
+    log.save()
 
 
 @receiver(oauth_user_login_signal)
@@ -75,8 +102,8 @@ def comment_save_callback(sender, **kwargs):
     comment = Comment.objects.get(id=kwargs['comment_id'])
     site = Site.objects.get_current().domain
     article = comment.article
-    if not settings.DEBUG:
-
+    # if not settings.DEBUG:
+    if True:
         subject = '感谢您发表的评论'
         article_url = "https://{site}{path}".format(site=site, path=comment.article.get_absolute_url())
         html_content = """
