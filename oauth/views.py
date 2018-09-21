@@ -16,6 +16,8 @@ from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseForbidden
 from .oauthmanager import get_manager_by_type
+from DjangoBlog.blog_signals import oauth_user_login_signal
+
 import logging
 
 logger = logging.getLogger(__name__)
@@ -52,8 +54,6 @@ def authorize(request):
         return HttpResponseRedirect(manager.get_authorization_url(nexturl))
     user = manager.get_oauth_userinfo()
     if user:
-        if user.picture:
-            user.picture = save_user_avatar(user.picture)
         if not user.nikename:
             import datetime
             user.nikename = "djangoblog" + datetime.datetime.now().strftime('%y%m%d%I%M%S')
@@ -80,7 +80,10 @@ def authorize(request):
 
             user.author = author
             user.save()
+
+            oauth_user_login_signal.send(sender=authorize.__class__, id=user.id)
             login(request, author)
+
             return HttpResponseRedirect(nexturl)
         if not email:
             user.save()
