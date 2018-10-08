@@ -13,8 +13,8 @@ branches:
 # command to install dependencies
 install:
   - pip install -r travis_test/requirements.txt
-  - pip install python-coveralls
-  - pip install coverage
+  - pip install python-coveralls 
+  - pip install coverage codecov
 before_script:
   - mysql -e 'CREATE DATABASE `djangoblog` /*!40100 DEFAULT CHARACTER SET utf8 */;'
   - python manage.py makemigrations
@@ -26,3 +26,4 @@ script:
     - coverage run manage.py test
 after_success:
     - coveralls
+    - codecov
