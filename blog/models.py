@@ -1,8 +1,10 @@
+import logging
+from abc import ABCMeta, abstractmethod, abstractproperty
+
 from django.db import models
 from django.urls import reverse
 from django.conf import settings
 from uuslug import slugify
-import logging
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.contrib.sites.models import Site
@@ -14,20 +16,21 @@ logger = logging.getLogger(__name__)
 
 
 class BaseModel(models.Model):
+    id = models.AutoField(primary_key=True)
     created_time = models.DateTimeField('创建时间', default=now)
     last_mod_time = models.DateTimeField('修改时间', default=now)
 
     def save(self, *args, **kwargs):
-        from DjangoBlog.blog_signals import article_save_signal
-        if not isinstance(self, Article):
-            if not self.slug or self.slug == 'no-slug' or not self.id:
-                slug = self.title if 'title' in self.__dict__ else self.name
-                self.slug = slugify(slug)
+
+        if not isinstance(self, Article) and 'slug' in self.__dict__:
+            if getattr(self, 'slug') == 'no-slug' or not self.id:
+                slug = getattr(self, 'title') if 'title' in self.__dict__ else getattr(self, 'name')
+                setattr(self, 'slug', slugify(slug))
         super().save(*args, **kwargs)
-        # type = self.__class__.__name__
-        is_update_views = 'update_fields' in kwargs and len(kwargs['update_fields']) == 1 and kwargs['update_fields'][
-            0] == 'views'
-        article_save_signal.send(sender=self.__class__, is_update_views=is_update_views, id=self.id)
+        # is_update_views = 'update_fields' in kwargs and len(kwargs['update_fields']) == 1 and kwargs['update_fields'][
+        #     0] == 'views'
+        # from DjangoBlog.blog_signals import article_save_signal
+        # article_save_signal.send(sender=self.__class__, is_update_views=is_update_views, id=self.id)
 
     def get_full_url(self):
         site = Site.objects.get_current().domain
@@ -36,6 +39,10 @@ class BaseModel(models.Model):
 
     class Meta:
         abstract = True
+
+    @abstractmethod
+    def get_absolute_url(self):
+        pass
 
 
 class Article(BaseModel):
@@ -71,7 +78,7 @@ class Article(BaseModel):
         ordering = ['-article_order', '-pub_time']
         verbose_name = "文章"
         verbose_name_plural = verbose_name
-        get_latest_by = 'created_time'
+        get_latest_by = 'id'
 
     def get_absolute_url(self):
         return reverse('blog:detailbyid', kwargs={
