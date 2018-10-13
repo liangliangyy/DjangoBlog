@@ -29,7 +29,8 @@ class ArticleTest(TestCase):
         user.save()
         response = self.client.get(user.get_absolute_url())
         self.assertEqual(response.status_code, 200)
-
+        response = self.client.get('/admin/servermanager/emailsendlog/')
+        response = self.client.get('admin/admin/logentry/')
         s = SideBar()
         s.sequence = 1
         s.name = 'test'
@@ -161,6 +162,9 @@ class ArticleTest(TestCase):
             rsp = self.client.post('/upload', form_data, follow=True)
 
             self.assertEqual(rsp.status_code, 200)
+        from DjangoBlog.utils import save_user_avatar, send_email
+        send_email(['qq@qq.com'], 'testTitle', 'testContent')
+        save_user_avatar('https://www.python.org/static/img/python-logo@2x.png')
         """
         data = SimpleUploadedFile(imagepath, b'file_content', content_type='image/jpg')
         rsp = self.client.post('/upload', {'django.jpg': data})

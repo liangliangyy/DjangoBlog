@@ -1,6 +1,7 @@
 from django.test import Client, RequestFactory, TestCase
 from .models import OwnTrackLog
 from accounts.models import BlogUser
+from owntracks.views import convert_to_amap
 import json
 
 
@@ -17,6 +18,7 @@ class OwnTrackLogTest(TestCase):
             'lat': 123.123,
             'lon': 134.341
         }
+
         self.client.post('/owntracks/logtracks', json.dumps(o), content_type='application/json')
         length = len(OwnTrackLog.objects.all())
         self.assertEqual(length, 1)
@@ -25,6 +27,7 @@ class OwnTrackLogTest(TestCase):
             'tid': 12,
             'lat': 123.123
         }
+
         self.client.post('/owntracks/logtracks', json.dumps(o), content_type='application/json')
         length = len(OwnTrackLog.objects.all())
         self.assertEqual(length, 1)
@@ -41,6 +44,7 @@ class OwnTrackLogTest(TestCase):
         s.lon = 123.234
         s.lat = 34.234
         s.save()
+        convert_to_amap([s])
         rsp = self.client.get('/owntracks/show_dates')
         self.assertEqual(rsp.status_code, 200)
         rsp = self.client.get('/owntracks/show_maps')

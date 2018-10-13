@@ -62,10 +62,4 @@ class CommentPostView(FormView):
             comment.parent_comment = parent_comment
 
         comment.save(True)
-
-        from DjangoBlog.blog_signals import comment_save_signal
-
-        port = self.request.get_port()
-        username = self.request.user.username if self.request.user else ''
-        comment_save_signal.send(sender=self.__class__, comment_id=comment.id, username=username, serverport=port)
         return HttpResponseRedirect("%s#div-comment-%d" % (article.get_absolute_url(), comment.pk))
