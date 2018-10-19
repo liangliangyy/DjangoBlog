@@ -61,10 +61,12 @@ class BaseOauthManager(metaclass=ABCMeta):
 
     def do_get(self, url, params):
         rsp = requests.get(url=url, params=params)
+        logger.info(rsp.text)
         return rsp.text
 
     def do_post(self, url, params):
         rsp = requests.post(url, params)
+        logger.info(rsp.text)
         return rsp.text
 
     def get_config(self):
@@ -272,7 +274,7 @@ class GitHubOauthManager(BaseOauthManager):
             user.type = 'github'
             user.token = self.access_token
             user.matedata = rsp
-            if datas['email']:
+            if 'email' in datas and datas['email']:
                 user.email = datas['email']
 
             return user
@@ -339,14 +341,89 @@ class FaceBookOauthManager(BaseOauthManager):
             user.type = 'facebook'
             user.token = self.access_token
             user.matedata = rsp
-            if datas['email']:
+            if 'email' in datas and datas['email']:
                 user.email = datas['email']
-            if datas['picture'] and datas['picture']['data'] and datas['picture']['data']['url']:
+            if 'picture' in datas and datas['picture'] and datas['picture']['data'] and datas['picture']['data']['url']:
                 user.picture = str(datas['picture']['data']['url'])
             return user
         except Exception as e:
             logger.error(e)
             return None
+
+
+class QQOauthManager(BaseOauthManager):
+    AUTH_URL = 'https://graph.qq.com/oauth2.0/authorize'
+    TOKEN_URL = 'https://graph.qq.com/oauth2.0/token'
+    API_URL = 'https://graph.qq.com/user/get_user_info'
+    OPEN_ID_URL = 'https://graph.qq.com/oauth2.0/me'
+    ICON_NAME = 'qq'
+
+    def __init__(self, access_token=None, openid=None):
+        config = self.get_config()
+        self.client_id = config.appkey if config else ''
+        self.client_secret = config.appsecret if config else ''
+        self.callback_url = config.callback_url if config else ''
+        super(QQOauthManager, self).__init__(access_token=access_token, openid=openid)
+
+    def get_authorization_url(self, nexturl='/'):
+        params = {
+            'response_type': 'code',
+            'client_id': self.client_id,
+            'redirect_uri': self.callback_url + '&next_url=' + nexturl,
+        }
+        url = self.AUTH_URL + "?" + urllib.parse.urlencode(params)
+        return url
+
+    def get_access_token_by_code(self, code):
+        params = {
+            'grant_type': 'authorization_code',
+            'client_id': self.client_id,
+            'client_secret': self.client_secret,
+            'code': code,
+            'redirect_uri': self.callback_url
+        }
+        rsp = self.do_get(self.TOKEN_URL, params)
+        if rsp:
+            d = urllib.parse.parse_qs(rsp)
+            token = d['access_token']
+            self.access_token = token
+            return token
+
+    def get_open_id(self):
+        if self.is_access_token_set:
+            params = {
+                'access_token': self.access_token
+            }
+            rsp = self.do_get(self.OPEN_ID_URL, params)
+            if rsp:
+                rsp = rsp.replace('callback(', '').replace(')', '').replace(';', '')
+                obj = json.loads(rsp)
+                openid = str(obj['openid'])
+                self.openid = openid
+                return openid
+
+    def get_oauth_userinfo(self):
+        openid = self.get_open_id()
+        if openid:
+            params = {
+                'access_token': self.access_token,
+                'oauth_consumer_key': self.client_id,
+                'openid': self.openid
+            }
+            rsp = self.do_get(self.API_URL, params)
+            logger.info(rsp)
+            obj = json.loads(rsp)
+            user = OAuthUser()
+            user.nikename = obj['nickname']
+            user.openid = openid
+            user.type = 'qq'
+            user.token = self.access_token
+            user.matedata = rsp
+            if 'email' in obj:
+                user.email = obj['email']
+            if 'figureurl' in obj:
+                user.picture = str(obj['figureurl'])
+            return user
 
 
 def get_oauth_apps():

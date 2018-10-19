@@ -35,6 +35,7 @@ class OAuthConfig(models.Model):
         ('google', '谷歌'),
         ('github', 'GitHub'),
         ('facebook', 'FaceBook'),
+        ('qq', 'QQ'),
     )
     type = models.CharField('类型', max_length=10, choices=TYPE, default='a')
     appkey = models.CharField(max_length=200, verbose_name='AppKey')
