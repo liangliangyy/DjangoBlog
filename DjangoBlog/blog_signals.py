@@ -22,7 +22,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.db.models.signals import post_save
 from django.contrib.auth.signals import user_logged_in, user_logged_out, user_login_failed
 
-from DjangoBlog.utils import cache, send_email, expire_view_cache, get_blog_setting
+from DjangoBlog.utils import cache, send_email, expire_view_cache, get_blog_setting, delete_view_cache
 from DjangoBlog.spider_notify import SpiderNotify
 from oauth.models import OAuthUser
 from blog.models import Article, Category, Tag, Links, SideBar, BlogSettings
@@ -65,11 +65,15 @@ def send_email_signal_handler(sender, **kwargs):
 def oauth_user_login_signal_handler(sender, **kwargs):
     id = kwargs['id']
     oauthuser = OAuthUser.objects.get(id=id)
-    setting = get_blog_setting()
-    if oauthuser.picture and not oauthuser.picture.startswith(setting.resource_path):
+    site = Site.objects.get_current().domain
+    if oauthuser.picture and not oauthuser.picture.find(site) >= 0:
         from DjangoBlog.utils import save_user_avatar
         oauthuser.picture = save_user_avatar(oauthuser.picture)
         oauthuser.save()
+
+    delete_view_cache(oauthuser.author.username)
+
+    cache.clear()
 
 
 @receiver(post_save)
@@ -99,10 +103,7 @@ def model_post_save_callback(sender, instance, created, raw, using, update_field
             cache.delete('seo_processor')
         comment_cache_key = 'article_comments_{id}'.format(id=instance.article.id)
         cache.delete(comment_cache_key)
-        from django.core.cache.utils import make_template_fragment_key
-        key = make_template_fragment_key('sidebar', [instance.author.username])
-        logger.info('delete sidebar key:' + key)
-        cache.delete(key)
+        delete_view_cache(instance.author.username)
 
         _thread.start_new(send_comment_email, (instance,))
 
@@ -114,4 +115,5 @@ def model_post_save_callback(sender, instance, created, raw, using, update_field
 @receiver(user_logged_out)
 def user_auth_callback(sender, request, user, **kwargs):
     logger.info(user)
+    delete_view_cache(user.username)
     cache.clear()

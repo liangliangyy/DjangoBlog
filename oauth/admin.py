@@ -24,9 +24,6 @@ class OAuthUserAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         return False
 
-    def has_delete_permission(self, request, obj=None):
-        return False
-
     def link_to_usermodel(self, obj):
         if obj.author:
             info = (obj.author._meta.app_label, obj.author._meta.model_name)

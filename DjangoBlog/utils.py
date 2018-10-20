@@ -209,11 +209,19 @@ def get_blog_setting():
 
 
 def save_user_avatar(url):
+    setting = get_blog_setting()
+    logger.info(url)
+    try:
+        imgname = url.split('/')[-1]
+        if imgname:
+            path = r'{basedir}/avatar/{img}'.format(basedir=setting.resource_path, img=imgname)
+            if os.path.exists(path):
+                os.remove(path)
+    except:
+        pass
     try:
         rsp = requests.get(url, timeout=2)
         if rsp.status_code == 200:
-            setting = get_blog_setting()
-
             basepath = r'{basedir}/avatar/'.format(basedir=setting.resource_path)
             if not os.path.exists(basepath):
                 os.makedirs(basepath)
@@ -229,3 +237,10 @@ def save_user_avatar(url):
     except Exception as e:
         logger.error(e)
         return url
+
+
+def delete_view_cache(username):
+    from django.core.cache.utils import make_template_fragment_key
+    key = make_template_fragment_key('sidebar', [username])
+    logger.info('delete sidebar key:' + key)
+    cache.delete(key)

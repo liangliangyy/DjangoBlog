@@ -58,7 +58,11 @@ def authorize(request):
             import datetime
             user.nikename = "djangoblog" + datetime.datetime.now().strftime('%y%m%d%I%M%S')
         try:
-            user = OAuthUser.objects.get(type=type, openid=user.openid)
+            temp = OAuthUser.objects.get(type=type, openid=user.openid)
+            temp.picture = user.picture
+            temp.matedata = user.matedata
+            temp.nikename = user.nikename
+            user = temp
         except ObjectDoesNotExist:
             pass
         # facebook的token过长
@@ -83,7 +87,6 @@ def authorize(request):
 
             oauth_user_login_signal.send(sender=authorize.__class__, id=user.id)
             login(request, author)
-
             return HttpResponseRedirect(nexturl)
         if not email:
             user.save()
