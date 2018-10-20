@@ -5,6 +5,7 @@ from django.contrib.sites.models import Site
 import datetime
 from accounts.models import BlogUser
 from django.urls import reverse
+from DjangoBlog.utils import *
 
 
 # Create your tests here.
@@ -58,6 +59,7 @@ class AccountTest(TestCase):
         user.is_superuser = True
         user.is_staff = True
         user.save()
+        delete_view_cache(user.username)
         category = Category()
         category.name = "categoryaaa"
         category.created_time = datetime.datetime.now()
