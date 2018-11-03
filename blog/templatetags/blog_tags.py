@@ -14,6 +14,7 @@
 """
 
 from django import template
+from django.db.models import Q
 from django.conf import settings
 from django.template.defaultfilters import stringfilter
 from django.utils.safestring import mark_safe
@@ -126,7 +127,7 @@ def load_articletags(article):
 
 
 @register.inclusion_tag('blog/tags/sidebar.html')
-def load_sidebar(user):
+def load_sidebar(user, linktype):
     """
     加载侧边栏
     :return:
@@ -139,7 +140,7 @@ def load_sidebar(user):
     extra_sidebars = SideBar.objects.filter(is_enable=True).order_by('sequence')
     most_read_articles = Article.objects.filter(status='p').order_by('-views')[:blogsetting.sidebar_article_count]
     dates = Article.objects.datetimes('created_time', 'month', order='DESC')
-    links = Links.objects.all()
+    links = Links.objects.filter(is_enable=True).filter(Q(show_type=str(linktype)) | Q(show_type='a'))
     commment_list = Comment.objects.filter(is_enable=True).order_by('-id')[:blogsetting.sidebar_comment_count]
     # show_adsense = settings.SHOW_GOOGLE_ADSENSE
     # 标签云 计算字体大小
@@ -150,7 +151,7 @@ def load_sidebar(user):
     if tags and len(tags) > 0:
         s = list(map(lambda t: (t, t.get_article_count()), tags))
         count = sum(map(lambda t: t[1], s))
-        dd = 1 if count == 0 else count / len(tags)
+        dd = 1 if count == 0 and not len(tags) else count / len(tags)
         sidebar_tags = list(map(lambda x: (x[0], x[1], (x[1] / dd) * increment + 10), s))
 
     return {
@@ -158,9 +159,9 @@ def load_sidebar(user):
         'sidebar_categorys': sidebar_categorys,
         'most_read_articles': most_read_articles,
         'article_dates': dates,
-        'sidabar_links': links,
         'sidebar_comments': commment_list,
         'user': user,
+        'sidabar_links': links,
         'show_google_adsense': blogsetting.show_google_adsense,
         'google_adsense_codes': blogsetting.google_adsense_codes,
         'open_site_comment': blogsetting.open_site_comment,

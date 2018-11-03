@@ -60,10 +60,10 @@ def cache_decorator(expiration=3 * 60):
                 key = m.hexdigest()
             value = cache.get(key)
             if value:
-                logger.info('cache_decorator get cache:%s key:%s' % (func.__name__, key))
+                # logger.info('cache_decorator get cache:%s key:%s' % (func.__name__, key))
                 return value
             else:
-                logger.info('cache_decorator set cache:%s key:%s' % (func.__name__, key))
+                # logger.info('cache_decorator set cache:%s key:%s' % (func.__name__, key))
                 value = func(*args, **kwargs)
                 cache.set(key, value, expiration)
                 return value
@@ -241,6 +241,8 @@ def save_user_avatar(url):
 
 def delete_view_cache(username):
     from django.core.cache.utils import make_template_fragment_key
-    key = make_template_fragment_key('sidebar', [username])
-    logger.info('delete sidebar key:' + key)
-    cache.delete(key)
+    from blog.models import LINK_SHOW_TYPE
+    keys = (make_template_fragment_key('sidebar', [username + x[0]]) for x in LINK_SHOW_TYPE)
+    for k in keys:
+        logger.info('delete sidebar key:' + k)
+        cache.delete(k)
