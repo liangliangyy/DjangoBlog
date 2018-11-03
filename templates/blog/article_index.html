@@ -37,10 +37,10 @@
     </div><!-- #primary -->
 
 {% endblock %}
-
-
 {% block sidebar %}
-    {% load_sidebar user %}
+    {% with request.user.username|add:linktype as cachekey %}
+        {% cache 36000 sidebar cachekey %}
+            {% load_sidebar user linktype %}
+        {% endcache %}
+    {% endwith %}
 {% endblock %}
-
-

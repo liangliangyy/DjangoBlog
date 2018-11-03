@@ -14,6 +14,13 @@ from django.utils.timezone import now
 
 logger = logging.getLogger(__name__)
 
+LINK_SHOW_TYPE = (
+    ('i', '首页'),
+    ('l', '列表页'),
+    ('p', '文章页面'),
+    ('a', '全站'),
+)
+
 
 class BaseModel(models.Model):
     id = models.AutoField(primary_key=True)
@@ -207,9 +214,12 @@ class Tag(BaseModel):
 
 class Links(models.Model):
     """友情链接"""
+
     name = models.CharField('链接名称', max_length=30, unique=True)
     link = models.URLField('链接地址')
     sequence = models.IntegerField('排序', unique=True)
+    is_enable = models.BooleanField('是否显示', default=True, blank=False, null=False)
+    show_type = models.CharField('显示类型', max_length=1, choices=LINK_SHOW_TYPE, default='i')
     created_time = models.DateTimeField('创建时间', default=now)
     last_mod_time = models.DateTimeField('修改时间', default=now)
 

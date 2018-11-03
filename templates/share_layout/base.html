@@ -63,10 +63,10 @@
         {% block content %}
         {% endblock %}
 
-        {% cache 36000 sidebar request.user.username %}
-            {% block sidebar %}
-            {% endblock %}
-        {% endcache %}
+
+        {% block sidebar %}
+        {% endblock %}
+
 
     </div><!-- #main .wrapper -->
     {% include 'share_layout/footer.html' %}

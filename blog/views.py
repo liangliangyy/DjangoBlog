@@ -31,6 +31,7 @@ class ArticleListView(ListView):
     page_type = ''
     paginate_by = settings.PAGINATE_BY
     page_kwarg = 'page'
+    link_type = 'l'
 
     def get_view_cache_key(self):
         return self.request.get['pages']
@@ -70,8 +71,14 @@ class ArticleListView(ListView):
         value = self.get_queryset_from_cache(key)
         return value
 
+    def get_context_data(self, **kwargs):
+        kwargs['linktype'] = self.link_type
+        return super(ArticleListView, self).get_context_data(**kwargs)
+
 
 class IndexView(ArticleListView):
+    link_type = 'i'
+
     def get_queryset_data(self):
         article_list = Article.objects.filter(type='a', status='p')
         return article_list
