@@ -114,6 +114,7 @@ def model_post_save_callback(sender, instance, created, raw, using, update_field
 @receiver(user_logged_in)
 @receiver(user_logged_out)
 def user_auth_callback(sender, request, user, **kwargs):
-    logger.info(user)
-    delete_view_cache(user.username)
-    cache.clear()
+    if user and user.username:
+        logger.info(user)
+        delete_view_cache(user.username)
+        cache.clear()
