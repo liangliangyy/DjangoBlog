@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 # Create your views here.
-
+from urllib.parse import urlparse
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import get_user_model
@@ -23,6 +23,20 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+def get_redirecturl(request):
+    nexturl = request.GET.get('next_url', None)
+    if not nexturl or nexturl == '/login/' or nexturl == '/login':
+        nexturl = '/'
+        return nexturl
+    p = urlparse(nexturl)
+    if p.netloc:
+        site = Site.objects.get_current().domain
+        if not p.netloc.replace('www.', '') == site.replace('www.', ''):
+            logger.info('非法url:' + nexturl)
+            return "/"
+    return nexturl
+
+
 def oauthlogin(request):
     type = request.GET.get('type', None)
     if not type:
@@ -30,15 +44,12 @@ def oauthlogin(request):
     manager = get_manager_by_type(type)
     if not manager:
         return HttpResponseRedirect('/')
-    nexturl = request.GET.get('next_url', None)
-    if not nexturl or nexturl == '/login/':
-        nexturl = '/'
+    nexturl = get_redirecturl(request)
     authorizeurl = manager.get_authorization_url(nexturl)
     return HttpResponseRedirect(authorizeurl)
 
 
 def authorize(request):
-    manager = None
     type = request.GET.get('type', None)
     if not type:
         return HttpResponseRedirect('/')
@@ -47,9 +58,7 @@ def authorize(request):
         return HttpResponseRedirect('/')
     code = request.GET.get('code', None)
     rsp = manager.get_access_token_by_code(code)
-    nexturl = request.GET.get('next_url', None)
-    if not nexturl:
-        nexturl = '/'
+    nexturl = get_redirecturl(request)
     if not rsp:
         return HttpResponseRedirect(manager.get_authorization_url(nexturl))
     user = manager.get_oauth_userinfo()
@@ -88,7 +97,7 @@ def authorize(request):
             oauth_user_login_signal.send(sender=authorize.__class__, id=user.id)
             login(request, author)
             return HttpResponseRedirect(nexturl)
-        if not email:
+        else:
             user.save()
             url = reverse('oauth:require_email', kwargs={
                 'oauthid': user.id
@@ -105,7 +114,6 @@ def emailconfirm(request, id, sign):
     if not get_md5(settings.SECRET_KEY + str(id) + settings.SECRET_KEY).upper() == sign.upper():
         return HttpResponseForbidden()
     oauthuser = get_object_or_404(OAuthUser, pk=id)
-    author = None
     if oauthuser.author:
         author = get_user_model().objects.get(pk=oauthuser.author_id)
     else:
@@ -202,9 +210,6 @@ class RequireEmailView(FormView):
 
 def bindsuccess(request, oauthid):
     type = request.GET.get('type', None)
-
-    title = ''
-    content = ''
     oauthuser = get_object_or_404(OAuthUser, pk=oauthid)
     if type == 'email':
         title = '绑定成功'
