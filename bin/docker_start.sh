@@ -4,7 +4,7 @@ DJANGODIR=/code/DjangoBlog # Django project directory
 USER=root # the user to run as
 GROUP=root # the group to run as
 NUM_WORKERS=1 # how many worker processes should Gunicorn spawn
-DJANGO_SETTINGS_MODULE=DjangoBlog.settings # which settings file should Django use
+#DJANGO_SETTINGS_MODULE=DjangoBlog.settings # which settings file should Django use
 DJANGO_WSGI_MODULE=DjangoBlog.wsgi # WSGI module name
 
 
