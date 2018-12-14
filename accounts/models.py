@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.urls import reverse
-from django.contrib.sites.models import Site
+from DjangoBlog.utils import get_current_site
 from django.utils.timezone import now
 
 
@@ -22,6 +22,6 @@ class BlogUser(AbstractUser):
         return self.email
 
     def get_full_url(self):
-        site = Site.objects.get_current().domain
+        site = get_current_site().domain
         url = "https://{site}{path}".format(site=site, path=self.get_absolute_url())
         return url

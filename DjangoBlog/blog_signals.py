@@ -17,7 +17,7 @@ import django.dispatch
 from django.dispatch import receiver
 from django.conf import settings
 from django.contrib.admin.models import LogEntry
-from django.contrib.sites.models import Site
+from DjangoBlog.utils import get_current_site
 from django.core.mail import EmailMultiAlternatives
 from django.db.models.signals import post_save
 from django.contrib.auth.signals import user_logged_in, user_logged_out, user_login_failed
@@ -65,7 +65,7 @@ def send_email_signal_handler(sender, **kwargs):
 def oauth_user_login_signal_handler(sender, **kwargs):
     id = kwargs['id']
     oauthuser = OAuthUser.objects.get(id=id)
-    site = Site.objects.get_current().domain
+    site = get_current_site().domain
     if oauthuser.picture and not oauthuser.picture.find(site) >= 0:
         from DjangoBlog.utils import save_user_avatar
         oauthuser.picture = save_user_avatar(oauthuser.picture)
@@ -94,7 +94,7 @@ def model_post_save_callback(sender, instance, created, raw, using, update_field
     if isinstance(instance, Comment):
 
         path = instance.article.get_absolute_url()
-        site = Site.objects.get_current().domain
+        site = get_current_site().domain
         if site.find(':') > 0:
             site = site[0:site.find(':')]
 

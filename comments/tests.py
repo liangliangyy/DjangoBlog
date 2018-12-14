@@ -1,7 +1,7 @@
 from django.test import Client, RequestFactory, TestCase
 from blog.models import Article, Category, Tag
 from django.contrib.auth import get_user_model
-from django.contrib.sites.models import Site
+from DjangoBlog.utils import get_current_site
 from django.urls import reverse
 import datetime
 from accounts.models import BlogUser
@@ -17,7 +17,7 @@ class CommentsTest(TestCase):
         self.factory = RequestFactory()
 
     def test_validate_comment(self):
-        site = Site.objects.get_current().domain
+        site = get_current_site().domain
         user = BlogUser.objects.create_superuser(email="liangliangyy1@gmail.com",
                                                  username="liangliangyy1", password="liangliangyy1")
 

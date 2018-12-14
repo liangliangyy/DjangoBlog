@@ -25,7 +25,6 @@ def seo_processor(requests):
     key = 'seo_processor'
     value = cache.get(key)
     if value:
-        logger.info('get processor cache.')
         return value
     else:
         logger.info('set processor cache.')

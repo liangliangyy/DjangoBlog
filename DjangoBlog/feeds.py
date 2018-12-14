@@ -20,7 +20,7 @@ from django.utils.feedgenerator import Rss201rev2Feed
 from DjangoBlog.utils import CommonMarkdown
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
-from django.contrib.sites.models import Site
+from DjangoBlog.utils import get_current_site
 
 
 class DjangoBlogFeed(Feed):
@@ -46,7 +46,7 @@ class DjangoBlogFeed(Feed):
         return CommonMarkdown.get_markdown(item.body)
 
     def feed_copyright(self):
-        # print(Site.objects.get_current().name)
+        # print(get_current_site().name)
         return "Copyright© 2018 且听风吟"
 
     def item_link(self, item):

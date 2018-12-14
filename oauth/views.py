@@ -12,7 +12,7 @@ from django.views.generic import FormView, RedirectView
 from oauth.forms import RequireEmailForm
 from django.urls import reverse
 from DjangoBlog.utils import send_email, get_md5, save_user_avatar
-from django.contrib.sites.models import Site
+from DjangoBlog.utils import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseForbidden
 from .oauthmanager import get_manager_by_type
@@ -30,7 +30,7 @@ def get_redirecturl(request):
         return nexturl
     p = urlparse(nexturl)
     if p.netloc:
-        site = Site.objects.get_current().domain
+        site = get_current_site().domain
         if not p.netloc.replace('www.', '') == site.replace('www.', ''):
             logger.info('非法url:' + nexturl)
             return "/"
@@ -127,7 +127,7 @@ def emailconfirm(request, id, sign):
     oauth_user_login_signal.send(sender=emailconfirm.__class__, id=oauthuser.id)
     login(request, author)
 
-    site = Site.objects.get_current().domain
+    site = get_current_site().domain
     content = '''
      <p>恭喜您，您已经成功绑定您的邮箱，您可以使用{type}来直接免密码登录本网站.欢迎您继续关注本站，地址是</p>
 
@@ -181,7 +181,7 @@ class RequireEmailView(FormView):
         oauthuser.email = email
         oauthuser.save()
         sign = get_md5(settings.SECRET_KEY + str(oauthuser.id) + settings.SECRET_KEY)
-        site = Site.objects.get_current().domain
+        site = get_current_site().domain
         if settings.DEBUG:
             site = '127.0.0.1:8000'
         path = reverse('oauth:email_confirm', kwargs={
