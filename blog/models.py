@@ -7,7 +7,7 @@ from django.conf import settings
 from uuslug import slugify
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
-from django.contrib.sites.models import Site
+from DjangoBlog.utils import get_current_site
 from DjangoBlog.utils import cache_decorator, cache
 from django.utils.functional import cached_property
 from django.utils.timezone import now
@@ -40,7 +40,7 @@ class BaseModel(models.Model):
         # article_save_signal.send(sender=self.__class__, is_update_views=is_update_views, id=self.id)
 
     def get_full_url(self):
-        site = Site.objects.get_current().domain
+        site = get_current_site().domain
         url = "https://{site}{path}".format(site=site, path=self.get_absolute_url())
         return url
 

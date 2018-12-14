@@ -29,7 +29,7 @@ from comments.models import Comment
 from DjangoBlog.utils import cache_decorator, cache
 from django.contrib.auth import get_user_model
 from oauth.models import OAuthUser
-from django.contrib.sites.models import Site
+from DjangoBlog.utils import get_current_site
 import logging
 
 logger = logging.getLogger(__name__)
@@ -96,7 +96,7 @@ def load_breadcrumb(article):
     names = article.get_category_tree()
     from DjangoBlog.utils import get_blog_setting
     blogsetting = get_blog_setting()
-    site = Site.objects.get_current().domain
+    site = get_current_site().domain
     names.append((blogsetting.sitename, '/'))
     names = names[::-1]
 

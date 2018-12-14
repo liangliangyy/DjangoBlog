@@ -1,5 +1,5 @@
 from django.test import Client, RequestFactory, TestCase
-from django.contrib.sites.models import Site
+from DjangoBlog.utils import get_current_site
 from .models import commands
 import datetime
 from accounts.models import BlogUser
@@ -22,7 +22,7 @@ class ServerManagerTest(TestCase):
         self.assertIsNotNone(content)
 
     def test_validate_comment(self):
-        site = Site.objects.get_current().domain
+        site = get_current_site().domain
         user = BlogUser.objects.create_superuser(email="liangliangyy1@gmail.com",
                                                  username="liangliangyy1", password="liangliangyy1")
 

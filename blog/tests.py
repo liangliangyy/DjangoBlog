@@ -1,7 +1,7 @@
 from django.test import Client, RequestFactory, TestCase
 from blog.models import Article, Category, Tag, SideBar
 from django.contrib.auth import get_user_model
-from django.contrib.sites.models import Site
+from DjangoBlog.utils import get_current_site
 from blog.forms import BlogSearchForm
 from django.core.paginator import Paginator
 from blog.templatetags.blog_tags import load_pagination_info, load_articletags
@@ -21,7 +21,7 @@ class ArticleTest(TestCase):
         self.factory = RequestFactory()
 
     def test_validate_article(self):
-        site = Site.objects.get_current().domain
+        site = get_current_site().domain
         user = BlogUser.objects.get_or_create(email="liangliangyy@gmail.com", username="liangliangyy")[0]
         user.set_password("liangliangyy")
         user.is_staff = True

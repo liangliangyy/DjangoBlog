@@ -21,11 +21,7 @@ from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import html
 import logging
-import _thread
-from django.core.mail import EmailMultiAlternatives
-from django.conf import settings
 import requests
-import datetime
 import uuid
 import os
 
@@ -63,7 +59,7 @@ def cache_decorator(expiration=3 * 60):
                 # logger.info('cache_decorator get cache:%s key:%s' % (func.__name__, key))
                 return value
             else:
-                # logger.info('cache_decorator set cache:%s key:%s' % (func.__name__, key))
+                logger.info('cache_decorator set cache:%s key:%s' % (func.__name__, key))
                 value = func(*args, **kwargs)
                 cache.set(key, value, expiration)
                 return value
@@ -110,6 +106,12 @@ def block_code(text, lang, inlinestyles=False, linenos=False):
         )
 
 
+@cache_decorator()
+def get_current_site():
+    site = Site.objects.get_current()
+    return site
+
+
 class BlogMarkDownRenderer(mistune.Renderer):
     def block_code(self, text, lang=None):
         # renderer has an options
@@ -124,13 +126,13 @@ class BlogMarkDownRenderer(mistune.Renderer):
             link = 'mailto:%s' % link
         if not link:
             link = "#"
-        site = Site.objects.get_current()
+        site = get_current_site()
         nofollow = "" if link.find(site.domain) > 0 else "rel='nofollow'"
         return '<a href="%s" %s>%s</a>' % (link, nofollow, text)
 
     def link(self, link, title, text):
         link = escape_link(link)
-        site = Site.objects.get_current()
+        site = get_current_site()
         nofollow = "" if link.find(site.domain) > 0 else "rel='nofollow'"
         if not link:
             link = "#"
@@ -152,25 +154,6 @@ class CommonMarkdown():
 def send_email(emailto, title, content):
     from DjangoBlog.blog_signals import send_email_signal
     send_email_signal.send(send_email.__class__, emailto=emailto, title=title, content=content)
-    # msg = EmailMultiAlternatives(title, content, from_email=settings.DEFAULT_FROM_EMAIL, to=emailto)
-    # msg.content_subtype = "html"
-    #
-    # def sendmsg_withlog():
-    #     from servermanager.models import EmailSendLog
-    #     log = EmailSendLog()
-    #     log.title = title
-    #     log.content = content
-    #     log.emailto = ','.join(emailto)
-    #
-    #     try:
-    #         result = msg.send()
-    #         log.send_result = result > 0
-    #     except Exception as e:
-    #         logger.error(e)
-    #         log.send_result = False
-    #     log.save()
-    #
-    # _thread.start_new_thread(sendmsg_withlog, ())
 
 
 def parse_dict_to_url(dict):
@@ -183,7 +166,6 @@ def parse_dict_to_url(dict):
 def get_blog_setting():
     value = cache.get('get_blog_setting')
     if value:
-        logger.info('get cache get_blog_setting')
         return value
     else:
         from blog.models import BlogSettings
