@@ -7,11 +7,10 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.conf import settings
 from django import forms
-from django.http import HttpResponse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
-from DjangoBlog.utils import cache
+from DjangoBlog.utils import cache, get_md5, get_blog_setting
 from django.shortcuts import get_object_or_404
 from blog.models import Article, Category, Tag
 from comments.forms import CommentForm
@@ -233,16 +232,21 @@ class ArchivesView(ArticleListView):
 @csrf_exempt
 def fileupload(request):
     if request.method == 'POST':
+        sign = request.GET.get('sign', None)
+        if not sign:
+            return HttpResponseForbidden()
+        if not sign == get_md5(get_md5(settings.SECRET_KEY)):
+            return HttpResponseForbidden()
         response = []
         for filename in request.FILES:
             timestr = datetime.datetime.now().strftime('%Y/%m/%d')
             imgextensions = ['jpg', 'png', 'jpeg', 'bmp']
             fname = u''.join(str(filename))
-
             isimage = len([i for i in imgextensions if fname.find(i) >= 0]) > 0
+            blogsetting = get_blog_setting()
 
-            basepath = r'/var/www/resource/{type}/{timestr}'.format(
-                type='files' if not isimage else 'image', timestr=timestr)
+            basepath = r'{basedir}/{type}/{timestr}'.format(basedir=blogsetting.resource_path,
+                                                            type='files' if not isimage else 'image', timestr=timestr)
             if settings.TESTING:
                 basepath = settings.BASE_DIR + '/uploads'
             url = 'https://resource.lylinux.net/{type}/{timestr}/{filename}'.format(
@@ -274,7 +278,6 @@ def refresh_memcache(request):
                 cache.clear()
             return HttpResponse("ok")
         else:
-            from django.http import HttpResponseForbidden
             return HttpResponseForbidden()
     except Exception as e:
         logger.error(e)
