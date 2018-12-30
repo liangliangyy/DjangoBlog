@@ -1,7 +1,7 @@
 from django.test import Client, RequestFactory, TestCase
 from blog.models import Article, Category, Tag, SideBar
 from django.contrib.auth import get_user_model
-from DjangoBlog.utils import get_current_site
+from DjangoBlog.utils import get_current_site, get_md5
 from blog.forms import BlogSearchForm
 from django.core.paginator import Paginator
 from blog.templatetags.blog_tags import load_pagination_info, load_articletags
@@ -156,10 +156,13 @@ class ArticleTest(TestCase):
         imagepath = os.path.join(settings.BASE_DIR, 'python.png')
         with open(imagepath, 'wb') as file:
             file.write(rsp.content)
+        rsp = self.client.post('/upload')
+        self.assertEqual(rsp.status_code, 403)
+        sign = get_md5(get_md5(settings.SECRET_KEY))
         with open(imagepath, 'rb') as file:
             imgfile = SimpleUploadedFile('python.png', file.read(), content_type='image/jpg')
             form_data = {'python.png': imgfile}
-            rsp = self.client.post('/upload', form_data, follow=True)
+            rsp = self.client.post('/upload?sign=' + sign, form_data, follow=True)
 
             self.assertEqual(rsp.status_code, 200)
         from DjangoBlog.utils import save_user_avatar, send_email

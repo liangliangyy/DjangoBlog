@@ -7,7 +7,7 @@
 @author: liangliangyy
 @license: MIT Licence 
 @contact: liangliangyy@gmail.com
-@site: https://www.lylinux.org/
+@site: https://www.lylinux.net/
 @software: PyCharm
 @file: user_login_backend.py
 @time: 2017/2/17 下午8:45

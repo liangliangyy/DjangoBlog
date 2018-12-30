@@ -7,7 +7,7 @@
 @author: liangliangyy
 @license: MIT Licence
 @contact: liangliangyy@gmail.com
-@site: https://www.lylinux.org/
+@site: https://www.lylinux.net/
 @software: PyCharm
 @file: urls.py
 @time: 2016/11/20 下午3:52

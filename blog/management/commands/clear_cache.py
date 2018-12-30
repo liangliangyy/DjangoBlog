@@ -7,7 +7,7 @@
 @author: liangliangyy
 @license: MIT Licence 
 @contact: liangliangyy@gmail.com
-@site: https://www.lylinux.org/
+@site: https://www.lylinux.net/
 @software: PyCharm
 @file: clear_cache.py
 @time: 2017/2/17 下午10:30

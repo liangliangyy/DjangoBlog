@@ -7,7 +7,7 @@
 @author: liangliangyy
 @license: MIT Licence
 @contact: liangliangyy@gmail.com
-@site: https://www.lylinux.org/
+@site: https://www.lylinux.net/
 @software: PyCharm
 @file: blog_tags.py
 @time: 2016/11/2 下午11:10
@@ -142,7 +142,6 @@ def load_sidebar(user, linktype):
     dates = Article.objects.datetimes('created_time', 'month', order='DESC')
     links = Links.objects.filter(is_enable=True).filter(Q(show_type=str(linktype)) | Q(show_type='a'))
     commment_list = Comment.objects.filter(is_enable=True).order_by('-id')[:blogsetting.sidebar_comment_count]
-    # show_adsense = settings.SHOW_GOOGLE_ADSENSE
     # 标签云 计算字体大小
     # 根据总数计算出平均值 大小为 (数目/平均值)*步长
     increment = 5
@@ -151,8 +150,10 @@ def load_sidebar(user, linktype):
     if tags and len(tags) > 0:
         s = list(map(lambda t: (t, t.get_article_count()), tags))
         count = sum(map(lambda t: t[1], s))
-        dd = 1 if count == 0 and not len(tags) else count / len(tags)
+        dd = 1 if (count == 0 and not len(tags)) else count / len(tags)
+        import random
         sidebar_tags = list(map(lambda x: (x[0], x[1], (x[1] / dd) * increment + 10), s))
+        random.shuffle(sidebar_tags)
 
     return {
         'recent_articles': recent_articles,
@@ -282,8 +283,6 @@ def gravatar_url(email, size=40):
         return url
 
 
-# return an image tag with the gravatar
-# TEMPLATE USE:  {{ email|gravatar:150 }}
 @register.filter
 def gravatar(email, size=40):
     """获得gravatar头像"""
