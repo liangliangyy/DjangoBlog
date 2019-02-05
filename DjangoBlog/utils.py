@@ -70,6 +70,14 @@ def cache_decorator(expiration=3 * 60):
 
 
 def expire_view_cache(path, servername, serverport, key_prefix=None):
+    '''
+    刷新视图缓存
+    :param path:url路径
+    :param servername:host
+    :param serverport:端口
+    :param key_prefix:前缀
+    :return:是否成功
+    '''
     from django.http import HttpRequest
     from django.utils.cache import get_cache_key
 
@@ -87,6 +95,14 @@ def expire_view_cache(path, servername, serverport, key_prefix=None):
 
 
 def block_code(text, lang, inlinestyles=False, linenos=False):
+    '''
+    markdown代码高亮
+    :param text:
+    :param lang:
+    :param inlinestyles:
+    :param linenos:
+    :return:
+    '''
     if not lang:
         text = text.strip()
         return u'<pre><code>%s</code></pre>\n' % mistune.escape(text)
@@ -113,6 +129,10 @@ def get_current_site():
 
 
 class BlogMarkDownRenderer(mistune.Renderer):
+    '''
+    markdown渲染
+    '''
+
     def block_code(self, text, lang=None):
         # renderer has an options
         inlinestyles = self.options.get('inlinestyles')
@@ -191,6 +211,11 @@ def get_blog_setting():
 
 
 def save_user_avatar(url):
+    '''
+    保存用户头像
+    :param url:头像url
+    :return: 本地路径
+    '''
     setting = get_blog_setting()
     logger.info(url)
     try:

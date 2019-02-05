@@ -54,7 +54,11 @@ class ArticleListView(ListView):
         raise NotImplementedError()
 
     def get_queryset_from_cache(self, cache_key):
-        # raise NotImplementedError()
+        '''
+        缓存页面数据
+        :param cache_key: 缓存key
+        :return:
+        '''
         value = cache.get(cache_key)
         if value:
             logger.info('get view cache.key:{key}'.format(key=cache_key))
@@ -66,6 +70,10 @@ class ArticleListView(ListView):
             return article_list
 
     def get_queryset(self):
+        '''
+        重写默认，从缓存获取数据
+        :return:
+        '''
         key = self.get_queryset_cache_key()
         value = self.get_queryset_from_cache(key)
         return value
@@ -76,6 +84,9 @@ class ArticleListView(ListView):
 
 
 class IndexView(ArticleListView):
+    '''
+    首页
+    '''
     link_type = 'i'
 
     def get_queryset_data(self):
@@ -88,6 +99,9 @@ class IndexView(ArticleListView):
 
 
 class ArticleDetailView(DetailView):
+    '''
+    文章详情页面
+    '''
     template_name = 'blog/article_detail.html'
     model = Article
     pk_url_kwarg = 'article_id'
@@ -103,7 +117,7 @@ class ArticleDetailView(DetailView):
         articleid = int(self.kwargs[self.pk_url_kwarg])
         comment_form = CommentForm()
         user = self.request.user
-
+        # 如果用户已经登录，则隐藏邮件和用户名输入框
         if user.is_authenticated and not user.is_anonymous and user.email and user.username:
             comment_form.fields.update({
                 'email': forms.CharField(widget=forms.HiddenInput()),
@@ -125,6 +139,9 @@ class ArticleDetailView(DetailView):
 
 
 class CategoryDetailView(ArticleListView):
+    '''
+    分类目录列表
+    '''
     page_type = "分类目录归档"
 
     def get_queryset_data(self):
@@ -158,6 +175,9 @@ class CategoryDetailView(ArticleListView):
 
 
 class AuthorDetailView(ArticleListView):
+    '''
+    作者详情页
+    '''
     page_type = '作者文章归档'
 
     def get_queryset_cache_key(self):
@@ -177,18 +197,10 @@ class AuthorDetailView(ArticleListView):
         return super(AuthorDetailView, self).get_context_data(**kwargs)
 
 
-class TagListView(ListView):
-    template_name = ''
-    context_object_name = 'tag_list'
-
-    def get_queryset(self):
-        tags_list = []
-        tags = Tag.objects.all()
-        for t in tags:
-            t.article_set.count()
-
-
 class TagDetailView(ArticleListView):
+    '''
+    标签列表页面
+    '''
     page_type = '分类标签归档'
 
     def get_queryset_data(self):
@@ -216,6 +228,9 @@ class TagDetailView(ArticleListView):
 
 
 class ArchivesView(ArticleListView):
+    '''
+    文章归档页面
+    '''
     page_type = '文章归档'
     paginate_by = None
     page_kwarg = None
@@ -231,6 +246,11 @@ class ArchivesView(ArticleListView):
 
 @csrf_exempt
 def fileupload(request):
+    '''
+    该方法需自己写调用端来上传图片，该方法仅提供图床功能
+    :param request:
+    :return:
+    '''
     if request.method == 'POST':
         sign = request.GET.get('sign', None)
         if not sign:
