@@ -25,13 +25,10 @@
     <link rel="alternate" type="application/rss+xml" title="{{ SITE_NAME }} &raquo; Feed"
           href="{{ SITE_BASE_URL }}feed"/>
 
-
-
-
-       <link rel='stylesheet' id='twentytwelve-fonts-css'
-          href='https://resource.lylinux.net/statics/fonts/fonts.css'
-          type='text/css' media='all'/>
     {% compress css %}
+        <link rel='stylesheet' id='twentytwelve-fonts-css'
+              href='{% static 'blog/fonts/fonts.css' %}'
+              type='text/css' media='all'/>
         <link rel='stylesheet' id='twentytwelve-style-css' href='{% static 'blog/css/style.css' %}' type='text/css'
               media='all'/>
         <link href="{% static 'blog/css/oauth_style.css' %}" rel="stylesheet">
