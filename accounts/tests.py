@@ -1,7 +1,7 @@
 from django.test import Client, RequestFactory, TestCase
 from blog.models import Article, Category, Tag
 from django.contrib.auth import get_user_model
-from DjangoBlog.utils import get_current_site
+from DjangoBlog.utils import delete_view_cache, delete_sidebar_cache
 import datetime
 from accounts.models import BlogUser
 from django.urls import reverse
@@ -59,7 +59,7 @@ class AccountTest(TestCase):
         user.is_superuser = True
         user.is_staff = True
         user.save()
-        delete_view_cache(user.username)
+        delete_sidebar_cache(user.username)
         category = Category()
         category.name = "categoryaaa"
         category.created_time = datetime.datetime.now()

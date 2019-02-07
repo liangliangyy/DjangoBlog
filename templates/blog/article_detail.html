@@ -51,8 +51,7 @@
         </div><!-- #content -->
         {% if article.comment_status == "o" and OPEN_SITE_COMMENT %}
 
-            {% comment %}{% load comments_tags %}
-                {% load_post_comment article from %}{% endcomment %}
+
             {% include 'comments/tags/comment_list.html' %}
             {% if user.is_authenticated %}
                 {% include 'comments/tags/post_comment.html' %}
