@@ -117,7 +117,7 @@ class Article(BaseModel):
             return value
         else:
             comments = self.comment_set.filter(is_enable=True)
-            cache.set(cache_key, comments)
+            cache.set(cache_key, comments, 60 * 100)
             logger.info('set article comments:{id}'.format(id=self.id))
             return comments
 
@@ -125,12 +125,12 @@ class Article(BaseModel):
         info = (self._meta.app_label, self._meta.model_name)
         return reverse('admin:%s_%s_change' % info, args=(self.pk,))
 
-    @cached_property
+    @cache_decorator(expiration=60 * 100)
     def next_article(self):
         # 下一篇
         return Article.objects.filter(id__gt=self.id, status='p').order_by('id').first()
 
-    @cached_property
+    @cache_decorator(expiration=60 * 100)
     def prev_article(self):
         # 前一篇
         return Article.objects.filter(id__lt=self.id, status='p').first()

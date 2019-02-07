@@ -22,7 +22,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.db.models.signals import post_save
 from django.contrib.auth.signals import user_logged_in, user_logged_out, user_login_failed
 
-from DjangoBlog.utils import cache, send_email, expire_view_cache, get_blog_setting, delete_view_cache
+from DjangoBlog.utils import cache, send_email, expire_view_cache, delete_sidebar_cache, delete_view_cache
 from DjangoBlog.spider_notify import SpiderNotify
 from oauth.models import OAuthUser
 from blog.models import Article, Category, Tag, Links, SideBar, BlogSettings
@@ -103,7 +103,8 @@ def model_post_save_callback(sender, instance, created, raw, using, update_field
             cache.delete('seo_processor')
         comment_cache_key = 'article_comments_{id}'.format(id=instance.article.id)
         cache.delete(comment_cache_key)
-        delete_view_cache(instance.author.username)
+        delete_sidebar_cache(instance.author.username)
+        delete_view_cache('article_comments', [str(instance.article.pk)])
 
         _thread.start_new(send_comment_email, (instance,))
 
@@ -116,5 +117,5 @@ def model_post_save_callback(sender, instance, created, raw, using, update_field
 def user_auth_callback(sender, request, user, **kwargs):
     if user and user.username:
         logger.info(user)
-        delete_view_cache(user.username)
+        delete_sidebar_cache(user.username)
         cache.clear()

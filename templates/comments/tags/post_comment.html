@@ -7,18 +7,11 @@
         </h3>
         <form action="{% url 'comments:postcomment' article.pk %}" method="post" id="commentform"
               class="comment-form">{% csrf_token %}
-            {% comment %}<p class="comment-notes"><span id="email-notes">电子邮件地址不会被公开。</span> 必填项已用<span class="required">*</span>标注
-            </p>{% endcomment %}
             <p class="comment-form-comment">
                 {{ form.body.label_tag }}
 
                 {{ form.body }}
                 {{ form.body.errors }}
-                {% comment %}<label for="comment">评论</label> <textarea id="comment" name="comment"
-                                                                                      cols="45" rows="8"
-                                                                                      maxlength="65525"
-                                                                                      aria-required="true"
-                                                                                      required="required"></textarea>{% endcomment %}
             </p>
             <p class="comment-form-author">
                 {% if not form.name.is_hidden %}
@@ -26,26 +19,13 @@
                 {% endif %}
                 {{ form.name }}
                 {{ form.name.errors }}
-                {% comment %}<label for="author">姓名 <span class="required">*</span></label>
-                <input id="author" name="author" type="text" value="" size="30" maxlength="245" aria-required='true'
-                       required='required'/></p>{% endcomment %}
-
             <p class="comment-form-email">
-                {% comment %}    <label for="email">电子邮件 <span class="required">*</span></label> <input
-                    id="email" name="email" type="text" value="" size="30" maxlength="100"
-                    aria-describedby="email-notes" aria-required='true' required='required'/>{% endcomment %}
                 {% if not form.email.is_hidden %}
                     {{ form.email.label_tag }}
                 {% endif %}
                 {{ form.email }}
                 {{ form.email.errors }}
             </p>
-            {% comment %}<p class="comment-form-url">
-                {{ form.url.label_tag }}
-                {{ form.url }}
-                {{ form.url.errors }}
-
-            </p>{% endcomment %}
             {{ form.parent_comment_id }}
             <div class="form-submit">
                 <span class="comment-markdown"> 支持markdown</span>

@@ -20,7 +20,7 @@ import requests
 import json
 import logging
 import urllib.parse
-from DjangoBlog.utils import parse_dict_to_url
+from DjangoBlog.utils import parse_dict_to_url, cache_decorator
 
 logger = logging.getLogger(__name__)
 
@@ -426,6 +426,7 @@ class QQOauthManager(BaseOauthManager):
             return user
 
 
+@cache_decorator(expiration=100 * 60)
 def get_oauth_apps():
     configs = OAuthConfig.objects.filter(is_enable=True).all()
     if not configs:
@@ -438,7 +439,8 @@ def get_oauth_apps():
 
 def get_manager_by_type(type):
     applications = get_oauth_apps()
-    finds = list(filter(lambda x: x.ICON_NAME.lower() == type.lower(), applications))
-    if finds:
-        return finds[0]
+    if applications:
+        finds = list(filter(lambda x: x.ICON_NAME.lower() == type.lower(), applications))
+        if finds:
+            return finds[0]
     return None

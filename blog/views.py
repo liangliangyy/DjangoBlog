@@ -87,6 +87,7 @@ class IndexView(ArticleListView):
     '''
     首页
     '''
+    # 友情链接类型
     link_type = 'i'
 
     def get_queryset_data(self):
