@@ -71,7 +71,7 @@ def oauth_user_login_signal_handler(sender, **kwargs):
         oauthuser.picture = save_user_avatar(oauthuser.picture)
         oauthuser.save()
 
-    delete_view_cache(oauthuser.author.username)
+    delete_sidebar_cache(oauthuser.author.username)
 
     cache.clear()
 
