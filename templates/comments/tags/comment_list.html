@@ -11,27 +11,15 @@
     {% if article_comments %}
         {% cache 36000 article_comments article.id %}
             <div id="commentlist-container" class="comment-tab" style="display: block;">
-
                 <ol class="commentlist">
                     {% query article_comments parent_comment=None as parent_comments %}
-                    {% for comment in parent_comments %}
-                        {% show_comment_item comment False %}
-
-                        {% parse_commenttree article_comments comment as childcomments %}
-                        {% if childcomments %}
-                            <ul class="children">
-                                {% for child in childcomments %}
-                                    {% show_comment_item child True %}
-
-                                {% endfor %}
-                            </ul><!-- .children -->
-                        {% endif %}
-
-
+                    {% for comment_item in parent_comments %}
+                        {% with 0 as depth %}
+                            {% include "comments/tags/comment_item_tree.html" %}
+                        {% endwith %}
                     {% endfor %}
 
                 </ol><!--/.commentlist-->
-
 
             </div>
         {% endcache %}
