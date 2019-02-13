@@ -7,7 +7,7 @@ cffi==1.11.5
 chardet==3.0.4
 coverage==4.5.2
 cryptography==2.5
-Django==2.1.5
+Django==2.1.7
 django-appconf==1.0.2
 django-autoslug==1.9.4
 django-compressor==2.2
@@ -47,4 +47,4 @@ webencodings==0.5.1
 WeRoBot==1.7.0
 Whoosh==2.7.4
 wrapt==1.11.1
-xmltodict==0.11.0
+xmltodict==0.12.0
