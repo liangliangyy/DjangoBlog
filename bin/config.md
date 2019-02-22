@@ -53,3 +53,10 @@ SERVER_EMAIL = os.environ.get('DJANGO_EMAIL_USER')
 
 
 也就是说，需要在代码块开始位置加入这段代码对应的语言。
+
+## update
+如果你发现执行数据库迁移的时候出现如下报错：
+```python
+django.db.migrations.exceptions.MigrationSchemaMissing: Unable to create the django_migrations table ((1064, "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(6) NOT NULL)' at line 1"))
+```
+可能是因为你的mysql版本低于5.6，需要升级mysql版本>=5.6即可。
