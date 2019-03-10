@@ -1,7 +1,6 @@
 from django.contrib import admin
 # Register your models here.
 from .models import Article, Category, Tag, Links, SideBar, BlogSettings
-from pagedown.widgets import AdminPagedownWidget
 from django import forms
 from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext_lazy as _
@@ -27,7 +26,7 @@ class ArticleListFilter(admin.SimpleListFilter):
 
 
 class ArticleForm(forms.ModelForm):
-    body = forms.CharField(widget=AdminPagedownWidget())
+    # body = forms.CharField(widget=AdminPagedownWidget())
 
     class Meta:
         model = Article
