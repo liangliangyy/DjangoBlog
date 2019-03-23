@@ -188,7 +188,7 @@ class AuthorDetailView(ArticleListView):
 
     def get_queryset_data(self):
         author_name = self.kwargs['author_name']
-        article_list = Article.objects.filter(author__username=author_name)
+        article_list = Article.objects.filter(author__username=author_name, type='a', status='p')
         return article_list
 
     def get_context_data(self, **kwargs):
@@ -209,7 +209,7 @@ class TagDetailView(ArticleListView):
         tag = get_object_or_404(Tag, slug=slug)
         tag_name = tag.name
         self.name = tag_name
-        article_list = Article.objects.filter(tags__name=tag_name)
+        article_list = Article.objects.filter(tags__name=tag_name, type='a', status='p')
         return article_list
 
     def get_queryset_cache_key(self):

@@ -15,7 +15,9 @@
 
 from haystack.forms import SearchForm
 from django import forms
-from blog.models import Article, Category
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class BlogSearchForm(SearchForm):
@@ -27,5 +29,5 @@ class BlogSearchForm(SearchForm):
             return self.no_query_found()
 
         if self.cleaned_data['querydata']:
-            print(self.cleaned_data['querydata'])
+            logger.info(self.cleaned_data['querydata'])
         return datas
