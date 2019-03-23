@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+import logging
 from .forms import RegisterForm, LoginForm
 from django.contrib.auth import authenticate, login, logout
 # from django.views.generic.edit import FormView
@@ -16,6 +16,8 @@ from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.views.decorators.debug import sensitive_post_parameters
 from django.utils.http import is_safe_url
+
+logger = logging.getLogger(__name__)
 
 
 # Create your views here.
@@ -73,7 +75,7 @@ class LoginView(FormView):
             from DjangoBlog.utils import cache
             if cache and cache is not None:
                 cache.clear()
-            print(self.redirect_field_name)
+            logger.info(self.redirect_field_name)
             redirect_to = self.request.GET.get(self.redirect_field_name)
             auth.login(self.request, form.get_user())
             return super(LoginView, self).form_valid(form)
