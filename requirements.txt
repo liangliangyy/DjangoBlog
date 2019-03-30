@@ -12,11 +12,15 @@ django-appconf==1.0.3
 django-autoslug==1.9.4
 django-compressor==2.2
 django-debug-toolbar==1.11
+django-elasticsearch-dsl==0.5.1
 django-haystack==2.8.1
 django-ipware==2.1.0
 django-mdeditor==0.1.13
 django-uuslug==1.1.8
+elasticsearch==6.3.1
+elasticsearch-dsl==6.1.0
 idna==2.8
+ipaddress==1.0.22
 isort==4.3.15
 jieba==0.39
 jsonpickle==1.1
@@ -32,6 +36,8 @@ Pygments==2.3.1
 pylint==2.3.1
 PyMySQL==0.9.3
 pyparsing==2.3.1
+python-dateutil==2.8.0
+python-logstash==0.4.6
 python-memcached==1.59
 python-slugify==3.0.0
 pytz==2018.9
@@ -50,3 +56,4 @@ WeRoBot==1.8.0
 Whoosh==2.7.4
 wrapt==1.11.1
 xmltodict==0.12.0
+
