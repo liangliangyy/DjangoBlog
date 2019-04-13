@@ -58,3 +58,6 @@ class ArticleDocument(DocType):
         ]
         # related_models = [Category, Tag, BlogUser]
         doc_type = 'Article'
+        auto_refresh = False
+        ignore_signals = True
+

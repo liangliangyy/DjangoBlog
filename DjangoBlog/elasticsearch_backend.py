@@ -70,7 +70,7 @@ class ElasticSearchBackend(BaseSearchBackend):
 
     def update(self, index, iterable, commit=True):
         models = self._get_models()
-        self._rebuild(models)
+        #self._rebuild(models)
 
     def remove(self, obj_or_string):
         models = self._get_models()
