@@ -79,6 +79,9 @@ class Article(BaseModel):
     category = models.ForeignKey('Category', verbose_name='分类', on_delete=models.CASCADE, blank=False, null=False)
     tags = models.ManyToManyField('Tag', verbose_name='标签集合', blank=True)
 
+    def body_to_string(self):
+        return self.body
+
     def __str__(self):
         return self.title
 

@@ -42,9 +42,7 @@ python-memcached==1.59
 python-slugify==3.0.0
 pytz==2018.9
 raven==6.10.0
-rcssmin==1.0.6
 requests==2.21.0
-rjsmin==1.1.0
 six==1.12.0
 sqlparse==0.3.0
 text-unidecode==1.2
@@ -56,4 +54,3 @@ WeRoBot==1.8.0
 Whoosh==2.7.4
 wrapt==1.11.1
 xmltodict==0.12.0
-
