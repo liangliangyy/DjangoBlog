@@ -118,11 +118,11 @@ WSGI_APPLICATION = 'DjangoBlog.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'water',
+        'NAME': 'DjangoBlog',
         'HOST':'',
         'PORT':'3306',
         'USER':'root',
-        'PASSWORD':'Frank!',
+        'PASSWORD':'',
     }
 }
 
