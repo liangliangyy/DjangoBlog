@@ -3,7 +3,7 @@
 """
 @version: ??
 @author: liangliangyy
-@license: MIT Licence 
+@license: MIT Licence
 @contact: liangliangyy@gmail.com
 @site: https://www.lylinux.net/
 @software: PyCharm
@@ -21,6 +21,8 @@ from django.core.exceptions import ImproperlyConfigured
 from django.utils import six
 from django.utils.datetime_safe import datetime
 from django.utils.encoding import force_text
+
+from elasticsearch_dsl import Q
 
 from haystack.backends import BaseEngine, BaseSearchBackend, BaseSearchQuery, EmptyResults, log_query
 from haystack.constants import DJANGO_CT, DJANGO_ID, ID
@@ -70,7 +72,7 @@ class ElasticSearchBackend(BaseSearchBackend):
 
     def update(self, index, iterable, commit=True):
         models = self._get_models()
-        #self._rebuild(models)
+        # self._rebuild(models)
 
     def remove(self, obj_or_string):
         models = self._get_models()
@@ -85,83 +87,38 @@ class ElasticSearchBackend(BaseSearchBackend):
 
         start_offset = kwargs.get('start_offset')
         end_offset = kwargs.get('end_offset')
+
+        q = Q('bool',
+              must=[Q('match', body=query_string)],
+              minimum_should_match="70%"
+              )
+
         search = ArticleDocument.search() \
-                     .query("match", body=query_string) \
+                     .query('bool', filter=[q]) \
                      .filter('term', status='p') \
                      .filter('term', type='a') \
-            [start_offset: end_offset]
+                     .source(False)[start_offset: end_offset]
+
         results = search.execute()
-
-        return self._process_results(raw_results=results)
-
-    def _process_results(self, raw_results, highlight=False,
-                         result_class=None, distance_point=None,
-                         geo_sort=False):
-        from haystack import connections
-        results = []
-        hits = raw_results['hits'].total
-
-        facets = {}
-        spelling_suggestion = None
-
-        if result_class is None:
-            result_class = SearchResult
-        if 'facets' in raw_results:
-            facets = {
-                'fields': {},
-                'dates': {},
-                'queries': {},
-            }
-
-            # ES can return negative timestamps for pre-1970 data. Handle it.
-            def from_timestamp(tm):
-                if tm >= 0:
-                    return datetime.utcfromtimestamp(tm)
-                else:
-                    return datetime(1970, 1, 1) + timedelta(seconds=tm)
-
-            for facet_fieldname, facet_info in raw_results['facets'].items():
-                if facet_info.get('_type', 'terms') == 'terms':
-                    facets['fields'][facet_fieldname] = [(individual['term'], individual['count']) for individual in
-                                                         facet_info['terms']]
-                elif facet_info.get('_type', 'terms') == 'date_histogram':
-                    # Elasticsearch provides UTC timestamps with an extra three
-                    # decimals of precision, which datetime barfs on.
-                    facets['dates'][facet_fieldname] = [(from_timestamp(individual['time'] / 1000),
-                                                         individual['count'])
-                                                        for individual in facet_info['entries']]
-                elif facet_info.get('_type', 'terms') == 'query':
-                    facets['queries'][facet_fieldname] = facet_info['count']
-
-        unified_index = connections[self.connection_alias].get_unified_index()
-
-        content_field = unified_index.document_field
-        # articleids = list(map(lambda x: x['_id'], raw_results['hits']['hits']))
-        # article_results = list(Article.objects.filter(id__in=articleids))
-
-        for raw_result in raw_results['hits']['hits']:
+        hits = results['hits'].total
+        raw_results = []
+        for raw_result in results['hits']['hits']:
             app_label = 'blog'
             model_name = 'Article'
             additional_fields = {}
 
-            if 'highlight' in raw_result:
-                additional_fields['highlighted'] = raw_result['highlight'].get(content_field, '')
+            # if 'highlight' in raw_result:
+            #     additional_fields['highlighted'] = raw_result['highlight'].get(content_field, '')
 
-            if distance_point:
-                additional_fields['_point_of_origin'] = distance_point
-
-                if geo_sort and raw_result.get('sort'):
-                    from haystack.utils.geo import Distance
-                    additional_fields['_distance'] = Distance(km=float(raw_result['sort'][0]))
-                else:
-                    additional_fields['_distance'] = None
+            result_class = SearchResult
 
             result = result_class(app_label, model_name, raw_result['_id'], raw_result['_score'],
                                   **additional_fields)
-            results.append(result)
-
+            raw_results.append(result)
+        facets = {}
+        spelling_suggestion = None
         return {
-            'results': results,
+            'results': raw_results,
             'hits': hits,
             'facets': facets,
             'spelling_suggestion': spelling_suggestion,
