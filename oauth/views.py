@@ -15,7 +15,7 @@ from DjangoBlog.utils import send_email, get_md5, save_user_avatar
 from DjangoBlog.utils import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseForbidden
-from .oauthmanager import get_manager_by_type
+from .oauthmanager import get_manager_by_type, OAuthAccessTokenException
 from DjangoBlog.blog_signals import oauth_user_login_signal
 
 import logging
@@ -57,7 +57,14 @@ def authorize(request):
     if not manager:
         return HttpResponseRedirect('/')
     code = request.GET.get('code', None)
-    rsp = manager.get_access_token_by_code(code)
+    try:
+        rsp = manager.get_access_token_by_code(code)
+    except OAuthAccessTokenException as e:
+        logger.warning("OAuthAccessTokenException:" + str(e))
+        return HttpResponseRedirect('/')
+    except Exception as e:
+        logger.error(e)
+        rsp = None
     nexturl = get_redirecturl(request)
     if not rsp:
         return HttpResponseRedirect(manager.get_authorization_url(nexturl))
