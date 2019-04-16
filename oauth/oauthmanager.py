@@ -25,6 +25,12 @@ from DjangoBlog.utils import parse_dict_to_url, cache_decorator
 logger = logging.getLogger(__name__)
 
 
+class OAuthAccessTokenException(Exception):
+    '''
+    oauth授权失败异常
+    '''
+
+
 class BaseOauthManager(metaclass=ABCMeta):
     """获取用户授权"""
     AUTH_URL = None
@@ -106,14 +112,14 @@ class WBOauthManager(BaseOauthManager):
             'redirect_uri': self.callback_url
         }
         rsp = self.do_post(self.TOKEN_URL, params)
-        try:
-            obj = json.loads(rsp)
+
+        obj = json.loads(rsp)
+        if 'access_token' in obj:
             self.access_token = str(obj['access_token'])
             self.openid = str(obj['uid'])
             return self.get_oauth_userinfo()
-        except Exception as e:
-            logger.error(e)
-            return None
+        else:
+            raise OAuthAccessTokenException(rsp)
 
     def get_oauth_userinfo(self):
         if not self.is_authorized:
@@ -124,7 +130,6 @@ class WBOauthManager(BaseOauthManager):
         }
         rsp = self.do_get(self.API_URL, params)
         try:
-
             datas = json.loads(rsp)
             user = OAuthUser()
             user.matedata = rsp
@@ -178,15 +183,14 @@ class GoogleOauthManager(BaseOauthManager):
         rsp = self.do_post(self.TOKEN_URL, params)
 
         obj = json.loads(rsp)
-        try:
+
+        if 'access_token' in obj:
             self.access_token = str(obj['access_token'])
             self.openid = str(obj['id_token'])
             logger.info(self.ICON_NAME + ' oauth ' + rsp)
             return self.access_token
-        except Exception as e:
-            logger.error(e)
-            logger.error(self.ICON_NAME + ' oauth error ' + rsp)
-            return None
+        else:
+            raise OAuthAccessTokenException(rsp)
 
     def get_oauth_userinfo(self):
         if not self.is_authorized:
@@ -249,14 +253,13 @@ class GitHubOauthManager(BaseOauthManager):
         }
         rsp = self.do_post(self.TOKEN_URL, params)
 
-        try:
-            from urllib import parse
-            r = parse.parse_qs(rsp)
+        from urllib import parse
+        r = parse.parse_qs(rsp)
+        if 'access_token' in r:
             self.access_token = (r['access_token'][0])
             return self.access_token
-        except Exception as e:
-            logger.error(e)
-            return None
+        else:
+            raise OAuthAccessTokenException(rsp)
 
     def get_oauth_userinfo(self):
 
@@ -318,14 +321,13 @@ class FaceBookOauthManager(BaseOauthManager):
         }
         rsp = self.do_post(self.TOKEN_URL, params)
 
-        try:
-            obj = json.loads(rsp)
+        obj = json.loads(rsp)
+        if 'access_token' in obj:
             token = str(obj['access_token'])
             self.access_token = token
             return self.access_token
-        except Exception as e:
-            logger.error(e)
-            return None
+        else:
+            raise OAuthAccessTokenException(rsp)
 
     def get_oauth_userinfo(self):
         params = {
@@ -385,9 +387,12 @@ class QQOauthManager(BaseOauthManager):
         rsp = self.do_get(self.TOKEN_URL, params)
         if rsp:
             d = urllib.parse.parse_qs(rsp)
-            token = d['access_token']
-            self.access_token = token
-            return token
+            if 'access_token' in d:
+                token = d['access_token']
+                self.access_token = token
+                return token
+        else:
+            raise OAuthAccessTokenException(rsp)
 
     def get_open_id(self):
         if self.is_access_token_set:
