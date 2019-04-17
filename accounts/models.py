@@ -9,7 +9,6 @@ from django.utils.timezone import now
 
 class BlogUser(AbstractUser):
     nickname = models.CharField('昵称', max_length=100, blank=True)
-    mugshot = models.ImageField('头像', upload_to='upload/mugshots', blank=True)
     created_time = models.DateTimeField('创建时间', default=now)
     last_mod_time = models.DateTimeField('修改时间', default=now)
 
@@ -25,3 +24,9 @@ class BlogUser(AbstractUser):
         site = get_current_site().domain
         url = "https://{site}{path}".format(site=site, path=self.get_absolute_url())
         return url
+
+    class Meta:
+        ordering = ['-id']
+        verbose_name = "用户"
+        verbose_name_plural = verbose_name
+        get_latest_by = 'id'
