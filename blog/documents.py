@@ -10,54 +10,122 @@
 @file: documents.py
 @time: 2019-04-05 13:05
 """
-
-from django_elasticsearch_dsl import DocType, Index, fields
+import time
 from blog.models import Article, Category, Tag
-from accounts.models import BlogUser
+from elasticsearch_dsl import Document, Date, Integer, Keyword, Text, Object, Boolean
 
-blog = Index('blog')
-blog.settings(
-    number_of_shards=1,
-    number_of_replicas=0
-)
+from django.conf import settings
+
+ELASTICSEARCH_ENABLED = hasattr(settings, 'ELASTICSEARCH_DSL')
+
+from elasticsearch_dsl.connections import connections
+
+if ELASTICSEARCH_ENABLED:
+    connections.create_connection(hosts=[settings.ELASTICSEARCH_DSL['default']['hosts']])
 
 
-@blog.doc_type
-class ArticleDocument(DocType):
-    body = fields.TextField(attr='body_to_string', analyzer='ik_max_word')
-    title = fields.TextField(analyzer='ik_max_word')
-    author = fields.ObjectField(properties={
-        'nickname': fields.TextField(analyzer='ik_max_word'),
-        'id': fields.IntegerField()
-    })
-    category = fields.ObjectField(properties={
-        'name': fields.TextField(analyzer='ik_max_word'),
-        'id': fields.IntegerField()
-    })
-    tags = fields.ObjectField(properties={
-        'name': fields.TextField(analyzer='ik_max_word'),
-        'id': fields.IntegerField()
-    })
+class ElapsedTimeDocument(Document):
+    url = Text()
+    time_taken = Integer()
+    log_datetime = Date()
+    type = Text(analyzer='ik_max_word')
 
-    # def get_instances_from_related(self, related_instance):
-    #     if isinstance(related_instance, BlogUser):
-    #         return related_instance
-    #     elif isinstance(related_instance, Category):
-    #         pass
+    class Index:
+        name = 'performance'
+        settings = {
+            "number_of_shards": 1,
+            "number_of_replicas": 0
+        }
 
     class Meta:
-        model = Article
-        fields = [
-            'pub_time',
-            'status',
-            'comment_status',
-            'type',
-            'views',
-            'article_order',
+        doc_type = 'ElapsedTime'
 
-        ]
-        # related_models = [Category, Tag, BlogUser]
+
+class ElaspedTimeDocumentManager():
+
+    @staticmethod
+    def create(url, time_taken, log_datetime, type):
+        if not hasattr(ElaspedTimeDocumentManager, 'mapping_created'):
+            ElapsedTimeDocument.init()
+            setattr(ElaspedTimeDocumentManager, 'mapping_created', True)
+        doc = ElapsedTimeDocument(meta={'id': int(round(time.time() * 1000))}, url=url, time_taken=time_taken,
+                                  log_datetime=log_datetime, type=type)
+        doc.save()
+
+
+class ArticleDocument(Document):
+    body = Text(analyzer='ik_max_word')
+    title = Text(analyzer='ik_max_word')
+    author = Object(properties={
+        'nickname': Text(analyzer='ik_max_word'),
+        'id': Integer()
+    })
+    category = Object(properties={
+        'name': Text(analyzer='ik_max_word'),
+        'id': Integer()
+    })
+    tags = Object(properties={
+        'name': Text(analyzer='ik_max_word'),
+        'id': Integer()
+    })
+
+    pub_time = Date()
+    status = Text()
+    comment_status = Text()
+    type = Text()
+    views = Integer()
+    article_order = Integer()
+
+    class Index:
+        name = 'blog'
+        settings = {
+            "number_of_shards": 1,
+            "number_of_replicas": 0
+        }
+
+    class Meta:
         doc_type = 'Article'
-        auto_refresh = False
-        ignore_signals = True
 
+
+class ArticleDocumentManager():
+
+    def __init__(self):
+
+        ArticleDocument.init()
+
+    def create_index(self):
+        ArticleDocument.init()
+
+    def deleate_index(self):
+        from elasticsearch import Elasticsearch
+        es = Elasticsearch()
+        es.indices.delete(index='blog', ignore=[400, 404])
+
+    def convert_to_doc(self, articles):
+        return [ArticleDocument(meta={'id': article.id}, body=article.body, title=article.title,
+                                auth={
+                                    'nikename': article.author.username,
+                                    'id': article.author.id
+                                },
+                                category={
+                                    'name': article.category.name,
+                                    'id': article.category.id
+                                },
+                                tags=[{'name': t.name, 'id': t.id} for t in article.tags.all()],
+                                pub_time=article.pub_time,
+                                status=article.status,
+                                comment_status=article.comment_status,
+                                type=article.type,
+                                views=article.views,
+                                article_order=article.article_order
+                                ) for article in articles]
+
+    def rebuild(self, articles=None):
+        articles = articles if articles else Article.objects.all()
+        docs = self.convert_to_doc(articles)
+        for doc in docs:
+            doc.save()
+
+    def update_docs(self, docs):
+        for doc in docs:
+            doc.save()

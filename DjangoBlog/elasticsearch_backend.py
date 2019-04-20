@@ -10,72 +10,55 @@
 @file: elasticsearch_backend.py
 @time: 2019-04-13 11:46
 """
+
 import logging
 import re
-import json
-
-from datetime import datetime, timedelta
-
-from django.conf import settings
-from django.core.exceptions import ImproperlyConfigured
-from django.utils import six
-from django.utils.datetime_safe import datetime
 from django.utils.encoding import force_text
 
 from elasticsearch_dsl import Q
 
 from haystack.backends import BaseEngine, BaseSearchBackend, BaseSearchQuery, EmptyResults, log_query
-from haystack.constants import DJANGO_CT, DJANGO_ID, ID
-from haystack.exceptions import MissingDependency, SearchBackendError, SkipDocument
-from haystack.inputs import Clean, Exact, PythonData, Raw
 from haystack.models import SearchResult
 from haystack.utils import log as logging
-from haystack.utils import get_identifier, get_model_ct
-from haystack.utils.app_loading import haystack_get_model
-from django_elasticsearch_dsl.registries import registry
 
 from blog.models import Article
-from blog.documents import ArticleDocument
+from blog.documents import ArticleDocument, ArticleDocumentManager
 
 logger = logging.getLogger(__name__)
 
-DATETIME_REGEX = re.compile(
-    '^(?P<year>\d{4})-(?P<month>\d{2})-(?P<day>\d{2})T(?P<hour>\d{2}):(?P<minute>\d{2}):(?P<second>\d{2})(\.\d{3,6}Z?)?$')
-
 
 class ElasticSearchBackend(BaseSearchBackend):
+    def __init__(self, connection_alias, **connection_options):
+        super(ElasticSearchBackend, self).__init__(connection_alias, **connection_options)
+        self.manager = ArticleDocumentManager()
+        self._rebuild(None)
 
-    def _get_models(self):
-        models = registry.get_models()
-        return set(models)
+    def _get_models(self, iterable):
+        models = iterable if iterable else Article.objects.all()
+        docs = self.manager.convert_to_doc(models)
+        return docs
 
     def _create(self, models):
-        for index in registry.get_indices(models):
-            index.create()
-
-    def _populate(self, models):
-        for doc in registry.get_documents(models):
-            qs = doc().get_queryset()
-            doc().update(qs)
+        self.manager.create_index()
+        docs = self._get_models(models)
+        self.manager.rebuild(docs)
 
     def _delete(self, models):
-        for index in registry.get_indices(models):
-            index.delete(ignore=404)
+        for m in models:
+            m.delete()
         return True
 
     def _rebuild(self, models):
-        if not self._delete(models):
-            return
-
-        self._create(models)
-        self._populate(models)
+        models = models if models else Article.objects.all()
+        docs = self.manager.convert_to_doc(models)
+        self.manager.update_docs(docs)
 
     def update(self, index, iterable, commit=True):
-        models = self._get_models()
-        # self._rebuild(models)
+        models = self._get_models(iterable)
+        self.manager.update_docs(models)
 
     def remove(self, obj_or_string):
-        models = self._get_models()
+        models = self._get_models([obj_or_string])
         self._delete(models)
 
     def clear(self, models=None, commit=True):
@@ -123,66 +106,6 @@ class ElasticSearchBackend(BaseSearchBackend):
             'facets': facets,
             'spelling_suggestion': spelling_suggestion,
         }
-
-    def _from_python(self, value):
-        """
-        Converts Python values to a string for Whoosh.
-
-        Code courtesy of pysolr.
-        """
-        if hasattr(value, 'strftime'):
-            if not hasattr(value, 'hour'):
-                value = datetime(value.year, value.month, value.day, 0, 0, 0)
-        elif isinstance(value, bool):
-            if value:
-                value = 'true'
-            else:
-                value = 'false'
-        elif isinstance(value, (list, tuple)):
-            value = u','.join([force_text(v) for v in value])
-        elif isinstance(value, (six.integer_types, float)):
-            # Leave it alone.
-            pass
-        else:
-            value = force_text(value)
-        return value
-
-    def _to_python(self, value):
-        """
-        Converts values from Whoosh to native Python values.
-
-        A port of the same method in pysolr, as they deal with data the same way.
-        """
-        if value == 'true':
-            return True
-        elif value == 'false':
-            return False
-
-        if value and isinstance(value, six.string_types):
-            possible_datetime = DATETIME_REGEX.search(value)
-
-            if possible_datetime:
-                date_values = possible_datetime.groupdict()
-
-                for dk, dv in date_values.items():
-                    date_values[dk] = int(dv)
-
-                return datetime(date_values['year'], date_values['month'], date_values['day'], date_values['hour'],
-                                date_values['minute'], date_values['second'])
-
-        try:
-            # Attempt to use json to load the values.
-            converted_value = json.loads(value)
-
-            # Try to handle most built-in types.
-            if isinstance(converted_value, (list, tuple, set, dict, six.integer_types, float, complex)):
-                return converted_value
-        except:
-            # If it fails (SyntaxError or its ilk) or we don't trust it,
-            # continue on.
-            pass
-
-        return value
 
 
 class ElasticSearchQuery(BaseSearchQuery):
