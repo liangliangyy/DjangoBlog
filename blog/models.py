@@ -12,6 +12,7 @@ from DjangoBlog.utils import cache_decorator, cache
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from mdeditor.fields import MDTextField
+from django.db.models.signals import post_save
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +35,12 @@ class BaseModel(models.Model):
             if getattr(self, 'slug') == 'no-slug' or not self.id:
                 slug = getattr(self, 'title') if 'title' in self.__dict__ else getattr(self, 'name')
                 setattr(self, 'slug', slugify(slug))
-        super().save(*args, **kwargs)
+        is_update_views = isinstance(self, Article) and 'update_fields' in kwargs and kwargs['update_fields'] == [
+            'views']
+        if is_update_views:
+            Article.objects.filter(pk=self.pk).update(views=self.views)
+        else:
+            super().save(*args, **kwargs)
         # is_update_views = 'update_fields' in kwargs and len(kwargs['update_fields']) == 1 and kwargs['update_fields'][
         #     0] == 'views'
         # from DjangoBlog.blog_signals import article_save_signal

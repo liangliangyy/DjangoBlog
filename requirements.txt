@@ -12,13 +12,12 @@ django-appconf==1.0.3
 django-autoslug==1.9.4
 django-compressor==2.2
 django-debug-toolbar==1.11
-django-elasticsearch-dsl==0.5.1
 django-haystack==2.8.1
 django-ipware==2.1.0
 django-mdeditor==0.1.13
 django-uuslug==1.1.8
 elasticsearch==6.3.1
-elasticsearch-dsl==6.1.0
+elasticsearch-dsl==6.3.1
 idna==2.8
 ipaddress==1.0.22
 isort==4.3.15
