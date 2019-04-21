@@ -38,6 +38,6 @@ class OnlineMiddleware(object):
             from django.utils import timezone
 
             ElaspedTimeDocumentManager.create(url=url, time_taken=time_taken, log_datetime=timezone.now(),
-                                              type='blog')
+                                              type='blog', useragent=http_user_agent)
         response.content = response.content.replace(b'<!!LOAD_TIMES!!>', str.encode(str(cast_time)[:5]))
         return response
