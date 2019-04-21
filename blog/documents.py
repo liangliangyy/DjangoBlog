@@ -29,6 +29,7 @@ class ElapsedTimeDocument(Document):
     time_taken = Integer()
     log_datetime = Date()
     type = Text(analyzer='ik_max_word')
+    useragent = Text()
 
     class Index:
         name = 'performance'
@@ -44,12 +45,12 @@ class ElapsedTimeDocument(Document):
 class ElaspedTimeDocumentManager():
 
     @staticmethod
-    def create(url, time_taken, log_datetime, type):
+    def create(url, time_taken, log_datetime, type, useragent):
         if not hasattr(ElaspedTimeDocumentManager, 'mapping_created'):
             ElapsedTimeDocument.init()
             setattr(ElaspedTimeDocumentManager, 'mapping_created', True)
         doc = ElapsedTimeDocument(meta={'id': int(round(time.time() * 1000))}, url=url, time_taken=time_taken,
-                                  log_datetime=log_datetime, type=type)
+                                  log_datetime=log_datetime, type=type, useragent=useragent)
         doc.save()
 
 
