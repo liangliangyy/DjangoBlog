@@ -498,6 +498,7 @@ body.custom-font-enabled {
 a {
     outline: none;
     color: #21759b;
+    word-wrap: break-word;
 }
 
 a:hover {
