@@ -58,7 +58,8 @@
             {% else %}
                 <div class="comments-area">
                     <h3 class="comment-meta">您还没有登录，请您<a
-                            href="{% url "account:login" %}?next={{ request.get_full_path }}">登录</a>后发表评论。</h3>
+                            href="{% url "account:login" %}?next={{ request.get_full_path }}" rel="nofollow">登录</a>后发表评论。
+                    </h3>
 
                     {% load oauth_tags %}
                     {% load_oauth_applications request %}
