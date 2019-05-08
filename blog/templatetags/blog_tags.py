@@ -148,9 +148,9 @@ def load_sidebar(user, linktype):
     tags = Tag.objects.all()
     sidebar_tags = None
     if tags and len(tags) > 0:
-        s = list(map(lambda t: (t, t.get_article_count()), tags))
-        count = sum(map(lambda t: t[1], s))
-        dd = 1 if (count == 0 and not len(tags)) else count / len(tags)
+        s = [t for t in [(t, t.get_article_count()) for t in tags] if t[1] > 0]
+        count = sum([t[1] for t in s])
+        dd = 1 if (count == 0 or not len(tags)) else count / len(tags)
         import random
         sidebar_tags = list(map(lambda x: (x[0], x[1], (x[1] / dd) * increment + 10), s))
         random.shuffle(sidebar_tags)
