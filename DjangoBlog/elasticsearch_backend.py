@@ -100,6 +100,7 @@ class ElasticSearchBackend(BaseSearchBackend):
             raw_results.append(result)
         facets = {}
         spelling_suggestion = None
+
         return {
             'results': raw_results,
             'hits': hits,
@@ -142,6 +143,10 @@ class ElasticSearchQuery(BaseSearchQuery):
 
     def build_query_fragment(self, field, filter_type, value):
         return value.query_string
+
+    def get_count(self):
+        results = self.get_results()
+        return len(results) if results else 0
 
 
 class ElasticSearchEngine(BaseEngine):

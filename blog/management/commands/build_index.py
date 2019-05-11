@@ -23,5 +23,5 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         manager = ArticleDocumentManager()
-        manager.deleate_index()
+        manager.delete_index()
         manager.rebuild()
