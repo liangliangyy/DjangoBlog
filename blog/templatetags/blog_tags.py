@@ -148,7 +148,7 @@ def load_sidebar(user, linktype):
     tags = Tag.objects.all()
     sidebar_tags = None
     if tags and len(tags) > 0:
-        s = [t for t in [(t, t.get_article_count()) for t in tags] if t[1] > 0]
+        s = [t for t in [(t, t.get_article_count()) for t in tags] if t[1]]
         count = sum([t[1] for t in s])
         dd = 1 if (count == 0 or not len(tags)) else count / len(tags)
         import random

@@ -47,24 +47,23 @@ def cache_decorator(expiration=3 * 60):
                 key = view.get_cache_key()
             except:
                 key = None
-                pass
             if not key:
                 unique_str = repr((func, args, kwargs))
 
                 m = md5(unique_str.encode('utf-8'))
                 key = m.hexdigest()
             value = cache.get(key)
-            if value:
+            if value is not None:
                 # logger.info('cache_decorator get cache:%s key:%s' % (func.__name__, key))
-                if repr(value) == 'default':
+                if str(value) == '__default_cache_value__':
                     return None
                 else:
                     return value
             else:
                 logger.info('cache_decorator set cache:%s key:%s' % (func.__name__, key))
                 value = func(*args, **kwargs)
-                if not value:
-                    cache.set(key, 'default', expiration)
+                if value is None:
+                    cache.set(key, '__default_cache_value__', expiration)
                 else:
                     cache.set(key, value, expiration)
                 return value
