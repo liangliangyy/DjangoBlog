@@ -97,7 +97,7 @@ class ArticleDocumentManager():
     def create_index(self):
         ArticleDocument.init()
 
-    def deleate_index(self):
+    def delete_index(self):
         from elasticsearch import Elasticsearch
         es = Elasticsearch()
         es.indices.delete(index='blog', ignore=[400, 404])
