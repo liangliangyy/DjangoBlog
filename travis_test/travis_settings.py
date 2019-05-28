@@ -1,11 +1,5 @@
 from DjangoBlog.settings import *
 
-SECRET_KEY = '&3g0bdza#c%dm1lf%5gi&0-*53p3t0m*hmcvo29cn^$ji7je(c'
-
-# Database
-# https://docs.djangoproject.com/en/1.10/ref/settings/#databases
-
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -17,5 +11,12 @@ DATABASES = {
         # 'USER': 'root',
         # 'PASSWORD': 'root',
         'PORT': 3306,
+    }
+}
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': 'django_cache',
     }
 }
