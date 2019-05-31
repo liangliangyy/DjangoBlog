@@ -25,11 +25,11 @@
 
             <div class="entry-content">
 
-                {% regroup article_list by created_time.year as year_post_group %}
+                {% regroup article_list by pub_time.year as year_post_group %}
                 <ul>
                     {% for year in year_post_group %}
                         <li>{{ year.grouper }} 年
-                            {% regroup year.list by created_time.month as month_post_group %}
+                            {% regroup year.list by pub_time.month as month_post_group %}
                             <ul>
                                 {% for month in month_post_group %}
                                     <li>{{ month.grouper }} 月
