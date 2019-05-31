@@ -3,13 +3,13 @@
 {% with article.id|add:user.is_authenticated as cachekey %}
     {% cache 36000 metainfo cachekey %}
         <footer class="entry-meta">
-            本条目发布于<a href="{{ article.get_absolute_url }}" title="{% datetimeformat article.created_time %}"
-                     itemprop="datePublished" content="{% datetimeformat article.created_time %}"
+            本条目发布于<a href="{{ article.get_absolute_url }}" title="{% datetimeformat article.pub_time %}"
+                     itemprop="datePublished" content="{% datetimeformat article.pub_time %}"
                      rel="bookmark">
 
             <time class="entry-date updated"
-                  datetime="{{ article.created_time }}">
-                {% datetimeformat article.created_time %}</time>
+                  datetime="{{ article.pub_time }}">
+                {% datetimeformat article.pub_time %}</time>
         </a>
             {% if article.type == 'a' %}
                 。属于<a href="{{ article.category.get_absolute_url }}" rel="category tag">{{ article.category.name }}</a>
