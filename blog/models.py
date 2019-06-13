@@ -30,21 +30,15 @@ class BaseModel(models.Model):
     last_mod_time = models.DateTimeField('修改时间', default=now)
 
     def save(self, *args, **kwargs):
-
-        if not isinstance(self, Article) and 'slug' in self.__dict__:
-            if getattr(self, 'slug') == 'no-slug' or not self.id:
-                slug = getattr(self, 'title') if 'title' in self.__dict__ else getattr(self, 'name')
-                setattr(self, 'slug', slugify(slug))
         is_update_views = isinstance(self, Article) and 'update_fields' in kwargs and kwargs['update_fields'] == [
             'views']
         if is_update_views:
             Article.objects.filter(pk=self.pk).update(views=self.views)
         else:
+            if 'slug' in self.__dict__:
+                slug = getattr(self, 'title') if 'title' in self.__dict__ else getattr(self, 'name')
+                setattr(self, 'slug', slugify(slug))
             super().save(*args, **kwargs)
-        # is_update_views = 'update_fields' in kwargs and len(kwargs['update_fields']) == 1 and kwargs['update_fields'][
-        #     0] == 'views'
-        # from DjangoBlog.blog_signals import article_save_signal
-        # article_save_signal.send(sender=self.__class__, is_update_views=is_update_views, id=self.id)
 
     def get_full_url(self):
         site = get_current_site().domain
