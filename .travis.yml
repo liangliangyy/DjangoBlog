@@ -11,8 +11,10 @@ branches:
     only:
         - master
 # command to install dependencies
-install:
+before_install:
+  - sudo apt-get update
   - sudo apt-get install python-dev python3-dev default-libmysqlclient-dev
+install:
   - pip install -r travis_test/requirements.txt
   - pip install python-coveralls 
   - pip install coverage codecov
