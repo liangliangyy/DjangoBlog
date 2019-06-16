@@ -1,0 +1,22 @@
+{% extends 'share_layout/base.html' %}
+{% block header %}
+    <title> {{ title }}</title>
+{% endblock %}
+{% block content %}
+    <div id="primary" class="site-content">
+        <div id="content" role="main">
+
+            <header class="archive-header">
+
+                <h2 class="archive-title"> {{ content }}</h2>
+            </header><!-- .archive-header -->
+            <br/>
+            <header class="archive-header" style="text-align: center">
+
+                <a href="{% url "account:login" %}">登录</a>
+                |
+                <a href="/">回到首页</a>
+            </header><!-- .archive-header -->
+        </div>
+    </div>
+{% endblock %}
