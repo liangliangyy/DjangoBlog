@@ -6,6 +6,7 @@ import datetime
 from accounts.models import BlogUser
 from django.urls import reverse
 from DjangoBlog.utils import *
+from django.conf import settings
 
 
 # Create your tests here.
@@ -53,6 +54,12 @@ class AccountTest(TestCase):
             'password2': 'password123!q@wE#R$T',
         })
         self.assertEquals(1, len(BlogUser.objects.filter(email='user123@user.com')))
+        user = BlogUser.objects.filter(email='user123@user.com')[0]
+        sign = get_md5(get_md5(settings.SECRET_KEY + str(user.id)))
+        path = reverse('accounts:result')
+        url = '{path}?type=validation&id={id}&sign={sign}'.format(path=path, id=user.id, sign=sign)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
 
         self.client.login(username='user1233', password='password123!q@wE#R$T')
         user = BlogUser.objects.filter(email='user123@user.com')[0]

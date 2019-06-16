@@ -16,6 +16,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.forms import widgets
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 
 
 class LoginForm(AuthenticationForm):
@@ -36,6 +37,12 @@ class RegisterForm(UserCreationForm):
             attrs={'placeholder': "password", "class": "form-control"})
         self.fields['password2'].widget = widgets.PasswordInput(
             attrs={'placeholder': "repeat password", "class": "form-control"})
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if get_user_model().objects.filter(email=email).exists():
+            raise ValidationError("该邮箱已经存在.")
+        return email
 
     class Meta:
         model = get_user_model()
