@@ -148,9 +148,9 @@ HAYSTACK_CONNECTIONS = {
         'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
     },
 }
-# 自动更新搜索索引
+# Automatically update searching index
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
-# 允许使用用户名或密码登录
+# Allow user login with username and password
 AUTHENTICATION_BACKENDS = ['accounts.user_login_backend.EmailOrUsernameModelBackend']
 
 STATIC_ROOT = os.path.join(SITE_ROOT, 'collectedstatic')
@@ -164,14 +164,14 @@ LOGIN_URL = '/login/'
 TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 DATE_TIME_FORMAT = '%Y-%m-%d'
 
-# bootstrap颜色样式
+# bootstrap color styles
 BOOTSTRAP_COLOR_TYPES = [
     'default', 'primary', 'success', 'info', 'warning', 'danger'
 ]
 
-# 分页
+# paginate
 PAGINATE_BY = 10
-# http缓存时间
+# http cache timeout
 CACHE_CONTROL_MAX_AGE = 2592000
 # cache setting
 CACHES = {
@@ -203,9 +203,9 @@ EMAIL_HOST_USER = os.environ.get('DJANGO_EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('DJANGO_EMAIL_PASSWORD')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 SERVER_EMAIL = os.environ.get('DJANGO_EMAIL_USER')
-# 设置debug=false 未处理异常邮件通知
+# Setting debug=false did NOT handle except email notifications
 ADMINS = [('liangliang', 'liangliangyy@gmail.com')]
-# 微信管理员密码(两次md5获得)
+# WX ADMIN password(Two times md5)
 WXADMIN = '995F03AC401D6CABABAEF756FC4D43C7'
 
 LOGGING = {
