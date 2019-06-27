@@ -9,10 +9,6 @@
             <img class="img-circle profile-img" src="{% static 'blog/img/avatar.png' %}" alt="">
             <form class="form-signin" action="{% url 'account:register' %}" method="post">
                 {% csrf_token %}
-                {% comment %}<label for="inputEmail" class="sr-only">Email address</label>
-                <input type="email" id="inputEmail" class="form-control" placeholder="Email" required autofocus>
-                <label for="inputPassword" class="sr-only">Password</label>
-                <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>{% endcomment %}
                 {{ form.non_field_errors }}
                 {% for field in form %}
                     {{ field }}
@@ -22,14 +18,6 @@
 
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Create Your Account</button>
 
-                {% comment %}
-                 <div class="checkbox">
-                    <a class="pull-right">Need help?</a>
-                    <label>
-                        <input type="checkbox" value="remember-me"> Stay signed in
-                    </label>
-                </div>
-{% endcomment %}
             </form>
         </div>
 
