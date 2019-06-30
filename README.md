@@ -111,7 +111,7 @@ CREATE DATABASE `djangoblog` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8
 
 浏览器打开: http://127.0.0.1:8000/  就可以看到效果了。
 ## 更多配置:
-[更多配置介绍](/bin/config.md)
+[更多配置介绍](/docs/config.md)
 
 ## 问题相关
 
