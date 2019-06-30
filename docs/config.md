@@ -19,7 +19,7 @@ CACHES = {
 ```
 ## oauth登录:
 
-现在已经支持微博，Google，GitHub，Facebook登录，需要在其对应的开放平台申请oauth登录权限，然后在  
+现在已经支持QQ，微博，Google，GitHub，Facebook登录，需要在其对应的开放平台申请oauth登录权限，然后在  
 **后台->Oauth** 配置中新增配置，填写对应的`appkey`和`appsecret`以及回调地址。  
 ### 回调地址示例：
 qq：http://你的域名/oauth/authorize?type=qq  

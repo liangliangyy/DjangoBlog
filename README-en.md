@@ -109,7 +109,7 @@ Execute: `./manage.py runserver`
 Open up a browser and visit: http://127.0.0.1:8000/ , the you will see the blog.
 
 ## More configurations
-[More configurations details](/bin/config.md)
+[More configurations details](/docs/config-en.md)
 
 ## About the issues
 
