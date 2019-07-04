@@ -33,6 +33,7 @@ class RegisterView(FormView):
         if form.is_valid():
             user = form.save(False)
             user.is_active = False
+            user.source = 'Register'
             user.save(True)
             site = get_current_site().domain
             sign = get_md5(get_md5(settings.SECRET_KEY + str(user.id)))
@@ -106,7 +107,7 @@ class LoginView(FormView):
             if cache and cache is not None:
                 cache.clear()
             logger.info(self.redirect_field_name)
-            redirect_to = self.request.GET.get(self.redirect_field_name)
+
             auth.login(self.request, form.get_user())
             return super(LoginView, self).form_valid(form)
             # return HttpResponseRedirect('/')
