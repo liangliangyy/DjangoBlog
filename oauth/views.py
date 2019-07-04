@@ -2,6 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 from urllib.parse import urlparse
+import datetime
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import get_user_model
@@ -70,7 +71,7 @@ def authorize(request):
         return HttpResponseRedirect(manager.get_authorization_url(nexturl))
     user = manager.get_oauth_userinfo()
     if user:
-        if not user.nikename:
+        if not user.nikename.strip():
             import datetime
             user.nikename = "djangoblog" + datetime.datetime.now().strftime('%y%m%d%I%M%S')
         try:
@@ -96,6 +97,7 @@ def authorize(request):
                 author = result[0]
                 if result[1]:
                     author.username = user.nikename
+                    author.source = 'authorize'
                     author.save()
 
             user.author = author
@@ -127,7 +129,9 @@ def emailconfirm(request, id, sign):
         result = get_user_model().objects.get_or_create(email=oauthuser.email)
         author = result[0]
         if result[1]:
-            author.username = oauthuser.nikename
+            author.source = 'emailconfirm'
+            author.username = oauthuser.nikename.strip() if oauthuser.nikename.strip() else "djangoblog" + datetime.datetime.now().strftime(
+                '%y%m%d%I%M%S')
             author.save()
     oauthuser.author = author
     oauthuser.save()
