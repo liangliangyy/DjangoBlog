@@ -1,13 +1,11 @@
+dist: xenial
 language: python
+sudo: required
 python:
   - "3.5"
   - "3.6"
-matrix:
-  include:
-    - python: "3.7"
-      dist: xenial
-  allow_failures:
-    - python: "3.7"
+  - "3.7"
+  
 services:
   - mysql
 env:
@@ -20,12 +18,14 @@ branches:
 before_install:
   - sudo apt-get update
   - sudo apt-get install python-dev python3-dev libmysqlclient-dev
+  - sudo cp $TRAVIS_BUILD_DIR/travis_test/mysql.cnf /etc/mysql/conf.d/
+  - sudo service mysql restart
 install:
   - pip install -r travis_test/requirements.txt
   - pip install python-coveralls 
   - pip install coverage codecov
 before_script:
-  - mysql -e 'CREATE DATABASE `djangoblog` /*!40100 DEFAULT CHARACTER SET utf8 */;'
+  - mysql -e 'CREATE DATABASE `djangoblog` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */;'
   - python manage.py makemigrations
   - python manage.py migrate
   - python manage.py collectstatic --noinput
