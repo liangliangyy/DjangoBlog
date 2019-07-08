@@ -31,7 +31,10 @@ class ElasticSearchBackend(BaseSearchBackend):
     def __init__(self, connection_alias, **connection_options):
         super(ElasticSearchBackend, self).__init__(connection_alias, **connection_options)
         self.manager = ArticleDocumentManager()
-        self._rebuild(None)
+        try:
+            self._rebuild(None)
+        except:
+            pass
 
     def _get_models(self, iterable):
         models = iterable if iterable else Article.objects.all()
@@ -54,6 +57,7 @@ class ElasticSearchBackend(BaseSearchBackend):
         self.manager.update_docs(docs)
 
     def update(self, index, iterable, commit=True):
+
         models = self._get_models(iterable)
         self.manager.update_docs(models)
 
