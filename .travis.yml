@@ -4,11 +4,8 @@ sudo: required
 python:
   - "3.5"
   - "3.6"
-matrix:
-  include:
-    - python: "3.7"
-  allow_failures:
-    - python: "3.7"
+  - "3.7"
+  
 services:
   - mysql
 env:
