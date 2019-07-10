@@ -88,14 +88,14 @@ CREATE DATABASE `djangoblog` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8
 ### 创建超级用户
 
  终端下执行:
-```bash
-./manage.py createsuperuser
+```python
+python manage.py createsuperuser
 ```
 
 ### 创建测试数据
 终端下执行:
-```bash
-./manage.py create_testdata
+```python
+ python manage.py create_testdata
 ```
 
 ### 收集静态文件
