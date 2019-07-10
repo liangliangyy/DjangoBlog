@@ -75,9 +75,9 @@ CREATE DATABASE `djangoblog` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8
 ```
 
 然后终端下执行:
-```bash
-./manage.py makemigrations
-./manage.py migrate
+```python
+python manage.py makemigrations
+python manage.py migrate
 ```
 
 **注意：** 在使用 `./manage.py` 之前需要确定你系统中的 `python` 命令是指向 `python 3.6` 及以上版本的。如果不是如此，请使用以下两种方式中的一种：
@@ -100,13 +100,13 @@ python manage.py createsuperuser
 
 ### 收集静态文件
 终端下执行:  
-```bash
-./manage.py collectstatic --noinput
-./manage.py compress --force
+```python
+python manage.py collectstatic --noinput
+python manage.py compress --force
 ```
 
 ### 开始运行：
-执行： `./manage.py runserver`
+执行： `python manage.py runserver`
 
 
 浏览器打开: http://127.0.0.1:8000/  就可以看到效果了。
