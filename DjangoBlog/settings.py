@@ -204,7 +204,7 @@ EMAIL_HOST_PASSWORD = os.environ.get('DJANGO_EMAIL_PASSWORD')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 SERVER_EMAIL = os.environ.get('DJANGO_EMAIL_USER')
 # Setting debug=false did NOT handle except email notifications
-ADMINS = [('liangliang', 'liangliangyy@gmail.com')]
+ADMINS = [('admin', 'admin@admin.com')]
 # WX ADMIN password(Two times md5)
 WXADMIN = '995F03AC401D6CABABAEF756FC4D43C7'
 
