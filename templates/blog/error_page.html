@@ -5,9 +5,9 @@
     {% if tag_name %}
         {% if statuscode == '404' %}
             <title>404 NotFound</title>
-        {% elif statuscode == '500' %}
-            <title>Permission Denied</title>
         {% elif statuscode == '403' %}
+            <title>Permission Denied</title>
+        {% elif statuscode == '500' %}
             <title>500 Error</title>
         {% else %}
             <title></title>
