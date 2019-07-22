@@ -17,7 +17,7 @@ branches:
 # command to install dependencies
 before_install:
   - sudo apt-get update
-  - sudo apt-get install python-dev python3-dev libmysqlclient-dev
+  - sudo apt-get install python-dev python3-dev libmysqlclient-dev -y
   - sudo cp $TRAVIS_BUILD_DIR/travis_test/mysql.cnf /etc/mysql/conf.d/
   - sudo service mysql restart
 install:
