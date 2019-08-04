@@ -1,7 +1,7 @@
 #!/bin/bash
 
 NAME="djangoblog" # Name of the application
-DJANGODIR=//var/www/DjangoBlog # Django project directory
+DJANGODIR=/var/www/DjangoBlog # Django project directory
 SOCKFILE=/var/www/DjangoBlog/run/gunicorn.sock # we will communicte using this unix socket
 USER=root # the user to run as
 GROUP=root # the group to run as

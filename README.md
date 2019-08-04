@@ -1,7 +1,7 @@
 # DjangoBlog
 
 🌍
-*[English](README-en.md) ∙ [简体中文](README.md)*
+*[English](/docs/README-en.md) ∙ [简体中文](README.md)*
 
 基于`python3.6`和`Django2.1`的博客。   
 

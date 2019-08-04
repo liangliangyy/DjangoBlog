@@ -58,6 +58,6 @@ class BlogUserChangeForm(UserChangeForm):
 class BlogUserAdmin(UserAdmin):
     form = BlogUserChangeForm
     add_form = BlogUserCreationForm
-    list_display = ('id', 'nickname', 'username', 'email', 'last_login', 'date_joined')
+    list_display = ('id', 'nickname', 'username', 'email', 'last_login', 'date_joined', 'source')
     list_display_links = ('id', 'username')
     ordering = ('-id',)

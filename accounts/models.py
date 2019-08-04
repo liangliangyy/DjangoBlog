@@ -11,9 +11,7 @@ class BlogUser(AbstractUser):
     nickname = models.CharField('昵称', max_length=100, blank=True)
     created_time = models.DateTimeField('创建时间', default=now)
     last_mod_time = models.DateTimeField('修改时间', default=now)
-    source = models.CharField("创建涞源", max_length=100, blank=True)
-
-    # objects = BlogUserManager()
+    source = models.CharField("创建来源", max_length=100, blank=True)
 
     def get_absolute_url(self):
         return reverse('blog:author_detail', kwargs={'author_name': self.username})
