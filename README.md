@@ -1,7 +1,7 @@
 # DjangoBlog
 
 🌍
-*[English](README-en.md) ∙ [简体中文](README.md)*
+*[English](/docs/README-en.md) ∙ [简体中文](README.md)*
 
 基于`python3.6`和`Django2.1`的博客。   
 
@@ -46,7 +46,7 @@ mysql客户端从`pymysql`修改成了`mysqlclient`，具体请参考 [pypi](htt
 
 `bin`目录是在`linux`环境中使用`Nginx`+`Gunicorn`+`virtualenv`+`supervisor`来部署的脚本和`Nginx`配置文件.可以参考我的文章:
 
->[使用Nginx+Gunicorn+virtualenv+supervisor来部署django项目](https://www.lylinux.org/%E4%BD%BF%E7%94%A8nginxgunicornvirtualenvsupervisor%E6%9D%A5%E9%83%A8%E7%BD%B2django%E9%A1%B9%E7%9B%AE.html)
+>[DjangoBlog部署教程](https://www.lylinux.net/article/2019/8/5/58.html)
 
 有详细的部署介绍.
 
