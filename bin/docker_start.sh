@@ -28,5 +28,6 @@ exec gunicorn ${DJANGO_WSGI_MODULE}:application \
 --user=$USER --group=$GROUP \
 --bind 0.0.0.0:8000 \
 --log-level=debug \
---log-file=-
-
+--log-file=- \
+--worker-class gevent \
+--threads 4
