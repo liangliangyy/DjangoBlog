@@ -21,7 +21,7 @@ before_install:
   - sudo cp $TRAVIS_BUILD_DIR/travis_test/mysql.cnf /etc/mysql/conf.d/
   - sudo service mysql restart
 install:
-  - pip install -r travis_test/requirements.txt
+  - pip install -r requirements.txt
   - pip install python-coveralls 
   - pip install coverage codecov
 before_script:
