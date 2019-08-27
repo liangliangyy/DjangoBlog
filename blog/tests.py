@@ -1,5 +1,5 @@
 from django.test import Client, RequestFactory, TestCase
-from blog.models import Article, Category, Tag, SideBar
+from blog.models import Article, Category, Tag, SideBar, Links
 from django.contrib.auth import get_user_model
 from DjangoBlog.utils import get_current_site, get_md5
 from blog.forms import BlogSearchForm
@@ -119,6 +119,11 @@ class ArticleTest(TestCase):
         from blog.templatetags.blog_tags import gravatar_url, gravatar
         u = gravatar_url('liangliangyy@gmail.com')
         u = gravatar('liangliangyy@gmail.com')
+
+        link = Links(sequence=1, name="lylinux", link='https://wwww.lylinux.net')
+        link.save()
+        response = self.client.get('/links.html')
+        self.assertEqual(response.status_code, 200)
 
     def __check_pagination__(self, p, type, value):
         s = load_pagination_info(p.page(1), type, value)
