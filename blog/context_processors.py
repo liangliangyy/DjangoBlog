@@ -36,6 +36,7 @@ def seo_processor(requests):
             'SITE_SEO_DESCRIPTION': setting.site_seo_description,
             'SITE_DESCRIPTION': setting.site_description,
             'SITE_KEYWORDS': setting.site_keywords,
+            'SITE_BASE_URL': requests.scheme + '://' + requests.get_host() + '/',
             'ARTICLE_SUB_LENGTH': setting.article_sub_length,
             'nav_category_list': Category.objects.all(),
             'nav_pages': Article.objects.filter(type='p', status='p'),
