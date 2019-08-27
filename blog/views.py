@@ -12,7 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from DjangoBlog.utils import cache, get_md5, get_blog_setting
 from django.shortcuts import get_object_or_404
-from blog.models import Article, Category, Tag
+from blog.models import Article, Category, Tag, Links
 from comments.forms import CommentForm
 import logging
 
@@ -245,13 +245,21 @@ class ArchivesView(ArticleListView):
         return cache_key
 
 
+class LinkListView(ListView):
+    model = Links
+    template_name = 'blog/links_list.html'
+
+    def get_queryset(self):
+        return Links.objects.filter(is_enable=True)
+
+
 @csrf_exempt
 def fileupload(request):
-    '''
+    """
     该方法需自己写调用端来上传图片，该方法仅提供图床功能
     :param request:
     :return:
-    '''
+    """
     if request.method == 'POST':
         sign = request.GET.get('sign', None)
         if not sign:

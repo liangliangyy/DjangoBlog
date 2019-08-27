@@ -9,10 +9,8 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from DjangoBlog.utils import get_current_site
 from DjangoBlog.utils import cache_decorator, cache
-from django.utils.functional import cached_property
 from django.utils.timezone import now
 from mdeditor.fields import MDTextField
-from django.db.models.signals import post_save
 
 logger = logging.getLogger(__name__)
 
@@ -21,6 +19,7 @@ LINK_SHOW_TYPE = (
     ('l', '列表页'),
     ('p', '文章页面'),
     ('a', '全站'),
+    ('s', '友情链接页面'),
 )
 
 
