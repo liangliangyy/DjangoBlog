@@ -71,7 +71,7 @@ def authorize(request):
         return HttpResponseRedirect(manager.get_authorization_url(nexturl))
     user = manager.get_oauth_userinfo()
     if user:
-        if not user.nikename.strip():
+        if not user.nikename or not user.nikename.strip():
             import datetime
             user.nikename = "djangoblog" + datetime.datetime.now().strftime('%y%m%d%I%M%S')
         try:
@@ -85,8 +85,7 @@ def authorize(request):
         # facebook的token过长
         if type == 'facebook':
             user.token = ''
-        email = user.email
-        if email:
+        if user.email:
             author = None
             try:
                 author = get_user_model().objects.get(id=user.author_id)
