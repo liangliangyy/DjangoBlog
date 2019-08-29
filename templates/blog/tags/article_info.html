@@ -6,8 +6,14 @@
 
         <h1 class="entry-title">
             {% if  isindex %}
-                <a href="{{ article.get_absolute_url }}"
-                   rel="bookmark">{{ article.title }}</a>
+                {% if article.article_order > 0 %}
+                    <a href="{{ article.get_absolute_url }}"
+                       rel="bookmark">【置顶】{{ article.title }}</a>
+                {% else %}
+                    <a href="{{ article.get_absolute_url }}"
+                       rel="bookmark">{{ article.title }}</a>
+                {% endif %}
+
             {% else %}
                 {{ article.title }}
             {% endif %}
