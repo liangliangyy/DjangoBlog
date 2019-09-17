@@ -12,6 +12,7 @@ from django.shortcuts import get_object_or_404
 from django.views.generic import FormView, RedirectView
 from oauth.forms import RequireEmailForm
 from django.urls import reverse
+from django.db import transaction
 from DjangoBlog.utils import send_email, get_md5, save_user_avatar
 from DjangoBlog.utils import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
@@ -86,25 +87,26 @@ def authorize(request):
         if type == 'facebook':
             user.token = ''
         if user.email:
-            author = None
-            try:
-                author = get_user_model().objects.get(id=user.author_id)
-            except ObjectDoesNotExist:
-                pass
-            if not author:
-                result = get_user_model().objects.get_or_create(email=user.email)
-                author = result[0]
-                if result[1]:
-                    author.username = user.nikename
-                    author.source = 'authorize'
-                    author.save()
+            with transaction.atomic():
+                author = None
+                try:
+                    author = get_user_model().objects.get(id=user.author_id)
+                except ObjectDoesNotExist:
+                    pass
+                if not author:
+                    result = get_user_model().objects.get_or_create(email=user.email)
+                    author = result[0]
+                    if result[1]:
+                        author.username = user.nikename
+                        author.source = 'authorize'
+                        author.save()
 
-            user.author = author
-            user.save()
+                user.author = author
+                user.save()
 
-            oauth_user_login_signal.send(sender=authorize.__class__, id=user.id)
-            login(request, author)
-            return HttpResponseRedirect(nexturl)
+                oauth_user_login_signal.send(sender=authorize.__class__, id=user.id)
+                login(request, author)
+                return HttpResponseRedirect(nexturl)
         else:
             user.save()
             url = reverse('oauth:require_email', kwargs={
@@ -122,18 +124,19 @@ def emailconfirm(request, id, sign):
     if not get_md5(settings.SECRET_KEY + str(id) + settings.SECRET_KEY).upper() == sign.upper():
         return HttpResponseForbidden()
     oauthuser = get_object_or_404(OAuthUser, pk=id)
-    if oauthuser.author:
-        author = get_user_model().objects.get(pk=oauthuser.author_id)
-    else:
-        result = get_user_model().objects.get_or_create(email=oauthuser.email)
-        author = result[0]
-        if result[1]:
-            author.source = 'emailconfirm'
-            author.username = oauthuser.nikename.strip() if oauthuser.nikename.strip() else "djangoblog" + datetime.datetime.now().strftime(
-                '%y%m%d%I%M%S')
-            author.save()
-    oauthuser.author = author
-    oauthuser.save()
+    with transaction.atomic():
+        if oauthuser.author:
+            author = get_user_model().objects.get(pk=oauthuser.author_id)
+        else:
+            result = get_user_model().objects.get_or_create(email=oauthuser.email)
+            author = result[0]
+            if result[1]:
+                author.source = 'emailconfirm'
+                author.username = oauthuser.nikename.strip() if oauthuser.nikename.strip() else "djangoblog" + datetime.datetime.now().strftime(
+                    '%y%m%d%I%M%S')
+                author.save()
+        oauthuser.author = author
+        oauthuser.save()
     oauth_user_login_signal.send(sender=emailconfirm.__class__, id=oauthuser.id)
     login(request, author)
 
