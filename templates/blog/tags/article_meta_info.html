@@ -41,7 +41,7 @@
             </span>
     </a>
         </span>。
-                {% if user.is_authenticated %}
+                {% if user.is_superuser %}
                     <a href="{{ article.get_admin_url }}">编辑</a>
                 {% endif %}
     </span>
