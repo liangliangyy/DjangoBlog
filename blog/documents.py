@@ -46,9 +46,9 @@ class ElaspedTimeDocumentManager():
 
     @staticmethod
     def create(url, time_taken, log_datetime, type, useragent):
-        if not hasattr(ElaspedTimeDocumentManager, 'mapping_created'):
-            ElapsedTimeDocument.init()
-            setattr(ElaspedTimeDocumentManager, 'mapping_created', True)
+        # if not hasattr(ElaspedTimeDocumentManager, 'mapping_created'):
+        #     ElapsedTimeDocument.init()
+        #     setattr(ElaspedTimeDocumentManager, 'mapping_created', True)
         doc = ElapsedTimeDocument(meta={'id': int(round(time.time() * 1000))}, url=url, time_taken=time_taken,
                                   log_datetime=log_datetime, type=type, useragent=useragent)
         doc.save()
@@ -91,8 +91,8 @@ class ArticleDocument(Document):
 class ArticleDocumentManager():
 
     def __init__(self):
-
-        ArticleDocument.init()
+        pass
+        # ArticleDocument.init()
 
     def create_index(self):
         ArticleDocument.init()
@@ -122,6 +122,7 @@ class ArticleDocumentManager():
                                 ) for article in articles]
 
     def rebuild(self, articles=None):
+        ArticleDocument.init()
         articles = articles if articles else Article.objects.all()
         docs = self.convert_to_doc(articles)
         for doc in docs:

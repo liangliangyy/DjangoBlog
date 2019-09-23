@@ -20,6 +20,7 @@ python manage.py makemigrations
 python manage.py migrate
 python manage.py collectstatic --noinput 
 python manage.py compress --force
+python manage.py build_index
 # Start your Django Unicorn
 # Programs meant to be run under supervisor should not daemonize themselves (do not use --daemon)
 exec gunicorn ${DJANGO_WSGI_MODULE}:application \

@@ -11,7 +11,7 @@
 @time: 2019-04-20 20:39
 """
 
-from blog.documents import ArticleDocument, ArticleDocumentManager
+from blog.documents import ElapsedTimeDocument, ArticleDocumentManager
 
 from django.core.management.base import BaseCommand
 from blog.models import Article
@@ -25,3 +25,6 @@ class Command(BaseCommand):
         manager = ArticleDocumentManager()
         manager.delete_index()
         manager.rebuild()
+
+        manager = ElapsedTimeDocument()
+        manager.init()
