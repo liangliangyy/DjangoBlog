@@ -55,18 +55,18 @@ class ElaspedTimeDocumentManager():
 
 
 class ArticleDocument(Document):
-    body = Text(analyzer='ik_max_word')
-    title = Text(analyzer='ik_max_word')
+    body = Text(analyzer='ik_max_word', search_analyzer='ik_smart')
+    title = Text(analyzer='ik_max_word', search_analyzer='ik_smart')
     author = Object(properties={
-        'nickname': Text(analyzer='ik_max_word'),
+        'nickname': Text(analyzer='ik_max_word', search_analyzer='ik_smart'),
         'id': Integer()
     })
     category = Object(properties={
-        'name': Text(analyzer='ik_max_word'),
+        'name': Text(analyzer='ik_max_word', search_analyzer='ik_smart'),
         'id': Integer()
     })
     tags = Object(properties={
-        'name': Text(analyzer='ik_max_word'),
+        'name': Text(analyzer='ik_max_word', search_analyzer='ik_smart'),
         'id': Integer()
     })
 
@@ -99,12 +99,12 @@ class ArticleDocumentManager():
 
     def delete_index(self):
         from elasticsearch import Elasticsearch
-        es = Elasticsearch()
+        es = Elasticsearch(settings.ELASTICSEARCH_DSL['default']['hosts'])
         es.indices.delete(index='blog', ignore=[400, 404])
 
     def convert_to_doc(self, articles):
         return [ArticleDocument(meta={'id': article.id}, body=article.body, title=article.title,
-                                auth={
+                                author={
                                     'nikename': article.author.username,
                                     'id': article.author.id
                                 },
