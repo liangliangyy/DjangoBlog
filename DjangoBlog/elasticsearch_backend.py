@@ -31,10 +31,10 @@ class ElasticSearchBackend(BaseSearchBackend):
     def __init__(self, connection_alias, **connection_options):
         super(ElasticSearchBackend, self).__init__(connection_alias, **connection_options)
         self.manager = ArticleDocumentManager()
-        try:
-            self._rebuild(None)
-        except:
-            pass
+        # try:
+        #     self._rebuild(None)
+        # except:
+        #     pass
 
     def _get_models(self, iterable):
         models = iterable if iterable else Article.objects.all()
@@ -76,7 +76,7 @@ class ElasticSearchBackend(BaseSearchBackend):
         end_offset = kwargs.get('end_offset')
 
         q = Q('bool',
-              must=[Q('match', body=query_string)],
+              should=[Q('match', body=query_string), Q('match', title=query_string)],
               minimum_should_match="70%"
               )
 
