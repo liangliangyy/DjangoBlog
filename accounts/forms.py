@@ -17,9 +17,10 @@ from django.forms import widgets
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-
+from django import forms
 
 class LoginForm(AuthenticationForm):
+    pub_key = forms.CharField(widget=forms.HiddenInput())
     def __init__(self, *args, **kwargs):
         super(LoginForm, self).__init__(*args, **kwargs)
         self.fields['username'].widget = widgets.TextInput(attrs={'placeholder': "username", "class": "form-control"})

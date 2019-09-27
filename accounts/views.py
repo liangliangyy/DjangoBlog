@@ -19,7 +19,10 @@ from django.views.decorators.debug import sensitive_post_parameters
 from django.utils.http import is_safe_url
 from DjangoBlog.utils import send_email, get_md5, get_current_site
 from django.conf import settings
-
+from Crypto import Random
+from Crypto.Cipher import PKCS1_v1_5
+import base64
+from Crypto.PublicKey import RSA
 logger = logging.getLogger(__name__)
 
 
@@ -91,6 +94,19 @@ class LoginView(FormView):
 
         return super(LoginView, self).dispatch(request, *args, **kwargs)
 
+    def get_initial(self):
+        initial = super(LoginView, self).get_initial()
+        if self.request.method in ('GET'):
+            #generate RSA key
+            random_generator = Random.new().read
+            rsa = RSA.generate(1024, random_generator)
+            rsa_private_key = rsa.exportKey()
+            self.request.session['privkey'] = rsa_private_key.decode()
+            rsa_public_key = rsa.publickey().exportKey()
+
+            initial.update({'pub_key':rsa_public_key.decode()})    
+        return initial
+
     def get_context_data(self, **kwargs):
         redirect_to = self.request.GET.get(self.redirect_field_name)
         if redirect_to is None:
@@ -98,6 +114,29 @@ class LoginView(FormView):
         kwargs['redirect_to'] = redirect_to
 
         return super(LoginView, self).get_context_data(**kwargs)
+
+    def get_form_kwargs(self):
+        
+        #decode password
+        if self.request.method in ('POST', 'PUT'):
+
+            privkeystr = self.request.session.get('privkey').encode()
+            #decode
+            password = self.request.POST['password']
+            pub_key = self.request.POST['pub_key']
+            privkey = RSA.importKey(privkeystr)
+            cipher = PKCS1_v1_5.new(privkey)
+            password_decode = cipher.decrypt(base64.b64decode(password.encode()), 'error')
+
+            #change self.requet.POST to mutable
+            _mutable = self.request.POST._mutable
+            self.request.POST._mutable = True
+            self.request.POST['password'] = password_decode
+            self.request.POST._mutable = _mutable
+
+        kwargs = super(LoginView, self).get_form_kwargs()
+        
+        return kwargs
 
     def form_valid(self, form):
         form = AuthenticationForm(data=self.request.POST, request=self.request)
