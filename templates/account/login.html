@@ -7,7 +7,7 @@
 
         <div class="card card-signin">
             <img class="img-circle profile-img" src="{% static 'blog/img/avatar.png' %}" alt="">
-            <form class="form-signin" action="{% url 'account:login' %}" method="post">
+            <form id="login_form" class="form-signin" action="{% url 'account:login' %}" method="post">
                 {% csrf_token %}
                 {% comment %}<label for="inputEmail" class="sr-only">Email address</label>
                 <input type="email" id="inputEmail" class="form-control" placeholder="Email" required autofocus>
@@ -20,7 +20,7 @@
                 {% endfor %}
 
                 <input type="hidden" name="next" value="{{ redirect_to }}">
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+                <button class="btn btn-lg btn-primary btn-block" type="submit" onclick="dologin();return false;">Sign in</button>
 
                 <div class="checkbox">
                     {% comment %}<a class="pull-right">Need help?</a>{% endcomment %}
