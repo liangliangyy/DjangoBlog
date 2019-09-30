@@ -33,6 +33,7 @@ olefile==0.46
 packaging==19.1
 Pillow==6.1.0
 pycparser==2.19
+pycrypto==2.6.1
 Pygments==2.4.2
 pylint==2.3.1
 pyparsing==2.4.2
