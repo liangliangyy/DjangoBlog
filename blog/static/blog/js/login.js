@@ -6,6 +6,6 @@ function dologin() {
         var jsencrypt = new JSEncrypt();
         jsencrypt.setPublicKey(pubkey);
         var enPwd = jsencrypt.encrypt(pwd);
-        $("#id_password").val(en_pwd);
+        $("#id_password").val(enPwd);
         $("#login_form").submit();
     }
