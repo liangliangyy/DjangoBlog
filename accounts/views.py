@@ -115,7 +115,6 @@ class LoginView(FormView):
         return super(LoginView, self).get_context_data(**kwargs)
 
     def get_form_kwargs(self):
-        
         #decode password
         if self.request.method in ('POST', 'PUT'):
 
