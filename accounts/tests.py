@@ -7,7 +7,9 @@ from accounts.models import BlogUser
 from django.urls import reverse
 from DjangoBlog.utils import *
 from django.conf import settings
-
+from Crypto.Cipher import PKCS1_v1_5 as Cipher_pkcs1_v1_5
+from Crypto.PublicKey import RSA
+import base64
 
 # Create your tests here.
 
@@ -92,9 +94,16 @@ class AccountTest(TestCase):
         response = self.client.get(article.get_admin_url())
         self.assertIn(response.status_code, [301, 302, 200])
 
-        response = self.client.post(reverse('account:login'), {
-            'username': 'user1233',
-            'password': 'password123'
+        response = self.client.get(reverse('account:login'))
+        self.assertEqual(response.status_code, 200)
+
+        pub_key = response.context['form'].initial['pub_key']
+        pubobj = Cipher_pkcs1_v1_5.new(RSA.importKey(pub_key))
+        pw = base64.b64encode(pubobj.encrypt('qwer!@#$ggg'.encode()))
+        response = self.client.post(reverse('account:login'),{
+            'username': 'liangliangyy1',
+            'password': pw.decode(),
+            'pub_key': pub_key
         })
         self.assertIn(response.status_code, [301, 302, 200])
 
