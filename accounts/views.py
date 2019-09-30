@@ -99,12 +99,11 @@ class LoginView(FormView):
         if self.request.method in ('GET'):
             #generate RSA key
             random_generator = Random.new().read
-            rsa = RSA.generate(1024, random_generator)
+            rsa = RSA.generate(2048, random_generator)
             rsa_private_key = rsa.exportKey()
             self.request.session['privkey'] = rsa_private_key.decode()
             rsa_public_key = rsa.publickey().exportKey()
-
-            initial.update({'pub_key':rsa_public_key.decode()})    
+            initial.update({'pub_key':rsa_public_key.decode()})
         return initial
 
     def get_context_data(self, **kwargs):
@@ -120,22 +119,21 @@ class LoginView(FormView):
         #decode password
         if self.request.method in ('POST', 'PUT'):
 
-            privkeystr = self.request.session.get('privkey').encode()
-            #decode
-            password = self.request.POST['password']
-            pub_key = self.request.POST['pub_key']
-            privkey = RSA.importKey(privkeystr)
-            cipher = PKCS1_v1_5.new(privkey)
-            password_decode = cipher.decrypt(base64.b64decode(password.encode()), 'error')
+            if self.request.session.get('privkey')!=None:
+                privkeystr = self.request.session.get('privkey').encode()
+                #decode
+                password = self.request.POST['password']
+                privkey = RSA.importKey(privkeystr)
+                cipher = PKCS1_v1_5.new(privkey)
+                password_decode = cipher.decrypt(base64.b64decode(password.encode()), 'error')
 
-            #change self.requet.POST to mutable
-            _mutable = self.request.POST._mutable
-            self.request.POST._mutable = True
-            self.request.POST['password'] = password_decode
-            self.request.POST._mutable = _mutable
+                #change self.requet.POST to mutable
+                _mutable = self.request.POST._mutable
+                self.request.POST._mutable = True
+                self.request.POST['password'] = password_decode
+                self.request.POST._mutable = _mutable
 
         kwargs = super(LoginView, self).get_form_kwargs()
-        
         return kwargs
 
     def form_valid(self, form):
