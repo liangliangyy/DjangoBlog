@@ -16,10 +16,10 @@ class Comment(models.Model):
     is_enable = models.BooleanField('是否显示', default=True, blank=False, null=False)
 
     class Meta:
-        ordering = ['-id']
+        ordering = ['id']
         verbose_name = "评论"
         verbose_name_plural = verbose_name
-        get_latest_by = 'created_time'
+        get_latest_by = 'id'
 
     def __str__(self):
         return self.body
