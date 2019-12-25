@@ -41,7 +41,7 @@ class RegisterForm(UserCreationForm):
     def clean_email(self):
         email = self.cleaned_data['email']
         if get_user_model().objects.filter(email=email).exists():
-            raise ValidationError("该邮箱已经存在.")
+            raise ValidationError("The mailbox already exists.")
         return email
 
     class Meta:

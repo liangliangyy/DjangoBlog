@@ -243,9 +243,9 @@ def load_nav_info():
 @register.inclusion_tag('blog/tags/article_info.html')
 def load_article_detail(article, isindex, user):
     """
-    加载文章详情
+    Loading article details
     :param article:
-    :param isindex:是否列表页，若是列表页只显示摘要
+    :param isindex: List page containing only summary
     :return:
     """
     from DjangoBlog.utils import get_blog_setting
@@ -263,7 +263,7 @@ def load_article_detail(article, isindex, user):
 # TEMPLATE USE:  {{ email|gravatar_url:150 }}
 @register.filter
 def gravatar_url(email, size=40):
-    """获得gravatar头像"""
+    """Get gravatar avatar"""
     cachekey = 'gravatat/' + email
     if cache.get(cachekey):
         return cache.get(cachekey)

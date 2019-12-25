@@ -19,7 +19,7 @@ from django.contrib.auth.backends import ModelBackend
 
 class EmailOrUsernameModelBackend(ModelBackend):
     """
-    允许使用用户名或邮箱登录
+    Allow login with username or email
     """
 
     def authenticate(self, request, username=None, password=None, **kwargs):

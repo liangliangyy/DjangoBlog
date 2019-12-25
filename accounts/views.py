@@ -45,16 +45,16 @@ class RegisterView(FormView):
                                                                                    sign=sign)
 
             content = """
-                            <p>请点击下面链接验证您的邮箱</p>
+                            <p>Please click the link below to verify your email</p>
     
                             <a href="{url}" rel="bookmark">{url}</a>
     
-                            再次感谢您！
+                            Thank you again！
                             <br />
-                            如果上面链接无法打开，请将此链接复制至浏览器。
+                            If the link above does not open, copy this link to your browser。
                             {url}
                             """.format(url=url)
-            send_email(emailto=[user.email, ], title='验证您的电子邮箱', content=content)
+            send_email(emailto=[user.email, ], title='Verify your email', content=content)
 
             url = reverse('accounts:result') + '?type=register&id=' + str(user.id)
             return HttpResponseRedirect(url)
@@ -135,9 +135,9 @@ def account_result(request):
     if type and type in ['register', 'validation']:
         if type == 'register':
             content = '''
-    恭喜您注册成功，一封验证邮件已经发送到您 {email} 的邮箱，请验证您的邮箱后登录本站。
+    Congratulations on your successful registration. A verification email has been sent to your {email} email. Please verify your email and log in to this site。
     '''.format(email=user.email)
-            title = '注册成功'
+            title = 'Registration success'
         else:
             c_sign = get_md5(get_md5(settings.SECRET_KEY + str(user.id)))
             sign = request.GET.get('sign')
@@ -146,9 +146,9 @@ def account_result(request):
             user.is_active = True
             user.save()
             content = '''
-            恭喜您已经成功的完成邮箱验证，您现在可以使用您的账号来登录本站。
+            Congratulations that you have successfully completed your email verification. You can now use your account to log in to this site.
             '''
-            title = '验证成功'
+            title = 'Verification succeeded'
         return render(request, 'account/result.html', {
             'title': title,
             'content': content
