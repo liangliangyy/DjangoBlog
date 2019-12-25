@@ -1,17 +1,5 @@
 #!/usr/bin/env python
-# encoding: utf-8
 
-
-"""
-@version: ??
-@author: liangliangyy
-@license: MIT Licence
-@contact: liangliangyy@gmail.com
-@site: https://www.lylinux.net/
-@software: PyCharm
-@file: utils.py
-@time: 2017/1/19 上午2:30
-"""
 from django.core.cache import cache
 from django.contrib.sites.models import Site
 from hashlib import md5
@@ -75,12 +63,12 @@ def cache_decorator(expiration=3 * 60):
 
 def expire_view_cache(path, servername, serverport, key_prefix=None):
     '''
-    刷新视图缓存
-    :param path:url路径
-    :param servername:host
-    :param serverport:端口
-    :param key_prefix:前缀
-    :return:是否成功
+    Flush preliminary cache
+    :param path:url path
+    :param servername: host
+    :param serverport: port
+    :param key_prefix: prefix
+    :return: status
     '''
     from django.http import HttpRequest
     from django.utils.cache import get_cache_key
@@ -100,7 +88,7 @@ def expire_view_cache(path, servername, serverport, key_prefix=None):
 
 def block_code(text, lang, inlinestyles=False, linenos=False):
     '''
-    markdown代码高亮
+    markdown Code highlighting
     :param text:
     :param lang:
     :param inlinestyles:
@@ -134,7 +122,7 @@ def get_current_site():
 
 class BlogMarkDownRenderer(mistune.Renderer):
     '''
-    markdown渲染
+    markdown Render
     '''
 
     def block_code(self, text, lang=None):
@@ -195,10 +183,10 @@ def get_blog_setting():
         from blog.models import BlogSettings
         if not BlogSettings.objects.count():
             setting = BlogSettings()
-            setting.sitename = 'DjangoBlog'
-            setting.site_description = '基于Django的博客系统'
-            setting.site_seo_description = '基于Django的博客系统'
-            setting.site_keywords = 'Django,Python'
+            setting.sitename = 'mtuktarov empire'
+            setting.site_description = 'mtuktarov empire blog'
+            setting.site_seo_description = 'mtuktarov'
+            setting.site_keywords = 'love,hope,truth'
             setting.article_sub_length = 300
             setting.sidebar_article_count = 10
             setting.sidebar_comment_count = 5
@@ -216,9 +204,9 @@ def get_blog_setting():
 
 def save_user_avatar(url):
     '''
-    保存用户头像
-    :param url:头像url
-    :return: 本地路径
+    Save user avatar
+    :param url: Avatar url
+    :return: Local path
     '''
     setting = get_blog_setting()
     logger.info(url)
@@ -241,10 +229,10 @@ def save_user_avatar(url):
             isimage = len([i for i in imgextensions if url.endswith(i)]) > 0
             ext = os.path.splitext(url)[1] if isimage else '.jpg'
             savefilename = str(uuid.uuid4().hex) + ext
-            logger.info('保存用户头像:' + basepath + savefilename)
+            logger.info('Save user avatar:' + basepath + savefilename)
             with open(basepath + savefilename, 'wb+') as file:
                 file.write(rsp.content)
-            return 'https://resource.lylinux.net/avatar/' + savefilename
+            return 'https://resource.mtuktarov.com/avatar/' + savefilename
     except Exception as e:
         logger.error(e)
         return url

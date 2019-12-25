@@ -51,7 +51,7 @@ OAuth user avatar path is saved in *StaticFileSavedAddress*. Please input absolu
 ## Source code highlighting
 If the code block in your article didn't show hightlight, please write the code blocks as following:
 
-![](https://resource.lylinux.net/image/codelang.png)
+![](https://resource.mtuktarov.com/image/codelang.png)
 
 That is, you should add the corresponding language name before the code block.
 

@@ -1,9 +1,9 @@
 <div id="comments" class="comments-area">
 
     <div id="respond" class="comment-respond">
-        <h3 id="reply-title" class="comment-reply-title">发表评论
+        <h3 id="reply-title" class="comment-reply-title">Оставить комментарий
             <small><a rel="nofollow" id="cancel-comment-reply-link" href="/wordpress/?p=3786#respond"
-                      style="display:none;">取消回复</a></small>
+                      style="display:none;">Отменить</a></small>
         </h3>
         <form action="{% url 'comments:postcomment' article.pk %}" method="post" id="commentform"
               class="comment-form">{% csrf_token %}
@@ -28,10 +28,10 @@
             </p>
             {{ form.parent_comment_id }}
             <div class="form-submit">
-                <span class="comment-markdown"> 支持markdown</span>
-                <input name="submit" type="submit" id="submit" class="submit" value="发表评论"/>
+                <span class="comment-markdown"> Поддержка markdown</span>
+                <input name="submit" type="submit" id="submit" class="submit" value="Оставить комментарий"/>
                 <small class="cancel-comment" id="cancel_comment" style="display: none">
-                    <a href="javascript:void(0)" id="cancel-comment-reply-link" onclick="cancel_reply()">取消回复</a>
+                    <a href="javascript:void(0)" id="cancel-comment-reply-link" onclick="cancel_reply()">Отменить</a>
                 </small>
             </div>
         </form>

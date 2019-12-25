@@ -8,10 +8,10 @@ from django.utils.timezone import now
 # Create your models here.
 
 class BlogUser(AbstractUser):
-    nickname = models.CharField('Nickname', max_length=100, blank=True)
-    created_time = models.DateTimeField('Creation time', default=now)
-    last_mod_time = models.DateTimeField('Modification time', default=now)
-    source = models.CharField("Create source", max_length=100, blank=True)
+    nickname = models.CharField('Блогнэйм', max_length=100, blank=True)
+    created_time = models.DateTimeField('Время создания', default=now)
+    last_mod_time = models.DateTimeField('Время изменения', default=now)
+    source = models.CharField("Source", max_length=100, blank=True)
 
     def get_absolute_url(self):
         return reverse('blog:author_detail', kwargs={'author_name': self.username})
@@ -26,6 +26,6 @@ class BlogUser(AbstractUser):
 
     class Meta:
         ordering = ['-id']
-        verbose_name = "User"
+        verbose_name = "Пользователь"
         verbose_name_plural = verbose_name
         get_latest_by = 'id'

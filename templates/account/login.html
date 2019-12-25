@@ -3,15 +3,15 @@
 {% block content %}
     <div class="container">
 
-        <h2 class="form-signin-heading text-center">Sign in with your Account</h2>
+        <h2 class="form-signin-heading text-center">Войти в свой Блогнэйм</h2>
 
         <div class="card card-signin">
             <img class="img-circle profile-img" src="{% static 'blog/img/avatar.png' %}" alt="">
             <form class="form-signin" action="{% url 'account:login' %}" method="post">
                 {% csrf_token %}
-                {% comment %}<label for="inputEmail" class="sr-only">Email address</label>
+                {% comment %}<label for="inputEmail" class="sr-only">Электронная почта</label>
                 <input type="email" id="inputEmail" class="form-control" placeholder="Email" required autofocus>
-                <label for="inputPassword" class="sr-only">Password</label>
+                <label for="inputPassword" class="sr-only">Пароль</label>
                 <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>{% endcomment %}
                 {{ form.non_field_errors }}
                 {% for field in form %}
@@ -20,12 +20,12 @@
                 {% endfor %}
 
                 <input type="hidden" name="next" value="{{ redirect_to }}">
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
 
                 <div class="checkbox">
-                    {% comment %}<a class="pull-right">Need help?</a>{% endcomment %}
+                    {% comment %}<a class="pull-right">Помочь?</a>{% endcomment %}
                     <label>
-                        <input type="checkbox" value="remember-me"> Stay signed in
+                        <input type="checkbox" value="remember-me"> Не вводить пароль часто
                     </label>
                 </div>
                 {% load oauth_tags %}
@@ -34,9 +34,9 @@
         </div>
 
         <p class="text-center">
-            <a href="{% url "account:register" %}">Create Account</a>
+            <a href="{% url "account:register" %}">Создать блогнэйм</a>
             |
-            <a href="/">Home Page</a>
+            <a href="/">Главная страница</a>
         </p>
 
     </div> <!-- /container -->

@@ -20,13 +20,13 @@ logger = logging.getLogger(__name__)
 
 
 class ArticleListView(ListView):
-    # template_name属性用于指定使用哪个模板进行渲染
+    # template_name Property to specify which template to use for rendering
     template_name = 'blog/article_index.html'
 
-    # context_object_name属性用于给上下文变量取名（在模板中使用该名字）
+    # context_object_name Attribute is used to name the context variable (use that name in the template)
     context_object_name = 'article_list'
 
-    # 页面类型，分类目录或标签列表等
+    # Page type, catalog or tag list, etc.
     page_type = ''
     paginate_by = settings.PAGINATE_BY
     page_kwarg = 'page'
@@ -43,20 +43,20 @@ class ArticleListView(ListView):
 
     def get_queryset_cache_key(self):
         """
-        子类重写.获得queryset的缓存key
+        Subclass rewrite. Get cache key of queryset
         """
         raise NotImplementedError()
 
     def get_queryset_data(self):
         """
-        子类重写.获取queryset的数据
+        Subclass override. Get queryset data
         """
         raise NotImplementedError()
 
     def get_queryset_from_cache(self, cache_key):
         '''
-        缓存页面数据
-        :param cache_key: 缓存key
+        Cache page data
+        :param cache_key: Cache key
         :return:
         '''
         value = cache.get(cache_key)
@@ -71,7 +71,7 @@ class ArticleListView(ListView):
 
     def get_queryset(self):
         '''
-        重写默认，从缓存获取数据
+        Override default to get data from cache
         :return:
         '''
         key = self.get_queryset_cache_key()
@@ -85,9 +85,9 @@ class ArticleListView(ListView):
 
 class IndexView(ArticleListView):
     '''
-    首页
+    Home
     '''
-    # 友情链接类型
+    # Friendly Link Type
     link_type = 'i'
 
     def get_queryset_data(self):
@@ -101,7 +101,7 @@ class IndexView(ArticleListView):
 
 class ArticleDetailView(DetailView):
     '''
-    文章详情页面
+    Article details page
     '''
     template_name = 'blog/article_detail.html'
     model = Article
@@ -118,7 +118,7 @@ class ArticleDetailView(DetailView):
         articleid = int(self.kwargs[self.pk_url_kwarg])
         comment_form = CommentForm()
         user = self.request.user
-        # 如果用户已经登录，则隐藏邮件和用户名输入框
+        # If the user is already logged in, hide the email and username input boxes
         if user.is_authenticated and not user.is_anonymous and user.email and user.username:
             comment_form.fields.update({
                 'email': forms.CharField(widget=forms.HiddenInput()),
@@ -141,9 +141,9 @@ class ArticleDetailView(DetailView):
 
 class CategoryDetailView(ArticleListView):
     '''
-    分类目录列表
+    Category list
     '''
-    page_type = "分类目录归档"
+    page_type = "Категория"
 
     def get_queryset_data(self):
         slug = self.kwargs['category_name']
@@ -177,9 +177,9 @@ class CategoryDetailView(ArticleListView):
 
 class AuthorDetailView(ArticleListView):
     '''
-    作者详情页
+    Страница сведений об авторе
     '''
-    page_type = '作者文章归档'
+    page_type = 'Автор'
 
     def get_queryset_cache_key(self):
         author_name = self.kwargs['author_name']
@@ -200,9 +200,9 @@ class AuthorDetailView(ArticleListView):
 
 class TagDetailView(ArticleListView):
     '''
-    标签列表页面
+    Страница списка тегов
     '''
-    page_type = '分类标签归档'
+    page_type = 'Тег'
 
     def get_queryset_data(self):
         slug = self.kwargs['tag_name']
@@ -230,9 +230,9 @@ class TagDetailView(ArticleListView):
 
 class ArchivesView(ArticleListView):
     '''
-    文章归档页面
+    Article Archive Page
     '''
-    page_type = '文章归档'
+    page_type = 'Пост'
     paginate_by = None
     page_kwarg = None
     template_name = 'blog/article_archives.html'
@@ -256,7 +256,8 @@ class LinkListView(ListView):
 @csrf_exempt
 def fileupload(request):
     """
-    该方法需自己写调用端来上传图片，该方法仅提供图床功能
+    This method needs to write the caller to upload the picture.
+    This method only provides the picture bed function.
     :param request:
     :return:
     """
@@ -278,7 +279,7 @@ def fileupload(request):
                                                             type='files' if not isimage else 'image', timestr=timestr)
             if settings.TESTING:
                 basepath = settings.BASE_DIR + '/uploads'
-            url = 'https://resource.lylinux.net/{type}/{timestr}/{filename}'.format(
+            url = 'https://resource.mtuktarov.com/{type}/{timestr}/{filename}'.format(
                 type='files' if not isimage else 'image', timestr=timestr, filename=filename)
             if not os.path.exists(basepath):
                 os.makedirs(basepath)
@@ -318,16 +319,16 @@ def page_not_found_view(request, exception, template_name='blog/error_page.html'
         logger.error(exception)
     url = request.get_full_path()
     return render(request, template_name,
-                  {'message': '哎呀，您访问的地址 ' + url + ' 是一个未知的地方。请点击首页看看别的？', 'statuscode': '404'}, status=404)
+                  {'message': 'соррян,' + url + ' мы такой страницы не нашли!', 'statuscode': '404'}, status=404)
 
 
 def server_error_view(request, template_name='blog/error_page.html'):
     return render(request, template_name,
-                  {'message': '哎呀，出错了，我已经收集到了错误信息，之后会抓紧抢修，请点击首页看看别的？', 'statuscode': '500'}, status=500)
+                  {'message': 'Соррян, что-то не отработало... Мы поглядим!', 'statuscode': '500'}, status=500)
 
 
 def permission_denied_view(request, exception, template_name='blog/error_page.html'):
     if exception:
         logger.error(exception)
     return render(request, template_name,
-                  {'message': '哎呀，您没有权限访问此页面，请点击首页看看别的？', 'statuscode': '403'}, status=403)
+                  {'message': 'Соррян, вам сюда нельзя!', 'statuscode': '403'}, status=403)

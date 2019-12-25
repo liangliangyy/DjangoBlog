@@ -1,17 +1,4 @@
 #!/usr/bin/env python
-# encoding: utf-8
-
-
-"""
-@version: ??
-@author: liangliangyy
-@license: MIT Licence
-@contact: liangliangyy@gmail.com
-@site: https://www.lylinux.net/
-@software: PyCharm
-@file: feed.py
-@time: 2016/12/22 下午10:16
-"""
 
 from django.contrib.syndication.views import Feed
 from blog.models import Article
@@ -25,8 +12,8 @@ from datetime import datetime
 class DjangoBlogFeed(Feed):
     feed_type = Rss201rev2Feed
 
-    description = '大巧无工,重剑无锋.'
-    title = "且听风吟 大巧无工,重剑无锋. "
+    description = 'mtuktarov empire'
+    title = "mtuktarov"
     link = "/feed/"
 
     def author_name(self):
@@ -46,7 +33,7 @@ class DjangoBlogFeed(Feed):
 
     def feed_copyright(self):
         now = datetime.now()
-        return "Copyright© {year} 且听风吟".format(year=now.year)
+        return "Copyright© {year} mtuktarov".format(year=now.year)
 
     def item_link(self, item):
         return item.get_absolute_url()

@@ -1,59 +1,58 @@
 # DjangoBlog
 
 🌍
-*[English](/docs/README-en.md) ∙ [简体中文](README.md)*
+*[English](README-en.md) ∙ [简体中文](README.md)*
 
-基于`python3.6`和`Django2.1`的博客。   
+A blog system based on `python3.6` and `Django2.1`.
 
-[![Build Status](https://travis-ci.org/liangliangyy/DjangoBlog.svg?branch=master)](https://travis-ci.org/liangliangyy/DjangoBlog) [![codecov](https://codecov.io/gh/liangliangyy/DjangoBlog/branch/master/graph/badge.svg)](https://codecov.io/gh/liangliangyy/DjangoBlog) [![Requirements Status](https://requires.io/github/liangliangyy/DjangoBlog/requirements.svg?branch=master)](https://requires.io/github/liangliangyy/DjangoBlog/requirements/?branch=master)  [![license](https://img.shields.io/github/license/liangliangyy/djangoblog.svg)]()  
+[![Build Status](https://travis-ci.org/liangliangyy/DjangoBlog.svg?branch=master)](https://travis-ci.org/liangliangyy/DjangoBlog) [![codecov](https://codecov.io/gh/liangliangyy/DjangoBlog/branch/master/graph/badge.svg)](https://codecov.io/gh/liangliangyy/DjangoBlog) [![Requirements Status](https://requires.io/github/liangliangyy/DjangoBlog/requirements.svg?branch=master)](https://requires.io/github/liangliangyy/DjangoBlog/requirements/?branch=master)  [![license](https://img.shields.io/github/license/liangliangyy/djangoblog.svg)]()
 
-## 主要功能：
-- 文章，页面，分类目录，标签的添加，删除，编辑等。文章及页面支持`Markdown`，支持代码高亮。
-- 支持文章全文搜索。
-- 完整的评论功能，包括发表回复评论，以及评论的邮件提醒，支持`Markdown`。
-- 侧边栏功能，最新文章，最多阅读，标签云等。
-- 支持Oauth登陆，现已有Google,GitHub,facebook,微博,QQ登录。
-- 支持`Memcache`缓存，支持缓存自动刷新。
-- 简单的SEO功能，新建文章等会自动通知Google和百度。
-- 集成了简单的图床功能。
-- 集成`django-compressor`，自动压缩`css`，`js`。
-- 网站异常邮件提醒，若有未捕捉到的异常会自动发送提醒邮件。
-- 集成了微信公众号功能，现在可以使用微信公众号来管理你的vps了。
+## Main Features:
+- Articles, Pages, Categories, Tags(Add, Delete, Edit), edc. Articles and pages support `Markdown` and highlighting.
+- Articles support full-text search.
+- Complete comment feature, include posting reply comment and email notification. `Markdown` supporting.
+- Sidebar feature: new articles, most readings, tags, etc.
+- OAuth Login supported, including Google, GitHub, Facebook, Weibo, QQ.
+- `Memcache` supported, with cache auto refresh.
+- Simple SEO Features, notify Google and Baidu when there was a new article or other things.
+- Simple picture bed feature integrated.
+- `django-compressor` integrated, auto-compressed `css`, `js`.
+- Website exception email notification. When there is an unhandle exception, system will send an email notification.
+- Wechat official account feature integrated. Now, you can use wechat official account to manage your VPS.
 
-## 安装
-mysql客户端从`pymysql`修改成了`mysqlclient`，具体请参考 [pypi](https://pypi.org/project/mysqlclient/) 查看安装前的准备。
+## Installation
+Change MySQL client from `pymysql` to `mysqlclient`, more details please reference [pypi](https://pypi.org/project/mysqlclient/) , checkout preperation before installation.
 
-使用pip安装： `pip install -Ur requirements.txt`
+Install via pip: `pip install -Ur requirements.txt`
 
-如果你没有pip，使用如下方式安装：
-- OS X / Linux 电脑，终端下执行: 
+If you do NOT have `pip`, please use the following methods to install:
+- OS X / Linux, run the following commands:
 
     ```
     curl http://peak.telecommunity.com/dist/ez_setup.py | python
     curl https://raw.github.com/pypa/pip/master/contrib/get-pip.py | python
     ```
 
-- Windows电脑：
+- Windows：
 
-    下载 http://peak.telecommunity.com/dist/ez_setup.py 和 https://raw.github.com/pypa/pip/master/contrib/get-pip.py 这两个文件，双击运行。 
+    Download http://peak.telecommunity.com/dist/ez_setup.py and https://raw.github.com/pypa/pip/master/contrib/get-pip.py, and run with python.
 
-### 配置
-配置都是在 `setting.py` 中，部分配置迁移到了后台配置中。
+### Configuration
+Most configurations are in `setting.py`, others are in backend configurations.
 
-很多 `setting` 配置我都是写在环境变量里面的.并没有提交到 `github` 中来.例如`SECRET_KEY`,`OAHUTH`,`mysql`以及邮件部分的配置等.你可以直接修改代码成你自己的,或者在环境变量里面加入对应的配置就可以了.
+I set many `setting` configuration with my environment variables (such as: `SECRET_KEY`, `OAUTH`, `mysql` and some email configuration parts.) and they did NOT been submitted to the `GitHub`. You can change these in the code with your own configuration or just add them into your environment variables.
 
-`test`目录中的文件都是为了`travis`自动化测试使用的.不用去关注.或者直接使用.这样就可以集成`travis`自动化测试了.
+Files in `test` directory are for `travis` with automatic testing. You do not need to care about this. Or just use it, in this way to integrate `travis` for automatic testing.
 
-`bin`目录是在`linux`环境中使用`Nginx`+`Gunicorn`+`virtualenv`+`supervisor`来部署的脚本和`Nginx`配置文件.可以参考我的文章:
+In `bin` directory, we have scripts to deploy with `Nginx`+`Gunicorn`+`virtualenv`+`supervisor` on `linux` and `Nginx` configuration file. You can reference with my article
 
 >[DjangoBlog部署教程](https://www.lylinux.net/article/2019/8/5/58.html)
 
-有详细的部署介绍.
+More deploy detail in this article.
 
+## Run
 
-## 运行
-
- 修改`DjangoBlog/setting.py` 修改数据库配置，如下所示：
+Modify `DjangoBlog/setting.py` with database settings, as following:
 
 ```python
 DATABASES = {
@@ -68,58 +67,58 @@ DATABASES = {
 }
 ```
 
-### 创建数据库
-mysql数据库中执行:
+### Create database
+Run the following command in MySQL shell:
 ```sql
 CREATE DATABASE `djangoblog` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */;
 ```
 
-然后终端下执行:
+Run the following commands in Terminal:
 ```bash
 ./manage.py makemigrations
 ./manage.py migrate
 ```
 
-**注意：** 在使用 `./manage.py` 之前需要确定你系统中的 `python` 命令是指向 `python 3.6` 及以上版本的。如果不是如此，请使用以下两种方式中的一种：
+**Attention: ** Before you using `./manage.py`, make sure the `python` command in your system is towards to `python 3.6` or above version. Otherwise you may solve this by one of the two following methods:
+- Modify the first line in `manage.py`, change `#!/usr/bin/env python` to `#!/usr/bin/env python3`
+- Just run with: `python3 ./manage.py makemigrations`
 
-- 修改 `manage.py` 第一行 `#!/usr/bin/env python` 为 `#!/usr/bin/env python3`
-- 直接使用 `python3 ./manage.py makemigrations`
+### Create super user
 
-### 创建超级用户
-
- 终端下执行:
+Run command in terminal:
 ```bash
 ./manage.py createsuperuser
 ```
 
-### 创建测试数据
-终端下执行:
+### Create testing data
+Run command in terminal:
 ```bash
 ./manage.py create_testdata
 ```
 
-### 收集静态文件
-终端下执行:  
+### Collect static files
+Run command in terminal:
 ```bash
 ./manage.py collectstatic --noinput
 ./manage.py compress --force
 ```
 
-### 开始运行：
-执行： `./manage.py runserver`
+### Getting start to run server
+Execute: `./manage.py runserver`
 
+Open up a browser and visit: http://127.0.0.1:8000/ , the you will see the blog.
 
-浏览器打开: http://127.0.0.1:8000/  就可以看到效果了。
-## 更多配置:
-[更多配置介绍](/docs/config.md)
+## More configurations
+[More configurations details](/docs/config-en.md)
 
-## 问题相关
+## About the issues
 
-有任何问题欢迎提Issue,或者将问题描述发送至我邮箱 `liangliangyy#gmail.com`.我会尽快解答.推荐提交Issue方式.  
+If you have any *question*, please use Issue or send problem descriptions to my email `liangliangyy#gmail.com`. I will reponse you as soon as possible. And, we recommend you to use Issue.
 
 ---
- ## 致大家🙋‍♀️🙋‍♂️
- 如果本项目帮助到了你，请在[这里](https://github.com/liangliangyy/DjangoBlog/issues/214)留下你的网址，让更多的人看到。
-您的回复将会是我继续更新维护下去的动力。 
+## To Everyone 🙋‍♀️🙋‍♂️
+If this project helps you, please submit your site address [here](https://github.com/liangliangyy/DjangoBlog/issues/214) to let more people see it.
+
+Your reply will be the driving force for me to continue to update and maintain this project.
 
 🙏🙏🙏

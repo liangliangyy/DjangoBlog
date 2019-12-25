@@ -1,17 +1,4 @@
 #!/usr/bin/env python
-# encoding: utf-8
-
-
-"""
-@version: ??
-@author: liangliangyy
-@license: MIT Licence
-@contact: liangliangyy@gmail.com
-@site: https://www.lylinux.net/
-@software: PyCharm
-@file: oauthmanager.py
-@time: 2016/11/26 下午5:09
-"""
 
 from abc import ABCMeta, abstractmethod, abstractproperty
 from oauth.models import OAuthUser, OAuthConfig
@@ -27,18 +14,18 @@ logger = logging.getLogger(__name__)
 
 class OAuthAccessTokenException(Exception):
     '''
-    oauth授权失败异常
+    oauth authorization failure exception
     '''
 
 
 class BaseOauthManager(metaclass=ABCMeta):
-    """获取用户授权"""
+    """Get user authorization"""
     AUTH_URL = None
-    """获取token"""
+    """Get token"""
     TOKEN_URL = None
-    """获取用户信息"""
+    """Get user information"""
     API_URL = None
-    '''icon图标名'''
+    '''Get icon name'''
     ICON_NAME = None
 
     def __init__(self, access_token=None, openid=None):

@@ -1,17 +1,4 @@
 #!/usr/bin/env python
-# encoding: utf-8
-
-
-"""
-@version: ??
-@author: liangliangyy
-@license: MIT Licence 
-@contact: liangliangyy@gmail.com
-@site: https://www.lylinux.net/
-@software: PyCharm
-@file: robot.py
-@time: 2017/8/27 上午1:55
-"""
 
 from werobot import WeRoBot
 import re
@@ -26,7 +13,7 @@ from django.conf import settings
 import jsonpickle
 from servermanager.models import commands
 
-robot = WeRoBot(token='lylinux', enable_session=True)
+robot = WeRoBot(token='mtuktarov', enable_session=True)
 memstorage = MemcacheStorage()
 if memstorage.is_available:
     robot.config['SESSION_STORAGE'] = memstorage
@@ -72,14 +59,14 @@ def search(message, session):
         reply = convert_to_articlereply(articles, message)
         return reply
     else:
-        return '没有找到相关文章。'
+        return 'Ниче не нашли'
 
 
 @robot.filter(re.compile(r'^category\s*$', re.I))
 def category(message, session):
     categorys = blogapi.get_category_lists()
     content = ','.join(map(lambda x: x.name, categorys))
-    return '所有文章分类目录：' + content
+    return 'Все категории постов:' + content
 
 
 @robot.filter(re.compile(r'^recent\s*$', re.I))
@@ -89,7 +76,7 @@ def recents(message, session):
         reply = convert_to_articlereply(articles, message)
         return reply
     else:
-        return "暂时还没有文章"
+        return "Пока постов нет"
 
 
 @robot.filter(re.compile('^help$', re.I))
@@ -106,22 +93,22 @@ def help(message, session):
         help获得帮助.
         weather:获得天气
         如weather:西安
-        idcard:获得身份证信息
+        idcard:Получить идентификационную информацию
         如idcard:61048119xxxxxxxxxx
-        music:音乐搜索
-        如music:阴天快乐
+        music:Поиск музыки
+        Нравится музыка:Пасмурный день
         PS:以上标点符号都不支持中文标点~~
         '''
 
 
 @robot.filter(re.compile('^weather\:.*$', re.I))
 def weather(message, session):
-    return "建设中..."
+    return "В процессе строительства..."
 
 
 @robot.filter(re.compile('^idcard\:.*$', re.I))
 def idcard(message, session):
-    return "建设中..."
+    return "Мы это не допилили..."
 
 
 @robot.handler
@@ -139,14 +126,14 @@ class CommandHandler():
         if cmd:
             return self.__run_command__(cmd[0].command)
         else:
-            return "未找到相关命令，请输入hepme获得帮助。"
+            return "Связанные команды не найдены, пожалуйста, введите hepme для помощи."
 
     def __run_command__(self, cmd):
         try:
             str = os.popen(cmd).read()
             return str
         except:
-            return '命令执行出错!'
+            return 'Ошибка выполнения команды!'
 
     def get_help(self):
         rsp = ''
@@ -189,27 +176,27 @@ class MessageHandler():
         if self.userinfo.isAdmin and info.upper() == 'EXIT':
             self.userinfo = WxUserInfo()
             self.savesession()
-            return "退出成功"
+            return "Выход успешен"
         if info.upper() == 'ADMIN':
             self.userinfo.isAdmin = True
             self.savesession()
-            return "输入管理员密码"
+            return "Введите пароль администратора"
         if self.userinfo.isAdmin and not self.userinfo.isPasswordSet:
             passwd = settings.WXADMIN
             if settings.TESTING:
-                passwd='123'
+                passwd = '123'
             if passwd.upper() == get_md5(get_md5(info)).upper():
                 self.userinfo.isPasswordSet = True
                 self.savesession()
-                return "验证通过,请输入命令或者要执行的命令代码:输入helpme获得帮助"
+                return "Введите команду или код команды для выполнения: введите helpme для справки"
             else:
                 if self.userinfo.Count >= 3:
                     self.userinfo = WxUserInfo()
                     self.savesession()
-                    return "超过验证次数"
+                    return "Превышены допустимое число проверок"
                 self.userinfo.Count += 1
                 self.savesession()
-                return "验证失败，请重新输入管理员密码:"
+                return "Ошибка аутентификации. Пожалуйста, введите пароль администратора еще раз:"
         if self.userinfo.isAdmin and self.userinfo.isPasswordSet:
             if self.userinfo.Command != '' and info.upper() == 'Y':
                 return cmdhandler.run(self.userinfo.Command)
@@ -218,7 +205,7 @@ class MessageHandler():
                     return cmdhandler.get_help()
                 self.userinfo.Command = info
                 self.savesession()
-                return "确认执行: " + info + " 命令?"
+                return "Подтвердите выполнение: " + info + " команды?"
         rsp = tuling.getdata(info)
         return rsp
 

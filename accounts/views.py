@@ -45,13 +45,12 @@ class RegisterView(FormView):
                                                                                    sign=sign)
 
             content = """
-                            <p>Please click the link below to verify your email</p>
-    
+                            <p>Пожалуйста, подтвердите почтовый адрес переходом по ссылке</p>
+
                             <a href="{url}" rel="bookmark">{url}</a>
-    
-                            Thank you again！
+
                             <br />
-                            If the link above does not open, copy this link to your browser。
+                            Если ссылка выше не открывается，то копируй руками:。
                             {url}
                             """.format(url=url)
             send_email(emailto=[user.email, ], title='Verify your email', content=content)
@@ -135,9 +134,9 @@ def account_result(request):
     if type and type in ['register', 'validation']:
         if type == 'register':
             content = '''
-    Congratulations on your successful registration. A verification email has been sent to your {email} email. Please verify your email and log in to this site。
+    Круто, что ты с нами! Подтверждай свою почту {email}
     '''.format(email=user.email)
-            title = 'Registration success'
+            title = 'Регистрация прошла успешно'
         else:
             c_sign = get_md5(get_md5(settings.SECRET_KEY + str(user.id)))
             sign = request.GET.get('sign')
@@ -146,9 +145,17 @@ def account_result(request):
             user.is_active = True
             user.save()
             content = '''
-            Congratulations that you have successfully completed your email verification. You can now use your account to log in to this site.
+            Почта подтверждена! Моя идея в двух словах:
+
+            Я топлю за то, что нет ничего правдивее твоих личных историй из жизни, которые изменили твое отношение к чему-то. Я убежден, что в конечном счете все эти истории в некоторой абстракции похожи. Мы все переживаем одни и те же потрясения. И совершенно круто ими делиться. Неважно, обосрался ты по полной или наоборот пришел и выебал все эти хит-парады. А еще круто уметь смеяться над собой, но не проебать грань. И хорошо относиться друг к другу - подъебывать качественно.
+
+            !!! Я презираю безосновательную критику чужого субъективного. Чужие вкусы надо пытаться понять. Однажды это может неплохо пригодиться. Мы очень разные. Из этого нужно брать пользу.
+            !!! Никакой нахуй озлобленной печальной хуйни!!! Я топлю за позитивное мышление, даже если ты умираешь, радуйся за тех, кому остается больше воздуха. Радуйся, что ты больше этих тварей не увидишь!
+            !!! Если чья-то мысль может быть двояко истолкована, ты выбираешь всегда хороший вариант. Пробуешь прочитать с разной интонацией. Пробуешь. Если надо уточняешь. Нахуй недопонимания.
+
+            Мы тут любим истории. Любое мнение становится пиздатым, когда с ним связана история, переживания, умственная работа.
             '''
-            title = 'Verification succeeded'
+            title = 'Почта подтверждена'
         return render(request, 'account/result.html', {
             'title': title,
             'content': content

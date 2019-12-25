@@ -1,5 +1,5 @@
 server {
-	server_name blog.lylinux.org;
+	server_name mtuktarov.com;
 	root /var/www/DjangoBlog/;
 	listen 80;
 	keepalive_timeout 70;

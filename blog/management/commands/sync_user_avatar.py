@@ -1,17 +1,4 @@
 #!/usr/bin/env python
-# encoding: utf-8
-
-
-"""
-@version: ??
-@author: liangliangyy
-@license: MIT Licence 
-@contact: liangliangyy@gmail.com
-@site: https://www.lylinux.net/
-@software: PyCharm
-@file: sync_user_avatar.py
-@time: 2018/7/18 下午10:21
-"""
 
 from django.core.management.base import BaseCommand
 from oauth.models import OAuthUser
@@ -23,14 +10,14 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         users = OAuthUser.objects.filter(picture__isnull=False).exclude(
-            picture__istartswith='https://resource.lylinux.net').all()
-        self.stdout.write('开始同步{count}个用户头像'.format(count=len(users)))
+            picture__istartswith='https://resource.mtuktarov.com').all()
+        self.stdout.write('Начинаем синхронизацию{count}аватаров'.format(count=len(users)))
         for u in users:
-            self.stdout.write('开始同步:{id}'.format(id=u.nikename))
+            self.stdout.write('Начать синхронизацию:{id}'.format(id=u.nikename))
             url = u.picture
             url = save_user_avatar(url)
             if url:
-                self.stdout.write('结束同步:{id}.url:{url}'.format(id=u.nikename, url=url))
+                self.stdout.write('Завершить синхронизацию:{id}.url:{url}'.format(id=u.nikename, url=url))
                 u.picture = url
                 u.save()
-        self.stdout.write('结束同步')
+        self.stdout.write('Завершить синхронизацию')

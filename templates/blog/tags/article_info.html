@@ -8,7 +8,7 @@
             {% if  isindex %}
                 {% if article.article_order > 0 %}
                     <a href="{{ article.get_absolute_url }}"
-                       rel="bookmark">【置顶】{{ article.title }}</a>
+                       rel="bookmark">[Вверх]{{ article.title }}</a>
                 {% else %}
                     <a href="{{ article.get_absolute_url }}"
                        rel="bookmark">{{ article.title }}</a>
@@ -26,7 +26,7 @@
                     {% if article.comment and article.comment_set.count %}
                         {{ article.comment_set.count }}个评论
                     {% else %}
-                        发表评论
+                        Оставить комментарий
                     {% endif %}
                     </span>
                 </a>
@@ -49,7 +49,7 @@
         {% if  isindex %}
             {{ article.body|custom_markdown|escape|truncatechars_content }}
             <p class='read-more'><a
-                    href=' {{ article.get_absolute_url }}'>Read more</a></p>
+                    href=' {{ article.get_absolute_url }}'>Подробнее</a></p>
         {% else %}
             {{ article.body|custom_markdown }}
         {% endif %}

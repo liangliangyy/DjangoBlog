@@ -41,7 +41,7 @@ class CommentPostView(FormView):
         })
 
     def form_valid(self, form):
-        """提交的数据验证合法后的逻辑"""
+        """The logic after the submitted data is verified"""
         user = self.request.user
 
         article_id = self.kwargs['article_id']

@@ -66,17 +66,17 @@ class CommentsTest(TestCase):
         response = self.client.post(commenturl,
                                     {
                                         'body': '''
-                                        # Title1  
-        
+                                        # Title1
+
         ```python
         import os
-        ```  
-        
-        [url](https://www.lylinux.net/)  
-          
-        [ddd](http://www.baidu.com)  
-        
-        
+        ```
+
+        [url](https://www.mtuktarov.com/)
+
+        [ddd](http://www.baidu.com)
+
+
         ''',
                                         'email': user.email,
                                         'name': user.username,

@@ -34,7 +34,7 @@
 
             {% if article.type == 'a' %}
                 <nav class="nav-single">
-                    <h3 class="assistive-text">文章导航</h3>
+                    <h3 class="assistive-text">Навигация по посту</h3>
                     {% if next_article %}
 
                         <span class="nav-previous"><a href="{{ next_article.get_absolute_url }}" rel="prev"><span
@@ -57,8 +57,8 @@
                 {% include 'comments/tags/post_comment.html' %}
             {% else %}
                 <div class="comments-area">
-                    <h3 class="comment-meta">您还没有登录，请您<a
-                            href="{% url "account:login" %}?next={{ request.get_full_path }}" rel="nofollow">登录</a>后发表评论。
+                    <h3 class="comment-meta">Вы не авторизованы, пожалуйста<a
+                            href="{% url "account:login" %}?next={{ request.get_full_path }}" rel="nofollow">Войдите</a>и пишите комментариев сколько хотите
                     </h3>
 
                     {% load oauth_tags %}

@@ -1,17 +1,5 @@
 #!/usr/bin/env python
-# encoding: utf-8
 
-
-"""
-@version: ??
-@author: liangliangyy
-@license: MIT Licence 
-@contact: liangliangyy@gmail.com
-@site: https://www.lylinux.net/
-@software: PyCharm
-@file: oauth_tags.py
-@time: 2017/3/4 下午3:22
-"""
 from oauth.oauthmanager import get_oauth_apps
 from django.urls import reverse
 from django import template

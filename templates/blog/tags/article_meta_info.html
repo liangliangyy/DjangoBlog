@@ -3,7 +3,7 @@
 {% with article.id|add:user.is_authenticated as cachekey %}
     {% cache 36000 metainfo cachekey %}
         <footer class="entry-meta">
-            本条目发布于<a href="{{ article.get_absolute_url }}" title="{% datetimeformat article.pub_time %}"
+            Дата публикации<a href="{{ article.get_absolute_url }}" title="{% datetimeformat article.pub_time %}"
                      itemprop="datePublished" content="{% datetimeformat article.pub_time %}"
                      rel="bookmark">
 
@@ -12,10 +12,10 @@
                 {% datetimeformat article.pub_time %}</time>
         </a>
             {% if article.type == 'a' %}
-                。属于<a href="{{ article.category.get_absolute_url }}" rel="category tag">{{ article.category.name }}</a>
-                分类，
+                Категория <a href="{{ article.category.get_absolute_url }}" rel="category tag">{{ article.category.name }}</a>
+
                 {% if article.tags.all %}
-                    被贴了
+                    Тэги
 
                     {% for t in article.tags.all %}
                         <a href="{{ t.get_absolute_url }}" rel="tag">{{ t.name }}</a>
@@ -24,13 +24,13 @@
                         {% endif %}
                     {% endfor %}
 
-                    标签。
+
                 {% endif %}
             {% endif %}
-            <span class="by-author">作者是
+            <span class="by-author">Автор
         <span class="author vcard">
             <a class="url fn n" href="{{ article.author.get_absolute_url }}"
-               title="查看所有由{{ article.author.username }}发布的文章"
+               title="Просмотреть все посты {{ article.author.username }}"
                rel="author">
             <span itemprop="author" itemscope itemtype="http://schema.org/Person">
 
@@ -42,7 +42,7 @@
     </a>
         </span>。
                 {% if user.is_superuser %}
-                    <a href="{{ article.get_admin_url }}">编辑</a>
+                    <a href="{{ article.get_admin_url }}">Изменить</a>
                 {% endif %}
     </span>
         </footer><!-- .entry-meta -->

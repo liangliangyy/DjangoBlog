@@ -1,17 +1,4 @@
 #!/usr/bin/env python
-# encoding: utf-8
-
-
-"""
-@version: ??
-@author: liangliangyy
-@license: MIT Licence
-@contact: liangliangyy@gmail.com
-@site: https://www.lylinux.net/
-@software: PyCharm
-@file: blog_tags.py
-@time: 2016/11/2 下午11:10
-"""
 
 from django import template
 from django.db.models import Q
@@ -68,7 +55,7 @@ def custom_markdown(content):
 @stringfilter
 def truncatechars_content(content):
     """
-    获得文章内容的摘要
+    Get a summary of article content
     :param content:
     :return:
     """
@@ -89,7 +76,7 @@ def truncate(content):
 @register.inclusion_tag('blog/tags/breadcrumb.html')
 def load_breadcrumb(article):
     """
-    获得文章面包屑
+    Get article breadcrumbs
     :param article:
     :return:
     """
@@ -109,7 +96,7 @@ def load_breadcrumb(article):
 @register.inclusion_tag('blog/tags/article_tag_list.html')
 def load_articletags(article):
     """
-    文章标签
+    Article tags
     :param article:
     :return:
     """
@@ -129,7 +116,7 @@ def load_articletags(article):
 @register.inclusion_tag('blog/tags/sidebar.html')
 def load_sidebar(user, linktype):
     """
-    加载侧边栏
+    Load the sidebar
     :return:
     """
     logger.info('load sidebar')
@@ -142,8 +129,8 @@ def load_sidebar(user, linktype):
     dates = Article.objects.datetimes('created_time', 'month', order='DESC')
     links = Links.objects.filter(is_enable=True).filter(Q(show_type=str(linktype)) | Q(show_type='a'))
     commment_list = Comment.objects.filter(is_enable=True).order_by('-id')[:blogsetting.sidebar_comment_count]
-    # 标签云 计算字体大小
-    # 根据总数计算出平均值 大小为 (数目/平均值)*步长
+    # Tag cloud calculate font size
+    # Calculate the average value based on the total size (number / average) * step size
     increment = 5
     tags = Tag.objects.all()
     sidebar_tags = None
@@ -175,7 +162,7 @@ def load_sidebar(user, linktype):
 @register.inclusion_tag('blog/tags/article_meta_info.html')
 def load_article_metas(article, user):
     """
-    获得文章meta信息
+    Get article meta information
     :param article:
     :return:
     """
@@ -196,7 +183,7 @@ def load_pagination_info(page_obj, page_type, tag_name):
         if page_obj.has_previous():
             previous_number = page_obj.previous_page_number()
             previous_url = reverse('blog:index_page', kwargs={'page': previous_number})
-    if page_type == '分类标签归档':
+    if page_type == 'Тег':
         tag = get_object_or_404(Tag, name=tag_name)
         if page_obj.has_next():
             next_number = page_obj.next_page_number()
@@ -204,7 +191,7 @@ def load_pagination_info(page_obj, page_type, tag_name):
         if page_obj.has_previous():
             previous_number = page_obj.previous_page_number()
             previous_url = reverse('blog:tag_detail_page', kwargs={'page': previous_number, 'tag_name': tag.slug})
-    if page_type == '作者文章归档':
+    if page_type == 'Автор':
         if page_obj.has_next():
             next_number = page_obj.next_page_number()
             next_url = reverse('blog:author_detail_page', kwargs={'page': next_number, 'author_name': tag_name})
@@ -212,7 +199,7 @@ def load_pagination_info(page_obj, page_type, tag_name):
             previous_number = page_obj.previous_page_number()
             previous_url = reverse('blog:author_detail_page', kwargs={'page': previous_number, 'author_name': tag_name})
 
-    if page_type == '分类目录归档':
+    if page_type == 'Категория':
         category = get_object_or_404(Category, name=tag_name)
         if page_obj.has_next():
             next_number = page_obj.next_page_number()
@@ -275,7 +262,7 @@ def gravatar_url(email, size=40):
                 return o[0].picture
         email = email.encode('utf-8')
 
-        default = "https://resource.lylinux.net/image/2017/03/26/120117.jpg".encode('utf-8')
+        default = "https://resource.mtuktarov.com/image/2017/03/26/120117.jpg".encode('utf-8')
 
         url = "https://www.gravatar.com/avatar/%s?%s" % (
             hashlib.md5(email.lower()).hexdigest(), urllib.parse.urlencode({'d': default, 's': str(size)}))
@@ -285,7 +272,7 @@ def gravatar_url(email, size=40):
 
 @register.filter
 def gravatar(email, size=40):
-    """获得gravatar头像"""
+    """Get gravatar avatar"""
     url = gravatar_url(email, size)
     return mark_safe('<img src="%s" height="%d" width="%d">' % (url, size, size))
 
