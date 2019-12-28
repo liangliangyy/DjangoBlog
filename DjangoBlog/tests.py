@@ -25,8 +25,6 @@ class DjangoBlogTest(TestCase):
 
         [url](https://www.mtuktarov.com/)
 
-        [ddd](http://www.baidu.com)
-
 
         ''')
         self.assertIsNotNone(c)
@@ -36,8 +34,3 @@ class DjangoBlogTest(TestCase):
         }
         data = parse_dict_to_url(d)
         self.assertIsNotNone(data)
-        render = BlogMarkDownRenderer()
-        s = render.autolink('http://www.baidu.com')
-        self.assertTrue(s.find('nofollow') > 0)
-        s = render.link('http://www.baidu.com', 'test', 'test')
-        self.assertTrue(s.find('nofollow') > 0)

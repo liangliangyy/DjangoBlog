@@ -97,14 +97,14 @@ WSGI_APPLICATION = 'DjangoBlog.wsgi.application'
 
 DATABASES = {
     'default': {
-#        'ENGINE': 'django.db.backends.mysql',
+        #        'ENGINE': 'django.db.backends.mysql',
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'mtuktarov',
         'USER': 'mtuktarov',
         'PASSWORD': 'mtuktarov',
         'HOST': 'ubuntu-linux',
-#        'PORT': 3306,
-#        'OPTIONS': {'charset': 'utf8mb4'},
+        #        'PORT': 3306,
+        #        'OPTIONS': {'charset': 'utf8mb4'},
     }
 }
 
@@ -190,7 +190,6 @@ CACHES = {
 }
 
 SITE_ID = 1
-BAIDU_NOTIFY_URL = "http://data.zz.baidu.com/urls?site=https://www.mtuktarov.com&token=1uAOGrMsUm5syDGn"
 
 # Emial:
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

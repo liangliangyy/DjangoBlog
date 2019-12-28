@@ -74,8 +74,6 @@ class CommentsTest(TestCase):
 
         [url](https://www.mtuktarov.com/)
 
-        [ddd](http://www.baidu.com)
-
 
         ''',
                                         'email': user.email,
