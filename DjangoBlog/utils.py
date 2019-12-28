@@ -184,7 +184,7 @@ def get_blog_setting():
         if not BlogSettings.objects.count():
             setting = BlogSettings()
             setting.sitename = 'mtuktarov empire'
-            setting.site_description = 'mtuktarov empire blog'
+            setting.site_description = 'if I had my own world...'
             setting.site_seo_description = 'mtuktarov'
             setting.site_keywords = 'love,hope,truth'
             setting.article_sub_length = 300
