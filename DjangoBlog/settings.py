@@ -99,10 +99,10 @@ DATABASES = {
     'default': {
 #        'ENGINE': 'django.db.backends.mysql',
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mtuktarov',
+        'NAME': 'djangoblog',
         'USER': 'mtuktarov',
         'PASSWORD': 'mtuktarov',
-        'HOST': 'localhost',
+        'HOST': 'ubuntu-linux',
 #        'PORT': 3306,
 #        'OPTIONS': {'charset': 'utf8mb4'},
     }

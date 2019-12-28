@@ -5,7 +5,7 @@
             <div>
                 <label class="screen-reader-text" for="s">Поиск:</label>
                 <input type="text" value="" name="q" id="q"/>
-                <input type="submit" id="searchsubmit" value="搜索"/>
+                <input type="submit" id="searchsubmit" value="Поиск"/>
             </div>
         </form>
     </aside>
@@ -22,7 +22,7 @@
     {% endif %}
     {% if most_read_articles %}
 
-        <aside id="views-4" class="widget widget_views"><h3 class="widget-title">Вид</h3>
+        <aside id="views-4" class="widget widget_views"><h3 class="widget-title">Просмотры</h3>
             <ul>
                 {% for a in most_read_articles %}
                     <li>
