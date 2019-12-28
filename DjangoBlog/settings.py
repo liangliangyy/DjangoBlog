@@ -27,7 +27,7 @@ DEBUG = True
 TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 
 # ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['*', '127.0.0.1', 'example.com', '*mtuktarov.com']
+ALLOWED_HOSTS = ['*', '127.0.0.1', '*mtuktarov.ru', '*mtuktarov.com']
 # Application definition
 
 
@@ -99,7 +99,7 @@ DATABASES = {
     'default': {
 #        'ENGINE': 'django.db.backends.mysql',
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'djangoblog',
+        'NAME': 'mtuktarov',
         'USER': 'mtuktarov',
         'PASSWORD': 'mtuktarov',
         'HOST': 'ubuntu-linux',
