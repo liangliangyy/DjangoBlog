@@ -153,7 +153,6 @@ def load_sidebar(user, linktype):
         'show_google_adsense': blogsetting.show_google_adsense,
         'google_adsense_codes': blogsetting.google_adsense_codes,
         'open_site_comment': blogsetting.open_site_comment,
-        'show_gongan_code': blogsetting.show_gongan_code,
         'sidebar_tags': sidebar_tags,
         'extra_sidebars': extra_sidebars
     }

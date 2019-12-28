@@ -267,9 +267,7 @@ class BlogSettings(models.Model):
     google_adsense_codes = models.TextField('Рекламный контент', max_length=2000, null=True, blank=True, default='')
     open_site_comment = models.BooleanField('Включить комментарии', default=True)
     beiancode = models.CharField('Код записи', max_length=2000, null=True, blank=True, default='')
-    analyticscode = models.TextField("Код статистики сайта", max_length=1000, null=False, blank=False, default='')
-    show_gongan_code = models.BooleanField('Отображать публичный номер записи безопасности', default=False, null=False)
-    gongan_beiancode = models.TextField('Публичный номер записи безопасности', max_length=2000, null=True, blank=True, default='')
+    analyticscode = models.TextField("Тег Google Аналитики", max_length=1000, null=False, blank=False, default='')
     resource_path = models.CharField("Каталог со статикой", max_length=300, null=False, default='/var/www/resource/')
 
     class Meta:
