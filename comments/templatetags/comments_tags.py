@@ -1,17 +1,4 @@
 #!/usr/bin/env python
-# encoding: utf-8
-
-
-"""
-@version: ??
-@author: liangliangyy
-@license: MIT Licence
-@contact: liangliangyy@gmail.com
-@site: https://www.lylinux.net/
-@software: PyCharm
-@file: comments_tags.py
-@time: 2016/11/2 下午9:17
-"""
 
 from django import template
 from django.template.loader import render_to_string
@@ -24,8 +11,8 @@ register = template.Library()
 
 @register.simple_tag
 def parse_commenttree(commentlist, comment):
-    """获得当前评论子评论的列表
-        用法: {% parse_commenttree article_comments comment as childcomments %}
+    """Get a list of current comment sub-comments
+        Usage: {% parse_commenttree article_comments comment as childcomments %}
     """
     datas = []
 
@@ -41,7 +28,7 @@ def parse_commenttree(commentlist, comment):
 
 @register.inclusion_tag('comments/tags/comment_item.html')
 def show_comment_item(comment, ischild):
-    """评论"""
+    """Comment"""
     depth = 1 if ischild else 2
     return {
         'comment_item': comment,

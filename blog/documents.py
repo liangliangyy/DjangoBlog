@@ -1,15 +1,5 @@
 #!/usr/bin/env python
-# encoding: utf-8
-"""
-@version: ??
-@author: liangliangyy
-@license: MIT Licence 
-@contact: liangliangyy@gmail.com
-@site: https://www.lylinux.net/
-@software: PyCharm
-@file: documents.py
-@time: 2019-04-05 13:05
-"""
+
 import time
 from blog.models import Article, Category, Tag
 from elasticsearch_dsl import Document, Date, Integer, Keyword, Text, Object, Boolean
@@ -107,19 +97,19 @@ class ArticleDocumentManager():
                                 author={
                                     'nikename': article.author.username,
                                     'id': article.author.id
-                                },
-                                category={
+        },
+            category={
                                     'name': article.category.name,
                                     'id': article.category.id
-                                },
-                                tags=[{'name': t.name, 'id': t.id} for t in article.tags.all()],
-                                pub_time=article.pub_time,
-                                status=article.status,
-                                comment_status=article.comment_status,
-                                type=article.type,
-                                views=article.views,
-                                article_order=article.article_order
-                                ) for article in articles]
+        },
+            tags=[{'name': t.name, 'id': t.id} for t in article.tags.all()],
+            pub_time=article.pub_time,
+            status=article.status,
+            comment_status=article.comment_status,
+            type=article.type,
+            views=article.views,
+            article_order=article.article_order
+        ) for article in articles]
 
     def rebuild(self, articles=None):
         ArticleDocument.init()

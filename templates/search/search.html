@@ -16,7 +16,7 @@
             {% if query %}
                 <header class="archive-header">
 
-                    <h2 class="archive-title"> 搜索：<span style="color: red">{{ query }}</span></h2>
+                    <h2 class="archive-title"> Поиск: <span style="color: red">{{ query }}</span></h2>
                 </header><!-- .archive-header -->
             {% endif %}
             {% if query and page.object_list %}
@@ -25,14 +25,14 @@
                 {% endfor %}
                 {% if page.has_previous or page.has_next %}
                     <nav id="nav-below" class="navigation" role="navigation">
-                        <h3 class="assistive-text">文章导航</h3>
+                        <h3 class="assistive-text">Навигация по постам</h3>
                         {% if page.has_previous %}
                             <div class="nav-previous"><a
                                     href="?q={{ query }}&amp;page={{ page.previous_page_number }}"><span
-                                    class="meta-nav">&larr;</span> 早期文章</a></div>
+                                    class="meta-nav">&larr;</span> Посты ранее</a></div>
                         {% endif %}
                         {% if page.has_next %}
-                            <div class="nav-next"><a href="?q={{ query }}&amp;page={{ page.next_page_number }}">较新文章
+                            <div class="nav-next"><a href="?q={{ query }}&amp;page={{ page.next_page_number }}">Посты позже
                                 <span
                                         class="meta-nav">→</span></a>
                             </div>
@@ -43,7 +43,7 @@
             {% else %}
                 <header class="archive-header">
 
-                    <h1 class="archive-title">哎呀，关键字：<span>{{ query }}</span>没有找到结果，要不换个词再试试？</h1>
+                    <h1 class="archive-title">Ключевые слова：<span>{{ query }}</span>Ничего не найдено？</h1>
                 </header><!-- .archive-header -->
             {% endif %}
         </div><!-- #content -->

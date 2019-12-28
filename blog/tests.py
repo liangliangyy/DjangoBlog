@@ -120,7 +120,7 @@ class ArticleTest(TestCase):
         u = gravatar_url('liangliangyy@gmail.com')
         u = gravatar('liangliangyy@gmail.com')
 
-        link = Links(sequence=1, name="lylinux", link='https://wwww.lylinux.net')
+        link = Links(sequence=1, name="mtuktarov", link='https://wwww.mtuktarov.com')
         link.save()
         response = self.client.get('/links.html')
         self.assertEqual(response.status_code, 200)

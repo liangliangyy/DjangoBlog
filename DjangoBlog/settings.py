@@ -27,7 +27,7 @@ DEBUG = True
 TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 
 # ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['*', '127.0.0.1', 'example.com']
+ALLOWED_HOSTS = ['*', '127.0.0.1', 'example.com', '*mtuktarov.com']
 # Application definition
 
 
@@ -97,13 +97,14 @@ WSGI_APPLICATION = 'DjangoBlog.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+#        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'djangoblog',
-        'USER': os.environ.get('DJANGO_MYSQL_USER'),
-        'PASSWORD': os.environ.get('DJANGO_MYSQL_PASSWORD'),
-        'HOST': os.environ.get('DJANGO_MYSQL_HOST'),
-        'PORT': 3306,
-        'OPTIONS': {'charset': 'utf8mb4'},
+        'USER': 'mtuktarov',
+        'PASSWORD': 'mtuktarov',
+        'HOST': 'ubuntu-linux',
+#        'PORT': 3306,
+#        'OPTIONS': {'charset': 'utf8mb4'},
     }
 }
 
@@ -128,9 +129,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
 
-LANGUAGE_CODE = 'zh-hans'
-
-TIME_ZONE = 'Asia/Shanghai'
+#LANGUAGE_CODE = 'zh-hans'
+LANGUAGE_CODE = 'ru-RU'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -175,13 +176,13 @@ PAGINATE_BY = 10
 CACHE_CONTROL_MAX_AGE = 2592000
 # cache setting
 CACHES = {
-    'default': {
+    'memcache': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
         'LOCATION': '127.0.0.1:11211',
         'KEY_PREFIX': 'django_test' if TESTING else 'djangoblog',
         'TIMEOUT': 60 * 60 * 10
     },
-    'locmemcache': {
+    'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
         'TIMEOUT': 10800,
         'LOCATION': 'unique-snowflake',
@@ -189,7 +190,7 @@ CACHES = {
 }
 
 SITE_ID = 1
-BAIDU_NOTIFY_URL = "http://data.zz.baidu.com/urls?site=https://www.lylinux.net&token=1uAOGrMsUm5syDGn"
+BAIDU_NOTIFY_URL = "http://data.zz.baidu.com/urls?site=https://www.mtuktarov.com&token=1uAOGrMsUm5syDGn"
 
 # Emial:
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

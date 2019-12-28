@@ -13,8 +13,8 @@ def enable_commentstatus(modeladmin, request, queryset):
     queryset.update(is_enable=True)
 
 
-disable_commentstatus.short_description = '禁用评论'
-enable_commentstatus.short_description = '启用评论'
+disable_commentstatus.short_description = 'Отключить комментарии'
+enable_commentstatus.short_description = 'Включить комментарии'
 
 
 class CommentAdmin(admin.ModelAdmin):
@@ -37,5 +37,5 @@ class CommentAdmin(admin.ModelAdmin):
         return format_html(
             u'<a href="%s">%s</a>' % (link, obj.article.title))
 
-    link_to_userinfo.short_description = '用户'
-    link_to_article.short_description = '文章'
+    link_to_userinfo.short_description = 'Пользователь'
+    link_to_article.short_description = 'Статья'

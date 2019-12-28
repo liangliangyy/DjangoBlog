@@ -1,17 +1,5 @@
 #!/usr/bin/env python
-# encoding: utf-8
 
-
-"""
-@version: ??
-@author: liangliangyy
-@license: MIT Licence 
-@contact: liangliangyy@gmail.com
-@site: https://www.lylinux.net/
-@software: PyCharm
-@file: MemcacheStorage.py
-@time: 2017/8/27 上午2:42
-"""
 from werobot.session import SessionStorage
 from werobot.utils import json_loads, json_dumps
 from DjangoBlog.utils import cache

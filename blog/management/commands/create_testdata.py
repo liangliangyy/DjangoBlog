@@ -1,17 +1,4 @@
 #!/usr/bin/env python
-# encoding: utf-8
-
-
-"""
-@version: ??
-@author: liangliangyy
-@license: MIT Licence 
-@contact: liangliangyy@gmail.com
-@site: https://www.lylinux.net/
-@software: PyCharm
-@file: create_testdata.py
-@time: 2017/3/11 上午1:58
-"""
 
 from django.core.management.base import BaseCommand
 from blog.models import Article, Tag, Category
@@ -25,16 +12,16 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         user = \
-            get_user_model().objects.get_or_create(email='test@test.com', username='测试用户',
+            get_user_model().objects.get_or_create(email='test', username='test',
                                                    password='test!q@w#eTYU')[0]
 
-        pcategory = Category.objects.get_or_create(name='我是父类目', parent_category=None)[0]
+        pcategory = Category.objects.get_or_create(name='pcategory', parent_category=None)[0]
 
-        category = Category.objects.get_or_create(name='子类目', parent_category=pcategory)[0]
+        category = Category.objects.get_or_create(name='category', parent_category=pcategory)[0]
 
         category.save()
         basetag = Tag()
-        basetag.name = "标签"
+        basetag.name = "basetag.name"
         basetag.save()
         for i in range(1, 20):
             article = Article.objects.get_or_create(category=category,
@@ -43,7 +30,7 @@ class Command(BaseCommand):
                                                     author=user
                                                     )[0]
             tag = Tag()
-            tag.name = "标签" + str(i)
+            tag.name = "tag.name" + str(i)
             tag.save()
             article.tags.add(tag)
             article.tags.add(basetag)

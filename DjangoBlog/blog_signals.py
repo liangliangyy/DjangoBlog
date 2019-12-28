@@ -1,17 +1,5 @@
 #!/usr/bin/env python
-# encoding: utf-8
 
-
-"""
-@version: ??
-@author: liangliangyy
-@license: MIT Licence 
-@contact: liangliangyy@gmail.com
-@site: https://www.lylinux.net/
-@software: PyCharm
-@file: blog_signals.py
-@time: 2017/8/12 上午10:18
-"""
 import django
 import django.dispatch
 from django.dispatch import receiver

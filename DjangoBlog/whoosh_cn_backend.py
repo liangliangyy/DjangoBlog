@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 from __future__ import absolute_import, division, print_function, unicode_literals
 from jieba.analyse import ChineseAnalyzer
 import json
@@ -911,7 +909,6 @@ class WhooshSearchQuery(BaseSearchQuery):
                 query_frag = "(%s)" % query_frag
 
         return u"%s%s" % (index_fieldname, query_frag)
-
 
         # if not filter_type in ('in', 'range'):
         #     # 'in' is a bit of a special case, as we don't want to

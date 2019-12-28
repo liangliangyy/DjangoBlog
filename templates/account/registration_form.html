@@ -3,7 +3,7 @@
 {% block content %}
     <div class="container">
 
-        <h2 class="form-signin-heading text-center">Create Your Account</h2>
+        <h2 class="form-signin-heading text-center">Создать блогнэйм</h2>
 
         <div class="card card-signin">
             <img class="img-circle profile-img" src="{% static 'blog/img/avatar.png' %}" alt="">
@@ -16,13 +16,13 @@
                 {% endfor %}
 
 
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Create Your Account</button>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Создать блогнэйм</button>
 
             </form>
         </div>
 
         <p class="text-center">
-            <a href="{% url "account:login" %}">Sign In</a>
+            <a href="{% url "account:login" %}">Войти</a>
         </p>
 
     </div> <!-- /container -->
