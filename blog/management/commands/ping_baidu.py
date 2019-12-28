@@ -9,7 +9,6 @@ site = get_current_site().domain
 
 
 class Command(BaseCommand):
-    help = 'notify baidu url'
 
     def add_arguments(self, parser):
         parser.add_argument('data_type', type=str, choices=['all', 'article', 'tag', 'category'],
@@ -37,5 +36,4 @@ class Command(BaseCommand):
                 urls.append(self.get_full_url(url))
 
         self.stdout.write(self.style.SUCCESS('start notify %d urls' % len(urls)))
-        SpiderNotify.baidu_notify(urls)
         self.stdout.write(self.style.SUCCESS('finish notify'))
