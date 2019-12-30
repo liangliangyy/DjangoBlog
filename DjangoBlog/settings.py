@@ -99,10 +99,10 @@ DATABASES = {
     'default': {
 #        'ENGINE': 'django.db.backends.mysql',
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'djangoblog',
+        'NAME': 'mtuktarov',
         'USER': 'mtuktarov',
         'PASSWORD': 'mtuktarov',
-        'HOST': 'ubuntu-linux',
+        'HOST': '127.0.0.1',
 #        'PORT': 3306,
 #        'OPTIONS': {'charset': 'utf8mb4'},
     }
@@ -288,3 +288,43 @@ COMPRESS_JS_FILTERS = [
 
 MEDIA_ROOT = os.path.join(SITE_ROOT, 'uploads')
 MEDIA_URL = '/media/'
+
+MDEDITOR_CONFIGS = {
+    'default': {
+        'width': '90%',
+        'height': 500,
+        'toolbar': ["undo", "redo", "|",
+                    "bold", "del", "italic", "quote", "ucwords", "uppercase",
+                    "lowercase", "|",
+                    "h1", "h2", "h3", "h5", "h6", "|",
+                    "list-ul", "list-ol", "hr", "|",
+                    "link", "reference-link", "image", "code",
+                    "preformatted-text", "code-block", "table", "datetime",
+                    "emoji", "html-entities", "pagebreak", "goto-line", "|",
+                    "help", "info",
+                    "||", "preview", "watch", "fullscreen"],
+        'upload_image_formats': ["jpg", "JPG", "jpeg", "JPEG", "gif", "GIF",
+                                 "png", "PNG", "bmp", "BMP", "webp", "WEBP"],
+        'image_folder': 'editor',
+        'theme': 'default',  # dark / default
+        'preview_theme': 'default',  # dark / default
+        'editor_theme': 'default',  # pastel-on-dark / default
+        'toolbar_autofixed': True,
+        'search_replace': True,
+        'emoji': True,
+        'tex': True,
+        'flow_chart': True,
+        'sequence': True,
+        'language': 'en',  # zh / en
+        'watch': True,  # Live preview
+        'lineWrapping': False,  # lineWrapping
+        'lineNumbers': True,  # lineNumbers,
+        'placeholder': 'Enjoy!'
+    },
+    'custom': {
+        'width': '90%',
+        'height': 200,
+        'toolbar': ["undo", "redo"]
+    }
+}
+

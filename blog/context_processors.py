@@ -29,10 +29,7 @@ def seo_processor(requests):
             'nav_category_list': Category.objects.all(),
             'nav_pages': Article.objects.filter(type='p', status='p'),
             'OPEN_SITE_COMMENT': setting.open_site_comment,
-            'BEIAN_CODE': setting.beiancode,
             'ANALYTICS_CODE': setting.analyticscode,
-            "BEIAN_CODE_GONGAN": setting.gongan_beiancode,
-            "SHOW_GONGAN_CODE": setting.show_gongan_code,
             "CURRENT_YEAR": datetime.now().year
 
         }
