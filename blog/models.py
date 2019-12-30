@@ -77,7 +77,7 @@ class Article(BaseModel):
                                on_delete=models.CASCADE)
     article_order = models.IntegerField('Очередность', blank=False, null=False, default=0)
     category = models.ForeignKey('Category', verbose_name='Категория', on_delete=models.CASCADE, blank=False, null=False)
-    tags = models.ManyToManyField('Tag', verbose_name='Тэг', blank=True)
+    tags = models.ManyToManyField('Tag', verbose_name='Тег', blank=True)
 
     def body_to_string(self):
         return self.body
@@ -143,7 +143,7 @@ class Article(BaseModel):
 class Category(BaseModel):
     """Article Category"""
     name = models.CharField('Имя', max_length=30, unique=True)
-    parent_category = models.ForeignKey('self', verbose_name="Папа категория", blank=True, null=True, on_delete=models.CASCADE)
+    parent_category = models.ForeignKey('self', verbose_name="Надкатегория", blank=True, null=True, on_delete=models.CASCADE)
     slug = models.SlugField(default='no-slug', max_length=60, blank=True)
 
     class Meta:
@@ -197,7 +197,7 @@ class Category(BaseModel):
 
 class Tag(BaseModel):
     """Article tags"""
-    name = models.CharField('Тэг', max_length=30, unique=True)
+    name = models.CharField('Тег', max_length=30, unique=True)
     slug = models.SlugField(default='no-slug', max_length=60, blank=True)
 
     def __str__(self):
@@ -212,7 +212,7 @@ class Tag(BaseModel):
 
     class Meta:
         ordering = ['name']
-        verbose_name = "Тэг"
+        verbose_name = "Тег"
         verbose_name_plural = verbose_name
 
 
@@ -240,7 +240,7 @@ class SideBar(models.Model):
     """Sidebar, can display some html content"""
     name = models.CharField('Название', max_length=100)
     content = models.TextField("Содержимое")
-    sequence = models.IntegerField('Очередность', unique=True)
+    sequence = models.IntegerField('Позиция', unique=True)
     is_enable = models.BooleanField('Включен', default=True)
     created_time = models.DateTimeField('Дата создания', default=now)
     last_mod_time = models.DateTimeField('Дата редактирования', default=now)
@@ -266,8 +266,10 @@ class BlogSettings(models.Model):
     show_google_adsense = models.BooleanField('Показывать рекламу Гугла', default=False)
     google_adsense_codes = models.TextField('Рекламный контент', max_length=2000, null=True, blank=True, default='')
     open_site_comment = models.BooleanField('Включить комментарии', default=True)
-    analyticscode = models.TextField("Код статистики сайта", max_length=1000, null=False, blank=False, default='')
+    analyticscode = models.TextField("Код статистики сайта", max_length=1000, null=True, blank=False, default='')
     resource_path = models.CharField("Каталог со статикой", max_length=300, null=False, default='/var/www/resource/')
+    show_views_bar = models.BooleanField('Показывать панель ПРОСМОТРЫ', default=False)
+    show_category_bar = models.BooleanField('Показывать панель КАТЕГОРИИ', default=False)
 
     class Meta:
         verbose_name = 'Конфигурация сайта'

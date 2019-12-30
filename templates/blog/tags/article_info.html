@@ -18,23 +18,6 @@
                 {{ article.title }}
             {% endif %}
         </h1>
-        <div class="comments-link">
-            {% if article.comment_status == "o" and open_site_comment %}
-                <a href="{{ article.get_absolute_url }}#comments" class="ds-thread-count" data-thread-key="3815"
-                   rel="nofollow">
-                    <span class="leave-reply">
-                    {% if article.comment and article.comment_set.count %}
-                        {{ article.comment_set.count }}个评论
-                    {% else %}
-                        Оставить комментарий
-                    {% endif %}
-                    </span>
-                </a>
-            {% endif %}
-            <div style="float:right">
-                {{ article.views }} views
-            </div>
-        </div><!-- .comments-link -->
         <br/>
         {% if article.type == 'a' %}
             {% if not isindex %}
@@ -55,7 +38,25 @@
         {% endif %}
 
     </div><!-- .entry-content -->
-
+    <div class="comments-link">
+            {% if article.comment_status == "o" and open_site_comment %}
+                <a href="{{ article.get_absolute_url }}#comments" class="ds-thread-count" data-thread-key="3815"
+                   rel="nofollow">
+                    <span class="leave-reply">
+                    {% if article.comment and article.comment_set.count %}
+                        {{ article.comment_set.count }}Комментарии
+                    {% else %}
+                        Оставить комментарий
+                    {% endif %}
+                    </span>
+                </a>
+            {% endif %}
+            {% if SHOW_VIEWS_BAR %}
+              <div style="float:right">
+                  {{ article.views }} просмотров
+              </div>
+            {% endif %}
+        </div><!-- .comments-link -->
     {% load_article_metas article user %}
 
 </article><!-- #post -->

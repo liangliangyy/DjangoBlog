@@ -97,14 +97,14 @@ WSGI_APPLICATION = 'DjangoBlog.wsgi.application'
 
 DATABASES = {
     'default': {
-#        'ENGINE': 'django.db.backends.mysql',
+        #        'ENGINE': 'django.db.backends.mysql',
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'mtuktarov',
         'USER': 'mtuktarov',
         'PASSWORD': 'mtuktarov',
-        'HOST': '127.0.0.1',
-#        'PORT': 3306,
-#        'OPTIONS': {'charset': 'utf8mb4'},
+        'HOST': 'ubuntu-linux',
+        #        'PORT': 3306,
+        #        'OPTIONS': {'charset': 'utf8mb4'},
     }
 }
 
@@ -190,7 +190,6 @@ CACHES = {
 }
 
 SITE_ID = 1
-BAIDU_NOTIFY_URL = "http://data.zz.baidu.com/urls?site=https://www.mtuktarov.com&token=1uAOGrMsUm5syDGn"
 
 # Emial:
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -275,6 +274,8 @@ STATICFILES_FINDERS = (
 COMPRESS_ENABLED = True
 # COMPRESS_OFFLINE = True
 
+SHOW_VIEWS_BAR = False # Показывать панель ПРОСМОТРЫ
+SHOW_CATEGORY_BAR = False # Показывать панель КАТЕГОРИИ
 
 COMPRESS_CSS_FILTERS = [
     # creates absolute urls from relative ones
@@ -303,21 +304,20 @@ MDEDITOR_CONFIGS = {
                     "emoji", "html-entities", "pagebreak", "goto-line", "|",
                     "help", "info",
                     "||", "preview", "watch", "fullscreen"],
-        'upload_image_formats': ["jpg", "JPG", "jpeg", "JPEG", "gif", "GIF",
-                                 "png", "PNG", "bmp", "BMP", "webp", "WEBP"],
-        'image_folder': 'editor',
-        'theme': 'default',  # dark / default
-        'preview_theme': 'default',  # dark / default
-        'editor_theme': 'default',  # pastel-on-dark / default
-        'toolbar_autofixed': True,
-        'search_replace': True,
-        'emoji': True,
-        'tex': True,
-        'flow_chart': True,
-        'sequence': True,
-        'language': 'en',  # zh / en
+        'upload_image_formats': ["jpg", "jpeg", "gif", "png", "bmp", "webp"],  # image upload format type
+        'image_folder': 'editor',  # image save the folder name
+        'theme': 'default',  # edit box theme, dark / default
+        'preview_theme': 'default',  # Preview area theme, dark / default
+        'editor_theme': 'default',  # edit area theme, pastel-on-dark / default
+        'toolbar_autofixed': True,  # Whether the toolbar capitals
+        'search_replace': True,  # Whether to open the search for replacement
+        'emoji': True,  # whether to open the expression function
+        'tex': True,  # whether to open the tex chart function
+        'flow_chart': True,  # whether to open the flow chart function
+        'sequence': True,  # Whether to open the sequence diagram function
         'watch': True,  # Live preview
-        'lineWrapping': False,  # lineWrapping
+        'language': 'en',  # zh / en
+        'lineWrapping': True,  # lineWrapping
         'lineNumbers': True,  # lineNumbers,
         'placeholder': 'Enjoy!'
     },
@@ -327,4 +327,3 @@ MDEDITOR_CONFIGS = {
         'toolbar': ["undo", "redo"]
     }
 }
-

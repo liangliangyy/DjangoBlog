@@ -30,7 +30,9 @@ def seo_processor(requests):
             'nav_pages': Article.objects.filter(type='p', status='p'),
             'OPEN_SITE_COMMENT': setting.open_site_comment,
             'ANALYTICS_CODE': setting.analyticscode,
-            "CURRENT_YEAR": datetime.now().year
+            "CURRENT_YEAR": datetime.now().year,
+            "SHOW_VIEWS_BAR":  setting.show_views_bar,
+            "SHOW_CATEGORY_BAR":  setting.show_category_bar,
 
         }
         cache.set(key, value, 60 * 60 * 10)

@@ -3,28 +3,24 @@
 {% with article.id|add:user.is_authenticated as cachekey %}
     {% cache 36000 metainfo cachekey %}
         <footer class="entry-meta">
-            Дата публикации<a href="{{ article.get_absolute_url }}" title="{% datetimeformat article.pub_time %}"
+            Дата публикации <a href="{{ article.get_absolute_url }}" title="{% datetimeformat article.pub_time %}"
                      itemprop="datePublished" content="{% datetimeformat article.pub_time %}"
-                     rel="bookmark">
-
-            <time class="entry-date updated"
-                  datetime="{{ article.pub_time }}">
-                {% datetimeformat article.pub_time %}</time>
-        </a>
+                     rel="bookmark"
+                     style="white-space:normal"><time class="entry-date updated"
+                  datetime="{{ article.pub_time }}">{% datetimeformat article.pub_time %}</time></a>
+                &nbsp;|&nbsp;
             {% if article.type == 'a' %}
                 Категория <a href="{{ article.category.get_absolute_url }}" rel="category tag">{{ article.category.name }}</a>
-
+                &nbsp;|&nbsp;
                 {% if article.tags.all %}
                     Тэги
-
                     {% for t in article.tags.all %}
                         <a href="{{ t.get_absolute_url }}" rel="tag">{{ t.name }}</a>
                         {% if t != article.tags.all.last %}
                             ，
                         {% endif %}
                     {% endfor %}
-
-
+                    &nbsp;|&nbsp;
                 {% endif %}
             {% endif %}
             <span class="by-author">Автор
@@ -33,15 +29,10 @@
                title="Просмотреть все посты {{ article.author.username }}"
                rel="author">
             <span itemprop="author" itemscope itemtype="http://schema.org/Person">
-
-            <span itemprop="name" itemprop="publisher">
-
-            {{ article.author.username }}
+            <span itemprop="name" itemprop="publisher">{{ article.author.username }}</span></span></a>
         </span>
-            </span>
-    </a>
-        </span>。
                 {% if user.is_superuser %}
+                    &nbsp;|&nbsp;
                     <a href="{{ article.get_admin_url }}">Изменить</a>
                 {% endif %}
     </span>

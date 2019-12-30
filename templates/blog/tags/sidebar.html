@@ -10,18 +10,17 @@
         </form>
     </aside>
     {% if extra_sidebars %}
-        {% for sidebar in extra_sidebars %}
+      {% for sidebar in extra_sidebars %}
 
-            <aside class="widget_text widget widget_custom_html"><h3 class="widget-title">
-                {{ sidebar.name }}</h3>
-                <div class="textwidget custom-html-widget">
-                    {{ sidebar.content|custom_markdown }}
-                </div>
-            </aside>
-        {% endfor %}
+          <aside class="widget_text widget widget_custom_html"><h3 class="widget-title">
+              {{ sidebar.name }}</h3>
+              <div class="textwidget custom-html-widget">
+                  {{ sidebar.content|custom_markdown }}
+              </div>
+          </aside>
+      {% endfor %}
     {% endif %}
-    {% if most_read_articles %}
-
+    {% if SHOW_VIEWS_BAR and most_read_articles %}
         <aside id="views-4" class="widget widget_views"><h3 class="widget-title">Просмотры</h3>
             <ul>
                 {% for a in most_read_articles %}
@@ -32,10 +31,9 @@
                     </li>
                 {% endfor %}
             </ul>
-
         </aside>
     {% endif %}
-    {% if sidebar_categorys %}
+    {% if SHOW_CATEGORY_BAR and sidebar_categorys %}
         <aside id="su_siloed_terms-2" class="widget widget_su_siloed_terms"><h3 class="widget-title">Категория</h3>
             <ul>
                 {% for c in sidebar_categorys %}
@@ -104,17 +102,7 @@
             </div>
         </aside>
     {% endif %}
-    <!-- <aside id="text-2" class="widget widget_text"><h3 class="widget-title"></h3>
-        <div class="textwidget">
-
-            <p><a href="https://github.com/liangliangyy/DjangoBlog" rel="nofollow"><img
-                    src="https://resource.mtuktarov.com/img.shields.io/github/stars/liangliangyy/djangoblog.svg?style=social&amp;label=Star"
-                    alt="GitHub stars"></a> <a href="https://github.com/liangliangyy/DjangoBlog" rel="nofollow"><img
-                    src="https://resource.mtuktarov.com/img.shields.io/github/forks/liangliangyy/djangoblog.svg?style=social&amp;label=Fork"
-                    alt="GitHub forks"></a></p>
-        </div>
-    </aside> -->
-    <aside id="meta-2" class="widget widget_meta"><h3 class="widget-title">Функция</h3>
+    <aside id="meta-2" class="widget widget_meta"><h3 class="widget-title">Меню</h3>
         <ul>
             <li><a href="/admin/" rel="nofollow">Управление сайтом</a></li>
             {% if user.is_authenticated %}
@@ -128,7 +116,6 @@
                 <li><a href="{% url "blog:refresh" %}" target="_blank">Очистить кеш</a></li>
                 <li><a href="{% url 'owntracks:show_dates' %}" target="_blank">Список координат owntracks</a></li>
             {% endif %}
-            <li><a href="http://gitbook.mtuktarov.com" target="_blank" rel="nofollow">GitBook</a></li>
         </ul>
     </aside>
     <div id="rocket" class="show" title="Вернуться наверх"></div>

@@ -57,8 +57,8 @@
                 {% include 'comments/tags/post_comment.html' %}
             {% else %}
                 <div class="comments-area">
-                    <h3 class="comment-meta">Вы не авторизованы, пожалуйста<a
-                            href="{% url "account:login" %}?next={{ request.get_full_path }}" rel="nofollow">Войдите</a>и пишите комментариев сколько хотите
+                    <h3 class="comment-meta">Вы не авторизованы, пожалуйста, <a
+                            href="{% url "account:login" %}?next={{ request.get_full_path }}" rel="nofollow">войдите</a> и пишите комментариев сколько хотите
                     </h3>
 
                     {% load oauth_tags %}

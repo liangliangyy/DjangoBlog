@@ -184,7 +184,7 @@ def get_blog_setting():
         if not BlogSettings.objects.count():
             setting = BlogSettings()
             setting.sitename = 'mtuktarov empire'
-            setting.site_description = 'mtuktarov empire blog'
+            setting.site_description = 'if I had my own world...'
             setting.site_seo_description = 'mtuktarov'
             setting.site_keywords = 'love,hope,truth'
             setting.article_sub_length = 300
@@ -193,6 +193,8 @@ def get_blog_setting():
             setting.show_google_adsense = False
             setting.open_site_comment = True
             setting.analyticscode = ''
+            setting.show_views_bar = False
+            setting.show_category_bar = False
             setting.save()
         value = BlogSettings.objects.first()
         logger.info('set cache get_blog_setting')
