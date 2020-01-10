@@ -11,7 +11,7 @@ class OAuthUser(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Пользователь', blank=True, null=True,
                                on_delete=models.CASCADE)
     openid = models.CharField(max_length=50)
-    nikename = models.CharField(max_length=50, verbose_name='Блогнэйм')
+    nikename = models.CharField(max_length=50, verbose_name='Ник')
     token = models.CharField(max_length=150, null=True, blank=True)
     picture = models.CharField(max_length=350, blank=True, null=True)
     type = models.CharField(blank=False, null=False, max_length=50)

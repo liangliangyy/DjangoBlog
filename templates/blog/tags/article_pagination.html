@@ -1,12 +1,12 @@
 <nav id="nav-below" class="navigation" role="navigation">
-    <h3 class="assistive-text">Навигация по посту</h3>
+    <h3 class="assistive-text">Навигация по публикации</h3>
     {% if page_obj.has_next  and next_url%}
         <div class="nav-previous"><a
                 href="{{ next_url }}"><span
-                class="meta-nav">&larr;</span> Посты ранее</a></div>
+                class="meta-nav">&larr;</span> назад</a></div>
     {% endif %}
     {% if page_obj.has_previous and previous_url %}
-        <div class="nav-next"><a href="{{ previous_url }}">Посты позже
+        <div class="nav-next"><a href="{{ previous_url }}">вперед
             <span
                     class="meta-nav">→</span></a>
         </div>

@@ -33,18 +33,13 @@ def send_email_signal_handler(sender, **kwargs):
 
     msg = EmailMultiAlternatives(title, content, from_email=settings.DEFAULT_FROM_EMAIL, to=emailto)
     msg.content_subtype = "html"
-    logger.info('0')
     from servermanager.models import EmailSendLog
     log = EmailSendLog()
     log.title = title
-    logger.info('1')
     log.content = content
-    logger.info('2')
     log.emailto = ','.join(emailto)
-    logger.info('3')
     try:
         result = msg.send()
-        logger.info('4')
         log.send_result = result > 0
     except Exception as e:
         logger.error(e)

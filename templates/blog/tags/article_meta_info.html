@@ -9,20 +9,18 @@
                      style="white-space:normal"><time class="entry-date updated"
                   datetime="{{ article.pub_time }}">{% datetimeformat article.pub_time %}</time></a>
                 &nbsp;|&nbsp;
-            {% if article.type == 'a' %}
+            {% if show_category_bar %}
                 Категория <a href="{{ article.category.get_absolute_url }}" rel="category tag">{{ article.category.name }}</a>
                 &nbsp;|&nbsp;
-                {% if article.tags.all %}
-                    Тэги
-                    {% for t in article.tags.all %}
-                        <a href="{{ t.get_absolute_url }}" rel="tag">{{ t.name }}</a>
-                        {% if t != article.tags.all.last %}
-                            ，
-                        {% endif %}
-                    {% endfor %}
-                    &nbsp;|&nbsp;
-                {% endif %}
             {% endif %}
+            {% if article.tags.all %}
+                Тэги
+                {% for t in article.tags.all %}
+                    <a href="{{ t.get_absolute_url }}" rel="tag">{{ t.name }}</a>
+                {% endfor %}
+                &nbsp;|&nbsp;
+            {% endif %}
+
             <span class="by-author">Автор
         <span class="author vcard">
             <a class="url fn n" href="{{ article.author.get_absolute_url }}"

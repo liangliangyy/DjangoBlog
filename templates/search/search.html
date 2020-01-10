@@ -25,14 +25,14 @@
                 {% endfor %}
                 {% if page.has_previous or page.has_next %}
                     <nav id="nav-below" class="navigation" role="navigation">
-                        <h3 class="assistive-text">Навигация по постам</h3>
+                        <h3 class="assistive-text">Навигация по публикациям</h3>
                         {% if page.has_previous %}
                             <div class="nav-previous"><a
                                     href="?q={{ query }}&amp;page={{ page.previous_page_number }}"><span
-                                    class="meta-nav">&larr;</span> Посты ранее</a></div>
+                                    class="meta-nav">&larr;</span>назад</a></div>
                         {% endif %}
                         {% if page.has_next %}
-                            <div class="nav-next"><a href="?q={{ query }}&amp;page={{ page.next_page_number }}">Посты позже
+                            <div class="nav-next"><a href="?q={{ query }}&amp;page={{ page.next_page_number }}"вперед
                                 <span
                                         class="meta-nav">→</span></a>
                             </div>

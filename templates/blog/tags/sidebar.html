@@ -46,7 +46,7 @@
         </aside>
     {% endif %}
     {% if sidebar_comments and  open_site_comment %}
-        <aside id="ds-recent-comments-4" class="widget ds-widget-recent-comments"><h3 class="widget-title">Последние обсуждения</h3>
+        <aside id="ds-recent-comments-4" class="widget ds-widget-recent-comments"><h3 class="widget-title">Обсуждения</h3>
             {% comment %}<ul class="ds-recent-comments" data-num-items="5" data-show-avatars="1" data-show-time="1"
             data-show-title="1" data-show-admin="1" data-avatar-size="30" data-excerpt-length="70"></ul>{% endcomment %}
             <ul id="recentcomments">
@@ -62,7 +62,7 @@
         </aside>
     {% endif %}
     {% if recent_articles %}
-        <aside id="recent-posts-2" class="widget widget_recent_entries"><h3 class="widget-title">Последние посты</h3>
+        <aside id="recent-posts-2" class="widget widget_recent_entries"><h3 class="widget-title">Публикации</h3>
             <ul>
 
                 {% for a in  recent_articles %}
@@ -98,8 +98,7 @@
                 {% for tag,count,size in sidebar_tags %}
                     <a href="{{ tag.get_absolute_url }}"
                        class="tag-link-{{ tag.id }} tag-link-position-{{ tag.id }}"
-                       style="font-size: {{ size }}pt;" title="{{ count }}Теги"> {{ tag.name }}
-                    </a>
+                       style="font-size: {{ size }}pt;" title="{{ count }}Теги"> {{ tag.name }}</a>
                 {% endfor %}
             </div>
         </aside>
