@@ -106,7 +106,9 @@
     {% if show_menu_bar or user.is_superuser %}
       <aside id="meta-2" class="widget widget_meta"><h3 class="widget-title">Меню</h3>
           <ul>
-              <li><a href="/admin/" rel="nofollow">Админка</a></li>
+              {% if user.is_superuser %}
+                <li><a href="/admin/" rel="nofollow">Админка</a></li>
+              {% endif %}
               {% if user.is_authenticated %}
                   <li><a href="{% url "account:logout" %}" rel="nofollow">Выйти</a>
                   </li>
