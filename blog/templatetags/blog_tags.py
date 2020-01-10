@@ -80,7 +80,9 @@ def load_breadcrumb(article):
     :param article:
     :return:
     """
-    names = article.get_category_tree()
+    names = []
+    if article.category is not None and len(article.category):
+        names = article.get_category_tree()
     from DjangoBlog.utils import get_blog_setting
     blogsetting = get_blog_setting()
     site = get_current_site().domain
