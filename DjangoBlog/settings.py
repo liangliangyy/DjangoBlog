@@ -22,12 +22,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'n9ceqv38)#&mwuat@(mjb_p%em$e8$qyr#fw9ot!=ba6lijx-6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', False)
 # DEBUG = False
 TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 
 # ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['*', '127.0.0.1', 'example.com', '*mtuktarov.com']
+ALLOWED_HOSTS = ['*', '127.0.0.1', 'mtuktarov.ru']
 # Application definition
 
 
@@ -97,14 +97,11 @@ WSGI_APPLICATION = 'DjangoBlog.wsgi.application'
 
 DATABASES = {
     'default': {
-        #        'ENGINE': 'django.db.backends.mysql',
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mtuktarov',
-        'USER': 'mtuktarov',
-        'PASSWORD': 'mtuktarov',
-        'HOST': 'ubuntu-linux',
-        #        'PORT': 3306,
-        #        'OPTIONS': {'charset': 'utf8mb4'},
+        'NAME': os.getenv('DJANGO_DB_NAME', 'mtuktarov'),
+        'USER': os.getenv('DJANGO_DB_USER', 'mtuktarov'),
+        'PASSWORD': os.getenv('DJANGO_DB_PASSWORD', 'mtuktarov'),
+        'HOST': os.getenv('DJANGO_DB_HOST', '127.0.0.1'),
     }
 }
 
@@ -174,18 +171,15 @@ BOOTSTRAP_COLOR_TYPES = [
 PAGINATE_BY = 10
 # http cache timeout
 CACHE_CONTROL_MAX_AGE = 2592000
+
+DISABLE_CACHE = os.getenv('DISABLE_CACHE', False)
 # cache setting
 CACHES = {
-    'memcache': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1:11211',
-        'KEY_PREFIX': 'django_test' if TESTING else 'djangoblog',
-        'TIMEOUT': 60 * 60 * 10
-    },
     'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'TIMEOUT': 10800,
-        'LOCATION': 'unique-snowflake',
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache' if DISABLE_CACHE else 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+        'KEY_PREFIX': 'mtuktarov_test' if TESTING else 'mtuktarov',
+        'TIMEOUT': 60 * 60 * 10
     }
 }
 
@@ -197,14 +191,15 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # EMAIL_USE_TLS = True
 EMAIL_USE_SSL = True
 
-EMAIL_HOST = 'smtp.mxhichina.com'
-EMAIL_PORT = 465
-EMAIL_HOST_USER = os.environ.get('DJANGO_EMAIL_USER')
-EMAIL_HOST_PASSWORD = os.environ.get('DJANGO_EMAIL_PASSWORD')
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-SERVER_EMAIL = os.environ.get('DJANGO_EMAIL_USER')
+# postfix app gmail password: tgmsfmcrzethlkoi
+EMAIL_HOST = os.getenv('DJANGO_EMAIL_HOST', 'smtp.yandex.ru')
+EMAIL_PORT = os.getenv('DJANGO_EMAIL_PORT', 465)
+EMAIL_HOST_USER = os.getenv('DJANGO_EMAIL_USER', 'admin@mtuktarov.ru')
+EMAIL_HOST_PASSWORD = os.getenv('DJANGO_EMAIL_PASS', '')
+DEFAULT_FROM_EMAIL = os.getenv('DJANGO_FROM_EMAIL', 'Marat Tuktarov <admin@mtuktarov.ru>')
+SERVER_EMAIL = os.getenv('DJANGO_EMAIL_USER', 'admin@mtuktarov.ru'),
 # Setting debug=false did NOT handle except email notifications
-ADMINS = [('admin', 'admin@admin.com')]
+ADMINS = [('admin', 'admin@mtuktarov.ru')]
 # WX ADMIN password(Two times md5)
 WXADMIN = '995F03AC401D6CABABAEF756FC4D43C7'
 
@@ -273,9 +268,6 @@ STATICFILES_FINDERS = (
 )
 COMPRESS_ENABLED = True
 # COMPRESS_OFFLINE = True
-
-SHOW_VIEWS_BAR = False # Показывать панель ПРОСМОТРЫ
-SHOW_CATEGORY_BAR = False # Показывать панель КАТЕГОРИИ
 
 COMPRESS_CSS_FILTERS = [
     # creates absolute urls from relative ones

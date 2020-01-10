@@ -37,5 +37,4 @@ class Command(BaseCommand):
                 urls.append(self.get_full_url(url))
 
         self.stdout.write(self.style.SUCCESS('start notify %d urls' % len(urls)))
-        SpiderNotify.baidu_notify(urls)
         self.stdout.write(self.style.SUCCESS('finish notify'))

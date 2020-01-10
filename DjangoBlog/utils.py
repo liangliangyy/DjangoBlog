@@ -195,6 +195,8 @@ def get_blog_setting():
             setting.analyticscode = ''
             setting.show_views_bar = False
             setting.show_category_bar = False
+            setting.show_search_bar = False
+            setting.show_menu_bar = False
             setting.save()
         value = BlogSettings.objects.first()
         logger.info('set cache get_blog_setting')

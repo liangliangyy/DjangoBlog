@@ -33,15 +33,18 @@ def send_email_signal_handler(sender, **kwargs):
 
     msg = EmailMultiAlternatives(title, content, from_email=settings.DEFAULT_FROM_EMAIL, to=emailto)
     msg.content_subtype = "html"
-
+    logger.info('0')
     from servermanager.models import EmailSendLog
     log = EmailSendLog()
     log.title = title
+    logger.info('1')
     log.content = content
+    logger.info('2')
     log.emailto = ','.join(emailto)
-
+    logger.info('3')
     try:
         result = msg.send()
+        logger.info('4')
         log.send_result = result > 0
     except Exception as e:
         logger.error(e)
@@ -74,7 +77,6 @@ def model_post_save_callback(sender, instance, created, raw, using, update_field
         if not settings.TESTING and not is_update_views:
             try:
                 notify_url = instance.get_full_url()
-                SpiderNotify.baidu_notify([notify_url])
             except Exception as ex:
                 logger.error("notify sipder", ex)
         if not is_update_views:

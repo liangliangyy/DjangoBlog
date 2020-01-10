@@ -114,7 +114,6 @@ class ArticleTest(TestCase):
         f.search()
         self.client.login(username='liangliangyy', password='liangliangyy')
         from DjangoBlog.spider_notify import SpiderNotify
-        SpiderNotify.baidu_notify([article.get_full_url()])
 
         from blog.templatetags.blog_tags import gravatar_url, gravatar
         u = gravatar_url('liangliangyy@gmail.com')

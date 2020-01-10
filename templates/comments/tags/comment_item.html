@@ -17,7 +17,7 @@
                    class="url">{{ comment_item.author.username }}
                 </a>
             </cite>
-            <span class="says">说道：</span>
+            <span class="says">пишет：</span>
         </div>
 
         <div class="comment-meta commentmetadata">
@@ -29,7 +29,7 @@
         <div class="reply"><a rel="nofollow" class="comment-reply-link"
                               href="javascript:void(0)"
                               onclick="do_reply({{ comment_item.pk }})"
-                              aria-label="回复给{{ comment_item.author.username }}">Ответить</a></div>
+                              aria-label="Ответить{{ comment_item.author.username }}">Ответить</a></div>
     </div>
 
 </li><!-- #comment-## -->

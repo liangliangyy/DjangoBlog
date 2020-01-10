@@ -237,12 +237,20 @@ class ArchivesView(ArticleListView):
     page_kwarg = None
     template_name = 'blog/article_archives.html'
 
-    def get_queryset_data(self):
+    def get_queryset_data(self, **kwargs):
         return Article.objects.filter(status='p').all()
 
-    def get_queryset_cache_key(self):
+    def get_queryset_cache_key(self, **kwargs):
         cache_key = 'archives'
         return cache_key
+
+    def get_context_data(self, **kwargs):
+        # tag_name = self.kwargs['tag_name']
+        kwargs['months_map'] = {1: 'январь', 2: 'февраль', 3: 'март',
+                                4: 'апрель', 5: 'май', 6: 'июнь',
+                                7: 'июль', 8: 'август', 9: 'сентябрь',
+                                10: 'октябрь', 11: 'ноябрь', 12: 'декабрь'}
+        return super(ArchivesView, self).get_context_data(**kwargs)
 
 
 class LinkListView(ListView):

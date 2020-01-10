@@ -2316,6 +2316,7 @@ li #reply-title {
 
 #commentform {
     margin-bottom: 20px;
+    margin-top: 20px;
     padding: 10px 20px 20px;
     border-radius: 4px;
     background-color: #e5e5e5;
@@ -2355,7 +2356,18 @@ li #reply-title {
 #commentform p.form-submit {
     margin-top: 10px;
 }
-
+#commentform .form-submit{
+    display: inline-block;
+    width: 100%;
+}
+#commentform .form-submit #submit{
+    text-align: left;
+    float: left;
+}
+#commentform .form-submit #cancel_comment{
+    text-align: right;
+    float: right;
+}
 .logged-in #reply-title {
     margin-bottom: 20px;
 }

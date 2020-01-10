@@ -270,6 +270,8 @@ class BlogSettings(models.Model):
     resource_path = models.CharField("Каталог со статикой", max_length=300, null=False, default='/var/www/resource/')
     show_views_bar = models.BooleanField('Показывать панель ПРОСМОТРЫ', default=False)
     show_category_bar = models.BooleanField('Показывать панель КАТЕГОРИИ', default=False)
+    show_search_bar = models.BooleanField('Показывать панель ПОИСКА', default=False)
+    show_menu_bar = models.BooleanField('Показывать панель МЕНЮ', default=False)
 
     class Meta:
         verbose_name = 'Конфигурация сайта'

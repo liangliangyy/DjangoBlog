@@ -154,6 +154,10 @@ def load_sidebar(user, linktype):
         'google_adsense_codes': blogsetting.google_adsense_codes,
         'open_site_comment': blogsetting.open_site_comment,
         'sidebar_tags': sidebar_tags,
+        'show_views_bar': blogsetting.show_views_bar,
+        'show_category_bar': blogsetting.show_category_bar,
+        'show_search_bar': blogsetting.show_search_bar,
+        'show_menu_bar': blogsetting.show_menu_bar,
         'extra_sidebars': extra_sidebars
     }
 
@@ -242,6 +246,8 @@ def load_article_detail(article, isindex, user):
         'isindex': isindex,
         'user': user,
         'open_site_comment': blogsetting.open_site_comment,
+        'show_views_bar': blogsetting.show_views_bar,
+
     }
 
 
@@ -285,3 +291,10 @@ def query(qs, **kwargs):
           {% endfor %}
     """
     return qs.filter(**kwargs)
+
+
+def key(d, key_name):
+    return d[key_name]
+
+
+key = register.filter('key', key)

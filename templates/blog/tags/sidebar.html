@@ -1,14 +1,16 @@
 {% load blog_tags %}
 <div id="secondary" class="widget-area" role="complementary">
-    <aside id="search-2" class="widget widget_search">
-        <form role="search" method="get" id="searchform" class="searchform" action="/search">
-            <div>
-                <label class="screen-reader-text" for="s">Поиск:</label>
-                <input type="text" value="" name="q" id="q"/>
-                <input type="submit" id="searchsubmit" value="Поиск"/>
-            </div>
-        </form>
-    </aside>
+    {% if show_search_bar %}
+      <aside id="search-2" class="widget widget_search">
+          <form role="search" method="get" id="searchform" class="searchform" action="/search">
+              <div>
+                  <label class="screen-reader-text" for="s">Поиск:</label>
+                  <input type="text" value="" name="q" id="q"/>
+                  <input type="submit" id="searchsubmit" value="Поиск"/>
+              </div>
+          </form>
+      </aside>
+    {% endif %}
     {% if extra_sidebars %}
       {% for sidebar in extra_sidebars %}
 
@@ -20,21 +22,21 @@
           </aside>
       {% endfor %}
     {% endif %}
-    {% if SHOW_VIEWS_BAR and most_read_articles %}
+    {% if show_views_bar and most_read_articles %}
         <aside id="views-4" class="widget widget_views"><h3 class="widget-title">Просмотры</h3>
             <ul>
                 {% for a in most_read_articles %}
                     <li>
                         <a href="{{ a.get_absolute_url }}" title="{{ a.title }}">
                             {{ a.title }}
-                        </a> - {{ a.views }} views
+                        </a> - {{ a.views }} просмотров
                     </li>
                 {% endfor %}
             </ul>
         </aside>
     {% endif %}
-    {% if SHOW_CATEGORY_BAR and sidebar_categorys %}
-        <aside id="su_siloed_terms-2" class="widget widget_su_siloed_terms"><h3 class="widget-title">Категория</h3>
+    {% if show_category_bar and sidebar_categorys %}
+        <aside id="su_siloed_terms-2" class="widget widget_su_siloed_terms"><h3 class="widget-title">Категории</h3>
             <ul>
                 {% for c in sidebar_categorys %}
                     <li class="cat-item cat-item-184"><a href={{ c.get_absolute_url }}>{{ c.name }}</a>
@@ -44,16 +46,16 @@
         </aside>
     {% endif %}
     {% if sidebar_comments and  open_site_comment %}
-        <aside id="ds-recent-comments-4" class="widget ds-widget-recent-comments"><h3 class="widget-title">Последние мысли</h3>
+        <aside id="ds-recent-comments-4" class="widget ds-widget-recent-comments"><h3 class="widget-title">Последние обсуждения</h3>
             {% comment %}<ul class="ds-recent-comments" data-num-items="5" data-show-avatars="1" data-show-time="1"
             data-show-title="1" data-show-admin="1" data-avatar-size="30" data-excerpt-length="70"></ul>{% endcomment %}
             <ul id="recentcomments">
                 {% for c in sidebar_comments %}
                     <li class="recentcomments">
-                <span class="comment-author-link">
-                    {{ c.author.username }}</span>
-                        после поста《
-                        <a href="{{ c.article.get_absolute_url }}#comment-{{ c.pk }}">{{ c.article.title }}</a>》
+                        <a href="{{ c.author.get_absolute_url }}">
+                            <span class="comment-author-link">{{ c.author.username }}</span>
+                        </a>
+                        в <a href="{{ c.article.get_absolute_url }}#comment-{{ c.pk }}">{{ c.article.title }}</a>
                     </li>
                 {% endfor %}
             </ul>
@@ -102,21 +104,23 @@
             </div>
         </aside>
     {% endif %}
-    <aside id="meta-2" class="widget widget_meta"><h3 class="widget-title">Меню</h3>
-        <ul>
-            <li><a href="/admin/" rel="nofollow">Управление сайтом</a></li>
-            {% if user.is_authenticated %}
-                <li><a href="{% url "account:logout" %}" rel="nofollow">Выйти</a>
-                </li>
+    {% if show_menu_bar or user.is_superuser %}
+      <aside id="meta-2" class="widget widget_meta"><h3 class="widget-title">Меню</h3>
+          <ul>
+              <li><a href="/admin/" rel="nofollow">Админка</a></li>
+              {% if user.is_authenticated %}
+                  <li><a href="{% url "account:logout" %}" rel="nofollow">Выйти</a>
+                  </li>
 
-            {% else %}
-                <li><a href="{% url "account:login" %}" rel="nofollow">Войти</a>
-            {% endif %}
-            {% if user.is_superuser %}
-                <li><a href="{% url "blog:refresh" %}" target="_blank">Очистить кеш</a></li>
-                <li><a href="{% url 'owntracks:show_dates' %}" target="_blank">Список координат owntracks</a></li>
-            {% endif %}
-        </ul>
-    </aside>
+              {% else %}
+                  <li><a href="{% url "account:login" %}" rel="nofollow">Войти</a>
+              {% endif %}
+              {% if user.is_superuser %}
+                  <li><a href="{% url "blog:refresh" %}" target="_blank">Очистить кеш</a></li>
+                  <li><a href="{% url 'owntracks:show_dates' %}" target="_blank">Список координат owntracks</a></li>
+              {% endif %}
+          </ul>
+      </aside>
+    {% endif %}
     <div id="rocket" class="show" title="Вернуться наверх"></div>
 </div><!-- #secondary -->
