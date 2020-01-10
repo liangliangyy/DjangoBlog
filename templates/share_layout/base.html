@@ -12,7 +12,6 @@
 <html lang="ru-RU" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
 <!--<![endif]-->
 <head>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width"/>
     {% block header %}
@@ -25,15 +24,13 @@
 
     <link rel="alternate" type="application/rss+xml" title="{{ SITE_NAME }} &raquo; Feed"
           href="/feed"/>
-        <link rel='stylesheet' href='https://raw.githubusercontent.com/daneden/animate.css/master/animate.css'/>
     {% compress css %}
-
         <link rel='stylesheet' id='twentytwelve-fonts-css'
               href='{% static 'blog/fonts/fonts.css' %}'
               type='text/css' media='all'/>
         <link rel='stylesheet' id='twentytwelve-style-css' href='{% static 'blog/css/style.css' %}' type='text/css'
               media='all'/>
-        <link href="{% static 'blog/css/oauth_style.css' %}" rel="stylesheet">
+        <link href="{% static 'blog/css/oauth_style.css' %}" rel="stylesheet"/>
         {% comment %}<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>{% endcomment %}
         <!--[if lt IE 9]>
         <link rel='stylesheet' id='twentytwelve-ie-css'  href='{% static 'blog/css/ie.css' %}' type='text/css' media='all' />
@@ -44,12 +41,9 @@
         {% endblock %}
     {% endcompress %}
 </head>
-<body class="home blog custom-font-enabled left">
+<body class="home blog custom-font-enabled">
 <div id="page" class="hfeed site">
     <header id="masthead" class="site-header" role="banner">
-        <hgroup>
-
-        </hgroup>
 
         {% cache 36000 nav %}
           {% include 'share_layout/nav.html' %}
@@ -63,8 +57,7 @@
 
         {% block sidebar %}
         {% endblock %}
-  <div>
-    </div><!-- #page -->
+
     {% include 'share_layout/footer.html' %}
 </div>
 
@@ -75,7 +68,6 @@
 /*-----------------------------------*\
   $HEADER
 \*-----------------------------------*/
-
   .site__title {
     color: #f35626;
     background-image: linear-gradient(92deg, #f35626 0%,#feab3a 100%);
@@ -84,10 +76,6 @@
     -webkit-text-fill-color: transparent;
     animation: hue 60s infinite linear;
   }
-
-/*-----------------------------------*\
-  $ANIMATIONS
-\*-----------------------------------*/
 
 @keyframes hue {
   from {
@@ -98,9 +86,7 @@
     filter: hue-rotate(-360deg);
   }
 }
-
-    </style>
-
+</style>
 
 
     {% compress js %}
