@@ -8,10 +8,12 @@
                 <a href="/">На главную</a></li>
 
             {% load blog_tags %}
-            {% query nav_category_list parent_category=None as root_categorys %}
-            {% for node in root_categorys %}
-                {% include 'share_layout/nav_node.html' %}
-            {% endfor %}
+              {% if SHOW_CATEGORY_BAR %}
+              {% query nav_category_list parent_category=None as root_categorys %}
+              {% for node in root_categorys %}
+                  {% include 'share_layout/nav_node.html' %}
+              {% endfor %}
+            {% endif %}
             {% if nav_pages %}
                 {% for node in nav_pages %}
 

@@ -31,6 +31,7 @@ def seo_processor(requests):
             'OPEN_SITE_COMMENT': setting.open_site_comment,
             'ANALYTICS_CODE': setting.analyticscode,
             "CURRENT_YEAR": datetime.now().year,
+            "SHOW_CATEGORY_BAR": setting.show_category_bar
 
         }
         cache.set(key, value, 60 * 60 * 10)
