@@ -6,6 +6,9 @@ from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext_lazy as _
 from django.urls import reverse
 from django.utils.html import format_html
+from DjangoBlog.utils import get_blog_setting
+import logging
+logger = logging.getLogger(__name__)
 
 
 class ArticleListFilter(admin.SimpleListFilter):
@@ -59,8 +62,13 @@ class ArticlelAdmin(admin.ModelAdmin):
     list_per_page = 20
     search_fields = ('body', 'title')
     form = ArticleForm
-    list_display = (
-        'id', 'title', 'author', 'link_to_category', 'created_time', 'views', 'status', 'type', 'article_order')
+    setting = get_blog_setting()
+    list_display = [
+        'id', 'title', 'author', 'created_time', 'views', 'status', 'type', 'article_order']
+    if setting.show_category_bar:
+        list_display.append('link_to_category')
+    list_display = (list_display)
+
     list_display_links = ('id', 'title')
     list_filter = (ArticleListFilter, 'status', 'type', 'category', 'tags')
     filter_horizontal = ('tags',)
