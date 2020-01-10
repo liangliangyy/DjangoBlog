@@ -19,6 +19,7 @@ django-mdeditor==0.1.16
 django-uuslug==1.1.9
 elasticsearch==7.0.0
 elasticsearch-dsl==7.0.0
+gunicorn==20.0.4
 idna==2.8
 ipaddress==1.0.22
 isort==4.3.21
@@ -28,10 +29,10 @@ lazy-object-proxy==1.4.2
 markdown2==2.3.8
 mccabe==0.6.1
 mistune==0.8.4
-psycopg2-binary==2.8.4
 olefile==0.46
 packaging==19.2
 Pillow==6.2.1
+psycopg2-binary==2.8.4
 pycparser==2.19
 Pygments==2.4.2
 pylint==2.4.3
