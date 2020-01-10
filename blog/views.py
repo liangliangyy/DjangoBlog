@@ -232,7 +232,7 @@ class ArchivesView(ArticleListView):
     '''
     Article Archive Page
     '''
-    page_type = 'Пост'
+    page_type = 'Публикация'
     paginate_by = None
     page_kwarg = None
     template_name = 'blog/article_archives.html'

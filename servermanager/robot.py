@@ -66,7 +66,7 @@ def search(message, session):
 def category(message, session):
     categorys = blogapi.get_category_lists()
     content = ','.join(map(lambda x: x.name, categorys))
-    return 'Все категории постов:' + content
+    return 'Все категории:' + content
 
 
 @robot.filter(re.compile(r'^recent\s*$', re.I))
@@ -76,7 +76,7 @@ def recents(message, session):
         reply = convert_to_articlereply(articles, message)
         return reply
     else:
-        return "Пока постов нет"
+        return "Публикаций нет"
 
 
 @robot.filter(re.compile('^help$', re.I))

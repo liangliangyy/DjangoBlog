@@ -8,7 +8,7 @@ from django.utils.timezone import now
 # Create your models here.
 
 class BlogUser(AbstractUser):
-    nickname = models.CharField('Блогнэйм', max_length=100, blank=True)
+    nickname = models.CharField('Ник', max_length=100, blank=True)
     created_time = models.DateTimeField('Время создания', default=now)
     last_mod_time = models.DateTimeField('Время изменения', default=now)
     source = models.CharField("Source", max_length=100, blank=True)

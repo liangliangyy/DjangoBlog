@@ -129,6 +129,11 @@ def load_sidebar(user, linktype):
     dates = Article.objects.datetimes('created_time', 'month', order='DESC')
     links = Links.objects.filter(is_enable=True).filter(Q(show_type=str(linktype)) | Q(show_type='a'))
     commment_list = Comment.objects.filter(is_enable=True).order_by('-id')[:blogsetting.sidebar_comment_count]
+    unique_commment_list = []
+    for comment in commment_list:
+        if any(c.article.title == comment.article.title for c in unique_commment_list) and any(c.author.username == comment.author.username for c in unique_commment_list):
+            continue
+        unique_commment_list.append(comment)
     # Tag cloud calculate font size
     # Calculate the average value based on the total size (number / average) * step size
     increment = 5
@@ -147,7 +152,7 @@ def load_sidebar(user, linktype):
         'sidebar_categorys': sidebar_categorys,
         'most_read_articles': most_read_articles,
         'article_dates': dates,
-        'sidebar_comments': commment_list,
+        'sidebar_comments': unique_commment_list,
         'user': user,
         'sidabar_links': links,
         'show_google_adsense': blogsetting.show_google_adsense,

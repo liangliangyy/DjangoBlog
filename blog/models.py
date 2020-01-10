@@ -55,21 +55,21 @@ class BaseModel(models.Model):
 class Article(BaseModel):
     """Article"""
     STATUS_CHOICES = (
-        ('d', 'Draft'),
-        ('p', 'Post'),
+        ('d', 'Черновик'),
+        ('p', 'Публикация'),
     )
     COMMENT_STATUS = (
-        ('o', 'On'),
-        ('c', 'Off'),
+        ('o', 'Комментарии включены'),
+        ('c', 'Комментарии выключены'),
     )
     TYPE = (
-        ('a', 'Article'),
-        ('p', 'Page'),
+        ('a', 'Пост'),
+        ('p', 'Страница'),
     )
     title = models.CharField('Название', max_length=200, unique=True)
     body = MDTextField('Содержимое')
     pub_time = models.DateTimeField('Время публикации', blank=False, null=False, default=now)
-    status = models.CharField('Статус Поста', max_length=1, choices=STATUS_CHOICES, default='p')
+    status = models.CharField('Статус публикации', max_length=1, choices=STATUS_CHOICES, default='p')
     comment_status = models.CharField('Статус комментариев', max_length=1, choices=COMMENT_STATUS, default='o')
     type = models.CharField('Тип', max_length=1, choices=TYPE, default='a')
     views = models.PositiveIntegerField('Просмотры', default=0)
@@ -87,7 +87,7 @@ class Article(BaseModel):
 
     class Meta:
         ordering = ['-article_order', '-pub_time']
-        verbose_name = "Пост"
+        verbose_name = "Публикация"
         verbose_name_plural = verbose_name
         get_latest_by = 'id'
 
@@ -131,12 +131,12 @@ class Article(BaseModel):
 
     @cache_decorator(expiration=60 * 100)
     def next_article(self):
-        # Следующий пост
+        # Следующая публикация
         return Article.objects.filter(id__gt=self.id, status='p').order_by('id').first()
 
     @cache_decorator(expiration=60 * 100)
     def prev_article(self):
-        # Предыдущий пост
+        # Предыдущая публикация
         return Article.objects.filter(id__lt=self.id, status='p').first()
 
 
@@ -260,7 +260,7 @@ class BlogSettings(models.Model):
     site_description = models.TextField("Описание сайта", max_length=1000, null=False, blank=False, default='')
     site_seo_description = models.TextField("Владелец сайта", max_length=1000, null=False, blank=False, default='')
     site_keywords = models.TextField("Ключевые слова сайта", max_length=1000, null=False, blank=False, default='')
-    article_sub_length = models.IntegerField("Длина поста", default=300)
+    article_sub_length = models.IntegerField("Отображаемая длина поста", default=300)
     sidebar_article_count = models.IntegerField("Количество постов на боковой панели", default=10)
     sidebar_comment_count = models.IntegerField("Количество комментариев на боковой панели", default=5)
     show_google_adsense = models.BooleanField('Показывать рекламу Гугла', default=False)
