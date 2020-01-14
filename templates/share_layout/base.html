@@ -12,7 +12,7 @@
 <html lang="ru-RU" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
 <!--<![endif]-->
 <head>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+  <link href="data:image/x-icon;base64,AAABAAEAEBAAAAAAAABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAD/hAAA/4QAAP+EAAD/hAAAWc9ZAFnPWQBZz1kAWc9ZAFnPWQBZz1kAWc9ZAFnPWQBZz1kAAAAAAAAAAAAAAAAAWc9ZAFnPWQBZz1kAWc9ZAFnPWQD/hAAA/4QAAFnPWQBZz1kAWc9ZAFnPWQBZz1kAWc9ZAFnPWQBZz1kAWc9ZAFnPWQBZz1kAWc9ZAFnPWQBZz1kAWc9ZAFnPWQBZz1kAWc9ZAFnPWQBZz1kAWc9ZAFnPWQBZz1kAWc9ZAAAAAABZz1kAWc9ZAFnPWQBZz1kAWc9ZAFnPWQBZz1kAWc9ZAFnPWQBZz1kAWc9ZAFnPWQBPT08AT09PAAAAAAAAAAAAWc9ZAFnPWQBZz1kAWc9ZAFnPWQBZz1kAWc9ZAFnPWQBZz1kAT09PAE9PTwBPT08AT09PAE9PTwD/hAAF/4QABdaWPO3WljztWc9ZAFnPWQBZz1kAWc9ZANaWPAnWljzt1pY8/1nPWQBZz1kAT09PANaWPP/Wljz//4QABQAAAADWljzt1pY87U9PTwD/hAAFWc9ZAFnPWQDWljwJ1pY87daWPP//hAAF/4QABf+EAAXWljz/1pY8/wAAAAAAAAAA1pY87daWPO1Zz1kA/4QABVnPWQBZz1kA1pY8CdaWPO3Wljz//4QABf+EAAX/hAAF1pY8/9aWPP8AAAAAAAAAANaWPO3WljztWc9ZAFnPWQDWljz/Wc9ZANaWPAnWljzt1pY8//+EAAX/hAAF/4QABdaWPP/Wljz//4QABQAAAADWljzt1pY87f+EAAXWljz/1pY8/9aWPP/WljwJ1pY87daWPP8AAAAA/4QABf+EAAXWljz/1pY8//+EAAUAAAAA1pY87daWPO3Wljz/1pY8/9aWPO3Wljz/1pY8/9aWPO3Wljz/1pY8B1nPWQBZz1kA1pY8/9aWPP//hAAF/4QABdaWPO3Wljzt1pY8/9aWPO3Wljzt1pY87daWPP/Wljzt1pY8/9aWPAdZz1kAWc9ZANaWPP/Wljz/AAAAAP+EAAXWljzt1pY87daWPO3WljztWc9ZANaWPO3Wljzt1pY87daWPP/WljwH1pY8/9aWPP/Wljz/1pY8/9aWPP/Wljz/1pY87daWPO3WljztWc9ZAFnPWQBZz1kA1pY87daWPO3Wljz/Wc9ZANaWPP/Wljz/1pY8/9aWPP/Wljz/1pY8//+EAAX/hAAF/4QABf+EAAVZz1kAWc9ZAFnPWQBZz1kAWc9ZAFnPWQBZz1kAWc9ZAFnPWQBZz1kA/4QABf+EAAX/hAAF/4QABf+EAAUAAAAAWc9ZAFnPWQBZz1kAWc9ZAFnPWQBZz1kAWc9ZAFnPWQD/hAAFWc9ZAFnPWQD/hAAF//8AAP//AAD//wAA//8AAP//AAA+cwAAPnMAAD5zAAA2cwAAInMAAABzAAAAcwAACEAAABxAAAD//wAA//8AAA==" rel="icon" type="image/x-icon" />
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width"/>
     {% block header %}
@@ -74,48 +74,6 @@
 </div><!-- #page -->
 
 </body>
-    <style>
-
-.site__header {
-  animation: bounceInUp 1s;
-}
-
-  .site__title {
-    color: #f35626;
-    background-image: linear-gradient(92deg, #f35626 0%,#feab3a 100%);
-    -webkit-background-clip: text;
-            background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: hue 60s infinite linear;
-  }
-
-.site__content {
-  animation: bounceInUp 1s;
-  animation-delay: .1s;
-}
-
-  .site__content form {
-    animation: bounceInUp 1s;
-    animation-delay: .1s;
-  }
-
-/*-----------------------------------*\
-  $ANIMATIONS
-\*-----------------------------------*/
-
-@keyframes hue {
-  from {
-    filter: hue-rotate(0deg);
-  }
-
-  to {
-    filter: hue-rotate(-360deg);
-  }
-}
-
-    </style>
-
-<script src="{% static 'blog/js/animation.js' %}" type="application/javascript"></script>
 
 
 <footer>
@@ -124,7 +82,6 @@
         <script type="text/javascript" src="{% static 'blog/js/nprogress.js' %}"></script>
         <script src="{% static 'blog/js/blog.js' %}" type="application/javascript"></script>
         <script src="{% static 'blog/js/navigation.js' %}" type="application/javascript"></script>
-        <script type="text/javascript" src="{% static 'blog/js/animation.js' %}"></script>
         {% block compress_js %}
         {% endblock %}
     {% endcompress %}
