@@ -80,3 +80,6 @@ werobot_session.db
 **/.DS_Store
 **/.bash*
 **/.vim*
+data
+sockets
+ssl
