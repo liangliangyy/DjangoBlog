@@ -101,7 +101,7 @@ DATABASES = {
         'NAME': os.getenv('DJANGO_DB_NAME', 'mtuktarov'),
         'USER': os.getenv('DJANGO_DB_USER', 'mtuktarov'),
         'PASSWORD': os.getenv('DJANGO_DB_PASSWORD', 'mtuktarov'),
-        'HOST': os.getenv('DJANGO_DB_HOST', '127.0.0.1'),
+        'HOST': os.getenv('DJANGO_DB_HOST', '/opt/blogd/sockets'),
     }
 }
 
