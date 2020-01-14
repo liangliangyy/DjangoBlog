@@ -7,6 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.urls import reverse
 from django.utils.html import format_html
 
+
 class ArticleListFilter(admin.SimpleListFilter):
     title = _("Author")
     parameter_name = 'author'
@@ -68,9 +69,11 @@ class ArticlelAdmin(admin.ModelAdmin):
     actions = [makr_article_publish, draft_article, close_article_commentstatus, open_article_commentstatus]
 
     def link_to_category(self, obj):
-        info = (obj.category._meta.app_label, obj.category._meta.model_name)
-        link = reverse('admin:%s_%s_change' % info, args=(obj.category.id,))
-        return format_html(u'<a href="%s">%s</a>' % (link, obj.category.name))
+        if obj.category is not None:
+            info = (obj.category._meta.app_label, obj.category._meta.model_name)
+            link = reverse('admin:%s_%s_change' % info, args=(obj.category.id,))
+            return format_html(u'<a href="%s">%s</a>' % (link, obj.category.name))
+        return format_html(u'<a href="#">#</a>')
 
     link_to_category.short_description = 'Категории'
 

@@ -27,7 +27,7 @@ DEBUG = os.getenv('DJANGO_DEBUG', False)
 TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 
 # ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['*', '127.0.0.1', 'mtuktarov.ru']
+ALLOWED_HOSTS = ['*', '127.0.0.1', 'mtuktarov.ru', '192.168.1.64']
 # Application definition
 
 

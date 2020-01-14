@@ -2457,9 +2457,9 @@ li #reply-title {
     text-align: center;
 }
 
-@media screen and (min-width: 360px) {
+@media screen and (min-width: 320px) {
     #masthead{
-        background-size: 300px;
+        background-size: 280px;
     }
 }
 
