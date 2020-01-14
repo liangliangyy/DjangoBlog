@@ -13,6 +13,7 @@ StandardOutput=journal
 StandardError=journal
 ExecStartPre=/opt/blogd/config/docker_wrap.sh rm_byname %n
 ExecStartPre=-/usr/bin/docker pull mtuktarov/blogd:latest
+ExecStartPre=-/bin/bash -c "chown -R nginx:70 /opt/blogd/sockets && chmod -R 775 /opt/blogd/sockets"
 ExecStart=/usr/bin/docker run --rm --name %n \
     -v /opt/blogd/collectedstatic:/opt/blogd/collectedstatic \
     -v /opt/blogd/sockets:/opt/blogd/sockets \
