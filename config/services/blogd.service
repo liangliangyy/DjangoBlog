@@ -1,0 +1,24 @@
+[Unit]
+Description=blogd
+After=postgresql.service
+Wants=postgresql.service
+Requires=docker.socket
+
+[Service]
+Restart=always
+RestartSec=30s
+TimeoutStartSec=300
+TimeoutStopSec=15
+StandardOutput=journal
+StandardError=journal
+ExecStartPre=/opt/blogd/config/docker_wrap.sh rm_byname %n
+ExecStartPre=-/usr/bin/docker pull mtuktarov/blogd:latest
+ExecStart=/usr/bin/docker run --rm --name %n \
+    -v /opt/blogd/collectedstatic:/opt/blogd/collectedstatic \
+    -v /opt/blogd/sockets:/opt/blogd/sockets \
+    mtuktarov/blogd:latest
+ExecStartPost=/opt/blogd/config/docker_wrap.sh set_time_byname %n
+ExecStop=/opt/blogd/config/docker_wrap.sh stop_byname %n
+
+[Install]
+WantedBy=multi-user.target

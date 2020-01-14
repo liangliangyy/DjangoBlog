@@ -1,0 +1,28 @@
+[Unit]
+Description=nginx
+After=docker.service blogd.service
+Wants=blogd.service
+Requires=docker.socket
+
+[Service]
+Restart=always
+RestartSec=30s
+TimeoutStartSec=300
+TimeoutStopSec=15
+StandardOutput=journal
+StandardError=journal
+ExecStartPre=/opt/blogd/config/docker_wrap.sh rm_byname %n
+ExecStartPre=-/usr/bin/docker pull nginx:stable-alpine
+ExecStart=/usr/bin/docker run --rm --name %n \
+    -p 80:80 \
+    -p 443:443 \
+    -v /opt/blogd/static:/var/www/html/static \
+    -v /opt/blogd/sockets:/var/www/sockets \
+    -v /opt/blogd/config/nginx:/etc/nginx/conf.d \
+    -v /opt/blogd/ssl:/etc/nginx/ssl \
+    nginx:stable-alpine
+ExecStartPost=/opt/blogd/config/docker_wrap.sh set_time_byname %n
+ExecStop=/opt/blogd/config/docker_wrap.sh stop_byname %n
+
+[Install]
+WantedBy=multi-user.target

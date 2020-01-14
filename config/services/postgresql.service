@@ -1,0 +1,25 @@
+[Unit]
+Description=The PostgreSQL object-relational database system provides reliability and data integrity.
+After=docker.service
+Requires=docker.socket
+
+[Service]
+Restart=always
+RestartSec=30s
+TimeoutStartSec=300
+TimeoutStopSec=15
+StandardOutput=journal
+StandardError=journal
+ExecStartPre=/opt/blogd/config/docker_wrap.sh rm_byname %n
+ExecStartPre=-/usr/bin/docker pull nginx:stable-alpine
+ExecStart=/usr/bin/docker run --rm --name %n \
+    -e POSTGRES_PASSWORD=mtuktarov \
+    -e POSTGRES_USER=mtuktarov \
+    -v /opt/blogd/data:/var/lib/postgresql/data \
+    -v /opt/blogd/sockets:/var/run/postgresql \
+    postgres:alpine
+ExecStartPost=/opt/blogd/config/docker_wrap.sh set_time_byname %n
+ExecStop=/opt/blogd/config/docker_wrap.sh stop_byname %n
+
+[Install]
+WantedBy=multi-user.target

@@ -13,14 +13,13 @@ COPY *.py  /opt/blogd/
 COPY *.txt /opt/blogd/
 COPY *.ini /opt/blogd/
 WORKDIR /opt/blogd
-RUN apk add --no-cache --virtual .build-deps jpeg-dev zlib-dev gcc libc-dev libffi-dev postgresql-dev && \
+RUN addgroup -g 101 blogd                                        &&  \
+    adduser -G blogd -u 101 -h /opt/blogd -s /bin/sh -D blogd    &&  \
+    apk add --no-cache --virtual .build-deps memcached jpeg-dev zlib-dev gcc libc-dev libffi-dev postgresql-dev && \
     pip install -U pip && \
     pip install -Ur requirements.txt && \
-    addgroup -g 101 blogd                                        &&  \
-    adduser -G blogd -u 101 -h /opt/blogd -s /bin/sh -D blogd    &&  \
     chown -R 101:101 /opt/blogd && \
     apk del --update gcc libc-dev libffi-dev zlib-dev postgresql-dev && \
     rm -rf /var/cache/apk/*
 USER blogd
-
-#CMD [ "/bin/sh", "-c", "uwsgi --ini ./blogd.ini" ]
+CMD [ "/bin/sh", "-c", "./manage.py collectstatic --noinput ; ./manage.py compress --force ; memcached -d ; uwsgi --ini ./blogd.ini" ]
