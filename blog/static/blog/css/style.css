@@ -5,6 +5,7 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
     border: 0;
     font-size: 100%;
     vertical-align: baseline;
+    text-decoration: none;
 }
 
 body {
@@ -2476,4 +2477,16 @@ li #reply-title {
     }
 }
 
-
+.octicon {
+    display: inline-block;
+    vertical-align: inherit;
+    fill: currentColor;
+    margin: 0px 10px;
+}
+.github_text{
+    vertical-align: top;
+}
+.svg_wrapper{
+    vertical-align: top;
+    text-align: center;
+}
