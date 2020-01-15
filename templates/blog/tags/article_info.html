@@ -18,7 +18,7 @@
             {% endif %}
         </h1>
         <br/>
-        {% if article.type == 'a' %}
+        {% if article.type == 'a' and False %}
             {% if not isindex %}
                 {% cache 36000 breadcrumb article.pk %}
                     {% load_breadcrumb article %}
