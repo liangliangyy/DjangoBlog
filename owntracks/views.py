@@ -21,6 +21,7 @@ logger = logging.getLogger(__name__)
 def manage_owntrack_log(request):
     try:
         s = json.loads(request.read().decode('utf-8'))
+        logger.info("custom log: {}".format(s))
         tid = s['tid']
         lat = s['lat']
         lon = s['lon']
