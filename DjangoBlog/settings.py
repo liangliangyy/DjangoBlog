@@ -310,7 +310,7 @@ MDEDITOR_CONFIGS = {
         'watch': True,  # Live preview
         'language': 'en',  # zh / en
         'lineWrapping': True,  # lineWrapping
-#        'lineNumbers': True,  # lineNumbers,
+        'lineNumbers': True,  # lineNumbers,
         'placeholder': 'Enjoy!'
     },
     'custom': {
