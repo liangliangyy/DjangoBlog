@@ -496,6 +496,10 @@ body.custom-font-enabled {
     font-family: "Open Sans", Helvetica, Arial, sans-serif;
 }
 
+h1{
+    color: #21759b;
+}
+
 a {
     outline: none;
     color: #21759b;
