@@ -309,12 +309,12 @@ def fileupload(request):
 @login_required
 def refresh_memcache(request):
     try:
-
         if request.user.is_superuser:
             from DjangoBlog.utils import cache
             if cache and cache is not None:
                 cache.clear()
-            return HttpResponse("ok")
+                logger.info("cache has been cleared successfully")
+            return HttpResponseRedirect('/')
         else:
             return HttpResponseForbidden()
     except Exception as e:

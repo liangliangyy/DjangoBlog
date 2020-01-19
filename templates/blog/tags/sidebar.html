@@ -1,5 +1,19 @@
 {% load blog_tags %}
 <div id="secondary" class="widget-area" role="complementary">
+    <aside id="meta-2" class="widget widget_meta">
+        {% if user.is_authenticated %}
+          <h3 class="widget-title">{{ user.username }}  |  <a href="{% url 'account:logout' %}" rel="nofollow">Выйти</a></h3>
+        {% else %}
+          <h3><a href="{% url 'account:login' %}" rel="nofollow">Войти</a></h3>
+
+        {% endif %}
+        {% if user.is_superuser %}
+        <ul>
+          <li><a href="/admin/" rel="nofollow">Админка</a></li>
+          <li><a href="{% url 'blog:refresh' %}">Очистить кеш</a></li>
+        </ul>
+    {% endif %}
+    </aside>
     {% if show_search_bar %}
       <aside id="search-2" class="widget widget_search">
           <form role="search" method="get" id="searchform" class="searchform" action="/search">
@@ -102,25 +116,6 @@
                 {% endfor %}
             </div>
         </aside>
-    {% endif %}
-    {% if show_menu_bar or user.is_superuser %}
-      <aside id="meta-2" class="widget widget_meta"><h3 class="widget-title">Меню</h3>
-          <ul>
-              {% if user.is_superuser %}
-                <li><a href="/admin/" rel="nofollow">Админка</a></li>
-              {% endif %}
-              {% if user.is_authenticated %}
-                  <li><a href="{% url "account:logout" %}" rel="nofollow">Выйти</a>
-                  </li>
-
-              {% else %}
-                  <li><a href="{% url "account:login" %}" rel="nofollow">Войти</a>
-              {% endif %}
-              {% if user.is_superuser %}
-                  <li><a href="{% url "blog:refresh" %}" target="_blank">Очистить кеш</a></li>
-              {% endif %}
-          </ul>
-      </aside>
     {% endif %}
     <div id="rocket" class="show" title="Вернуться наверх"></div>
 </div><!-- #secondary -->
