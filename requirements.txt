@@ -32,7 +32,6 @@ mccabe==0.6.1
 mistune==0.8.4
 olefile==0.46
 packaging==19.2
-Pillow==6.2.1
 psycopg2-binary==2.8.4
 pycparser==2.19
 Pygments==2.4.2
