@@ -51,7 +51,6 @@ INSTALLED_APPS = [
     'comments',
     'oauth',
     'servermanager',
-    'owntracks',
     'compressor'
 ]
 

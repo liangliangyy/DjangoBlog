@@ -118,7 +118,6 @@
               {% endif %}
               {% if user.is_superuser %}
                   <li><a href="{% url "blog:refresh" %}" target="_blank">Очистить кеш</a></li>
-                  <li><a href="{% url 'owntracks:show_dates' %}" target="_blank">Список координат owntracks</a></li>
               {% endif %}
           </ul>
       </aside>
