@@ -17,7 +17,7 @@ from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.views.decorators.debug import sensitive_post_parameters
 from django.utils.http import is_safe_url
-from DjangoBlog.utils import send_email, get_md5, get_current_site
+from DjangoBlog.utils import send_email, get_md5, get_current_site, render_template
 from django.conf import settings
 
 logger = logging.getLogger(__name__)
@@ -43,17 +43,13 @@ class RegisterView(FormView):
             path = reverse('account:result')
             url = "http://{site}{path}?type=validation&id={id}&sign={sign}".format(site=site, path=path, id=user.id,
                                                                                    sign=sign)
-
-            content = """
-                            <p>Пожалуйста, подтвердите почтовый адрес переходом по ссылке</p>
-
-                            <a href="{url}" rel="bookmark">{url}</a>
-
-                            <br />
-                            Если ссылка выше не открывается，то копируй руками:。
-                            {url}
-                            """.format(url=url)
-            send_email(emailto=[user.email, ], title='Verify your email', content=content)
+            content = render_template('confirm_email.j2', vars=locals())
+            subject = 'Подтвердите email адрес'
+            if content is not None:
+                send_email(emailto=[user.email, ],
+                           title=subject,
+                           content=content,
+                           images={"logo.png": "image/png", "mail_icon.png": "image/png"})
 
             url = reverse('accounts:result') + '?type=register&id=' + str(user.id)
             return HttpResponseRedirect(url)
@@ -64,7 +60,7 @@ class RegisterView(FormView):
 
 
 class LogoutView(RedirectView):
-    url = '/login/'
+    url = '/'
 
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
@@ -134,7 +130,7 @@ def account_result(request):
     if type and type in ['register', 'validation']:
         if type == 'register':
             content = '''
-    Круто, что ты с нами! Подтверждай свою почту {email}
+    Круто, что ты с нами! Осталось подтвердить указанный почтовый ящик {email}
     '''.format(email=user.email)
             title = 'Регистрация прошла успешно'
         else:
@@ -145,15 +141,7 @@ def account_result(request):
             user.is_active = True
             user.save()
             content = '''
-            Почта подтверждена! Моя идея в двух словах:
-
-            Я топлю за то, что нет ничего правдивее твоих личных историй из жизни, которые изменили твое отношение к чему-то. Я убежден, что в конечном счете все эти истории в некоторой абстракции похожи. Мы все переживаем одни и те же потрясения. И совершенно круто ими делиться. Неважно, обосрался ты по полной или наоборот пришел и выебал все эти хит-парады. А еще круто уметь смеяться над собой, но не проебать грань. И хорошо относиться друг к другу - подъебывать качественно.
-
-            !!! Я презираю безосновательную критику чужого субъективного. Чужие вкусы надо пытаться понять. Однажды это может неплохо пригодиться. Мы очень разные. Из этого нужно брать пользу.
-            !!! Никакой нахуй озлобленной печальной хуйни!!! Я топлю за позитивное мышление, даже если ты умираешь, радуйся за тех, кому остается больше воздуха. Радуйся, что ты больше этих тварей не увидишь!
-            !!! Если чья-то мысль может быть двояко истолкована, ты выбираешь всегда хороший вариант. Пробуешь прочитать с разной интонацией. Пробуешь. Если надо уточняешь. Нахуй недопонимания.
-
-            Мы тут любим истории. Любое мнение становится пиздатым, когда с ним связана история, переживания, умственная работа.
+            Почта успешно подтверждена!
             '''
             title = 'Почта подтверждена'
         return render(request, 'account/result.html', {

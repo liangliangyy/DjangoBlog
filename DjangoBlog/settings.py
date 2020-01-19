@@ -189,14 +189,14 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 # EMAIL_USE_TLS = True
 EMAIL_USE_SSL = True
-
+EMAIL_FILES = os.path.join(BASE_DIR, 'templates/email')
 # postfix app gmail password: tgmsfmcrzethlkoi
-EMAIL_HOST = os.getenv('DJANGO_EMAIL_HOST', 'smtp.yandex.ru')
+EMAIL_HOST = os.getenv('DJANGO_EMAIL_HOST', 'smtp.gmail.com')
 EMAIL_PORT = os.getenv('DJANGO_EMAIL_PORT', 465)
-EMAIL_HOST_USER = os.getenv('DJANGO_EMAIL_USER', 'admin@mtuktarov.ru')
+EMAIL_HOST_USER = os.getenv('DJANGO_EMAIL_USER', 'noreply@gmail.com')
 EMAIL_HOST_PASSWORD = os.getenv('DJANGO_EMAIL_PASS', '')
-DEFAULT_FROM_EMAIL = os.getenv('DJANGO_FROM_EMAIL', 'Marat Tuktarov <admin@mtuktarov.ru>')
-SERVER_EMAIL = os.getenv('DJANGO_EMAIL_USER', 'admin@mtuktarov.ru'),
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+SERVER_EMAIL = EMAIL_HOST_USER
 # Setting debug=false did NOT handle except email notifications
 ADMINS = [('admin', 'admin@mtuktarov.ru')]
 # WX ADMIN password(Two times md5)

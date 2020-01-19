@@ -23,6 +23,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from DjangoBlog.admin_site import admin_site
 from django.urls import include, path
+from django.views.generic.base import RedirectView
 
 sitemaps = {
 
@@ -36,6 +37,7 @@ sitemaps = {
 handler404 = 'blog.views.page_not_found_view'
 handler500 = 'blog.views.server_error_view'
 handle403 = 'blog.views.permission_denied_view'
+favicon_view = RedirectView.as_view(url='/static/favicon.ico', permanent=True)
 urlpatterns = [
     url(r'^admin/', admin_site.urls),
     url(r'', include('blog.urls', namespace='blog')),
@@ -47,8 +49,9 @@ urlpatterns = [
         name='django.contrib.sitemaps.views.sitemap'),
     url(r'^feed/$', DjangoBlogFeed()),
     url(r'^rss/$', DjangoBlogFeed()),
+    url(r'^favicon\.ico$', favicon_view),
     url(r'^search', include('haystack.urls'), name='search'),
     url(r'', include('servermanager.urls', namespace='servermanager')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 if settings.DEBUG:
-  urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

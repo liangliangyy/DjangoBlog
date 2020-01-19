@@ -8,11 +8,11 @@ from mistune import escape, escape_link
 from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import html
+from django.conf import settings
 import logging
 import requests
 import uuid
 import os
-
 logger = logging.getLogger(__name__)
 
 
@@ -120,6 +120,13 @@ def get_current_site():
     return site
 
 
+@cache_decorator()
+def get_current_site_domain():
+    if settings.DEBUG:
+        return '127.0.0.1:8000'
+    return Site.objects.get_current().domain
+
+
 class BlogMarkDownRenderer(mistune.Renderer):
     '''
     markdown Render
@@ -163,9 +170,24 @@ class CommonMarkdown():
         return mdp(value)
 
 
-def send_email(emailto, title, content):
+def render_template(template, **kwargs):
+    ''' renders a Jinja template into HTML '''
+    # check if template exists
+    from DjangoBlog.settings import EMAIL_FILES
+    full_path = os.path.join(EMAIL_FILES, template)
+    if not os.path.isfile(full_path):
+        logger.error('No template file present: %s' % template)
+        return None
+
+    from jinja2 import Template
+    with open(full_path) as file_:
+        template_content = Template(file_.read())
+    return template_content.render(**kwargs)
+
+
+def send_email(emailto, title, content, images=None):
     from DjangoBlog.blog_signals import send_email_signal
-    send_email_signal.send(send_email.__class__, emailto=emailto, title=title, content=content)
+    send_email_signal.send(send_email.__class__, emailto=emailto, title=title, content=content, images=images)
 
 
 def parse_dict_to_url(dict):

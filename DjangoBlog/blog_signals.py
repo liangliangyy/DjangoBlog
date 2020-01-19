@@ -18,6 +18,9 @@ from comments.models import Comment
 from comments.utils import send_comment_email
 import _thread
 import logging
+import os
+from DjangoBlog.settings import EMAIL_FILES
+from email.mime.image import MIMEImage
 
 logger = logging.getLogger(__name__)
 
@@ -30,9 +33,21 @@ def send_email_signal_handler(sender, **kwargs):
     emailto = kwargs['emailto']
     title = kwargs['title']
     content = kwargs['content']
-
+    images = kwargs['images']
     msg = EmailMultiAlternatives(title, content, from_email=settings.DEFAULT_FROM_EMAIL, to=emailto)
     msg.content_subtype = "html"
+    msg.mixed_subtype = 'related'
+
+    if images is not None:
+        for key, value in images.items():
+            full_path = os.path.join(EMAIL_FILES, key)
+            if os.path.isfile(full_path):
+                img_data = open(full_path, 'rb').read()
+                img = MIMEImage(img_data, value)
+                img.add_header('Content-Id', key)
+                img.add_header("Content-Disposition", "inline", filename=key)
+                msg.attach(img)
+
     from servermanager.models import EmailSendLog
     log = EmailSendLog()
     log.title = title
