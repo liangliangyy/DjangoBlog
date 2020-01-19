@@ -19,6 +19,10 @@ body {
   margin-bottom: 10px;
   font-weight: normal;
 }
+.checkbox input[type=checkbox] {
+  margin-right: 5px;
+  top: 2px;
+}
 .form-signin .form-control {
   position: relative;
   height: auto;
@@ -31,7 +35,7 @@ body {
 .form-signin .form-control:focus {
   z-index: 2;
 }
-.form-signin input[type="username"] {
+.form-signin input[name="username"] {
   margin-bottom: 10px;
 }
 .form-signin input[type="email"] {
@@ -41,8 +45,6 @@ body {
   margin-bottom: 10px;
 }
 .card {
-  width: 304px;
-  padding: 20px 25px 30px;
   margin: 0 auto 25px;
   background-color: #f7f7f7;
   border-radius: 2px;
@@ -52,13 +54,25 @@ body {
 @media screen and (min-width: 320px) {
   .card {
       background-size: 280px;
-      padding 20px;
+      padding: 20px;
+  }
+  .card-signin {
+    width: 280px;
+    padding: 20px;
   }
 }
-.card-signin {
-  width: 354px;
-  padding: 40px;
+
+@media screen and (min-width: 360px) {
+  .card {
+      width: 304px;
+      padding: 20px 25px 30px;
+  }
+  .card-signin {
+    width: 354px;
+    padding: 40px;
+  }
 }
+
 .card-signin .profile-img {
   display: block;
   width: 96px;
