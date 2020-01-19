@@ -2112,6 +2112,7 @@ div {
     position: relative;
     padding-bottom: 20px;
     clear: both;
+    word-break: break-all;
 }
 
 .commentlist .comment-author,
