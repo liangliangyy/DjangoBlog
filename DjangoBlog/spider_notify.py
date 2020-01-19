@@ -18,5 +18,4 @@ class SpiderNotify():
 
     @staticmethod
     def notify(url):
-
         SpiderNotify.__google_notify()
