@@ -31,6 +31,9 @@ body {
 .form-signin .form-control:focus {
   z-index: 2;
 }
+.form-signin input[type="username"] {
+  margin-bottom: 10px;
+}
 .form-signin input[type="email"] {
   margin-bottom: 10px;
 }
@@ -45,6 +48,12 @@ body {
   border-radius: 2px;
   -webkit-box-shadow: 0 2px 2px rgba(0, 0, 0, .3);
           box-shadow: 0 2px 2px rgba(0, 0, 0, .3);
+}
+@media screen and (min-width: 320px) {
+  .card {
+      background-size: 280px;
+      padding 20px;
+  }
 }
 .card-signin {
   width: 354px;
