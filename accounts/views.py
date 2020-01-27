@@ -19,7 +19,7 @@ from django.views.decorators.debug import sensitive_post_parameters
 from django.utils.http import is_safe_url
 from DjangoBlog.utils import send_email, get_md5, get_current_site, render_template
 from django.conf import settings
-
+from django.contrib import messages
 logger = logging.getLogger(__name__)
 
 
@@ -52,8 +52,10 @@ class RegisterView(FormView):
                            images={"logo.png": "image/png", "mail_icon.png": "image/png"})
 
             url = reverse('accounts:result') + '?type=register&id=' + str(user.id)
+            messages.success(self.request, f"Новый аккаунт %s создан. Подтвердите свой почтовый ящик: %s" % (user.username, user.email))
             return HttpResponseRedirect(url)
         else:
+            messages.error(self.request, form.errors)
             return self.render_to_response({
                 'form': form
             })
@@ -102,11 +104,11 @@ class LoginView(FormView):
             if cache and cache is not None:
                 cache.clear()
             logger.info(self.redirect_field_name)
-
+            messages.success(self.request, 'Успешный вход')
             auth.login(self.request, form.get_user())
             return super(LoginView, self).form_valid(form)
-            # return HttpResponseRedirect('/')
         else:
+            messages.error(self.request, form.errors)
             return self.render_to_response({
                 'form': form
             })
@@ -129,10 +131,11 @@ def account_result(request):
         return HttpResponseRedirect('/')
     if type and type in ['register', 'validation']:
         if type == 'register':
-            content = '''
-    Круто, что ты с нами! Осталось подтвердить указанный почтовый ящик {email}
-    '''.format(email=user.email)
-            title = 'Регистрация прошла успешно'
+            messages.success(self.request, 'Регистрация почти завершена! Осталось подтвердить указанный почтовый ящик {email}'.format(email=user.email))
+    #         content = '''
+    # Круто, что ты с нами! Осталось подтвердить указанный почтовый ящик {email}
+    # '''.format(email=user.email)
+    #         title = 'Регистрация прошла успешно'
         else:
             c_sign = get_md5(get_md5(settings.SECRET_KEY + str(user.id)))
             sign = request.GET.get('sign')
@@ -140,13 +143,11 @@ def account_result(request):
                 return HttpResponseForbidden()
             user.is_active = True
             user.save()
-            content = '''
-            Почта успешно подтверждена!
-            '''
-            title = 'Почта подтверждена'
-        return render(request, 'account/result.html', {
-            'title': title,
-            'content': content
-        })
-    else:
+            messages.success(self.request, 'Почта успешно подтверждена!')
+    #     return HttpResponseRedirect('/')
+    #     return render(request, '/', {
+    #         'title': title,
+    #         'content': content
+    #     })
+    # else:
         return HttpResponseRedirect('/')

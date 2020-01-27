@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['*', '127.0.0.1', 'mtuktarov.ru', '192.168.1.64']
 
 SITE_ROOT = os.path.dirname(os.path.abspath(__file__))
 SITE_ROOT = os.path.abspath(os.path.join(SITE_ROOT, '../'))
+MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 
 INSTALLED_APPS = [
     # 'django.contrib.admin',
@@ -74,7 +75,7 @@ ROOT_URLCONF = 'DjangoBlog.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'), os.path.join(BASE_DIR, 'templates/share_layout')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -92,18 +93,20 @@ WSGI_APPLICATION = 'DjangoBlog.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
-
+SITE_DOMAIN_NAME = os.getenv('DJANGO_SITE_DOMAIN_NAME', 'mtuktarov.ru')
+DJANGO_SU_NAME = os.environ.get('DJANGO_SU_NAME', 'admin')
+DJANGO_SU_EMAIL = os.environ.get('DJANGO_SU_EMAIL', 'admin@admin.admin')
+DJANGO_SU_PASSWORD = os.environ.get('DJANGO_SU_PASSWORD', 'admin123')
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DJANGO_DB_NAME', 'mtuktarov'),
-        'USER': os.getenv('DJANGO_DB_USER', 'mtuktarov'),
-        'PASSWORD': os.getenv('DJANGO_DB_PASSWORD', 'mtuktarov'),
-        'HOST': os.getenv('DJANGO_DB_HOST', '/opt/blogd/sockets'),
+        'NAME': os.getenv('PGNAME', 'blogd'),
+        'USER': os.getenv('PGUSER', 'blogd'),
+        'PASSWORD': os.getenv('PGPASSWORD', 'blogd'),
+        'HOST': os.getenv('PGHOST', '/opt/blogd/sockets'),
     }
 }
-
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
 
@@ -125,7 +128,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
 
-#LANGUAGE_CODE = 'zh-hans'
+# LANGUAGE_CODE = 'zh-hans'
 LANGUAGE_CODE = 'ru-RU'
 TIME_ZONE = 'Europe/Moscow'
 
@@ -198,7 +201,7 @@ EMAIL_HOST_PASSWORD = os.getenv('DJANGO_EMAIL_PASS', '')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 SERVER_EMAIL = EMAIL_HOST_USER
 # Setting debug=false did NOT handle except email notifications
-ADMINS = [('admin', 'admin@mtuktarov.ru')]
+ADMINS = []
 # WX ADMIN password(Two times md5)
 WXADMIN = '995F03AC401D6CABABAEF756FC4D43C7'
 
@@ -206,7 +209,7 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'root': {
-        'level': 'INFO',
+        'level': 'DEBUG',
         'handlers': ['console', 'log_file'],
     },
     'formatters': {
@@ -224,7 +227,7 @@ LOGGING = {
     },
     'handlers': {
         'log_file': {
-            'level': 'INFO',
+            'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': 'djangoblog.log',
             'maxBytes': 16777216,  # 16 MB
@@ -240,7 +243,7 @@ LOGGING = {
             'class': 'logging.NullHandler',
         },
         'mail_admins': {
-            'level': 'ERROR',
+            'level': 'DEBUG',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
         }
@@ -248,12 +251,12 @@ LOGGING = {
     'loggers': {
         'djangoblog': {
             'handlers': ['log_file', 'console'],
-            'level': 'INFO',
+            'level': 'DEBUG',
             'propagate': True,
         },
         'django.request': {
             'handlers': ['mail_admins'],
-            'level': 'ERROR',
+            'level': 'DEBUG',
             'propagate': False,
         }
     }
@@ -278,7 +281,7 @@ COMPRESS_JS_FILTERS = [
     'compressor.filters.jsmin.JSMinFilter'
 ]
 
-MEDIA_ROOT = os.path.join(SITE_ROOT, 'uploads')
+MEDIA_ROOT = os.path.join(SITE_ROOT, 'media')
 MEDIA_URL = '/media/'
 
 MDEDITOR_CONFIGS = {
@@ -318,3 +321,8 @@ MDEDITOR_CONFIGS = {
         'toolbar': ["undo", "redo"]
     }
 }
+
+try:
+    from local_settings import *
+except ImportError:
+    pass
