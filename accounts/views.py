@@ -29,6 +29,16 @@ class RegisterView(FormView):
     form_class = RegisterForm
     template_name = 'account/registration_form.html'
 
+    def form_invalid(self, form):
+        for field, errors in form.errors.as_data().items():
+            for error in errors:
+                messages.add_message(self.request, messages.ERROR, ' '.join(error))
+        response = super().form_invalid(form)
+        if self.request.is_ajax():
+            return JsonResponse(form.errors, status=400)
+        else:
+            return response
+
     def form_valid(self, form):
         if form.is_valid():
             user = form.save(False)
@@ -72,11 +82,19 @@ class LogoutView(RedirectView):
         from DjangoBlog.utils import cache
         cache.clear()
         logout(request)
+
+        messages.success(self.request, f"Успешный выход")
         return super(LogoutView, self).get(request, *args, **kwargs)
 
 
+class CustomAuthForm(LoginForm):
+    def __init__(self, *args, **kwargs):
+        self.error_messages['invalid_login'] = 'Неверный пользователь или пароль'
+        super().__init__(*args, **kwargs)
+
+
 class LoginView(FormView):
-    form_class = LoginForm
+    form_class = CustomAuthForm
     template_name = 'account/login.html'
     success_url = '/'
     redirect_field_name = REDIRECT_FIELD_NAME
@@ -85,7 +103,6 @@ class LoginView(FormView):
     @method_decorator(csrf_protect)
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
-
         return super(LoginView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -93,19 +110,29 @@ class LoginView(FormView):
         if redirect_to is None:
             redirect_to = '/'
         kwargs['redirect_to'] = redirect_to
-
         return super(LoginView, self).get_context_data(**kwargs)
 
+    def form_invalid(self, form):
+        for field, errors in form.errors.as_data().items():
+            for error in errors:
+                messages.add_message(self.request, messages.ERROR, ' '.join(error))
+        response = super().form_invalid(form)
+        if self.request.is_ajax():
+            return JsonResponse(form.errors, status=400)
+        else:
+            return response
+
     def form_valid(self, form):
-        form = AuthenticationForm(data=self.request.POST, request=self.request)
+        form = CustomAuthForm(data=self.request.POST, request=self.request)
 
         if form.is_valid():
             from DjangoBlog.utils import cache
             if cache and cache is not None:
                 cache.clear()
             logger.info(self.redirect_field_name)
-            messages.success(self.request, 'Успешный вход')
+
             auth.login(self.request, form.get_user())
+            messages.success(self.request, 'Успешный вход')
             return super(LoginView, self).form_valid(form)
         else:
             messages.error(self.request, form.errors)
@@ -117,6 +144,7 @@ class LoginView(FormView):
 
         redirect_to = self.request.POST.get(self.redirect_field_name)
         if not is_safe_url(url=redirect_to, allowed_hosts=[self.request.get_host()]):
+            messages.error(self.request, 'username or password not correct')
             redirect_to = self.success_url
         return redirect_to
 
@@ -131,11 +159,10 @@ def account_result(request):
         return HttpResponseRedirect('/')
     if type and type in ['register', 'validation']:
         if type == 'register':
-            messages.success(self.request, 'Регистрация почти завершена! Осталось подтвердить указанный почтовый ящик {email}'.format(email=user.email))
-    #         content = '''
-    # Круто, что ты с нами! Осталось подтвердить указанный почтовый ящик {email}
-    # '''.format(email=user.email)
-    #         title = 'Регистрация прошла успешно'
+            content = '''
+    Круто, что ты с нами! Осталось подтвердить указанный почтовый ящик {email}
+    '''.format(email=user.email)
+            title = 'Регистрация прошла успешно'
         else:
             c_sign = get_md5(get_md5(settings.SECRET_KEY + str(user.id)))
             sign = request.GET.get('sign')
@@ -143,11 +170,5 @@ def account_result(request):
                 return HttpResponseForbidden()
             user.is_active = True
             user.save()
-            messages.success(self.request, 'Почта успешно подтверждена!')
-    #     return HttpResponseRedirect('/')
-    #     return render(request, '/', {
-    #         'title': title,
-    #         'content': content
-    #     })
-    # else:
+            messages.success(request, 'Почта успешно подтверждена!')
         return HttpResponseRedirect('/')

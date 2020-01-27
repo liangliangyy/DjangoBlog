@@ -11,11 +11,11 @@ TimeoutStopSec=15
 StandardOutput=journal
 StandardError=journal
 ExecStartPre=/opt/blogd/config/docker_wrap.sh rm_byname %n
-ExecStartPre=-/usr/bin/docker pull nginx:stable-alpine
+ExecStartPre=-/usr/bin/docker pull postgres:alpine
 ExecStart=/usr/bin/docker run --rm --name %n \
     -e POSTGRES_PASSWORD=blogd \
     -e POSTGRES_USER=blogd \
-    -e /opt/blogd_data:/var/lib/postgresql/data \
+    -v /opt/blogd_data:/var/lib/postgresql/data \
     -p 5432:5432 \
     postgres:alpine
 ExecStartPost=/opt/blogd/config/docker_wrap.sh set_time_byname %n

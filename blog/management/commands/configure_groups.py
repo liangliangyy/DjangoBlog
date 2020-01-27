@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
 Create permission groups
 Create permissions (read only) to models for a set of groups
@@ -11,7 +12,7 @@ from accounts.models import BlogUser
 import logging
 
 GROUPS = ['new_users', 'devops', 'developers', 'qa', 'operators', 'product']
-MODELS = ['logentry', 'permission', 'group', 'contenttype', 'session', 'site', 'blogsettings', 'links', 'sidebar', 'tag', 'category', 'article', 'bloguser', 'comment', 'commands', 'emailsendlog', 'sitecomment', 'comment', 'tasklist', 'attachment']
+MODELS = ['logentry', 'permission', 'group', 'contenttype', 'session', 'site', 'blogsettings', 'links', 'sidebar', 'tag', 'category', 'article', 'bloguser', 'comment', 'commands', 'emailsendlog', 'comment']
 
 
 class Command(BaseCommand):

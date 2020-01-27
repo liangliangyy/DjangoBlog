@@ -19,8 +19,8 @@ format_arg(){
     ls -a /opt/blogd | grep '.git' || git clone --single-branch --branch $BRANCH https://github.com/mtuktarov/mtuktarov.ru.git /opt/blogd
 
     cd /opt/blogd && git checkout $BRANCH && git pull origin $BRANCH
-    mkdir -p /opt/blogd/sockets /opt/blogd/uploads
-
+    mkdir -p /opt/blogd_sockets /opt/blogd_media
+    ln -fs /opt/local_settings.py /opt/blogd/local_settings.py
     [ $(format_arg $MAKEMIGRATIONS) = true ] && ./manage.py makemigrations
     [ $(format_arg $MIGRATE) = true ] && ./manage.py migrate
     [ $(format_arg $ADD_SUPERUSER) = true ] && ./manage.py add_superuser

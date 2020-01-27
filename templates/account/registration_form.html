@@ -9,10 +9,23 @@
             <img class="img-circle profile-img" src="{% static 'blog/img/avatar.png' %}" alt="">
             <form class="form-signin" action="{% url 'account:register' %}" method="post">
                 {% csrf_token %}
-                {{ form.non_field_errors }}
+                <!-- {{ form.non_field_errors }} -->
+                {% if messages %}
+                  {% for message in messages %}
+                    {% if message.level %}
+                      <div class="row">
+                        <div class="col-sm-12 col-sm-offset-0">
+                          <div class="alert alert-{{ message.tags }}" role="alert">
+                            <p>{{ message }}</p>
+                          </div>
+                        </div>
+                      </div>
+                    {% endif %}
+                  {% endfor %}
+                {% endif %}
                 {% for field in form %}
                     {{ field }}
-                    {{ field.errors }}
+                    <!-- {{ field.errors }} -->
                 {% endfor %}
 
 

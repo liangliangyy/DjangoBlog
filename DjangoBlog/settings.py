@@ -29,7 +29,8 @@ TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 # ALLOWED_HOSTS = []
 ALLOWED_HOSTS = ['*', '127.0.0.1', 'mtuktarov.ru', '192.168.1.64']
 # Application definition
-
+# MY_SUPER_ERROR = 0
+# MESSAGE_LEVEL = MY_SUPER_ERROR
 
 SITE_ROOT = os.path.dirname(os.path.abspath(__file__))
 SITE_ROOT = os.path.abspath(os.path.join(SITE_ROOT, '../'))
@@ -153,7 +154,7 @@ HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 # Allow user login with username and password
 AUTHENTICATION_BACKENDS = ['accounts.user_login_backend.EmailOrUsernameModelBackend']
 
-STATIC_ROOT = os.path.join(SITE_ROOT, 'collectedstatic')
+STATIC_ROOT = '/opt/blogd_static'
 
 STATIC_URL = '/static/'
 STATICFILES = os.path.join(BASE_DIR, 'static')
@@ -235,7 +236,6 @@ LOGGING = {
         },
         'console': {
             'level': 'DEBUG',
-            'filters': ['require_debug_true'],
             'class': 'logging.StreamHandler',
             'formatter': 'verbose'
         },
@@ -268,7 +268,8 @@ STATICFILES_FINDERS = (
     # other
     'compressor.finders.CompressorFinder',
 )
-COMPRESS_ENABLED = True
+# COMPRESS_ENABLED = True
+COMPRESS_ENABLED = False
 # COMPRESS_OFFLINE = True
 
 COMPRESS_CSS_FILTERS = [
@@ -321,6 +322,14 @@ MDEDITOR_CONFIGS = {
         'toolbar': ["undo", "redo"]
     }
 }
+
+from django.contrib.messages import constants as message_constants
+MESSAGE_TAGS = {message_constants.DEBUG: 'debug',
+                message_constants.INFO: 'info',
+                message_constants.SUCCESS: 'success',
+                message_constants.WARNING: 'warning',
+                message_constants.ERROR: 'danger', }
+
 
 try:
     from local_settings import *

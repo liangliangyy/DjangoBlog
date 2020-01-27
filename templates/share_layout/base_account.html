@@ -36,18 +36,11 @@
 
 <body>
       <div id="main" class="wrapper">
-    {% if messages %}
-      {% for message in messages %}
-        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}</div>
-      {% endfor %}
-    {% endif %}
-    <p>{{ form.non_field_errors }}</p>
 
+    <!-- <p>{{ form.non_field_errors }}</p> -->
         {% block content %}
         {% endblock %}
 
  </div><!-- #main .wrapper -->
-<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-
 </body>
 </html>

@@ -4,7 +4,7 @@
         {% if user.is_authenticated %}
           <h3 class="widget-title">{{ user.username }}  |  <a href="{% url 'account:logout' %}" rel="nofollow">Выйти</a></h3>
         {% else %}
-          <h3><a href="{% url 'account:login' %}" rel="nofollow">Войти</a></h3>
+          <h3 class="widget-title"><a href="{% url 'account:login' %}" rel="nofollow">Войти</a></h3>
 
         {% endif %}
         {% if user.is_superuser %}

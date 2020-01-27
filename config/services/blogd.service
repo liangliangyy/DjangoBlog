@@ -14,10 +14,17 @@ StandardError=journal
 ExecStartPre=/opt/blogd/config/docker_wrap.sh rm_byname %n
 ExecStartPre=-/usr/bin/docker pull mtuktarov/blogd:latest
 ExecStart=/usr/bin/docker run --rm --name %n \
-    -v /opt/blogd:/opt/blogd \
-    -v /opt/blogd_sockets:/opt/blogd/sockets \
+    -v /opt/blogd_media:/opt/blogd_media \
+    -v /opt/blogd_sockets:/opt/blogd_sockets \
+    -v /opt/blogd_static:/opt/blogd_static \
+    -v /opt/local_settings.py:/opt/local_settings.py \
     -e ADD_SUPERUSER=true \
+    -e PGNAME=mtuktarov \
+    -e PGUSER=mtuktarov \
+    -e PGPASSWORD=mtuktarov \
+    -e PGHOST=172.17.0.1 \
     -e CONFIGURE_GROUPS=true \
+    -e BRANCH=addMesssages \
     -e RENAME_SITE=true \
     -e WAIT_FOR_POSTGRES=true \
     -p 8000:8000 \
