@@ -13,10 +13,26 @@
                 <input type="email" id="inputEmail" class="form-control" placeholder="Email" required autofocus>
                 <label for="inputPassword" class="sr-only">Пароль</label>
                 <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>{% endcomment %}
-                {{ form.non_field_errors }}
+
+                {% if messages %}
+                  {% for message in messages %}
+                    {% if message.level %}
+                      <div class="row">
+                        <div class="col-sm-12 col-sm-offset-0">
+                          <div class="alert alert-{{ message.tags }}" role="alert">
+                            <p>{{ message }}</p>
+                          </div>
+                        </div>
+                      </div>
+                    {% endif %}
+                  {% endfor %}
+                {% endif %}
+
+                <!-- {{ form.non_field_errors }} -->
                 {% for field in form %}
                     {{ field }}
-                    {{ field.errors }}
+                    <!-- <div class="alert alert-danjer"> {{ field.errors }}</div> -->
+
                 {% endfor %}
 
                 <input type="hidden" name="next" value="{{ redirect_to }}">
@@ -34,7 +50,7 @@
         </div>
 
         <p class="text-center">
-            <a href="{% url "account:register" %}">Создать аккаунт</a>
+            <a href="{% url 'account:register' %}">Создать аккаунт</a>
             |
             <a href="/">Главная страница</a>
         </p>

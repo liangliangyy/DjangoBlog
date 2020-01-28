@@ -29,6 +29,9 @@
           href="/feed"/>
 
     {% compress css %}
+        <link href="{% static 'assets/css/bootstrap.min.css' %}" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+        <script src="https://getbootstrap.com/docs/4.0/dist/js/bootstrap.min.js"></script>
 
         <link rel='stylesheet' id='twentytwelve-fonts-css' href="{% static 'blog/fonts/fonts.css' %}" type='text/css' media='all'/>
         <link rel='stylesheet' id='twentytwelve-style-css' href="{% static 'blog/css/style.css' %}" type='text/css' media='all'/>
@@ -62,6 +65,35 @@
     </header><!-- #masthead -->
     <div id="main" class="wrapper">
 
+{% if messages %}
+<ul class="messages">
+    {% for msg in messages %}
+    <li>
+        <div class="alert alert-{{msg.level_tag}} alert-dismissible show" style="float: unset;" role="alert">
+          <style>
+            @media screen and (min-width: 320px) {
+                  .alert-dismissible{
+                      width: 100%;
+                  }
+              }
+
+              @media screen and (min-width: 600px) {
+                  .alert-dismissible{
+                      width: 67%;
+                  }
+              }
+          </style>
+        {{msg.message}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+    <!-- <p>{{ form.non_field_errors }}</p> -->
 
         {% block content %}
         {% endblock %}

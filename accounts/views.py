@@ -19,7 +19,7 @@ from django.views.decorators.debug import sensitive_post_parameters
 from django.utils.http import is_safe_url
 from DjangoBlog.utils import send_email, get_md5, get_current_site, render_template
 from django.conf import settings
-
+from django.contrib import messages
 logger = logging.getLogger(__name__)
 
 
@@ -28,6 +28,16 @@ logger = logging.getLogger(__name__)
 class RegisterView(FormView):
     form_class = RegisterForm
     template_name = 'account/registration_form.html'
+
+    def form_invalid(self, form):
+        for field, errors in form.errors.as_data().items():
+            for error in errors:
+                messages.add_message(self.request, messages.ERROR, ' '.join(error))
+        response = super().form_invalid(form)
+        if self.request.is_ajax():
+            return JsonResponse(form.errors, status=400)
+        else:
+            return response
 
     def form_valid(self, form):
         if form.is_valid():
@@ -52,8 +62,10 @@ class RegisterView(FormView):
                            images={"logo.png": "image/png", "mail_icon.png": "image/png"})
 
             url = reverse('accounts:result') + '?type=register&id=' + str(user.id)
+            messages.success(self.request, f"Новый аккаунт %s создан. Подтвердите свой почтовый ящик: %s" % (user.username, user.email))
             return HttpResponseRedirect(url)
         else:
+            messages.error(self.request, form.errors)
             return self.render_to_response({
                 'form': form
             })
@@ -70,11 +82,19 @@ class LogoutView(RedirectView):
         from DjangoBlog.utils import cache
         cache.clear()
         logout(request)
+
+        messages.success(self.request, f"Успешный выход")
         return super(LogoutView, self).get(request, *args, **kwargs)
 
 
+class CustomAuthForm(LoginForm):
+    def __init__(self, *args, **kwargs):
+        self.error_messages['invalid_login'] = 'Неверный пользователь или пароль'
+        super().__init__(*args, **kwargs)
+
+
 class LoginView(FormView):
-    form_class = LoginForm
+    form_class = CustomAuthForm
     template_name = 'account/login.html'
     success_url = '/'
     redirect_field_name = REDIRECT_FIELD_NAME
@@ -83,7 +103,6 @@ class LoginView(FormView):
     @method_decorator(csrf_protect)
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
-
         return super(LoginView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -91,11 +110,20 @@ class LoginView(FormView):
         if redirect_to is None:
             redirect_to = '/'
         kwargs['redirect_to'] = redirect_to
-
         return super(LoginView, self).get_context_data(**kwargs)
 
+    def form_invalid(self, form):
+        for field, errors in form.errors.as_data().items():
+            for error in errors:
+                messages.add_message(self.request, messages.ERROR, ' '.join(error))
+        response = super().form_invalid(form)
+        if self.request.is_ajax():
+            return JsonResponse(form.errors, status=400)
+        else:
+            return response
+
     def form_valid(self, form):
-        form = AuthenticationForm(data=self.request.POST, request=self.request)
+        form = CustomAuthForm(data=self.request.POST, request=self.request)
 
         if form.is_valid():
             from DjangoBlog.utils import cache
@@ -104,9 +132,10 @@ class LoginView(FormView):
             logger.info(self.redirect_field_name)
 
             auth.login(self.request, form.get_user())
+            messages.success(self.request, 'Успешный вход')
             return super(LoginView, self).form_valid(form)
-            # return HttpResponseRedirect('/')
         else:
+            messages.error(self.request, form.errors)
             return self.render_to_response({
                 'form': form
             })
@@ -115,6 +144,7 @@ class LoginView(FormView):
 
         redirect_to = self.request.POST.get(self.redirect_field_name)
         if not is_safe_url(url=redirect_to, allowed_hosts=[self.request.get_host()]):
+            messages.error(self.request, 'username or password not correct')
             redirect_to = self.success_url
         return redirect_to
 
@@ -140,13 +170,5 @@ def account_result(request):
                 return HttpResponseForbidden()
             user.is_active = True
             user.save()
-            content = '''
-            Почта успешно подтверждена!
-            '''
-            title = 'Почта подтверждена'
-        return render(request, 'account/result.html', {
-            'title': title,
-            'content': content
-        })
-    else:
+            messages.success(request, 'Почта успешно подтверждена!')
         return HttpResponseRedirect('/')

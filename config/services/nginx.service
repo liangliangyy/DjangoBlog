@@ -16,11 +16,11 @@ ExecStartPre=-/usr/bin/docker pull nginx:stable-alpine
 ExecStart=/usr/bin/docker run --rm --name %n \
     -p 80:80 \
     -p 443:443 \
-    -v /opt/blogd/collectedstatic:/var/www/html/static \
-    -v /opt/blogd/uploads:/var/www/html/media \
-    -v /opt/blogd/sockets:/var/www/sockets \
+    -v /opt/blogd_static:/opt/blogd/static \
+    -v /opt/blogd_media:/opt/blogd/media \
+    -v /opt/blogd_sockets:/opt/blogd/sockets \
     -v /opt/blogd/config/nginx:/etc/nginx/conf.d \
-    -v /opt/blogd/ssl:/etc/nginx/ssl \
+    -v /etc/ssl/mtuktarov.ru:/opt/blogd/ssl \
     nginx:stable-alpine
 ExecStartPost=/opt/blogd/config/docker_wrap.sh set_time_byname %n
 ExecStop=/opt/blogd/config/docker_wrap.sh stop_byname %n
