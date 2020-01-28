@@ -24,7 +24,7 @@ ExecStart=/usr/bin/docker run --rm --name %n \
     -e PGPASSWORD=mtuktarov \
     -e PGHOST=172.17.0.1 \
     -e CONFIGURE_GROUPS=true \
-    -e BRANCH=addMesssages \
+    -e BRANCH=master \
     -e RENAME_SITE=true \
     -e WAIT_FOR_POSTGRES=true \
     -p 8000:8000 \
