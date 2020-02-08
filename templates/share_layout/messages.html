@@ -1,0 +1,14 @@
+{% if messages %}
+        <ul class="messages mt-2 col-12">
+          {% for msg in messages %}
+            <li>
+              <div class="alert alert-{{msg.level_tag}} alert-dismissible show" style="float: unset;" role="alert">
+                {{msg.message}}
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+            </li>
+          {% endfor %}
+        </ul>
+{% endif %}

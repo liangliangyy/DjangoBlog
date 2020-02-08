@@ -28,6 +28,7 @@ class ArticleListView(ListView):
 
     # Page type, catalog or tag list, etc.
     page_type = ''
+    page = ''
     paginate_by = settings.PAGINATE_BY
     page_kwarg = 'page'
     link_type = 'l'
@@ -80,6 +81,7 @@ class ArticleListView(ListView):
 
     def get_context_data(self, **kwargs):
         kwargs['linktype'] = self.link_type
+        kwargs['page'] = self.page
         return super(ArticleListView, self).get_context_data(**kwargs)
 
 
@@ -87,6 +89,9 @@ class IndexView(ArticleListView):
     '''
     Home
     '''
+
+    def __init__(self):
+        self.page = 'main'
     # Friendly Link Type
     link_type = 'i'
 
@@ -98,11 +103,18 @@ class IndexView(ArticleListView):
         cache_key = 'index_{page}'.format(page=self.page_number)
         return cache_key
 
+    # def get_context_data(self, **kwargs):
+
+        # return super(ArticleListView, self).get_context_data(**kwargs)
+
 
 class ArticleDetailView(DetailView):
     '''
     Article details page
     '''
+
+    def __init__(self):
+        self.page = 'article_details'
     template_name = 'blog/article_detail.html'
     model = Article
     pk_url_kwarg = 'article_id'
@@ -145,6 +157,9 @@ class CategoryDetailView(ArticleListView):
     '''
     page_type = "Категория"
 
+    def __init__(self):
+        self.page = 'category_details'
+
     def get_queryset_data(self):
         slug = self.kwargs['category_name']
         category = get_object_or_404(Category, slug=slug)
@@ -179,7 +194,11 @@ class AuthorDetailView(ArticleListView):
     '''
     Страница сведений об авторе
     '''
+
     page_type = 'Автор'
+
+    def __init__(self):
+        self.page = 'author_details'
 
     def get_queryset_cache_key(self):
         author_name = self.kwargs['author_name']
@@ -203,6 +222,9 @@ class TagDetailView(ArticleListView):
     Страница списка тегов
     '''
     page_type = 'Тег'
+
+    def __init__(self):
+        self.page = 'tag_details'
 
     def get_queryset_data(self):
         slug = self.kwargs['tag_name']
@@ -237,6 +259,9 @@ class ArchivesView(ArticleListView):
     page_kwarg = None
     template_name = 'blog/article_archives.html'
 
+    def __init__(self):
+        self.page = 'archive'
+
     def get_queryset_data(self, **kwargs):
         return Article.objects.filter(status='p').all()
 
@@ -245,7 +270,6 @@ class ArchivesView(ArticleListView):
         return cache_key
 
     def get_context_data(self, **kwargs):
-        # tag_name = self.kwargs['tag_name']
         kwargs['months_map'] = {1: 'январь', 2: 'февраль', 3: 'март',
                                 4: 'апрель', 5: 'май', 6: 'июнь',
                                 7: 'июль', 8: 'август', 9: 'сентябрь',

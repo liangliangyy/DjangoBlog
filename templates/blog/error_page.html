@@ -25,7 +25,6 @@
     <meta property="og:site_name" content="{{ SITE_NAME }}"/>
 {% endblock %}
 {% block content %}
-    <div id="primary" class="site-content">
         <div id="content" role="main">
 
             <header class="archive-header">
@@ -33,13 +32,12 @@
             </header><!-- .archive-header -->
 
         </div><!-- #content -->
-    </div><!-- #primary -->
 
 {% endblock %}
 
 
 {% block sidebar %}
-    {% load_sidebar user 'i' %}
+    {% load_sidebar user 'i' request %}
 {% endblock %}
 
 

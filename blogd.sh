@@ -15,12 +15,11 @@ format_arg(){
         done
     }
 
-    [ -d /opt/blogd ] || mkdir -p /opt/blogd
-    ls -a /opt/blogd | grep '.git' || git clone --single-branch --branch $BRANCH https://github.com/mtuktarov/mtuktarov.ru.git /opt/blogd
+    [ -d /opt/blogd/site ] || mkdir -p /opt/blogd/site
+    ls -a /opt/blogd/site | grep '.git' || git clone --single-branch --branch $BRANCH https://github.com/mtuktarov/mtuktarov.ru.git /opt/blogd/site
 
-    cd /opt/blogd && git checkout $BRANCH && git pull origin $BRANCH
-    mkdir -p /opt/blogd_sockets /opt/blogd_media
-    ln -fs /opt/local_settings.py /opt/blogd/local_settings.py
+    cd /opt/blogd/site && git checkout $BRANCH && git pull origin $BRANCH
+    mkdir -p /opt/blogd/sockets
     [ $(format_arg $MAKEMIGRATIONS) = true ] && ./manage.py makemigrations
     [ $(format_arg $MIGRATE) = true ] && ./manage.py migrate
     [ $(format_arg $ADD_SUPERUSER) = true ] && ./manage.py add_superuser

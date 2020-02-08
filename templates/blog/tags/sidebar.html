@@ -1,121 +1,98 @@
 {% load blog_tags %}
-<div id="secondary" class="widget-area" role="complementary">
-    <aside id="meta-2" class="widget widget_meta">
-        {% if user.is_authenticated %}
-          <h3 class="widget-title">{{ user.username }}  |  <a href="{% url 'account:logout' %}" rel="nofollow">Выйти</a></h3>
-        {% else %}
-          <h3 class="widget-title"><a href="{% url 'account:login' %}" rel="nofollow">Войти</a></h3>
-
-        {% endif %}
-        {% if user.is_superuser %}
-        <ul>
-          <li><a href="/admin/" rel="nofollow">Админка</a></li>
-          <li><a href="{% url 'blog:refresh' %}">Очистить кеш</a></li>
-        </ul>
-    {% endif %}
-    </aside>
-    {% if show_search_bar %}
-      <aside id="search-2" class="widget widget_search">
-          <form role="search" method="get" id="searchform" class="searchform" action="/search">
-              <div>
-                  <label class="screen-reader-text" for="s">Поиск:</label>
-                  <input type="text" value="" name="q" id="q"/>
-                  <input type="submit" id="searchsubmit" value="Поиск"/>
-              </div>
-          </form>
+{% if show_search_bar %}
+  <aside id="search-2" class="widget widget_search py-3">
+      <form role="search" method="get" id="searchform" class="searchform" action="/search">
+          <div>
+              <label class="screen-reader-text" for="s">Поиск:</label>
+              <input type="text" value="" name="q" id="q"/>
+              <input type="submit" id="searchsubmit" value="Поиск"/>
+          </div>
+      </form>
+  </aside>
+{% endif %}
+{% if extra_sidebars %}
+{% for sidebar in extra_sidebars %}
+      <aside class="widget_text widget widget_custom_html py-3">
+        <h3 class="widget-title pb-2">{{ sidebar.name }}</h3>
+          <div class="textwidget custom-html-widget">
+              {{ sidebar.content|custom_markdown }}
+          </div>
       </aside>
-    {% endif %}
-    {% if extra_sidebars %}
-      {% for sidebar in extra_sidebars %}
-
-          <aside class="widget_text widget widget_custom_html"><h3 class="widget-title">
-              {{ sidebar.name }}</h3>
-              <div class="textwidget custom-html-widget">
-                  {{ sidebar.content|custom_markdown }}
-              </div>
-          </aside>
-      {% endfor %}
-    {% endif %}
-    {% if show_views_bar and most_read_articles %}
-        <aside id="views-4" class="widget widget_views"><h3 class="widget-title">Просмотры</h3>
-            <ul>
-                {% for a in most_read_articles %}
-                    <li>
-                        <a href="{{ a.get_absolute_url }}" title="{{ a.title }}">
-                            {{ a.title }}
-                        </a> - {{ a.views }} просмотров
-                    </li>
-                {% endfor %}
-            </ul>
-        </aside>
-    {% endif %}
-    {% if show_category_bar and sidebar_categorys %}
-        <aside id="su_siloed_terms-2" class="widget widget_su_siloed_terms"><h3 class="widget-title">Категории</h3>
-            <ul>
-                {% for c in sidebar_categorys %}
-                    <li class="cat-item cat-item-184"><a href={{ c.get_absolute_url }}>{{ c.name }}</a>
-                    </li>
-                {% endfor %}
-            </ul>
-        </aside>
-    {% endif %}
-    {% if sidebar_comments and  open_site_comment %}
-        <aside id="ds-recent-comments-4" class="widget ds-widget-recent-comments"><h3 class="widget-title">Обсуждения</h3>
-            {% comment %}<ul class="ds-recent-comments" data-num-items="5" data-show-avatars="1" data-show-time="1"
-            data-show-title="1" data-show-admin="1" data-avatar-size="30" data-excerpt-length="70"></ul>{% endcomment %}
-            <ul id="recentcomments">
-                {% for c in sidebar_comments %}
-                    <li class="recentcomments">
-                        <a href="{{ c.author.get_absolute_url }}">
-                            <span class="comment-author-link">{{ c.author.username }}</span>
-                        </a>
-                        в <a href="{{ c.article.get_absolute_url }}#comment-{{ c.pk }}">{{ c.article.title }}</a>
-                    </li>
-                {% endfor %}
-            </ul>
-        </aside>
-    {% endif %}
-    {% if recent_articles %}
-        <aside id="recent-posts-2" class="widget widget_recent_entries"><h3 class="widget-title">Публикации</h3>
-            <ul>
-
-                {% for a in  recent_articles %}
-                    <li><a href="{{ a.get_absolute_url }}" title="{{ a.title }}">
+  {% endfor %}
+{% endif %}
+{% if show_views_bar and most_read_articles %}
+    <aside id="views-4" class="widget widget_views py-3">
+      <h3 class="widget-title pb-2">Просмотры</h3>
+        <ul>
+            {% for a in most_read_articles %}
+                <li>
+                    <a href="{{ a.get_absolute_url }}" title="{{ a.title }}">
                         {{ a.title }}
-                    </a></li>
-                {% endfor %}
-            </ul>
-        </aside>
-    {% endif %}
-    {% if sidabar_links %}
-        <aside id="linkcat-0" class="widget widget_links"><h3 class="widget-title">Ссылка</h3>
-            <ul class='xoxo blogroll'>
-                {% for l in sidabar_links %}
-                    <li>
-                        <a href="{{ l.link }}" target="_blank" title="{{ l.name }}">{{ l.name }}</a>
-                    </li>
-                {% endfor %}
+                    </a> - {{ a.views }} просмотров
+                </li>
+            {% endfor %}
+        </ul>
+    </aside>
+{% endif %}
+{% if sidebar_tags %}
+    <aside id="tag_cloud-2" class="widget widget_tag_cloud py-3">
+      <h3 class="widget-title pb-2">Теги</h3>
+        <div class="tagcloud text-center">
+            {% for tag,count,size in sidebar_tags %}
+                <a href="{{ tag.get_absolute_url }}"
+                   class="tag-link-{{ tag.id }} tag-link-position-{{ tag.id }}"
+                   style="font-size: {{ size }}pt;" title="{{ count }}Теги"> {{ tag.name }}</a>
+            {% endfor %}
+        </div>
+    </aside>
+{% endif %}
+{% if sidebar_comments and open_site_comment %}
+    <aside id="ds-recent-comments-4" class="widget ds-widget-recent-comments py-3">
+      <h3 class="widget-title pb-2">Обсуждения</h3>
+        {% comment %}<ul class="ds-recent-comments" data-num-items="5" data-show-avatars="1" data-show-time="1"
+        data-show-title="1" data-show-admin="1" data-avatar-size="30" data-excerpt-length="70"></ul>{% endcomment %}
+        <ul id="recentcomments">
+            {% for c in sidebar_comments %}
+                <li class="recentcomments">
+                    <a href="{{ c.author.get_absolute_url }}">
+                        <span class="comment-author-link">{{ c.author.username }}</span>
+                    </a>
+                    в <a href="{{ c.article.get_absolute_url }}#comment-{{ c.pk }}">{{ c.article.title }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </aside>
+{% endif %}
+{% if recent_articles %}
+    <aside id="recent-posts" class="widget widget_recent_entries recent-posts py-3">
+      <h3 class="widget-title pb-2">Публикации</h3>
+        <ul class="list-group-flush find_active">
+            {% for a in  recent_articles %}
+              <li class="list-group-item text-wrap py-2 {% if request.get_full_path == a.get_absolute_url %}active {% endif %}">
+                <a href="{{ a.get_absolute_url }}" title="{{ a.title }}" class="text-reset">{{ a.title }}</a>
+              </li>
+            {% endfor %}
+        </ul>
+    </aside>
+{% endif %}
 
-            </ul>
-        </aside>
-    {% endif %}
-    {% if show_google_adsense %}
-        <aside id="text-2" class="widget widget_text"><h3 class="widget-title">Google AdSense</h3>
-            <div class="textwidget">
-                {{ google_adsense_codes|safe }}
-            </div>
-        </aside>
-    {% endif %}
-    {% if sidebar_tags %}
-        <aside id="tag_cloud-2" class="widget widget_tag_cloud"><h3 class="widget-title">Теги</h3>
-            <div class="tagcloud">
-                {% for tag,count,size in sidebar_tags %}
-                    <a href="{{ tag.get_absolute_url }}"
-                       class="tag-link-{{ tag.id }} tag-link-position-{{ tag.id }}"
-                       style="font-size: {{ size }}pt;" title="{{ count }}Теги"> {{ tag.name }}</a>
-                {% endfor %}
-            </div>
-        </aside>
-    {% endif %}
-    <div id="rocket" class="show" title="Вернуться наверх"></div>
-</div><!-- #secondary -->
+{% if sidabar_links %}
+    <aside id="linkcat-0" class="widget widget_links py-3">
+      <h3 class="widget-title pb-2">Ссылка</h3>
+        <ul class='xoxo blogroll'>
+            {% for l in sidabar_links %}
+                <li>
+                    <a href="{{ l.link }}" target="_blank" title="{{ l.name }}">{{ l.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </aside>
+{% endif %}
+{% if show_google_adsense %}
+    <aside id="text-2" class="widget widget_text py-3">
+      <h3 class="widget-title pb-2">Google AdSense</h3>
+        <div class="textwidget">
+            {{ google_adsense_codes|safe }}
+        </div>
+    </aside>
+{% endif %}

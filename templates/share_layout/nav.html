@@ -1,32 +1,50 @@
-<nav id="site-navigation" class="main-navigation" role="navigation">
-    <button class="menu-toggle">Меню</button>
-    <a class="assistive-text" href="#content" title="Перейти к тексту">Перейти к тексту</a>
-    <div class="menu-%e8%8f%9c%e5%8d%95-container">
-        <ul id="menu-%e8%8f%9c%e5%8d%95" class="nav-menu">
-            <li id="menu-item-3498"
-                class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item menu-item-home menu-item-3498">
-                <a href="/">На главную</a></li>
-
-            {% load blog_tags %}
-              {% if SHOW_CATEGORY_BAR %}
-              {% query nav_category_list parent_category=None as root_categorys %}
-              {% for node in root_categorys %}
-                  {% include 'share_layout/nav_node.html' %}
-              {% endfor %}
-            {% endif %}
-            {% if nav_pages %}
-                {% for node in nav_pages %}
-
-                    <li id="menu-item-{{ node.pk }}"
-                        class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-{{ node.pk }}">
-                        <a href="{{ node.get_absolute_url }}">{{ node.title }}</a>
-                    </li>
-                {% endfor %}
-            {% endif %}
-            <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children">
-
-                <a href="{% url "blog:archives" %}">Все публикации</a>
-            </li>
-        </ul>
-    </div>
-</nav><!-- #site-navigation -->
+{% load blog_tags %}
+<header class="navbar navbar-expand navbar-dark bg-dark flex-column flex-md-row bd-navbar">
+  <a class="navbar-brand p-2 mx-5" href="/">
+    {% include 'logo.html' %}
+  </a>
+  <div class="navbar-nav-scroll" id="navbarNavDropdown">
+    <ul class="navbar-nav bd-navbar-nav flex-row find_active">
+      <li class="{% if page == 'main' %}active{% endif %}">
+          <a class="nav-link" href="/">На главную</a>
+      </li>
+      {% if nav_pages %}
+        {% for node in nav_pages %}
+          <li id="menu-item-{{ node.pk }}" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-{{ node.pk }}">
+            <a href="{{ node.get_absolute_url }}">{{ node.title }}</a>
+          </li>
+        {% endfor %}
+      {% endif %}
+      <li class="{% if page == 'archive' %}active{% endif %}">
+        <a class="nav-link" href="{% url 'blog:archives' %}">Все публикации</a>
+      </li>
+      {% if SHOW_CATEGORY_BAR %}
+        <li class="nav-item dropdown {% if page == 'category_details' %}active{% endif %}">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Категории</a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            {% query nav_category_list parent_category=None as root_categorys %}
+            {% for node in root_categorys %}
+                <a class="dropdown-item {% if request.get_full_path == node.get_absolute_url %}active{% endif %}" href="{{ node.get_absolute_url }}">{{ node.name }}</a>
+            {% endfor %}
+          </div>
+        </li>
+      {% endif %}
+    </ul>
+  </div>
+  <ul class="navbar-nav ml-md-auto">
+    {% if user.is_authenticated %}
+      <li class="nav-item dropdown mx-5">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="true">{{ user.username }}</a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/admin/" rel="nofollow">Админка</a>
+          <a class="dropdown-item" href="{% url 'blog:refresh' %}">Очистить кеш</a>
+          <a class="dropdown-item" href="{% url 'account:logout' %}">Выйти</a>
+        </div>
+      </li>
+    {% else %}
+      <li class="nav-item mr-md-5">
+        <a class="nav-link btn btn-nav-login d-lg-inline-block px-5" href="{% url 'accounts:login' %}">Войти</a>
+      </li>
+    {% endif %}
+  </ul>
+</header><!-- #site-navigation -->

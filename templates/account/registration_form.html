@@ -1,16 +1,14 @@
 {% extends 'share_layout/base_account.html' %}
 {% load static %}
 {% block content %}
-    <div class="container">
-
-        <h2 class="form-signin-heading text-center">Создать аккаунт</h2>
-
-        <div class="card card-signin">
-            <img class="img-circle profile-img" src="{% static 'blog/img/avatar.png' %}" alt="">
             <form class="form-signin" action="{% url 'account:register' %}" method="post">
-                {% csrf_token %}
-                <!-- {{ form.non_field_errors }} -->
-                {% if messages %}
+              {% csrf_token %}
+              <div class="text-center mb-4">
+                <img class="mb-2 rounded-circle img-circle profile-img" src="{% static 'blog/img/avatar.png' %}" alt="">
+                <!-- <img class="mb-4 rounded-circle img-circle profile-img" src="{% static 'blog/img/logo.png' %}" alt=""> -->
+                <!-- <h1 class="h3 mb-3 font-weight-normal">Создать аккаунт</h1> -->
+              </div>
+              {% if messages %}
                   {% for message in messages %}
                     {% if message.level %}
                       <div class="row">
@@ -23,22 +21,19 @@
                     {% endif %}
                   {% endfor %}
                 {% endif %}
-                {% for field in form %}
-                    {{ field }}
-                    <!-- {{ field.errors }} -->
+                {% for field in form.visible_fields %}
+                    <div class="form-label-group">
+                       {{ field }}{{ field.label_tag }}
+                        {{ field.errors }}
+                    </div>
                 {% endfor %}
-
-
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Создать аккаунт</button>
-
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Регистрация</button>
+                 <p class="mt-5 mb-3 text-muted text-center">
+                    <a href="{% url 'account:login' %}" class="mx-3">Войти</a>
+                    |
+                    <a href="/" class="mx-3">На главную</a>
+                </p>
             </form>
         </div>
 
-        <p class="text-center">
-            <a href="{% url "account:login" %}">Войти</a>
-            |
-            <a href="/">Главная страница</a>
-        </p>
-
-    </div> <!-- /container -->
 {% endblock %}

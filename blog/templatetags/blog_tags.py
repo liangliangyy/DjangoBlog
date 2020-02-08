@@ -116,12 +116,13 @@ def load_articletags(article):
 
 
 @register.inclusion_tag('blog/tags/sidebar.html')
-def load_sidebar(user, linktype):
+def load_sidebar(user, linktype, request):
     """
     Load the sidebar
     :return:
     """
     logger.info('load sidebar')
+    logger.info('request: {}'.format(request))
     from DjangoBlog.utils import get_blog_setting
     blogsetting = get_blog_setting()
     recent_articles = Article.objects.filter(status='p')[:blogsetting.sidebar_article_count]
@@ -165,7 +166,8 @@ def load_sidebar(user, linktype):
         'show_category_bar': blogsetting.show_category_bar,
         'show_search_bar': blogsetting.show_search_bar,
         'show_menu_bar': blogsetting.show_menu_bar,
-        'extra_sidebars': extra_sidebars
+        'extra_sidebars': extra_sidebars,
+        'request': request
     }
 
 
@@ -305,3 +307,17 @@ def key(d, key_name):
 
 
 key = register.filter('key', key)
+
+
+@register.filter
+def rain(d):
+    if settings.WEATHER in 'rain':
+        return True
+    return False
+
+
+@register.filter
+def snow(d):
+    if settings.WEATHER in 'snow':
+        return True
+    return False

@@ -17,7 +17,6 @@
     <meta property="og:site_name" content="{{ SITE_NAME }}"/>
 {% endblock %}
 {% block content %}
-    <div id="primary" class="site-content">
         <div id="content" role="main">
             {% if page_type and tag_name %}
                 <header class="archive-header">
@@ -34,13 +33,12 @@
 
             {% endif %}
         </div><!-- #content -->
-    </div><!-- #primary -->
 
 {% endblock %}
 {% block sidebar %}
     {% with request.user.username|add:linktype as cachekey %}
         {% cache 36000 sidebar cachekey %}
-            {% load_sidebar user linktype %}
+            {% load_sidebar user linktype request %}
         {% endcache %}
     {% endwith %}
 {% endblock %}

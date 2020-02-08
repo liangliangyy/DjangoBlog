@@ -10,9 +10,9 @@ from django.core.exceptions import ValidationError
 class LoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super(LoginForm, self).__init__(*args, **kwargs)
-        self.fields['username'].widget = widgets.TextInput(attrs={'placeholder': "логин или email", "class": "form-control"})
+        self.fields['username'].widget = widgets.TextInput(attrs={'placeholder': "логин или email", "class": "form-control", "autofocus": ""})
         self.fields['password'].widget = widgets.PasswordInput(
-            attrs={'placeholder': "пароль", "class": "form-control"})
+            attrs={'placeholder': "пароль", "class": "form-control", "autofocus": ""})
 
 
 class RegisterForm(UserCreationForm):

@@ -10,16 +10,16 @@ TimeoutStartSec=300
 TimeoutStopSec=15
 StandardOutput=journal
 StandardError=journal
-ExecStartPre=/opt/blogd/config/docker_wrap.sh rm_byname %n
+ExecStartPre=/opt/blogd/src/config/docker_wrap.sh rm_byname %N
 ExecStartPre=-/usr/bin/docker pull postgres:alpine
-ExecStart=/usr/bin/docker run --rm --name %n \
-    -e POSTGRES_PASSWORD=blogd \
-    -e POSTGRES_USER=blogd \
-    -v /opt/blogd_data:/var/lib/postgresql/data \
-    -p 5432:5432 \
+ExecStartPre=-/usr/bin/docker run --name blogd_data -v /opt/blogd:/opt/blogd -v /opt/blogd/config/nginx:/etc/nginx/conf.d busybox:latest
+ExecStart=/usr/bin/docker run --rm --name %N \
+    --env-file /opt/blogd/config/env \
+    --volumes-from blogd_data \
+    -p 172.17.0.1:5432:5432 \
     postgres:alpine
-ExecStartPost=/opt/blogd/config/docker_wrap.sh set_time_byname %n
-ExecStop=/opt/blogd/config/docker_wrap.sh stop_byname %n
+ExecStartPost=/opt/blogd/src/config/docker_wrap.sh set_time_byname %N
+ExecStop=/opt/blogd/src/config/docker_wrap.sh stop_byname %N
 
 [Install]
 WantedBy=multi-user.target

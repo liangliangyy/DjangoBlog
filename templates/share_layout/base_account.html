@@ -12,20 +12,27 @@
     <link href="{% static 'favicon.ico' %}" rel="icon" type="image/x-icon" />
     <title>{{ SITE_NAME }} | {{ SITE_DESCRIPTION }}</title>
     {% load compress %}
+
     {% compress css %}
-        <!-- Bootstrap core CSS -->
-        <link href="{% static 'assets/css/bootstrap.min.css' %}" rel="stylesheet">
         <link href="{% static 'blog/css/oauth_style.css' %}" rel="stylesheet">
         <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
         <link href="{% static 'assets/css/ie10-viewport-bug-workaround.css' %}" rel="stylesheet">
         <!-- TODC Bootstrap core CSS -->
         <link href="{% static 'assets/css/todc-bootstrap.min.css' %}" rel="stylesheet">
+        <!-- Bootstrap CSS -->
+        <link href="{% static 'assets/css/bootstrap.min.css' %}" rel="stylesheet">
         <!-- Custom styles for this template -->
-        <link href="{% static 'assets/css/signin.css' %}" rel="stylesheet">
+        <link href="{% static 'blog/css/floating-label.css' %}" rel="stylesheet">
     {% endcompress %}
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     {% compress js %}
         <script src="{% static 'assets/js/ie10-viewport-bug-workaround.js' %}"></script>
         <script src="{% static 'assets/js/ie-emulation-modes-warning.js' %}"></script>
+
     {% endcompress %}
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -34,8 +41,16 @@
     <![endif]-->
 </head>
 
+{% load blog_tags %}
+{% if weather|rain %}
+<link rel="stylesheet" href="{% static 'blog/css/rain.css' %}">
+<body class="back-row-toggle splat-toggle">
+<div class="rain front-row" style="z-index: -1;"></div>
+<div class="rain back-row" style="z-index: -1;"></div>
+<script type="text/javascript" src="{% static 'blog/js/rain.js' %}"></script>
+{% else %}
 <body>
-      <div id="main" class="wrapper">
+{% endif %}
 
     <!-- <p>{{ form.non_field_errors }}</p> -->
         {% block content %}

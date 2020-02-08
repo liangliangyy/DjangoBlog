@@ -14,7 +14,8 @@
                 {% endif %}
 
             {% else %}
-                {{ article.title }}
+                <a href="{{ article.get_absolute_url }}"
+                       rel="bookmark">{{ article.title }}</a>
             {% endif %}
         </h1>
         <br/>

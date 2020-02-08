@@ -9,8 +9,7 @@ https://docs.djangoproject.com/en/1.10/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.10/ref/settings/
 """
-import sys
-import os
+import os, sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -19,10 +18,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'n9ceqv38)#&mwuat@(mjb_p%em$e8$qyr#fw9ot!=ba6lijx-6'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'n9ceqv38)#&mwuat@(mjb_p%em$e8$qyr#fw9ot!=ba6lijx-6')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DJANGO_DEBUG', False)
+
+# 'rain' is supported right now
+WEATHER = os.getenv('DJANGO_WEATHER', 'NORMAL')
 # DEBUG = False
 TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 
@@ -31,6 +33,9 @@ ALLOWED_HOSTS = ['*', '127.0.0.1', 'mtuktarov.ru', '192.168.1.64']
 # Application definition
 # MY_SUPER_ERROR = 0
 # MESSAGE_LEVEL = MY_SUPER_ERROR
+LOGO_COLOR_BACKGROUND = '#2d2f44'
+LOGO_COLOR_TEXT = '#e0bf4b'
+
 
 SITE_ROOT = os.path.dirname(os.path.abspath(__file__))
 SITE_ROOT = os.path.abspath(os.path.join(SITE_ROOT, '../'))
@@ -58,17 +63,18 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.gzip.GZipMiddleware',
     # 'django.middleware.cache.UpdateCacheMiddleware',
-    'django.middleware.common.CommonMiddleware',
     # 'django.middleware.cache.FetchFromCacheMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.http.ConditionalGetMiddleware',
-    'blog.middleware.OnlineMiddleware'
+    'blog.middleware.OnlineMiddleware',
+
 ]
 
 ROOT_URLCONF = 'DjangoBlog.urls'
@@ -81,10 +87,10 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
-                'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'blog.context_processors.seo_processor'
+                'blog.context_processors.seo_processor',
+                'django.template.context_processors.request',
             ],
         },
     },
@@ -154,10 +160,9 @@ HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 # Allow user login with username and password
 AUTHENTICATION_BACKENDS = ['accounts.user_login_backend.EmailOrUsernameModelBackend']
 
-STATIC_ROOT = '/opt/blogd_static'
-
 STATIC_URL = '/static/'
-STATICFILES = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(SITE_ROOT, 'static')  
+STATICFILES = os.path.join(SITE_ROOT, 'static')
 
 AUTH_USER_MODEL = 'accounts.BlogUser'
 LOGIN_URL = '/login/'
@@ -188,19 +193,6 @@ CACHES = {
 
 SITE_ID = 1
 
-# Emial:
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
-# EMAIL_USE_TLS = True
-EMAIL_USE_SSL = True
-EMAIL_FILES = os.path.join(BASE_DIR, 'templates/email')
-# postfix app gmail password: tgmsfmcrzethlkoi
-EMAIL_HOST = os.getenv('DJANGO_EMAIL_HOST', 'smtp.gmail.com')
-EMAIL_PORT = os.getenv('DJANGO_EMAIL_PORT', 465)
-EMAIL_HOST_USER = os.getenv('DJANGO_EMAIL_USER', 'noreply@gmail.com')
-EMAIL_HOST_PASSWORD = os.getenv('DJANGO_EMAIL_PASS', '')
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-SERVER_EMAIL = EMAIL_HOST_USER
 # Setting debug=false did NOT handle except email notifications
 ADMINS = []
 # WX ADMIN password(Two times md5)
@@ -230,7 +222,7 @@ LOGGING = {
         'log_file': {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': 'djangoblog.log',
+            'filename': '../log/djangoblog.log',
             'maxBytes': 16777216,  # 16 MB
             'formatter': 'verbose'
         },
@@ -274,9 +266,9 @@ COMPRESS_ENABLED = False
 
 COMPRESS_CSS_FILTERS = [
     # creates absolute urls from relative ones
-    'compressor.filters.css_default.CssAbsoluteFilter',
+    # 'compressor.filters.css_default.CssAbsoluteFilter',
     # css minimizer
-    'compressor.filters.cssmin.CSSMinFilter'
+    # 'compressor.filters.cssmin.CSSMinFilter'
 ]
 COMPRESS_JS_FILTERS = [
     'compressor.filters.jsmin.JSMinFilter'
@@ -330,8 +322,19 @@ MESSAGE_TAGS = {message_constants.DEBUG: 'debug',
                 message_constants.WARNING: 'warning',
                 message_constants.ERROR: 'danger', }
 
+# Emial:
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.getenv('DJANGO_EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_PORT = os.getenv('DJANGO_EMAIL_PORT', 465)
+EMAIL_HOST_USER = os.getenv('DJANGO_EMAIL_USER', 'noreply@gmail.com')
+EMAIL_HOST_PASSWORD = os.getenv('DJANGO_EMAIL_PASS', '')
+EMAIL_FILES = os.path.join(BASE_DIR, 'templates/email')
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+SERVER_EMAIL = EMAIL_HOST_USER
 
 try:
-    from local_settings import *
+    parent_dir = os.path.dirname(SITE_ROOT)
+    sys.path.insert(0, os.path.join(parent_dir, 'config')) 
+    from local import * 
 except ImportError:
     pass

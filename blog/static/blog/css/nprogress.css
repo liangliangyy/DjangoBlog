@@ -71,14 +71,3 @@
   0%   { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
-
-@media screen and (min-width: 320px) {
-              .alert-dismissible{
-                width: 100%;
-              }
-            }
-            @media screen and (min-width: 600px) {
-              .alert-dismissible{
-                width: 67%;
-              }
-            }

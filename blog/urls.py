@@ -16,9 +16,9 @@ urlpatterns = [
          views.ArticleDetailView.as_view(),
          name='detailbyid'),
 
-#    path(r'category/<slug:category_name>.html', views.CategoryDetailView.as_view(), name='category_detail'),
-#    path(r'category/<slug:category_name>/<int:page>.html', views.CategoryDetailView.as_view(),
-#         name='category_detail_page'),
+   path(r'category/<slug:category_name>.html', views.CategoryDetailView.as_view(), name='category_detail'),
+   path(r'category/<slug:category_name>/<int:page>.html', views.CategoryDetailView.as_view(),
+        name='category_detail_page'),
 
     path(r'author/<author_name>.html', views.AuthorDetailView.as_view(), name='author_detail'),
     path(r'author/<author_name>/<int:page>.html', views.AuthorDetailView.as_view(),

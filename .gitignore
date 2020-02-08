@@ -75,8 +75,7 @@ cb9339dbe2ff86a5aa169d28dba5f615.txt
 werobot_session
 django.jpg
 uploads/
-local_settings.py
-settings_production.py
+env
 werobot_session.db
 **/.DS_Store
 **/.bash*

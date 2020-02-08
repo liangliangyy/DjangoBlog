@@ -1,0 +1,22 @@
+[Unit]
+Description=blogd_data service
+Requires=docker.socket
+
+[Service]
+Restart=always
+RestartSec=30s
+TimeoutStartSec=300
+TimeoutStopSec=15
+StandardOutput=journal
+StandardError=journal
+ExecStartPre=/opt/blogd/src/config/docker_wrap.sh rm_byname %N
+ExecStartPre=-/usr/bin/docker pull mtuktarov/busybox:latest
+ExecStart=/usr/bin/docker run --name %N \
+    -v /opt/blogd:/opt/blogd \
+    -v /opt/blogd/config/nginx:/etc/nginx/conf.d \
+    busybox:latest
+
+ExecStop=/opt/blogd/src/config/docker_wrap.sh stop_byname %N
+
+[Install]
+WantedBy=multi-user.target

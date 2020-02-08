@@ -1,6 +1,8 @@
 {% load static %}
 {% load cache %}
 {% load compress %}
+{% load blog_tags %}
+
 <!DOCTYPE html>
 <!--[if IE 7]>
 <html class="ie ie7" lang="ru-RU" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
@@ -11,112 +13,53 @@
 <!--[if !(IE 7) & !(IE 8)]><!-->
 <html lang="ru-RU" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
 <!--<![endif]-->
-<head>
-    {% include 'share_layout/analyticscode.html' %}
-    <link href="{% static 'favicon.ico' %}" rel="icon" type="image/x-icon" />
-    <meta charset="UTF-8"/>
-    <meta name="yandex-verification" content="48da2b58c4a727c9" />
-    <meta name="viewport" content="width=device-width"/>
-    {% block header %}
-    {% endblock %}
-    <link rel="profile" href="http://gmpg.org/xfn/11"/>
+  <head>
+      {% include 'head.html' %}
 
-    <!--[if lt IE 9]>
-    <script src="{% static 'blog/js/html5.js' %}" type="text/javascript"></script>
-    <![endif]-->
+      {% block header %}
+      {% endblock %}
+  </head>
+  {% if weather|rain %}
+    <link rel="stylesheet" href="{% static 'blog/css/rain.css' %}">
+    <body class="home blog custom-font-enabled back-row-toggle splat-toggle">
+    <div class="rain front-row" style="z-index: -1;"></div>
+    <div class="rain back-row" style="z-index: -1;"></div>
+    <script type="text/javascript" src="{% static 'blog/js/rain.js' %}"></script>
+  {% elif weather|snow %}
+    <link rel="stylesheet" href="{% static 'blog/css/snow.css' %}">
+    <body class="home blog custom-font-enabled back-row-toggle splat-toggle">
+    <script type="text/javascript" src="{% static 'blog/js/snow.js' %}"></script>
+  {% else %}
+    <body class="home blog custom-font-enabled">
+  {% endif %}
 
-    <link rel="alternate" type="application/rss+xml" title="{{ SITE_NAME }} &raquo; Feed"
-          href="/feed"/>
+    {% cache 36000 nav %}
+      {% include 'share_layout/nav.html' %}
+    {% endcache %}
 
-    {% compress css %}
-        <link href="{% static 'assets/css/bootstrap.min.css' %}" rel="stylesheet">
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-        <script src="https://getbootstrap.com/docs/4.0/dist/js/bootstrap.min.js"></script>
-
-        <link rel='stylesheet' id='twentytwelve-fonts-css' href="{% static 'blog/fonts/fonts.css' %}" type='text/css' media='all'/>
-        <link rel='stylesheet' id='twentytwelve-style-css' href="{% static 'blog/css/style.css' %}" type='text/css' media='all'/>
-        <link href="{% static 'blog/css/oauth_style.css' %}" rel="stylesheet">
-        {% comment %}<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>{% endcomment %}
-        <!--[if lt IE 9]>
-        <link rel='stylesheet' id='twentytwelve-ie-css'  href='{% static 'blog/css/ie.css' %}' type='text/css' media='all' />
-        <![endif]-->
-        <link rel="stylesheet" href="{% static 'pygments/default.css' %}"/>
-        <link rel="stylesheet" href="{% static 'blog/css/nprogress.css' %}">
-        {% block compress_css %}
-        {% endblock %}
-    {% endcompress %}
-</head>
-<body class="home blog custom-font-enabled">
-<div id="page" class="hfeed site">
-    <header id="masthead" class="site-header" role="banner">
-            <!-- <div class="wrap"> -->
-      <hgroup style="display: inline; padding-bottom: 30px;">
-
-        <a href="/" title="mtuktarov empire" rel="home" style="text-decoration: none;">
-          <p style="height: 60px;"></p>
-          <!-- <h1 class="site__title mega" >mtuktarov empire</h1> -->
-        </a>
-      </hgroup>
-
-        {% cache 36000 nav %}
-          {% include 'share_layout/nav.html' %}
-        {% endcache %}
-
-    </header><!-- #masthead -->
-    <div id="main" class="wrapper">
-
-{% if messages %}
-<ul class="messages">
-    {% for msg in messages %}
-    <li>
-        <div class="alert alert-{{msg.level_tag}} alert-dismissible show" style="float: unset;" role="alert">
-          <style>
-            @media screen and (min-width: 320px) {
-                  .alert-dismissible{
-                      width: 100%;
-                  }
-              }
-
-              @media screen and (min-width: 600px) {
-                  .alert-dismissible{
-                      width: 67%;
-                  }
-              }
-          </style>
-        {{msg.message}}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        </div>
-    </li>
-    {% endfor %}
-</ul>
-{% endif %}
-
-    <!-- <p>{{ form.non_field_errors }}</p> -->
-
+    <div id="page" class="site row mx-auto mt-3 col-11 col-md-9 py-5">
+      {% include 'share_layout/messages.html' %}
+      <div id="primary" class="site-content site-content col-md-8 py-0 pl-2">
         {% block content %}
         {% endblock %}
+      </div>
+      <div id="secondary" class="widget-area col-md-4 pl-0 px-2" role="complementary">
+      {% block sidebar %}
+      {% endblock %}
+      </div><!-- #secondary -->
+    </div><!-- #page -->
 
-        {% block sidebar %}
-        {% endblock %}
- </div><!-- #main .wrapper -->
     {% include 'share_layout/footer.html' %}
-</div><!-- #page -->
+  </body>
 
-</body>
-
-
-<footer>
+  <div> <!-- Optional JavaScript -->
     {% compress js %}
-        <script type="text/javascript" src="{% static 'blog/js/jquery-3.1.1.js' %}"></script>
-        <script type="text/javascript" src="{% static 'blog/js/nprogress.js' %}"></script>
-        <script src="{% static 'blog/js/blog.js' %}" type="application/javascript"></script>
-        <script src="{% static 'blog/js/navigation.js' %}" type="application/javascript"></script>
-        {% block compress_js %}
-        {% endblock %}
+      <script type="text/javascript" src="{% static 'blog/js/set_active_elements.js' %}"></script>
+      <script type="text/javascript" src="{% static 'blog/js/nprogress.js' %}"></script>
+      <script type="application/javascript" src="{% static 'blog/js/blog.js' %}" ></script>
+      <script type="application/javascript" src="{% static 'blog/js/navigation.js' %}"></script>
+    {% block compress_js %}
+      {% endblock %}
     {% endcompress %}
-    {% block footer %}
-    {% endblock %}
-</footer>
+  </div> <!-- Optional JavaScript -->
 </html>

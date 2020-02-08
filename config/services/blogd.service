@@ -1,7 +1,6 @@
 [Unit]
-Description=blogd
-After=postgresql.service
-Wants=postgresql.service
+Description=blogd service
+After=postgresql.service 
 Requires=docker.socket
 
 [Service]
@@ -11,27 +10,15 @@ TimeoutStartSec=300
 TimeoutStopSec=15
 StandardOutput=journal
 StandardError=journal
-ExecStartPre=/opt/blogd/config/docker_wrap.sh rm_byname %n
 ExecStartPre=-/usr/bin/docker pull mtuktarov/blogd:latest
-ExecStart=/usr/bin/docker run --rm --name %n \
-    -v /opt/blogd_media:/opt/blogd_media \
-    -v /opt/blogd_sockets:/opt/blogd_sockets \
-    -v /opt/blogd_static:/opt/blogd_static \
-    -v /opt/local_settings.py:/opt/local_settings.py \
-    -e ADD_SUPERUSER=true \
-    -e PGNAME=mtuktarov \
-    -e PGUSER=mtuktarov \
-    -e PGPASSWORD=mtuktarov \
-    -e PGHOST=172.17.0.1 \
-    -e CONFIGURE_GROUPS=true \
-    -e BRANCH=master \
-    -e RENAME_SITE=true \
-    -e WAIT_FOR_POSTGRES=true \
+ExecStart=/usr/bin/docker run --rm --name %N \
+    --env-file /opt/blogd/config/env \
+    --volumes-from blogd_data \
     -p 8000:8000 \
     mtuktarov/blogd:latest
 
-ExecStartPost=/opt/blogd/config/docker_wrap.sh set_time_byname %n
-ExecStop=/opt/blogd/config/docker_wrap.sh stop_byname %n
+ExecStartPost=/opt/blogd/src/config/docker_wrap.sh set_time_byname %N
+ExecStop=/opt/blogd/src/config/docker_wrap.sh stop_byname %N
 
 [Install]
 WantedBy=multi-user.target

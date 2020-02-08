@@ -5,8 +5,6 @@
     <title>{{ article.title }} | {{ SITE_DESCRIPTION }}</title>
     <meta property="og:type" content="article"/>
     <meta property="og:title" content="{{ article.title }}"/>
-
-
     <meta property="og:description" content="{{ article.body|custom_markdown|striptags|truncatewords:1 }}"/>
     <meta property="og:url"
           content="{{ article.get_full_url }}"/>
@@ -21,14 +19,13 @@
 
     <meta name="description" content="{{ article.body|custom_markdown|striptags|truncatewords:1 }}"/>
     {% if article.tags %}
-        <meta name="keywords" content="{{ article.tags.all|join:"," }}"/>
+        <meta name="keywords" content={{ article.tags.all|join:',' }}"/>
     {% else %}
         <meta name="keywords" content="{{ SITE_KEYWORDS }}"/>
     {% endif %}
 
 {% endblock %}
 {% block content %}
-    <div id="primary" class="site-content">
         <div id="content" role="main">
             {% load_article_detail article False user %}
 
@@ -58,7 +55,7 @@
             {% else %}
                 <div class="comments-area">
                     <h3 class="comment-meta">Вы не авторизованы, пожалуйста, <a
-                            href="{% url "account:login" %}?next={{ request.get_full_path }}" rel="nofollow">войдите</a> и пишите комментариев сколько хотите
+                            href="{% url 'account:login' %}?next={{ request.get_full_path }}" rel="nofollow">войдите</a> и пишите комментариев сколько хотите
                     </h3>
 
                     {% load oauth_tags %}
@@ -67,14 +64,13 @@
                 </div>
             {% endif %}
         {% endif %}
-    </div><!-- #primary -->
 
 {% endblock %}
 
 {% block sidebar %}
     {% with request.user.username|add:'p' as cachekey %}
         {% cache 36000 sidebar cachekey %}
-            {% load_sidebar user 'p' %}
+            {% load_sidebar user 'p' request %}
         {% endcache %}
     {% endwith %}
 {% endblock %}

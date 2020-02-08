@@ -54,6 +54,9 @@ draft_article.short_description = 'Сделать черновик из выбр
 close_article_commentstatus.short_description = 'Убрать комментарии статьи'
 open_article_commentstatus.short_description = 'Включить комментарии статьи'
 
+from django import template
+register = template.Library()
+
 
 class ArticlelAdmin(admin.ModelAdmin):
     list_per_page = 20
