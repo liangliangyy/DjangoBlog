@@ -267,7 +267,7 @@ class BlogSettings(models.Model):
     google_adsense_codes = models.TextField('Рекламный контент', max_length=2000, null=True, blank=True, default='')
     open_site_comment = models.BooleanField('Включить комментарии', default=True)
     analyticscode = models.TextField("Код статистики сайта", max_length=1000, null=True, blank=True, default='')
-    resource_path = models.CharField("Каталог со статикой", max_length=300, null=False, default='/var/www/resource/')
+    resource_path = models.CharField("Каталог со статикой", max_length=300, null=False, default='/media/')
     show_views_bar = models.BooleanField('Показывать панель ПРОСМОТРЫ', default=False)
     show_category_bar = models.BooleanField('Показывать панель КАТЕГОРИИ', default=False)
     show_search_bar = models.BooleanField('Показывать панель ПОИСКА', default=False)

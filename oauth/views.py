@@ -19,8 +19,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseForbidden
 from .oauthmanager import get_manager_by_type, OAuthAccessTokenException
 from DjangoBlog.blog_signals import oauth_user_login_signal
-
 import logging
+from django.contrib import messages
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +34,7 @@ def get_redirecturl(request):
     if p.netloc:
         site = get_current_site().domain
         if not p.netloc.replace('www.', '') == site.replace('www.', ''):
-            logger.info('非法url:' + nexturl)
+            logger.info('Illegal url:' + nexturl)
             return "/"
     return nexturl
 
@@ -52,15 +52,18 @@ def oauthlogin(request):
 
 
 def authorize(request):
+    logger.info("1authorize: {}".format(request))
     type = request.GET.get('type', None)
+
     if not type:
         return HttpResponseRedirect('/')
     manager = get_manager_by_type(type)
     if not manager:
         return HttpResponseRedirect('/')
     code = request.GET.get('code', None)
+
     try:
-        rsp = manager.get_access_token_by_code(code)
+        rsp, email = manager.get_access_token_by_code(code)
     except OAuthAccessTokenException as e:
         logger.warning("OAuthAccessTokenException:" + str(e))
         return HttpResponseRedirect('/')
@@ -74,7 +77,7 @@ def authorize(request):
     if user:
         if not user.nikename or not user.nikename.strip():
             import datetime
-            user.nikename = "djangoblog" + datetime.datetime.now().strftime('%y%m%d%I%M%S')
+            user.nikename = "mtuktarovblog" + datetime.datetime.now().strftime('%y%m%d%I%M%S')
         try:
             temp = OAuthUser.objects.get(type=type, openid=user.openid)
             temp.picture = user.picture
@@ -100,10 +103,11 @@ def authorize(request):
                         author.username = user.nikename
                         author.source = 'authorize'
                         author.save()
+                        logger.info("user account saved. username: {}, email: {}".format(author.username, author.email))
 
                 user.author = author
                 user.save()
-
+                logger.info("ouath user saved. {}".format(user.get_info()))
                 oauth_user_login_signal.send(sender=authorize.__class__, id=user.id)
                 login(request, author)
                 return HttpResponseRedirect(nexturl)
@@ -243,3 +247,49 @@ def bindsuccess(request, oauthid):
         'title': title,
         'content': content
     })
+
+#
+# from django.shortcuts import render
+# from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
+import requests
+
+from . import vk_utility
+#
+# def index(request):
+#     if 'testflask' not in request.COOKIES:  # проверяем браузер пользователя на наличие куки от нашего приложения
+#         return render(request,
+#                       'vk_app/homePage.html', )  # если куки не обнаружено значит пользователь зашел к нам в первый раз и направляем его на кнопку авторизации
+#     else:
+#         return HttpResponseRedirect(
+#             "http://i-empire.ru/vk_auth/login/")  # если куки обнаружено - сразу перенаправляем пользователя на приложение авторизации
+#
+#
+# #
+# # def vk_login(request):
+# #     try:
+# #         # https: // oauth.vk.com / authorize?client_id = 1 & display = page & redirect_uri = http: // example.com / callback & scope = friends & response_type = code & v = 5.103
+# #         link = "https://oauth.vk.com/authorize?client_id=%s&display=page&redirect_uri=http://i-empire.ru/vk_auth/final/&scope=friends&response_type=code&v=5.103" % settings.VK_APP_ID
+# #         r = requests.get(url=link)
+# #         return HttpResponseRedirect(link)
+# #             # "https://oauth.vk.com/authorize?client_id=%s&scope=friends,offline&redirect_uri=http://i-empire.ru/vk_auth/final/&response_type=code" % settings.VK_APP_ID)
+# #     except Exception as e:
+# #         response = "<h1 style='color:blue'>Сервер ВКонтакте временно недоступен. Повторите попытку позже. </h1>"
+# #         return HttpResponse(response)
+# #
+# #
+# # def vk_final(request):
+# #
+# #     current_url = request.build_absolute_uri()  # записываем в переменную текущую ссылку
+# #     logger.info(current_url)
+# #     code = request.GET["code"]   # получаем код из ссылки
+# #     logger.info(code)
+# #     report = vk_utility.auth(
+# #         code)  # функция vk_utility.auth на входе получает код. при помощи кода получает доступ к списку друзей пользователя
+# #     # и возвращает список из 5 друзей пользователя
+# #     if 'testflask' not in request.COOKIES:  # проверяем бразуер пользователя на наличие куки из данного приложения
+# #         response = HttpResponse(report)
+# #         response.set_cookie('testflask', 'VK_auth',
+# #                             max_age=60 * 60 * 24 * 365 * 2)  # если куки не обнаружено - записываем куки в браузер
+# #     else:
+# #         response = HttpResponse(report)
+# #     return response

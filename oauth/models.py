@@ -23,6 +23,10 @@ class OAuthUser(models.Model):
     def __str__(self):
         return self.nikename
 
+    def get_info(self):
+        return "author: %s, openid: %s, nikename: %s, token: %s, picture: %s, type: %s, email: %s, matedata: %s" % (self.author, self.openid,
+            self.nikename, self.token, self.picture, self.type, self.email, self.matedata)
+
     class Meta:
         verbose_name = 'oauth user'
         verbose_name_plural = verbose_name
@@ -34,6 +38,7 @@ class OAuthConfig(models.Model):
         ('weibo', 'Weibo'),
         ('google', 'Google'),
         ('github', 'GitHub'),
+        ('vk', 'VK'),
         ('facebook', 'FaceBook'),
         ('qq', 'QQ'),
     )

@@ -273,6 +273,78 @@ class GitHubOauthManager(BaseOauthManager):
             logger.error('github oauth error.rsp:' + rsp)
             return None
 
+class VKOauthManager(BaseOauthManager):
+    AUTH_URL =  'https://oauth.vk.com/authorize'
+    TOKEN_URL = 'https://oauth.vk.com/access_token'
+    API_URL = 'https://api.vk.com/method/users.get'
+    ICON_NAME = 'vk'
+
+    def __init__(self, access_token=None, openid=None):
+        config = self.get_config()
+        self.email = None
+        self.client_id = config.appkey if config else ''
+        self.client_secret = config.appsecret if config else ''
+        self.callback_url = config.callback_url if config else ''
+        super(VKOauthManager, self).__init__(access_token=access_token, openid=openid)
+
+    def get_authorization_url(self, nexturl='/'):
+        params = {
+            'client_id': self.client_id,
+            'response_type': 'code',
+            'redirect_uri': self.callback_url,
+            'scope': 'email,public_profile',
+            'display': 'page',
+            'v': '5.103',
+        }
+        url = self.AUTH_URL + "?" + urllib.parse.urlencode(params)
+        return url
+
+    def get_access_token_by_code(self, code):
+        params = {
+            'client_id': self.client_id,
+            'client_secret': self.client_secret,
+            'code': code,
+            'redirect_uri': self.callback_url
+        }
+        rsp = self.do_post(self.TOKEN_URL, params)
+
+        obj = json.loads(rsp)
+        if 'access_token' in obj:
+            token = str(obj['access_token'])
+            self.access_token = token
+            self.openid = str(obj['user_id'])
+            self.email = str(obj['email'])
+            return self.access_token, self.email
+        else:
+            raise OAuthAccessTokenException(rsp)
+
+    def get_oauth_userinfo(self):
+        params = {
+            'user_ids': self.openid,
+            'v': '5.103',
+            'access_token': self.access_token,
+            'fields': 'photo_max,nickname'
+        }
+        try:
+            rsp = self.do_get(self.API_URL, params)
+            datas = json.loads(rsp)['response'][0]
+            user = OAuthUser()
+            if 'nickname' in datas and datas['nickname']:
+                user.nikename = datas['nickname']
+            else:
+                user.nikename = '{}.{}'.format(datas['first_name'], datas['last_name'])
+
+            user.type = 'vk'
+            user.token = self.access_token
+            user.matedata = rsp
+            user.email = self.email
+            user.openid = str(datas['id'])
+            if 'photo_max' in datas and datas['photo_max']:
+                user.picture = str(datas['photo_max'])
+            return user
+        except Exception as e:
+            logger.error(e)
+            return None
 
 class FaceBookOauthManager(BaseOauthManager):
     AUTH_URL = 'https://www.facebook.com/v2.10/dialog/oauth'
@@ -403,7 +475,6 @@ class QQOauthManager(BaseOauthManager):
                 'openid': self.openid
             }
             rsp = self.do_get(self.API_URL, params)
-            logger.info(rsp)
             obj = json.loads(rsp)
             user = OAuthUser()
             user.nikename = obj['nickname']

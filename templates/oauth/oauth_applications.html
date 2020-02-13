@@ -1,12 +1,9 @@
 <div class="widget-login">
     {% if apps %}
-        <small>
-            Быстрый вход:
-        </small>
-        {% for icon,url in apps %}
-            <a href="{{ url }}" rel="nofollow">
-                <span class="icon-sn-{{ icon }}"></span>
-            </a>
+        <div class="social-buttons">
+            {% for icon,url in apps %}
+                <a href="{{ url }}" class="btn btn-{{ icon }}"><i class="fa fa-{{ icon }}"></i> {{ icon }}</a>
         {% endfor %}
+        </div>
     {% endif %}
 </div>

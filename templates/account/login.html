@@ -31,16 +31,11 @@
                         {{ field.errors }}
                     </div>
                 {% endfor %}
-                <div class="checkbox mb-3">
-                  {% comment %}<a class="pull-right">Помочь?</a>{% endcomment %}
-                  <label>
-                    <input type="checkbox" value="remember-me"> Запомнить меня
-                  </label>
-                </div>
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
                 <input type="hidden" name="next" value="{{ redirect_to }}">
                 {% load oauth_tags %}
                 {% load_oauth_applications request%}
+
                 <div class="form-label-group">
                 <p class="mt-5 mb-3 text-muted text-center">
                     <a href="{% url 'account:register' %}" class="mx-3">Регистрация</a>
@@ -49,5 +44,4 @@
                 </p>
               </div>
             </form>
-
 {% endblock %}

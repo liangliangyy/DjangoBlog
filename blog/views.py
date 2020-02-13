@@ -95,6 +95,7 @@ class IndexView(ArticleListView):
     # Friendly Link Type
     link_type = 'i'
 
+
     def get_queryset_data(self):
         article_list = Article.objects.filter(type='a', status='p')
         return article_list

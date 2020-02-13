@@ -69,3 +69,43 @@ $(document).on('webkitAnimationEnd', function() {
 		rocket.removeClass('move');
 	}, 400);
 });
+
+$( ".form-signin a.btn-block" ).click(function( event ) {
+    event.preventDefault();
+    username = document.getElementById("id_username").value;
+    password = document.getElementById("id_password").value;
+    csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+    $("#errorlogin").html("");
+    $.ajax({
+        type:"POST",
+        url:'/login/',
+        data:{
+            'csrfmiddlewaretoken': csrfmiddlewaretoken,
+            'username': username,
+            'password': password,
+        },
+        dataType: 'json',
+        success : function(data){
+            console.log(data);
+            if(data['message'] == "Success"){
+                location.reload();
+            }
+            else if(data['message'] == "Failure"){
+
+                var html_data = `
+                <div class="row">
+                    <div class="col-sm-12 col-sm-offset-0">
+                      <div class="alert alert-danger py-2 mb-3" role="alert">
+                        <p class="text-center mb-0">${data['errors']}</p>
+                      </div>
+                    </div>
+                  </div>`
+                $(".sign_up_messages").html(html_data);
+            }
+            else{
+                $("#errorlogin").html("The E-mail and Password do not match.");
+            }
+        }
+    });
+    console.log("LOL");
+});

@@ -11,8 +11,10 @@ class LoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super(LoginForm, self).__init__(*args, **kwargs)
         self.fields['username'].widget = widgets.TextInput(attrs={'placeholder': "логин или email", "class": "form-control", "autofocus": ""})
+        self.fields['username'].label = "логин или email"
         self.fields['password'].widget = widgets.PasswordInput(
             attrs={'placeholder': "пароль", "class": "form-control", "autofocus": ""})
+        self.fields['password'].label = "пароль"
 
 
 class RegisterForm(UserCreationForm):
@@ -20,11 +22,15 @@ class RegisterForm(UserCreationForm):
         super(RegisterForm, self).__init__(*args, **kwargs)
 
         self.fields['username'].widget = widgets.TextInput(attrs={'placeholder': "логин", "class": "form-control"})
+        self.fields['username'].label = "логин"
         self.fields['email'].widget = widgets.EmailInput(attrs={'placeholder': "email", "class": "form-control"})
+        self.fields['email'].label = "email"
         self.fields['password1'].widget = widgets.PasswordInput(
             attrs={'placeholder': "пароль", "class": "form-control"})
+        self.fields['password1'].label = "пароль"
         self.fields['password2'].widget = widgets.PasswordInput(
             attrs={'placeholder': "пароль еще раз", "class": "form-control"})
+        self.fields['password2'].label = "пароль еще раз"
 
     def clean_email(self):
         email = self.cleaned_data['email']

@@ -1,4 +1,8 @@
 {% load blog_tags %}
+{% load static %}
+
+
+
 <header class="navbar navbar-expand navbar-dark bg-dark flex-column flex-md-row bd-navbar">
   <a class="navbar-brand p-2 mx-5" href="/">
     {% include 'logo.html' %}
@@ -31,20 +35,64 @@
       {% endif %}
     </ul>
   </div>
-  <ul class="navbar-nav ml-md-auto">
+  <ul class="navbar-nav ml-md-auto text-right ml-md-auto col-12 col-md-3">
     {% if user.is_authenticated %}
-      <li class="nav-item dropdown mx-5">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="true">{{ user.username }}</a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" href="/admin/" rel="nofollow">Админка</a>
-          <a class="dropdown-item" href="{% url 'blog:refresh' %}">Очистить кеш</a>
-          <a class="dropdown-item" href="{% url 'account:logout' %}">Выйти</a>
-        </div>
-      </li>
+          <li class="nav-item dropdown mx-5">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="true">{{ user.username }}</a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                {% if user.is_superuser %}
+                    <a class="dropdown-item" href="/author/{{ user.username }}.html">Мои статьи</a>
+                    <a class="dropdown-item" href="/admin/" rel="nofollow">Админка</a>
+                    <a class="dropdown-item" href="{% url 'blog:refresh' %}">Очистить кеш</a>
+                {% endif %}
+                <a class="dropdown-item" href="{% url 'account:logout' %}">Выйти</a>
+            </div>
+          </li>
     {% else %}
-      <li class="nav-item mr-md-5">
-        <a class="nav-link btn btn-nav-login d-lg-inline-block px-5" href="{% url 'accounts:login' %}">Войти</a>
-      </li>
+    {% load oauth_tags %}
+
+{#      <li class="nav-item mr-md-5">#}
+{#        <a class="nav-link btn btn-nav-login d-lg-inline-block px-5" href="{% url 'accounts:login' %}">Войти</a>#}
+{#      </li>#}
+
+        <li class="nav-item  mr-md-5 dropdown col-12">
+          <a href="#" class="nav-link btn btn-nav-login d-lg-inline-block px-5" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="true"><b>Войти</b> <span class="caret"></span></a>
+			<ul id="login-dp" class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+				<li>
+					 <div class="row">
+							<div class="col-md-12 login-form-wrapper">
+                               <form class="form-signin" action="{% url 'account:login' %}" method="post">
+                                  {% csrf_token %}
+                                    <div class="row sign_up_messages">
+                                    </div>
+                                    {% comment %}<label for="inputEmail" class="sr-only">Электронная почта</label>
+                                      <input type="email" id="inputEmail" class="form-control my-3" placeholder="Email" required autofocus>
+                                      <label for="inputPassword" class="sr-only">Пароль</label>
+                                      <input type="password" id="inputPassword" class="form-control my-3" placeholder="Password" required>{% endcomment %}
+                                    {% for field in login_form.visible_fields %}
+                                        <div class="form-label-group">
+                                           {{ field }}{{ field.label_tag }}
+                                            {{ field.errors }}
+                                        </div>
+                                    {% endfor %}
+                                    <a href="#" class="btn btn-lg btn-primary btn-block text-light" type="submit">Войти</a>
+                                    <input type="hidden" name="next" value="{{ redirect_to }}">
+                                    {% load oauth_tags %}
+                                    {% load_oauth_applications request%}
+
+                                    <div class="form-label-group">
+                                    <p class="mt-5 mb-3 text-muted text-center">
+                                        <a href="{% url 'account:register' %}" class="mx-3">Регистрация</a>
+                                        |
+                                        <a href="/" class="mx-3">На главную</a>
+                                    </p>
+                                  </div>
+                                </form>
+							</div>
+					 </div>
+				</li>
+			</ul>
+        </li>
     {% endif %}
   </ul>
 </header><!-- #site-navigation -->

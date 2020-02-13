@@ -11,10 +11,11 @@
     <meta name="robots" content="noindex">
     <link href="{% static 'favicon.ico' %}" rel="icon" type="image/x-icon" />
     <title>{{ SITE_NAME }} | {{ SITE_DESCRIPTION }}</title>
+    {% include 'share_layout/analyticscode.html' %}
     {% load compress %}
 
     {% compress css %}
-        <link href="{% static 'blog/css/oauth_style.css' %}" rel="stylesheet">
+
         <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
         <link href="{% static 'assets/css/ie10-viewport-bug-workaround.css' %}" rel="stylesheet">
         <!-- TODC Bootstrap core CSS -->
@@ -23,6 +24,11 @@
         <link href="{% static 'assets/css/bootstrap.min.css' %}" rel="stylesheet">
         <!-- Custom styles for this template -->
         <link href="{% static 'blog/css/floating-label.css' %}" rel="stylesheet">
+         <link href="{% static 'blog/css/oauth_style.css' %}" rel="stylesheet">
+
+        <link href="http://lipis.github.io/bootstrap-social/assets/css/font-awesome.css" rel="stylesheet">
+        <link href="http://lipis.github.io/bootstrap-social/bootstrap-social.css" rel="stylesheet">
+
     {% endcompress %}
         <!-- Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->

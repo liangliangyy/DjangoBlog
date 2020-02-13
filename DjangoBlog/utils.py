@@ -256,7 +256,7 @@ def save_user_avatar(url):
             logger.info('Save user avatar:' + basepath + savefilename)
             with open(basepath + savefilename, 'wb+') as file:
                 file.write(rsp.content)
-            return 'https://resource.mtuktarov.com/avatar/' + savefilename
+            return "media/avatar/" % savefilename
     except Exception as e:
         logger.error(e)
         return url

@@ -6,7 +6,8 @@ from django import template
 from django.conf import settings
 
 register = template.Library()
-
+import logging
+logger = logging.getLogger(__name__)
 
 @register.inclusion_tag('oauth/oauth_applications.html')
 def load_oauth_applications(request):

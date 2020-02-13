@@ -206,10 +206,10 @@ def load_pagination_info(page_obj, page_type, tag_name):
     if page_type == 'Автор':
         if page_obj.has_next():
             next_number = page_obj.next_page_number()
-            next_url = reverse('blog:author_detail_page', kwargs={'page': next_number, 'author_name': tag_name})
+            # next_url = reverse('blog:author_detail_page', kwargs={'page': next_number, 'author_name': tag_name})
         if page_obj.has_previous():
             previous_number = page_obj.previous_page_number()
-            previous_url = reverse('blog:author_detail_page', kwargs={'page': previous_number, 'author_name': tag_name})
+            # previous_url = reverse('blog:author_detail_page', kwargs={'page': previous_number, 'author_name': tag_name})
 
     if page_type == 'Категория':
         category = get_object_or_404(Category, name=tag_name)

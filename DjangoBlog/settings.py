@@ -78,7 +78,9 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'DjangoBlog.urls'
-
+VK_APP_ID='7315982'
+VK_SECURITY_KEY='fI3rzcHb9omHBTwhMDyA'
+VK_SERVICE_TOKEN='af7d6cb5af7d6cb5af7d6cb537af12cebbaaf7daf7d6cb5f13c9d3218ace1aad5e1d579'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -91,6 +93,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'blog.context_processors.seo_processor',
                 'django.template.context_processors.request',
+                'accounts.context_processors.login_form',
             ],
         },
     },
@@ -198,6 +201,14 @@ ADMINS = []
 # WX ADMIN password(Two times md5)
 WXADMIN = '995F03AC401D6CABABAEF756FC4D43C7'
 
+try:
+    parent_dir = os.path.dirname(SITE_ROOT)
+    sys.path.insert(0, os.path.join(parent_dir, 'config'))
+    from local import *
+    LOG_FILE_NAME='../log/djangoblog.log'
+except ImportError:
+    LOG_FILE_NAME = 'djangoblog.log'
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -222,7 +233,7 @@ LOGGING = {
         'log_file': {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': '../log/djangoblog.log',
+            'filename': LOG_FILE_NAME,
             'maxBytes': 16777216,  # 16 MB
             'formatter': 'verbose'
         },
@@ -331,10 +342,3 @@ EMAIL_HOST_PASSWORD = os.getenv('DJANGO_EMAIL_PASS', '')
 EMAIL_FILES = os.path.join(BASE_DIR, 'templates/email')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 SERVER_EMAIL = EMAIL_HOST_USER
-
-try:
-    parent_dir = os.path.dirname(SITE_ROOT)
-    sys.path.insert(0, os.path.join(parent_dir, 'config')) 
-    from local import * 
-except ImportError:
-    pass

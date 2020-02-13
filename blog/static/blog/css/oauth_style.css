@@ -231,6 +231,12 @@
     background: #405791;
 }
 
+span.icon-sn-vk {
+    background-image: url('../img/vk.svg');
+    background-position: center;
+    background-size: 50px;
+}
+
 .btn-sn-renren {
     background: #197bc8;
 }
@@ -302,4 +308,7 @@
 
 [class*=btn-sn-] [class*=icon-sn-] {
     background-color: transparent;
+}
+.btn-social li.fa{
+    font-size: 1em;
 }

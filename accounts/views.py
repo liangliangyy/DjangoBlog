@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.views.generic import FormView, RedirectView
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponseRedirect, HttpResponseForbidden
+from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponse
 from django.urls import reverse
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import REDIRECT_FIELD_NAME
@@ -20,6 +20,8 @@ from django.utils.http import is_safe_url
 from DjangoBlog.utils import send_email, get_md5, get_current_site, render_template
 from django.conf import settings
 from django.contrib import messages
+import json
+from django.http import JsonResponse
 logger = logging.getLogger(__name__)
 
 
@@ -99,6 +101,7 @@ class LoginView(FormView):
     success_url = '/'
     redirect_field_name = REDIRECT_FIELD_NAME
 
+
     @method_decorator(sensitive_post_parameters('password'))
     @method_decorator(csrf_protect)
     @method_decorator(never_cache)
@@ -113,14 +116,19 @@ class LoginView(FormView):
         return super(LoginView, self).get_context_data(**kwargs)
 
     def form_invalid(self, form):
-        for field, errors in form.errors.as_data().items():
-            for error in errors:
-                messages.add_message(self.request, messages.ERROR, ' '.join(error))
-        response = super().form_invalid(form)
+        form_errors = []
+        for field, error_list in form.errors.as_data().items():
+            form_errors = [error.message for error in error_list]
+
         if self.request.is_ajax():
-            return JsonResponse(form.errors, status=400)
-        else:
-            return response
+            logger.info("ajax failed login request")
+            # logger.info("\n".join(form_errors))
+            return JsonResponse({"message": "Failure", 'errors': "\n".join(form_errors)}, content_type="application/json")
+
+        for error in form_errors:
+            messages.add_message(self.request, messages.ERROR, ' '.join(error))
+        return super().form_invalid(form)
+
 
     def form_valid(self, form):
         form = CustomAuthForm(data=self.request.POST, request=self.request)
@@ -129,9 +137,13 @@ class LoginView(FormView):
             from DjangoBlog.utils import cache
             if cache and cache is not None:
                 cache.clear()
-            logger.info(self.redirect_field_name)
 
             auth.login(self.request, form.get_user())
+            if self.request.is_ajax():
+                logger.info("ajax succesfull login request")
+                return JsonResponse({"message": "Success"},
+                                    content_type="application/json")
+
             messages.success(self.request, 'Успешный вход')
             return super(LoginView, self).form_valid(form)
         else:
