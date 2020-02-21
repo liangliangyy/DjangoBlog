@@ -2,18 +2,18 @@ dist: xenial
 language: python
 sudo: required
 python:
-  - "3.5"
   - "3.6"
   - "3.7"
-  
+  - "3.8"
+
 services:
   - mysql
 env:
   global:
     - DJANGO_SETTINGS_MODULE="travis_test.travis_settings"
 branches:
-    only:
-        - master
+  only:
+    - master
 # command to install dependencies
 before_install:
   - sudo apt-get update
@@ -22,7 +22,7 @@ before_install:
   - sudo service mysql restart
 install:
   - pip install -r requirements.txt
-  - pip install python-coveralls 
+  - pip install python-coveralls
   - pip install coverage codecov
 before_script:
   - mysql -e 'CREATE DATABASE `djangoblog` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */;'
@@ -32,7 +32,7 @@ before_script:
   - python manage.py compress --force
 # command to run tests
 script:
-    - coverage run manage.py test
+  - coverage run manage.py test
 after_success:
-    - coveralls
-    - codecov
+  - coveralls
+  - codecov
