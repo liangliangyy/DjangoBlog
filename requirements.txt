@@ -55,5 +55,5 @@ urllib3==1.25.8
 webencodings==0.5.1
 WeRoBot==1.10.1
 Whoosh==2.7.4
-wrapt==1.12.0
+wrapt==1.11.2
 xmltodict==0.12.0
