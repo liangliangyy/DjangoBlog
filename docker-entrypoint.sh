@@ -6,7 +6,6 @@ SOCKFILE=/tmp/gunicorn.sock
 # shellcheck disable=SC2112
 function init() {
     echo "init ...";
-    python manage.py makemigrations
     python manage.py migrate
     python manage.py collectstatic --no-input
     python manage.py compress --force
