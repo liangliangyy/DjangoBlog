@@ -21,6 +21,8 @@
 - 集成了微信公众号功能，现在可以使用微信公众号来管理你的vps了。
 
 ## 安装
+使用Docker部署请移步[快速部署DjangoBlog](https://github.com/kentio/ondjblog)
+
 mysql客户端从`pymysql`修改成了`mysqlclient`，具体请参考 [pypi](https://pypi.org/project/mysqlclient/) 查看安装前的准备。
 
 使用pip安装： `pip install -Ur requirements.txt`
