@@ -35,6 +35,7 @@ SITE_ROOT = os.path.dirname(os.path.abspath(__file__))
 SITE_ROOT = os.path.abspath(os.path.join(SITE_ROOT, '../'))
 
 INSTALLED_APPS = [
+    'simpleui',
     # 'django.contrib.admin',
     'django.contrib.admin.apps.SimpleAdminConfig',
     'django.contrib.auth',
@@ -94,18 +95,23 @@ WSGI_APPLICATION = 'DjangoBlog.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'djangoblog',
-        'USER': os.environ.get('DJANGO_MYSQL_USER'),
-        'PASSWORD': os.environ.get('DJANGO_MYSQL_PASSWORD'),
-        'HOST': os.environ.get('DJANGO_MYSQL_HOST'),
-        'PORT': 3306,
-        'OPTIONS': {'charset': 'utf8mb4'},
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'djangoblog',
+#         'USER': os.environ.get('DJANGO_MYSQL_USER'),
+#         'PASSWORD': os.environ.get('DJANGO_MYSQL_PASSWORD'),
+#         'HOST': os.environ.get('DJANGO_MYSQL_HOST'),
+#         'PORT': 3306,
+#         'OPTIONS': {'charset': 'utf8mb4'},
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
