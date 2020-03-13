@@ -9,7 +9,7 @@ cffi==1.14.0
 chardet==3.0.4
 coverage==5.0.3
 cryptography==2.8
-Django==3.0.3
+Django==3.0.4
 django-appconf==1.0.3
 django-autoslug==1.9.6
 django-compressor==2.4
