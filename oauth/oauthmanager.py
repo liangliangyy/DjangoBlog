@@ -65,13 +65,13 @@ class BaseOauthManager(metaclass=ABCMeta):
     def get_oauth_userinfo(self):
         pass
 
-    def do_get(self, url, params):
-        rsp = requests.get(url=url, params=params)
+    def do_get(self, url, params, headers=None):
+        rsp = requests.get(url=url, params=params, headers=headers)
         logger.info(rsp.text)
         return rsp.text
 
-    def do_post(self, url, params):
-        rsp = requests.post(url, params)
+    def do_post(self, url, params, headers=None):
+        rsp = requests.post(url, params, headers=headers)
         logger.info(rsp.text)
         return rsp.text
 
@@ -263,11 +263,9 @@ class GitHubOauthManager(BaseOauthManager):
 
     def get_oauth_userinfo(self):
 
-        params = {
-            'access_token': self.access_token
-        }
-        rsp = self.do_get(self.API_URL, params)
-
+        rsp = self.do_get(self.API_URL, params={}, headers={
+            "Authorization": "token " + self.access_token
+        })
         try:
             datas = json.loads(rsp)
             user = OAuthUser()
@@ -279,7 +277,6 @@ class GitHubOauthManager(BaseOauthManager):
             user.matedata = rsp
             if 'email' in datas and datas['email']:
                 user.email = datas['email']
-
             return user
         except Exception as e:
             logger.error(e)
