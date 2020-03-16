@@ -63,6 +63,8 @@ target/
 .idea
 .iml
 
+# virtualenv
+venv/
 
 migrations/
 !migrations/__init__.py
