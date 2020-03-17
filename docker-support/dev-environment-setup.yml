@@ -1,0 +1,21 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: djangoblog_123
+      MYSQL_DATABASE: djangoblog
+    volumes:
+      - mysql:/var/lib/mysql
+    ports:
+      - '3306:3306'
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+  memcached:
+    image: memcached:1.6-alpine
+    restart: always
+    ports:
+      - '11211:11211'
+    command: memcached -m 64
+volumes:
+  mysql: ~

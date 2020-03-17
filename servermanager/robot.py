@@ -26,7 +26,7 @@ from django.conf import settings
 import jsonpickle
 from servermanager.models import commands
 
-robot = WeRoBot(token='lylinux', enable_session=True)
+robot = WeRoBot(token=os.environ.get('DJANGO_WEROBOT_TOKEN') or 'lylinux', enable_session=True)
 memstorage = MemcacheStorage()
 if memstorage.is_available:
     robot.config['SESSION_STORAGE'] = memstorage
