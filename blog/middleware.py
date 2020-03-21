@@ -14,9 +14,12 @@
 """
 import datetime
 import time
+import logging
 from ipware.ip import get_real_ip
 from DjangoBlog.utils import cache
 from blog.documents import ELASTICSEARCH_ENABLED, ElaspedTimeDocumentManager
+
+logger = logging.getLogger(__name__)
 
 
 class OnlineMiddleware(object):
@@ -42,5 +45,5 @@ class OnlineMiddleware(object):
                                                       type='blog', useragent=http_user_agent)
                 response.content = response.content.replace(b'<!!LOAD_TIMES!!>', str.encode(str(cast_time)[:5]))
             except Exception as e:
-                print("Error OnlineMiddleware: %s" % e)
+                logger.error("Error OnlineMiddleware: %s" % e)
         return response
