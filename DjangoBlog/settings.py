@@ -291,3 +291,4 @@ COMPRESS_JS_FILTERS = [
 
 MEDIA_ROOT = os.path.join(SITE_ROOT, 'uploads')
 MEDIA_URL = '/media/'
+X_FRAME_OPTIONS = 'SAMEORIGIN'
