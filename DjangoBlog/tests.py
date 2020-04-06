@@ -5,7 +5,7 @@
 """
 @version: ??
 @author: liangliangyy
-@license: MIT Licence 
+@license: MIT Licence
 @contact: liangliangyy@gmail.com
 @site: https://www.lylinux.net/
 @software: PyCharm
@@ -30,17 +30,17 @@ class DjangoBlogTest(TestCase):
         md5 = get_md5('test')
         self.assertIsNotNone(md5)
         c = CommonMarkdown.get_markdown('''
-        # Title1  
-        
+        # Title1
+
         ```python
         import os
-        ```  
-        
-        [url](https://www.lylinux.net/)  
-          
-        [ddd](http://www.baidu.com)  
-        
-        
+        ```
+
+        [url](https://www.lylinux.net/)
+
+        [ddd](http://www.baidu.com)
+
+
         ''')
         self.assertIsNotNone(c)
         d = {

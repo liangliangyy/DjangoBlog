@@ -104,7 +104,8 @@ def authorize(request):
                 user.author = author
                 user.save()
 
-                oauth_user_login_signal.send(sender=authorize.__class__, id=user.id)
+                oauth_user_login_signal.send(
+                    sender=authorize.__class__, id=user.id)
                 login(request, author)
                 return HttpResponseRedirect(nexturl)
         else:
@@ -121,7 +122,10 @@ def authorize(request):
 def emailconfirm(request, id, sign):
     if not sign:
         return HttpResponseForbidden()
-    if not get_md5(settings.SECRET_KEY + str(id) + settings.SECRET_KEY).upper() == sign.upper():
+    if not get_md5(
+            settings.SECRET_KEY +
+            str(id) +
+            settings.SECRET_KEY).upper() == sign.upper():
         return HttpResponseForbidden()
     oauthuser = get_object_or_404(OAuthUser, pk=id)
     with transaction.atomic():
@@ -132,12 +136,14 @@ def emailconfirm(request, id, sign):
             author = result[0]
             if result[1]:
                 author.source = 'emailconfirm'
-                author.username = oauthuser.nikename.strip() if oauthuser.nikename.strip() else "djangoblog" + datetime.datetime.now().strftime(
-                    '%y%m%d%I%M%S')
+                author.username = oauthuser.nikename.strip() if oauthuser.nikename.strip(
+                ) else "djangoblog" + datetime.datetime.now().strftime('%y%m%d%I%M%S')
                 author.save()
         oauthuser.author = author
         oauthuser.save()
-    oauth_user_login_signal.send(sender=emailconfirm.__class__, id=oauthuser.id)
+    oauth_user_login_signal.send(
+        sender=emailconfirm.__class__,
+        id=oauthuser.id)
     login(request, author)
 
     site = get_current_site().domain
@@ -193,7 +199,8 @@ class RequireEmailView(FormView):
         oauthuser = get_object_or_404(OAuthUser, pk=oauthid)
         oauthuser.email = email
         oauthuser.save()
-        sign = get_md5(settings.SECRET_KEY + str(oauthuser.id) + settings.SECRET_KEY)
+        sign = get_md5(settings.SECRET_KEY +
+                       str(oauthuser.id) + settings.SECRET_KEY)
         site = get_current_site().domain
         if settings.DEBUG:
             site = '127.0.0.1:8000'
@@ -229,7 +236,8 @@ def bindsuccess(request, oauthid):
         content = "恭喜您，还差一步就绑定成功了，请登录您的邮箱查看邮件完成绑定，谢谢。"
     else:
         title = '绑定成功'
-        content = "恭喜您绑定成功，您以后可以使用{type}来直接免密码登录本站啦，感谢您对本站对关注。".format(type=oauthuser.type)
+        content = "恭喜您绑定成功，您以后可以使用{type}来直接免密码登录本站啦，感谢您对本站对关注。".format(
+            type=oauthuser.type)
     return render(request, 'oauth/bindsuccess.html', {
         'title': title,
         'content': content

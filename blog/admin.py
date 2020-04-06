@@ -60,13 +60,25 @@ class ArticlelAdmin(admin.ModelAdmin):
     search_fields = ('body', 'title')
     form = ArticleForm
     list_display = (
-        'id', 'title', 'author', 'link_to_category', 'created_time', 'views', 'status', 'type', 'article_order')
+        'id',
+        'title',
+        'author',
+        'link_to_category',
+        'created_time',
+        'views',
+        'status',
+        'type',
+        'article_order')
     list_display_links = ('id', 'title')
     list_filter = (ArticleListFilter, 'status', 'type', 'category', 'tags')
     filter_horizontal = ('tags',)
     exclude = ('created_time', 'last_mod_time')
     view_on_site = True
-    actions = [makr_article_publish, draft_article, close_article_commentstatus, open_article_commentstatus]
+    actions = [
+        makr_article_publish,
+        draft_article,
+        close_article_commentstatus,
+        open_article_commentstatus]
 
     def link_to_category(self, obj):
         info = (obj.category._meta.app_label, obj.category._meta.model_name)
@@ -77,7 +89,8 @@ class ArticlelAdmin(admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         form = super(ArticlelAdmin, self).get_form(request, obj, **kwargs)
-        form.base_fields['author'].queryset = get_user_model().objects.filter(is_superuser=True)
+        form.base_fields['author'].queryset = get_user_model(
+        ).objects.filter(is_superuser=True)
         return form
 
     def save_model(self, request, obj, form, change):

@@ -25,8 +25,15 @@ class Command(BaseCommand):
     help = 'notify baidu url'
 
     def add_arguments(self, parser):
-        parser.add_argument('data_type', type=str, choices=['all', 'article', 'tag', 'category'],
-                            help='article : all article,tag : all tag,category: all category,all: All of these')
+        parser.add_argument(
+            'data_type',
+            type=str,
+            choices=[
+                'all',
+                'article',
+                'tag',
+                'category'],
+            help='article : all article,tag : all tag,category: all category,all: All of these')
 
     def get_full_url(self, path):
         url = "https://{site}{path}".format(site=site, path=path)
@@ -49,6 +56,9 @@ class Command(BaseCommand):
                 url = category.get_absolute_url()
                 urls.append(self.get_full_url(url))
 
-        self.stdout.write(self.style.SUCCESS('start notify %d urls' % len(urls)))
+        self.stdout.write(
+            self.style.SUCCESS(
+                'start notify %d urls' %
+                len(urls)))
         SpiderNotify.baidu_notify(urls)
         self.stdout.write(self.style.SUCCESS('finish notify'))

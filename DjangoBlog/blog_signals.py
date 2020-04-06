@@ -5,7 +5,7 @@
 """
 @version: ??
 @author: liangliangyy
-@license: MIT Licence 
+@license: MIT Licence
 @contact: liangliangyy@gmail.com
 @site: https://www.lylinux.net/
 @software: PyCharm
@@ -34,7 +34,8 @@ import logging
 logger = logging.getLogger(__name__)
 
 oauth_user_login_signal = django.dispatch.Signal(providing_args=['id'])
-send_email_signal = django.dispatch.Signal(providing_args=['emailto', 'title', 'content'])
+send_email_signal = django.dispatch.Signal(
+    providing_args=['emailto', 'title', 'content'])
 
 
 @receiver(send_email_signal)
@@ -43,7 +44,11 @@ def send_email_signal_handler(sender, **kwargs):
     title = kwargs['title']
     content = kwargs['content']
 
-    msg = EmailMultiAlternatives(title, content, from_email=settings.DEFAULT_FROM_EMAIL, to=emailto)
+    msg = EmailMultiAlternatives(
+        title,
+        content,
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        to=emailto)
     msg.content_subtype = "html"
 
     from servermanager.models import EmailSendLog
@@ -77,7 +82,14 @@ def oauth_user_login_signal_handler(sender, **kwargs):
 
 
 @receiver(post_save)
-def model_post_save_callback(sender, instance, created, raw, using, update_fields, **kwargs):
+def model_post_save_callback(
+        sender,
+        instance,
+        created,
+        raw,
+        using,
+        update_fields,
+        **kwargs):
     clearcache = False
     if isinstance(instance, LogEntry):
         return
@@ -98,10 +110,15 @@ def model_post_save_callback(sender, instance, created, raw, using, update_field
         if site.find(':') > 0:
             site = site[0:site.find(':')]
 
-        expire_view_cache(path, servername=site, serverport=80, key_prefix='blogdetail')
+        expire_view_cache(
+            path,
+            servername=site,
+            serverport=80,
+            key_prefix='blogdetail')
         if cache.get('seo_processor'):
             cache.delete('seo_processor')
-        comment_cache_key = 'article_comments_{id}'.format(id=instance.article.id)
+        comment_cache_key = 'article_comments_{id}'.format(
+            id=instance.article.id)
         cache.delete(comment_cache_key)
         delete_sidebar_cache(instance.author.username)
         delete_view_cache('article_comments', [str(instance.article.pk)])

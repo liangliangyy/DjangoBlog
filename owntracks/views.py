@@ -25,7 +25,9 @@ def manage_owntrack_log(request):
         lat = s['lat']
         lon = s['lon']
 
-        logger.info('tid:{tid}.lat:{lat}.lon:{lon}'.format(tid=tid, lat=lat, lon=lon))
+        logger.info(
+            'tid:{tid}.lat:{lat}.lon:{lon}'.format(
+                tid=tid, lat=lat, lon=lon))
         if tid and lat and lon:
             m = OwnTrackLog()
             m.tid = tid
@@ -71,7 +73,8 @@ def convert_to_amap(locations):
 
     item = list(itertools.islice(it, 30))
     while item:
-        datas = ';'.join(set(map(lambda x: str(x.lon) + ',' + str(x.lat), item)))
+        datas = ';'.join(
+            set(map(lambda x: str(x.lon) + ',' + str(x.lat), item)))
 
         key = '8440a376dfc9743d8924bf0ad141f28e'
         api = 'http://restapi.amap.com/v3/assistant/coordinate/convert'
@@ -94,20 +97,25 @@ def get_datas(request):
     from django.utils.timezone import utc
 
     now = django.utils.timezone.now().replace(tzinfo=utc)
-    querydate = django.utils.timezone.datetime(now.year, now.month, now.day, 0, 0, 0)
+    querydate = django.utils.timezone.datetime(
+        now.year, now.month, now.day, 0, 0, 0)
     if request.GET.get('date', None):
         date = list(map(lambda x: int(x), request.GET.get('date').split('-')))
-        querydate = django.utils.timezone.datetime(date[0], date[1], date[2], 0, 0, 0)
+        querydate = django.utils.timezone.datetime(
+            date[0], date[1], date[2], 0, 0, 0)
     nextdate = querydate + datetime.timedelta(days=1)
-    models = OwnTrackLog.objects.filter(created_time__range=(querydate, nextdate))
+    models = OwnTrackLog.objects.filter(
+        created_time__range=(querydate, nextdate))
     result = list()
     if models and len(models):
-        for tid, item in groupby(sorted(models, key=lambda k: k.tid), key=lambda k: k.tid):
+        for tid, item in groupby(
+                sorted(models, key=lambda k: k.tid), key=lambda k: k.tid):
 
             d = dict()
             d["name"] = tid
             paths = list()
-            locations = convert_to_amap(sorted(item, key=lambda x: x.created_time))
+            locations = convert_to_amap(
+                sorted(item, key=lambda x: x.created_time))
             for i in locations.split(';'):
                 paths.append(i.split(','))
             d["path"] = paths

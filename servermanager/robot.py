@@ -5,7 +5,7 @@
 """
 @version: ??
 @author: liangliangyy
-@license: MIT Licence 
+@license: MIT Licence
 @contact: liangliangyy@gmail.com
 @site: https://www.lylinux.net/
 @software: PyCharm
@@ -26,7 +26,8 @@ from django.conf import settings
 import jsonpickle
 from servermanager.models import commands
 
-robot = WeRoBot(token=os.environ.get('DJANGO_WEROBOT_TOKEN') or 'lylinux', enable_session=True)
+robot = WeRoBot(token=os.environ.get('DJANGO_WEROBOT_TOKEN')
+                or 'lylinux', enable_session=True)
 memstorage = MemcacheStorage()
 if memstorage.is_available:
     robot.config['SESSION_STORAGE'] = memstorage
@@ -114,12 +115,12 @@ def help(message, session):
         '''
 
 
-@robot.filter(re.compile('^weather\:.*$', re.I))
+@robot.filter(re.compile(r'^weather\:.*$', re.I))
 def weather(message, session):
     return "建设中..."
 
 
-@robot.filter(re.compile('^idcard\:.*$', re.I))
+@robot.filter(re.compile(r'^idcard\:.*$', re.I))
 def idcard(message, session):
     return "建设中..."
 
@@ -135,7 +136,10 @@ class CommandHandler():
         self.commands = commands.objects.all()
 
     def run(self, title):
-        cmd = list(filter(lambda x: x.title.upper() == title.upper(), self.commands))
+        cmd = list(
+            filter(
+                lambda x: x.title.upper() == title.upper(),
+                self.commands))
         if cmd:
             return self.__run_command__(cmd[0].command)
         else:
@@ -145,7 +149,7 @@ class CommandHandler():
         try:
             str = os.popen(cmd).read()
             return str
-        except:
+        except BaseException:
             return '命令执行出错!'
 
     def get_help(self):
@@ -167,7 +171,7 @@ class MessageHandler():
         try:
             info = session[userid]
             self.userinfo = jsonpickle.decode(info)
-        except:
+        except BaseException:
             userinfo = WxUserInfo()
             self.userinfo = userinfo
 
@@ -197,7 +201,7 @@ class MessageHandler():
         if self.userinfo.isAdmin and not self.userinfo.isPasswordSet:
             passwd = settings.WXADMIN
             if settings.TESTING:
-                passwd='123'
+                passwd = '123'
             if passwd.upper() == get_md5(get_md5(info)).upper():
                 self.userinfo.isPasswordSet = True
                 self.savesession()

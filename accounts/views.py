@@ -41,22 +41,28 @@ class RegisterView(FormView):
             if settings.DEBUG:
                 site = '127.0.0.1:8000'
             path = reverse('account:result')
-            url = "http://{site}{path}?type=validation&id={id}&sign={sign}".format(site=site, path=path, id=user.id,
-                                                                                   sign=sign)
+            url = "http://{site}{path}?type=validation&id={id}&sign={sign}".format(
+                site=site, path=path, id=user.id, sign=sign)
 
             content = """
                             <p>请点击下面链接验证您的邮箱</p>
-    
+
                             <a href="{url}" rel="bookmark">{url}</a>
-    
+
                             再次感谢您！
                             <br />
                             如果上面链接无法打开，请将此链接复制至浏览器。
                             {url}
                             """.format(url=url)
-            send_email(emailto=[user.email, ], title='验证您的电子邮箱', content=content)
+            send_email(
+                emailto=[
+                    user.email,
+                ],
+                title='验证您的电子邮箱',
+                content=content)
 
-            url = reverse('accounts:result') + '?type=register&id=' + str(user.id)
+            url = reverse('accounts:result') + \
+                '?type=register&id=' + str(user.id)
             return HttpResponseRedirect(url)
         else:
             return self.render_to_response({
@@ -119,7 +125,9 @@ class LoginView(FormView):
     def get_success_url(self):
 
         redirect_to = self.request.POST.get(self.redirect_field_name)
-        if not is_safe_url(url=redirect_to, allowed_hosts=[self.request.get_host()]):
+        if not is_safe_url(
+            url=redirect_to, allowed_hosts=[
+                self.request.get_host()]):
             redirect_to = self.success_url
         return redirect_to
 

@@ -23,8 +23,10 @@ class ServerManagerTest(TestCase):
 
     def test_validate_comment(self):
         site = get_current_site().domain
-        user = BlogUser.objects.create_superuser(email="liangliangyy1@gmail.com",
-                                                 username="liangliangyy1", password="liangliangyy1")
+        user = BlogUser.objects.create_superuser(
+            email="liangliangyy1@gmail.com",
+            username="liangliangyy1",
+            password="liangliangyy1")
 
         self.client.login(username='liangliangyy1', password='liangliangyy1')
 

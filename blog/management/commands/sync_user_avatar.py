@@ -5,7 +5,7 @@
 """
 @version: ??
 @author: liangliangyy
-@license: MIT Licence 
+@license: MIT Licence
 @contact: liangliangyy@gmail.com
 @site: https://www.lylinux.net/
 @software: PyCharm
@@ -30,7 +30,9 @@ class Command(BaseCommand):
             url = u.picture
             url = save_user_avatar(url)
             if url:
-                self.stdout.write('结束同步:{id}.url:{url}'.format(id=u.nikename, url=url))
+                self.stdout.write(
+                    '结束同步:{id}.url:{url}'.format(
+                        id=u.nikename, url=url))
                 u.picture = url
                 u.save()
         self.stdout.write('结束同步')

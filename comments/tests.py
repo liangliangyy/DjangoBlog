@@ -18,8 +18,10 @@ class CommentsTest(TestCase):
 
     def test_validate_comment(self):
         site = get_current_site().domain
-        user = BlogUser.objects.create_superuser(email="liangliangyy1@gmail.com",
-                                                 username="liangliangyy1", password="liangliangyy1")
+        user = BlogUser.objects.create_superuser(
+            email="liangliangyy1@gmail.com",
+            username="liangliangyy1",
+            password="liangliangyy1")
 
         self.client.login(username='liangliangyy1', password='liangliangyy1')
 
@@ -38,7 +40,9 @@ class CommentsTest(TestCase):
         article.status = 'p'
         article.save()
 
-        commenturl = reverse('comments:postcomment', kwargs={'article_id': article.id})
+        commenturl = reverse(
+            'comments:postcomment', kwargs={
+                'article_id': article.id})
 
         response = self.client.post(commenturl,
                                     {
@@ -66,17 +70,17 @@ class CommentsTest(TestCase):
         response = self.client.post(commenturl,
                                     {
                                         'body': '''
-                                        # Title1  
-        
+                                        # Title1
+
         ```python
         import os
-        ```  
-        
-        [url](https://www.lylinux.net/)  
-          
-        [ddd](http://www.baidu.com)  
-        
-        
+        ```
+
+        [url](https://www.lylinux.net/)
+
+        [ddd](http://www.baidu.com)
+
+
         ''',
                                         'email': user.email,
                                         'name': user.username,

@@ -45,7 +45,7 @@ def cache_decorator(expiration=3 * 60):
             try:
                 view = args[0]
                 key = view.get_cache_key()
-            except:
+            except BaseException:
                 key = None
             if not key:
                 unique_str = repr((func, args, kwargs))
@@ -60,7 +60,9 @@ def cache_decorator(expiration=3 * 60):
                 else:
                     return value
             else:
-                logger.info('cache_decorator set cache:%s key:%s' % (func.__name__, key))
+                logger.info(
+                    'cache_decorator set cache:%s key:%s' %
+                    (func.__name__, key))
                 value = func(*args, **kwargs)
                 if value is None:
                     cache.set(key, '__default_cache_value__', expiration)
@@ -120,7 +122,7 @@ def block_code(text, lang, inlinestyles=False, linenos=False):
         if linenos:
             return '<div class="highlight">%s</div>\n' % code
         return code
-    except:
+    except BaseException:
         return '<pre class="%s"><code>%s</code></pre>\n' % (
             lang, mistune.escape(text)
         )
@@ -163,7 +165,8 @@ class BlogMarkDownRenderer(mistune.Renderer):
         if not title:
             return '<a href="%s" %s>%s</a>' % (link, nofollow, text)
         title = escape(title, quote=True)
-        return '<a href="%s" title="%s" %s>%s</a>' % (link, title, nofollow, text)
+        return '<a href="%s" title="%s" %s>%s</a>' % (
+            link, title, nofollow, text)
 
 
 class CommonMarkdown():
@@ -177,7 +180,11 @@ class CommonMarkdown():
 
 def send_email(emailto, title, content):
     from DjangoBlog.blog_signals import send_email_signal
-    send_email_signal.send(send_email.__class__, emailto=emailto, title=title, content=content)
+    send_email_signal.send(
+        send_email.__class__,
+        emailto=emailto,
+        title=title,
+        content=content)
 
 
 def parse_dict_to_url(dict):
@@ -225,15 +232,17 @@ def save_user_avatar(url):
     try:
         imgname = url.split('/')[-1]
         if imgname:
-            path = r'{basedir}/avatar/{img}'.format(basedir=setting.resource_path, img=imgname)
+            path = r'{basedir}/avatar/{img}'.format(
+                basedir=setting.resource_path, img=imgname)
             if os.path.exists(path):
                 os.remove(path)
-    except:
+    except BaseException:
         pass
     try:
         rsp = requests.get(url, timeout=2)
         if rsp.status_code == 200:
-            basepath = r'{basedir}/avatar/'.format(basedir=setting.resource_path)
+            basepath = r'{basedir}/avatar/'.format(
+                basedir=setting.resource_path)
             if not os.path.exists(basepath):
                 os.makedirs(basepath)
 
@@ -253,7 +262,10 @@ def save_user_avatar(url):
 def delete_sidebar_cache(username):
     from django.core.cache.utils import make_template_fragment_key
     from blog.models import LINK_SHOW_TYPE
-    keys = (make_template_fragment_key('sidebar', [username + x[0]]) for x in LINK_SHOW_TYPE)
+    keys = (
+        make_template_fragment_key(
+            'sidebar', [
+                username + x[0]]) for x in LINK_SHOW_TYPE)
     for k in keys:
         logger.info('delete sidebar key:' + k)
         cache.delete(k)
