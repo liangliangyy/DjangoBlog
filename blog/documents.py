@@ -13,12 +13,11 @@
 from elasticsearch_dsl.connections import connections
 import time
 from blog.models import Article, Category, Tag
-from elasticsearch_dsl import Document, Date, Integer, Keyword, Text, Object, Boolean
+from elasticsearch_dsl import Document, Date, Integer, Long, Keyword, Text, Object, Boolean
 
 from django.conf import settings
 
 ELASTICSEARCH_ENABLED = hasattr(settings, 'ELASTICSEARCH_DSL')
-
 
 if ELASTICSEARCH_ENABLED:
     connections.create_connection(
@@ -27,7 +26,7 @@ if ELASTICSEARCH_ENABLED:
 
 class ElapsedTimeDocument(Document):
     url = Text()
-    time_taken = Integer()
+    time_taken = Long()
     log_datetime = Date()
     type = Text(analyzer='ik_max_word')
     useragent = Text()
@@ -101,8 +100,7 @@ class ArticleDocument(Document):
 class ArticleDocumentManager():
 
     def __init__(self):
-        pass
-        # ArticleDocument.init()
+        self.create_index()
 
     def create_index(self):
         ArticleDocument.init()
