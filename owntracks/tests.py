@@ -19,7 +19,10 @@ class OwnTrackLogTest(TestCase):
             'lon': 134.341
         }
 
-        self.client.post('/owntracks/logtracks', json.dumps(o), content_type='application/json')
+        self.client.post(
+            '/owntracks/logtracks',
+            json.dumps(o),
+            content_type='application/json')
         length = len(OwnTrackLog.objects.all())
         self.assertEqual(length, 1)
 
@@ -28,15 +31,20 @@ class OwnTrackLogTest(TestCase):
             'lat': 123.123
         }
 
-        self.client.post('/owntracks/logtracks', json.dumps(o), content_type='application/json')
+        self.client.post(
+            '/owntracks/logtracks',
+            json.dumps(o),
+            content_type='application/json')
         length = len(OwnTrackLog.objects.all())
         self.assertEqual(length, 1)
 
         rsp = self.client.get('/owntracks/show_maps')
         self.assertEqual(rsp.status_code, 302)
 
-        user = BlogUser.objects.create_superuser(email="liangliangyy1@gmail.com",
-                                                 username="liangliangyy1", password="liangliangyy1")
+        user = BlogUser.objects.create_superuser(
+            email="liangliangyy1@gmail.com",
+            username="liangliangyy1",
+            password="liangliangyy1")
 
         self.client.login(username='liangliangyy1', password='liangliangyy1')
         s = OwnTrackLog()

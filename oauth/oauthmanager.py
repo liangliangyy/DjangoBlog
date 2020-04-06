@@ -91,7 +91,11 @@ class WBOauthManager(BaseOauthManager):
         self.client_id = config.appkey if config else ''
         self.client_secret = config.appsecret if config else ''
         self.callback_url = config.callback_url if config else ''
-        super(WBOauthManager, self).__init__(access_token=access_token, openid=openid)
+        super(
+            WBOauthManager,
+            self).__init__(
+            access_token=access_token,
+            openid=openid)
 
     def get_authorization_url(self, nexturl='/'):
         params = {
@@ -158,7 +162,11 @@ class GoogleOauthManager(BaseOauthManager):
         self.client_id = config.appkey if config else ''
         self.client_secret = config.appsecret if config else ''
         self.callback_url = config.callback_url if config else ''
-        super(GoogleOauthManager, self).__init__(access_token=access_token, openid=openid)
+        super(
+            GoogleOauthManager,
+            self).__init__(
+            access_token=access_token,
+            openid=openid)
 
     def get_authorization_url(self, nexturl='/'):
         params = {
@@ -229,7 +237,11 @@ class GitHubOauthManager(BaseOauthManager):
         self.client_id = config.appkey if config else ''
         self.client_secret = config.appsecret if config else ''
         self.callback_url = config.callback_url if config else ''
-        super(GitHubOauthManager, self).__init__(access_token=access_token, openid=openid)
+        super(
+            GitHubOauthManager,
+            self).__init__(
+            access_token=access_token,
+            openid=openid)
 
     def get_authorization_url(self, nexturl='/'):
         params = {
@@ -295,7 +307,11 @@ class FaceBookOauthManager(BaseOauthManager):
         self.client_id = config.appkey if config else ''
         self.client_secret = config.appsecret if config else ''
         self.callback_url = config.callback_url if config else ''
-        super(FaceBookOauthManager, self).__init__(access_token=access_token, openid=openid)
+        super(
+            FaceBookOauthManager,
+            self).__init__(
+            access_token=access_token,
+            openid=openid)
 
     def get_authorization_url(self, nexturl='/'):
         params = {
@@ -362,7 +378,11 @@ class QQOauthManager(BaseOauthManager):
         self.client_id = config.appkey if config else ''
         self.client_secret = config.appsecret if config else ''
         self.callback_url = config.callback_url if config else ''
-        super(QQOauthManager, self).__init__(access_token=access_token, openid=openid)
+        super(
+            QQOauthManager,
+            self).__init__(
+            access_token=access_token,
+            openid=openid)
 
     def get_authorization_url(self, nexturl='/'):
         params = {
@@ -398,7 +418,10 @@ class QQOauthManager(BaseOauthManager):
             }
             rsp = self.do_get(self.OPEN_ID_URL, params)
             if rsp:
-                rsp = rsp.replace('callback(', '').replace(')', '').replace(';', '')
+                rsp = rsp.replace(
+                    'callback(', '').replace(
+                    ')', '').replace(
+                    ';', '')
                 obj = json.loads(rsp)
                 openid = str(obj['openid'])
                 self.openid = openid
@@ -442,7 +465,10 @@ def get_oauth_apps():
 def get_manager_by_type(type):
     applications = get_oauth_apps()
     if applications:
-        finds = list(filter(lambda x: x.ICON_NAME.lower() == type.lower(), applications))
+        finds = list(
+            filter(
+                lambda x: x.ICON_NAME.lower() == type.lower(),
+                applications))
         if finds:
             return finds[0]
     return None

@@ -29,19 +29,23 @@ class BaseModel(models.Model):
     last_mod_time = models.DateTimeField('修改时间', default=now)
 
     def save(self, *args, **kwargs):
-        is_update_views = isinstance(self, Article) and 'update_fields' in kwargs and kwargs['update_fields'] == [
-            'views']
+        is_update_views = isinstance(
+            self,
+            Article) and 'update_fields' in kwargs and kwargs['update_fields'] == ['views']
         if is_update_views:
             Article.objects.filter(pk=self.pk).update(views=self.views)
         else:
             if 'slug' in self.__dict__:
-                slug = getattr(self, 'title') if 'title' in self.__dict__ else getattr(self, 'name')
+                slug = getattr(
+                    self, 'title') if 'title' in self.__dict__ else getattr(
+                    self, 'name')
                 setattr(self, 'slug', slugify(slug))
             super().save(*args, **kwargs)
 
     def get_full_url(self):
         site = get_current_site().domain
-        url = "https://{site}{path}".format(site=site, path=self.get_absolute_url())
+        url = "https://{site}{path}".format(site=site,
+                                            path=self.get_absolute_url())
         return url
 
     class Meta:
@@ -68,15 +72,34 @@ class Article(BaseModel):
     )
     title = models.CharField('标题', max_length=200, unique=True)
     body = MDTextField('正文')
-    pub_time = models.DateTimeField('发布时间', blank=False, null=False, default=now)
-    status = models.CharField('文章状态', max_length=1, choices=STATUS_CHOICES, default='p')
-    comment_status = models.CharField('评论状态', max_length=1, choices=COMMENT_STATUS, default='o')
+    pub_time = models.DateTimeField(
+        '发布时间', blank=False, null=False, default=now)
+    status = models.CharField(
+        '文章状态',
+        max_length=1,
+        choices=STATUS_CHOICES,
+        default='p')
+    comment_status = models.CharField(
+        '评论状态',
+        max_length=1,
+        choices=COMMENT_STATUS,
+        default='o')
     type = models.CharField('类型', max_length=1, choices=TYPE, default='a')
     views = models.PositiveIntegerField('浏览量', default=0)
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='作者', blank=False, null=False,
-                               on_delete=models.CASCADE)
-    article_order = models.IntegerField('排序,数字越大越靠前', blank=False, null=False, default=0)
-    category = models.ForeignKey('Category', verbose_name='分类', on_delete=models.CASCADE, blank=False, null=False)
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        verbose_name='作者',
+        blank=False,
+        null=False,
+        on_delete=models.CASCADE)
+    article_order = models.IntegerField(
+        '排序,数字越大越靠前', blank=False, null=False, default=0)
+    category = models.ForeignKey(
+        'Category',
+        verbose_name='分类',
+        on_delete=models.CASCADE,
+        blank=False,
+        null=False)
     tags = models.ManyToManyField('Tag', verbose_name='标签集合', blank=True)
 
     def body_to_string(self):
@@ -132,7 +155,8 @@ class Article(BaseModel):
     @cache_decorator(expiration=60 * 100)
     def next_article(self):
         # 下一篇
-        return Article.objects.filter(id__gt=self.id, status='p').order_by('id').first()
+        return Article.objects.filter(
+            id__gt=self.id, status='p').order_by('id').first()
 
     @cache_decorator(expiration=60 * 100)
     def prev_article(self):
@@ -143,7 +167,12 @@ class Article(BaseModel):
 class Category(BaseModel):
     """文章分类"""
     name = models.CharField('分类名', max_length=30, unique=True)
-    parent_category = models.ForeignKey('self', verbose_name="父级分类", blank=True, null=True, on_delete=models.CASCADE)
+    parent_category = models.ForeignKey(
+        'self',
+        verbose_name="父级分类",
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE)
     slug = models.SlugField(default='no-slug', max_length=60, blank=True)
 
     class Meta:
@@ -152,7 +181,9 @@ class Category(BaseModel):
         verbose_name_plural = verbose_name
 
     def get_absolute_url(self):
-        return reverse('blog:category_detail', kwargs={'category_name': self.slug})
+        return reverse(
+            'blog:category_detail', kwargs={
+                'category_name': self.slug})
 
     def __str__(self):
         return self.name
@@ -161,7 +192,7 @@ class Category(BaseModel):
     def get_category_tree(self):
         """
         递归获得分类目录的父级
-        :return: 
+        :return:
         """
         categorys = []
 
@@ -177,7 +208,7 @@ class Category(BaseModel):
     def get_sub_categorys(self):
         """
         获得当前分类目录所有子集
-        :return: 
+        :return:
         """
         categorys = []
         all_categorys = Category.objects.all()
@@ -222,8 +253,13 @@ class Links(models.Model):
     name = models.CharField('链接名称', max_length=30, unique=True)
     link = models.URLField('链接地址')
     sequence = models.IntegerField('排序', unique=True)
-    is_enable = models.BooleanField('是否显示', default=True, blank=False, null=False)
-    show_type = models.CharField('显示类型', max_length=1, choices=LINK_SHOW_TYPE, default='i')
+    is_enable = models.BooleanField(
+        '是否显示', default=True, blank=False, null=False)
+    show_type = models.CharField(
+        '显示类型',
+        max_length=1,
+        choices=LINK_SHOW_TYPE,
+        default='i')
     created_time = models.DateTimeField('创建时间', default=now)
     last_mod_time = models.DateTimeField('修改时间', default=now)
 
@@ -256,21 +292,58 @@ class SideBar(models.Model):
 
 class BlogSettings(models.Model):
     '''站点设置 '''
-    sitename = models.CharField("网站名称", max_length=200, null=False, blank=False, default='')
-    site_description = models.TextField("网站描述", max_length=1000, null=False, blank=False, default='')
-    site_seo_description = models.TextField("网站SEO描述", max_length=1000, null=False, blank=False, default='')
-    site_keywords = models.TextField("网站关键字", max_length=1000, null=False, blank=False, default='')
+    sitename = models.CharField(
+        "网站名称",
+        max_length=200,
+        null=False,
+        blank=False,
+        default='')
+    site_description = models.TextField(
+        "网站描述",
+        max_length=1000,
+        null=False,
+        blank=False,
+        default='')
+    site_seo_description = models.TextField(
+        "网站SEO描述", max_length=1000, null=False, blank=False, default='')
+    site_keywords = models.TextField(
+        "网站关键字",
+        max_length=1000,
+        null=False,
+        blank=False,
+        default='')
     article_sub_length = models.IntegerField("文章摘要长度", default=300)
     sidebar_article_count = models.IntegerField("侧边栏文章数目", default=10)
     sidebar_comment_count = models.IntegerField("侧边栏评论数目", default=5)
     show_google_adsense = models.BooleanField('是否显示谷歌广告', default=False)
-    google_adsense_codes = models.TextField('广告内容', max_length=2000, null=True, blank=True, default='')
+    google_adsense_codes = models.TextField(
+        '广告内容', max_length=2000, null=True, blank=True, default='')
     open_site_comment = models.BooleanField('是否打开网站评论功能', default=True)
-    beiancode = models.CharField('备案号', max_length=2000, null=True, blank=True, default='')
-    analyticscode = models.TextField("网站统计代码", max_length=1000, null=False, blank=False, default='')
-    show_gongan_code = models.BooleanField('是否显示公安备案号', default=False, null=False)
-    gongan_beiancode = models.TextField('公安备案号', max_length=2000, null=True, blank=True, default='')
-    resource_path = models.CharField("静态文件保存地址", max_length=300, null=False, default='/var/www/resource/')
+    beiancode = models.CharField(
+        '备案号',
+        max_length=2000,
+        null=True,
+        blank=True,
+        default='')
+    analyticscode = models.TextField(
+        "网站统计代码",
+        max_length=1000,
+        null=False,
+        blank=False,
+        default='')
+    show_gongan_code = models.BooleanField(
+        '是否显示公安备案号', default=False, null=False)
+    gongan_beiancode = models.TextField(
+        '公安备案号',
+        max_length=2000,
+        null=True,
+        blank=True,
+        default='')
+    resource_path = models.CharField(
+        "静态文件保存地址",
+        max_length=300,
+        null=False,
+        default='/var/www/resource/')
 
     class Meta:
         verbose_name = '网站配置'

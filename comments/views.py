@@ -50,7 +50,8 @@ class CommentPostView(FormView):
             email = form.cleaned_data['email']
             username = form.cleaned_data['name']
 
-            user = get_user_model().objects.get_or_create(username=username, email=email)[0]
+            user = get_user_model().objects.get_or_create(
+                username=username, email=email)[0]
             # auth.login(self.request, user)
         comment = form.save(False)
         comment.article = article
@@ -58,8 +59,11 @@ class CommentPostView(FormView):
         comment.author = user
 
         if form.cleaned_data['parent_comment_id']:
-            parent_comment = Comment.objects.get(pk=form.cleaned_data['parent_comment_id'])
+            parent_comment = Comment.objects.get(
+                pk=form.cleaned_data['parent_comment_id'])
             comment.parent_comment = parent_comment
 
         comment.save(True)
-        return HttpResponseRedirect("%s#div-comment-%d" % (article.get_absolute_url(), comment.pk))
+        return HttpResponseRedirect(
+            "%s#div-comment-%d" %
+            (article.get_absolute_url(), comment.pk))

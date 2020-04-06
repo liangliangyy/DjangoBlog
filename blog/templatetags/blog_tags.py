@@ -135,13 +135,18 @@ def load_sidebar(user, linktype):
     logger.info('load sidebar')
     from DjangoBlog.utils import get_blog_setting
     blogsetting = get_blog_setting()
-    recent_articles = Article.objects.filter(status='p')[:blogsetting.sidebar_article_count]
+    recent_articles = Article.objects.filter(
+        status='p')[:blogsetting.sidebar_article_count]
     sidebar_categorys = Category.objects.all()
-    extra_sidebars = SideBar.objects.filter(is_enable=True).order_by('sequence')
-    most_read_articles = Article.objects.filter(status='p').order_by('-views')[:blogsetting.sidebar_article_count]
+    extra_sidebars = SideBar.objects.filter(
+        is_enable=True).order_by('sequence')
+    most_read_articles = Article.objects.filter(status='p').order_by(
+        '-views')[:blogsetting.sidebar_article_count]
     dates = Article.objects.datetimes('created_time', 'month', order='DESC')
-    links = Links.objects.filter(is_enable=True).filter(Q(show_type=str(linktype)) | Q(show_type='a'))
-    commment_list = Comment.objects.filter(is_enable=True).order_by('-id')[:blogsetting.sidebar_comment_count]
+    links = Links.objects.filter(is_enable=True).filter(
+        Q(show_type=str(linktype)) | Q(show_type='a'))
+    commment_list = Comment.objects.filter(is_enable=True).order_by(
+        '-id')[:blogsetting.sidebar_comment_count]
     # 标签云 计算字体大小
     # 根据总数计算出平均值 大小为 (数目/平均值)*步长
     increment = 5
@@ -152,7 +157,8 @@ def load_sidebar(user, linktype):
         count = sum([t[1] for t in s])
         dd = 1 if (count == 0 or not len(tags)) else count / len(tags)
         import random
-        sidebar_tags = list(map(lambda x: (x[0], x[1], (x[1] / dd) * increment + 10), s))
+        sidebar_tags = list(
+            map(lambda x: (x[0], x[1], (x[1] / dd) * increment + 10), s))
         random.shuffle(sidebar_tags)
 
     return {
@@ -195,33 +201,57 @@ def load_pagination_info(page_obj, page_type, tag_name):
             next_url = reverse('blog:index_page', kwargs={'page': next_number})
         if page_obj.has_previous():
             previous_number = page_obj.previous_page_number()
-            previous_url = reverse('blog:index_page', kwargs={'page': previous_number})
+            previous_url = reverse(
+                'blog:index_page', kwargs={
+                    'page': previous_number})
     if page_type == '分类标签归档':
         tag = get_object_or_404(Tag, name=tag_name)
         if page_obj.has_next():
             next_number = page_obj.next_page_number()
-            next_url = reverse('blog:tag_detail_page', kwargs={'page': next_number, 'tag_name': tag.slug})
+            next_url = reverse(
+                'blog:tag_detail_page',
+                kwargs={
+                    'page': next_number,
+                    'tag_name': tag.slug})
         if page_obj.has_previous():
             previous_number = page_obj.previous_page_number()
-            previous_url = reverse('blog:tag_detail_page', kwargs={'page': previous_number, 'tag_name': tag.slug})
+            previous_url = reverse(
+                'blog:tag_detail_page',
+                kwargs={
+                    'page': previous_number,
+                    'tag_name': tag.slug})
     if page_type == '作者文章归档':
         if page_obj.has_next():
             next_number = page_obj.next_page_number()
-            next_url = reverse('blog:author_detail_page', kwargs={'page': next_number, 'author_name': tag_name})
+            next_url = reverse(
+                'blog:author_detail_page',
+                kwargs={
+                    'page': next_number,
+                    'author_name': tag_name})
         if page_obj.has_previous():
             previous_number = page_obj.previous_page_number()
-            previous_url = reverse('blog:author_detail_page', kwargs={'page': previous_number, 'author_name': tag_name})
+            previous_url = reverse(
+                'blog:author_detail_page',
+                kwargs={
+                    'page': previous_number,
+                    'author_name': tag_name})
 
     if page_type == '分类目录归档':
         category = get_object_or_404(Category, name=tag_name)
         if page_obj.has_next():
             next_number = page_obj.next_page_number()
-            next_url = reverse('blog:category_detail_page',
-                               kwargs={'page': next_number, 'category_name': category.slug})
+            next_url = reverse(
+                'blog:category_detail_page',
+                kwargs={
+                    'page': next_number,
+                    'category_name': category.slug})
         if page_obj.has_previous():
             previous_number = page_obj.previous_page_number()
-            previous_url = reverse('blog:category_detail_page',
-                                   kwargs={'page': previous_number, 'category_name': category.slug})
+            previous_url = reverse(
+                'blog:category_detail_page',
+                kwargs={
+                    'page': previous_number,
+                    'category_name': category.slug})
 
     return {
         'previous_url': previous_url,
@@ -275,10 +305,11 @@ def gravatar_url(email, size=40):
                 return o[0].picture
         email = email.encode('utf-8')
 
-        default = "https://resource.lylinux.net/image/2017/03/26/120117.jpg".encode('utf-8')
+        default = "https://resource.lylinux.net/image/2017/03/26/120117.jpg".encode(
+            'utf-8')
 
-        url = "https://www.gravatar.com/avatar/%s?%s" % (
-            hashlib.md5(email.lower()).hexdigest(), urllib.parse.urlencode({'d': default, 's': str(size)}))
+        url = "https://www.gravatar.com/avatar/%s?%s" % (hashlib.md5(
+            email.lower()).hexdigest(), urllib.parse.urlencode({'d': default, 's': str(size)}))
         cache.set(cachekey, url, 60 * 60 * 10)
         return url
 
@@ -287,7 +318,9 @@ def gravatar_url(email, size=40):
 def gravatar(email, size=40):
     """获得gravatar头像"""
     url = gravatar_url(email, size)
-    return mark_safe('<img src="%s" height="%d" width="%d">' % (url, size, size))
+    return mark_safe(
+        '<img src="%s" height="%d" width="%d">' %
+        (url, size, size))
 
 
 @register.simple_tag

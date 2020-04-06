@@ -18,11 +18,15 @@ class AccountTest(TestCase):
 
     def test_validate_account(self):
         site = get_current_site().domain
-        user = BlogUser.objects.create_superuser(email="liangliangyy1@gmail.com",
-                                                 username="liangliangyy1", password="qwer!@#$ggg")
+        user = BlogUser.objects.create_superuser(
+            email="liangliangyy1@gmail.com",
+            username="liangliangyy1",
+            password="qwer!@#$ggg")
         testuser = BlogUser.objects.get(username='liangliangyy1')
 
-        loginresult = self.client.login(username='liangliangyy1', password='qwer!@#$ggg')
+        loginresult = self.client.login(
+            username='liangliangyy1',
+            password='qwer!@#$ggg')
         self.assertEqual(loginresult, True)
         response = self.client.get('/admin/')
         self.assertEqual(response.status_code, 200)
@@ -46,18 +50,25 @@ class AccountTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_validate_register(self):
-        self.assertEquals(0, len(BlogUser.objects.filter(email='user123@user.com')))
+        self.assertEquals(
+            0, len(
+                BlogUser.objects.filter(
+                    email='user123@user.com')))
         response = self.client.post(reverse('account:register'), {
             'username': 'user1233',
             'email': 'user123@user.com',
             'password1': 'password123!q@wE#R$T',
             'password2': 'password123!q@wE#R$T',
         })
-        self.assertEquals(1, len(BlogUser.objects.filter(email='user123@user.com')))
+        self.assertEquals(
+            1, len(
+                BlogUser.objects.filter(
+                    email='user123@user.com')))
         user = BlogUser.objects.filter(email='user123@user.com')[0]
         sign = get_md5(get_md5(settings.SECRET_KEY + str(user.id)))
         path = reverse('accounts:result')
-        url = '{path}?type=validation&id={id}&sign={sign}'.format(path=path, id=user.id, sign=sign)
+        url = '{path}?type=validation&id={id}&sign={sign}'.format(
+            path=path, id=user.id, sign=sign)
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 

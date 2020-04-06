@@ -5,7 +5,7 @@
 """
 @version: ??
 @author: liangliangyy
-@license: MIT Licence 
+@license: MIT Licence
 @contact: liangliangyy@gmail.com
 @site: https://www.lylinux.net/
 @software: PyCharm
@@ -23,7 +23,8 @@ logger = logging.getLogger(__name__)
 def send_comment_email(comment):
     site = get_current_site().domain
     subject = '感谢您发表的评论'
-    article_url = "https://{site}{path}".format(site=site, path=comment.article.get_absolute_url())
+    article_url = "https://{site}{path}".format(
+        site=site, path=comment.article.get_absolute_url())
     html_content = """
                    <p>非常感谢您在本站发表评论</p>
                    您可以访问

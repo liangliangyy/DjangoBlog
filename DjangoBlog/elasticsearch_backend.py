@@ -29,7 +29,11 @@ logger = logging.getLogger(__name__)
 
 class ElasticSearchBackend(BaseSearchBackend):
     def __init__(self, connection_alias, **connection_options):
-        super(ElasticSearchBackend, self).__init__(connection_alias, **connection_options)
+        super(
+            ElasticSearchBackend,
+            self).__init__(
+            connection_alias,
+            **connection_options)
         self.manager = ArticleDocumentManager()
         # try:
         #     self._rebuild(None)
@@ -75,16 +79,14 @@ class ElasticSearchBackend(BaseSearchBackend):
         start_offset = kwargs.get('start_offset')
         end_offset = kwargs.get('end_offset')
 
-        q = Q('bool',
-              should=[Q('match', body=query_string), Q('match', title=query_string)],
-              minimum_should_match="70%"
-              )
+        q = Q('bool', should=[Q('match', body=query_string), Q(
+            'match', title=query_string)], minimum_should_match="70%")
 
         search = ArticleDocument.search() \
-                     .query('bool', filter=[q]) \
-                     .filter('term', status='p') \
-                     .filter('term', type='a') \
-                     .source(False)[start_offset: end_offset]
+            .query('bool', filter=[q]) \
+            .filter('term', status='p') \
+            .filter('term', type='a') \
+            .source(False)[start_offset: end_offset]
 
         results = search.execute()
         hits = results['hits'].total
@@ -99,8 +101,12 @@ class ElasticSearchBackend(BaseSearchBackend):
 
             result_class = SearchResult
 
-            result = result_class(app_label, model_name, raw_result['_id'], raw_result['_score'],
-                                  **additional_fields)
+            result = result_class(
+                app_label,
+                model_name,
+                raw_result['_id'],
+                raw_result['_score'],
+                **additional_fields)
             raw_results.append(result)
         facets = {}
         spelling_suggestion = None

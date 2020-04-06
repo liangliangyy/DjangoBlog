@@ -41,9 +41,14 @@ class OnlineMiddleware(object):
                     url = request.path
                     from django.utils import timezone
 
-                    ElaspedTimeDocumentManager.create(url=url, time_taken=time_taken, log_datetime=timezone.now(),
-                                                      type='blog', useragent=http_user_agent)
-                response.content = response.content.replace(b'<!!LOAD_TIMES!!>', str.encode(str(cast_time)[:5]))
+                    ElaspedTimeDocumentManager.create(
+                        url=url,
+                        time_taken=time_taken,
+                        log_datetime=timezone.now(),
+                        type='blog',
+                        useragent=http_user_agent)
+                response.content = response.content.replace(
+                    b'<!!LOAD_TIMES!!>', str.encode(str(cast_time)[:5]))
             except Exception as e:
                 logger.error("Error OnlineMiddleware: %s" % e)
         return response
