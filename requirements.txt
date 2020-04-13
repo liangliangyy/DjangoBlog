@@ -6,7 +6,7 @@ django-compressor==2.4
 django-debug-toolbar==2.2
 django-haystack==3.0b1
 django-ipware==2.1.0
-django-mdeditor==0.1.17
+django-mdeditor==0.1.18
 django-uuslug==1.2.0
 elasticsearch==7.5.1
 elasticsearch-dsl==7.1.0
