@@ -51,4 +51,6 @@ jobs:
         DJANGO_MYSQL_PASSWORD:  root
         DJANGO_MYSQL_HOST: 127.0.0.1
       run: |
+        python manage.py makemigrations
+        python manage.py migrate
         python manage.py test
