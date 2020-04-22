@@ -97,7 +97,12 @@ def authorize(request):
                     result = get_user_model().objects.get_or_create(email=user.email)
                     author = result[0]
                     if result[1]:
-                        author.username = user.nikename
+                        try:
+                            get_user_model().objects.get(username=user.nikename)
+                        except ObjectDoesNotExist:
+                            author.username = user.nikename
+                        else:
+                            author.username = "djangoblog" + datetime.datetime.now().strftime('%y%m%d%I%M%S')
                         author.source = 'authorize'
                         author.save()
 
