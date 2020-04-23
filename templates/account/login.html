@@ -1,47 +1,53 @@
 {% extends 'share_layout/base_account.html' %}
 {% load static %}
 {% block content %}
-            <form class="form-signin" action="{% url 'account:login' %}" method="post">
-              {% csrf_token %}
-              <div class="text-center mb-4">
-
-                <img class="mb-2 rounded-circle img-circle profile-img" src="{% static 'blog/img/avatar.png' %}" alt="">
-                <!-- <h1 class="h3 mb-3 font-weight-normal">Войти</h1> -->
-              </div>
-              {% if messages %}
-                  {% for message in messages %}
-                    {% if message.level %}
-                      <div class="row">
-                        <div class="col-sm-12 col-sm-offset-0">
-                          <div class="alert alert-{{ message.tags }} py-2 mb-3" role="alert">
-                            <p class="text-center mb-0">{{ message }}</p>
+    <div class="limiter">
+        <div class="container-input_creds">
+            <div class="wrap-input_creds">
+                <form class="form-signin input_creds-form validate-form" _lpchecked="1" action="{% url 'account:login' %}" method="post">
+                    {% csrf_token %}
+                    <span class="input_creds-form-title py-5">
+                    Вход
+                    </span>
+                    {% if messages %}
+                      {% for message in messages %}
+                        {% if message.level %}
+                          <div class="row mx-auto">
+                            <div class="col-sm-12 col-sm-offset-0">
+                              <div class="alert alert-{{ message.tags }} py-2 mb-3" role="alert">
+                                <span class="">{{ message }}</span>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
+                        {% endif %}
+                      {% endfor %}
                     {% endif %}
-                  {% endfor %}
-                {% endif %}
-                {% comment %}<label for="inputEmail" class="sr-only">Электронная почта</label>
-                  <input type="email" id="inputEmail" class="form-control my-3" placeholder="Email" required autofocus>
-                  <label for="inputPassword" class="sr-only">Пароль</label>
-                  <input type="password" id="inputPassword" class="form-control my-3" placeholder="Password" required>{% endcomment %}
-                {% for field in form.visible_fields %}
-                    <div class="form-label-group">
-                       {{ field }}{{ field.label_tag }}
-                        {{ field.errors }}
+                    {% for field in form.visible_fields %}
+                        <div class="wrap-input100 rs1-wrap-input100 validate-input mb-3 ml-1 w-100">
+                           {{ field }}
+                            {{ field.errors }}
+                            <span class="focus-input_creds"></span>
+                        </div>
+                    {% endfor %}
+                    <div class="container-input_creds-form-btn">
+                        <button class="input_creds-form-btn btn btn-lg btn-block" type="submit">
+                        Войти
+                        </button>
+                        <input type="hidden" name="next" value="{{ redirect_to }}">
                     </div>
-                {% endfor %}
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
-                <input type="hidden" name="next" value="{{ redirect_to }}">
-                {% load oauth_tags %}
-                {% load_oauth_applications request%}
-
-                <div class="form-label-group">
-                <p class="mt-5 mb-3 text-muted text-center">
-                    <a href="{% url 'account:register' %}" class="mx-3">Регистрация</a>
-                    |
-                    <a href="/" class="mx-3">На главную</a>
-                </p>
-              </div>
-            </form>
+                        {% load oauth_tags %}
+                        {% load_oauth_applications request %}
+                    <div class="w-100 text-center pb-5">
+                        <a href="{% url 'account:register' %}" class="text-uppercase px-2">
+                        Регистрация
+                        </a>
+                        <a href="/" class="text-uppercase px-2">
+                        На главную
+                        </a>
+                    </div>
+                </form>
+                <div class="input_creds-more" style="background-image: url('{% static 'blog/img/guesswhy.jpg' %}');"></div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

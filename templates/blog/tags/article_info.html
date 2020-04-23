@@ -31,32 +31,33 @@
     <div class="entry-content" itemprop="articleBody">
         {% if  isindex %}
             {{ article.body|custom_markdown|escape|truncatechars_content }}
-            <p class='read-more'><a
-                    href=' {{ article.get_absolute_url }}'>Подробнее</a></p>
+            <div class="d-flex flex-row post-article-actions">
+                <div class='read-more flex-grow-1'><a href=' {{ article.get_absolute_url }}'>Подробнее</a></div>
         {% else %}
             {{ article.body|custom_markdown }}
+            <div class="d-flex flex-row post-article-actions">
+            <div class="flex-grow-1"></div>
         {% endif %}
-
-    </div><!-- .entry-content -->
-    <div class="comments-link">
-            {% if article.comment_status == "o" and open_site_comment %}
-                <a href="{{ article.get_absolute_url }}#comments" class="ds-thread-count" data-thread-key="3815"
-                   rel="nofollow">
-                    <span class="leave-reply">
-                    {% if article.comment and article.comment_set.count %}
-                        {{ article.comment_set.count }}Комментарии
-                    {% else %}
-                        Оставить комментарий
-                    {% endif %}
-                    </span>
-                </a>
-            {% endif %}
-            {% if show_views_bar %}
-              <div style="float:right">
+            <div class="comments-link">
+                {% if article.comment_status == "o" and open_site_comment %}
+                    <a href="{{ article.get_absolute_url }}#comments" class="ds-thread-count" data-thread-key="3815" rel="nofollow">
+                        <span class="leave-reply">
+                        {% if article.comment and article.comment_set.count %}
+                            {{ article.comment_set.count }}Комментарии
+                        {% else %}
+                            Откомментить
+                        {% endif %}
+                        </span>
+                    </a>
+                {% endif %}
+                {% if show_views_bar %}
+                <div style="float:right">
                   {{ article.views }} просмотров
-              </div>
-            {% endif %}
-        </div><!-- .comments-link -->
+                </div>
+                {% endif %}
+            </div><!-- .comments-link -->
+        </div>
+    </div><!-- .entry-content -->
     {% load_article_metas article user %}
 
 </article><!-- #post -->

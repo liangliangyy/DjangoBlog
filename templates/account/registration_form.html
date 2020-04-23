@@ -1,39 +1,87 @@
 {% extends 'share_layout/base_account.html' %}
 {% load static %}
 {% block content %}
-            <form class="form-signin" action="{% url 'account:register' %}" method="post">
-              {% csrf_token %}
-              <div class="text-center mb-4">
-                <img class="mb-2 rounded-circle img-circle profile-img" src="{% static 'blog/img/avatar.png' %}" alt="">
-                <!-- <img class="mb-4 rounded-circle img-circle profile-img" src="{% static 'blog/img/logo.png' %}" alt=""> -->
-                <!-- <h1 class="h3 mb-3 font-weight-normal">Создать аккаунт</h1> -->
-              </div>
-              {% if messages %}
-                  {% for message in messages %}
-                    {% if message.level %}
-                      <div class="row">
-                        <div class="col-sm-12 col-sm-offset-0">
-                          <div class="alert alert-{{ message.tags }}" role="alert">
-                            <p>{{ message }}</p>
+    <div class="limiter">
+        <div class="container-input_creds">
+            <div class="wrap-input_creds">
+                <form class="form-signin input_creds-form validate-form" _lpchecked="1" action="{% url 'account:register' %}" method="post">
+                    {% csrf_token %}
+                    <span class="input_creds-form-title py-5">
+                    Регистрация
+                    </span>
+                    {% if messages %}
+                      {% for message in messages %}
+                        {% if message.level %}
+                          <div class="row mx-auto">
+                            <div class="col-sm-12 col-sm-offset-0">
+                              <div class="alert alert-{{ message.tags }} py-2 mb-3" role="alert">
+                                <span class="">{{ message }}</span>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
+                        {% endif %}
+                      {% endfor %}
                     {% endif %}
-                  {% endfor %}
-                {% endif %}
-                {% for field in form.visible_fields %}
-                    <div class="form-label-group">
-                       {{ field }}{{ field.label_tag }}
-                        {{ field.errors }}
+                    {% for field in form.visible_fields %}
+                        <div class="wrap-input100 rs1-wrap-input100 validate-input mb-3 ml-1 w-100">
+                           {{ field }}
+                            {{ field.errors }}
+                            <span class="focus-input_creds"></span>
+                        </div>
+                    {% endfor %}
+                    <div class="container-input_creds-form-btn mb-4">
+                        <button class="input_creds-form-btn btn btn-lg btn-block" type="submit">
+                        Регистрация
+                        </button>
+                        <input type="hidden" name="next" value="{{ redirect_to }}">
                     </div>
-                {% endfor %}
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Регистрация</button>
-                 <p class="mt-5 mb-3 text-muted text-center">
-                    <a href="{% url 'account:login' %}" class="mx-3">Войти</a>
-                    |
-                    <a href="/" class="mx-3">На главную</a>
-                </p>
-            </form>
+                    <div class="w-100 text-center pb-5">
+                        <a href="{% url 'account:login' %}" class="text-uppercase px-2">
+                        Войти
+                        </a>
+                        <a href="/" class="text-uppercase px-2">
+                        На главную
+                        </a>
+                    </div>
+                </form>
+                <div class="input_creds-more" style="background-image: url('{% static 'blog/img/guesswhy.jpg' %}');"></div>
+            </div>
         </div>
+    </div>
+
+{#            <form class="form-signin" action="{% url 'account:register' %}" method="post">#}
+{#              {% csrf_token %}#}
+{#              <div class="text-center mb-4">#}
+{#                <img class="mb-2 rounded-circle img-circle profile-img" src="{% static 'blog/img/avatar.png' %}" alt="">#}
+{#                <!-- <img class="mb-4 rounded-circle img-circle profile-img" src="{% static 'blog/img/logo.png' %}" alt=""> -->#}
+{#                <!-- <h1 class="h3 mb-3 font-weight-normal">Создать аккаунт</h1> -->#}
+{#              </div>#}
+{#              {% if messages %}#}
+{#                  {% for message in messages %}#}
+{#                    {% if message.level %}#}
+{#                      <div class="row">#}
+{#                        <div class="col-sm-12 col-sm-offset-0">#}
+{#                          <div class="alert alert-{{ message.tags }}" role="alert">#}
+{#                            <p>{{ message }}</p>#}
+{#                          </div>#}
+{#                        </div>#}
+{#                      </div>#}
+{#                    {% endif %}#}
+{#                  {% endfor %}#}
+{#                {% endif %}#}
+{#                {% for field in form.visible_fields %}#}
+{#                    <div class="form-label-group">#}
+{#                       {{ field }}{{ field.label_tag }}#}
+{#                        {{ field.errors }}#}
+{#                    </div>#}
+{#                {% endfor %}#}
+{#                <button class="btn btn-lg btn-primary btn-block" type="submit">Регистрация</button>#}
+{#                 <p class="mt-5 mb-3 text-muted text-center">#}
+{#                    <a href="{% url 'account:login' %}" class="mx-3">Войти</a>#}
+{#                    |#}
+{#                    <a href="/" class="mx-3">На главную</a>#}
+{#                </p>#}
+{#            </form>#}
+{#        </div>#}
 
 {% endblock %}

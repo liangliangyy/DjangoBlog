@@ -86,7 +86,6 @@ def authorize(request):
             user = temp
         except ObjectDoesNotExist:
             pass
-        # facebook的token过长
         if type == 'facebook':
             user.token = ''
         if user.email:
@@ -247,49 +246,3 @@ def bindsuccess(request, oauthid):
         'title': title,
         'content': content
     })
-
-#
-# from django.shortcuts import render
-# from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
-import requests
-
-from . import vk_utility
-#
-# def index(request):
-#     if 'testflask' not in request.COOKIES:  # проверяем браузер пользователя на наличие куки от нашего приложения
-#         return render(request,
-#                       'vk_app/homePage.html', )  # если куки не обнаружено значит пользователь зашел к нам в первый раз и направляем его на кнопку авторизации
-#     else:
-#         return HttpResponseRedirect(
-#             "http://i-empire.ru/vk_auth/login/")  # если куки обнаружено - сразу перенаправляем пользователя на приложение авторизации
-#
-#
-# #
-# # def vk_login(request):
-# #     try:
-# #         # https: // oauth.vk.com / authorize?client_id = 1 & display = page & redirect_uri = http: // example.com / callback & scope = friends & response_type = code & v = 5.103
-# #         link = "https://oauth.vk.com/authorize?client_id=%s&display=page&redirect_uri=http://i-empire.ru/vk_auth/final/&scope=friends&response_type=code&v=5.103" % settings.VK_APP_ID
-# #         r = requests.get(url=link)
-# #         return HttpResponseRedirect(link)
-# #             # "https://oauth.vk.com/authorize?client_id=%s&scope=friends,offline&redirect_uri=http://i-empire.ru/vk_auth/final/&response_type=code" % settings.VK_APP_ID)
-# #     except Exception as e:
-# #         response = "<h1 style='color:blue'>Сервер ВКонтакте временно недоступен. Повторите попытку позже. </h1>"
-# #         return HttpResponse(response)
-# #
-# #
-# # def vk_final(request):
-# #
-# #     current_url = request.build_absolute_uri()  # записываем в переменную текущую ссылку
-# #     logger.info(current_url)
-# #     code = request.GET["code"]   # получаем код из ссылки
-# #     logger.info(code)
-# #     report = vk_utility.auth(
-# #         code)  # функция vk_utility.auth на входе получает код. при помощи кода получает доступ к списку друзей пользователя
-# #     # и возвращает список из 5 друзей пользователя
-# #     if 'testflask' not in request.COOKIES:  # проверяем бразуер пользователя на наличие куки из данного приложения
-# #         response = HttpResponse(report)
-# #         response.set_cookie('testflask', 'VK_auth',
-# #                             max_age=60 * 60 * 24 * 365 * 2)  # если куки не обнаружено - записываем куки в браузер
-# #     else:
-# #         response = HttpResponse(report)
-# #     return response

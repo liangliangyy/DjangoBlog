@@ -10,26 +10,28 @@ from django.core.exceptions import ValidationError
 class LoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super(LoginForm, self).__init__(*args, **kwargs)
-        self.fields['username'].widget = widgets.TextInput(attrs={'placeholder': "логин или email", "class": "form-control", "autofocus": ""})
-        self.fields['username'].label = "логин или email"
+        self.fields['username'].widget = widgets.TextInput(attrs={'placeholder': "логин или email",
+                                                                  "class": "input_creds", "autocomplete": "off", "autofocus":"",
+                                                                  "style": "background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: pointer; background-image: none;"})
+        self.fields['username'].label = ""
         self.fields['password'].widget = widgets.PasswordInput(
-            attrs={'placeholder': "пароль", "class": "form-control", "autofocus": ""})
-        self.fields['password'].label = "пароль"
+            attrs={'placeholder': "пароль", "class": "input_creds", "name": "pass", "autocomplete": "off"})
+        self.fields['password'].span = ""
 
 
 class RegisterForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super(RegisterForm, self).__init__(*args, **kwargs)
 
-        self.fields['username'].widget = widgets.TextInput(attrs={'placeholder': "логин", "class": "form-control"})
+        self.fields['username'].widget = widgets.TextInput(attrs={'placeholder': "логин", "class": "input_creds", "autocomplete": "off", "autofocus":""})
         self.fields['username'].label = "логин"
-        self.fields['email'].widget = widgets.EmailInput(attrs={'placeholder': "email", "class": "form-control"})
+        self.fields['email'].widget = widgets.EmailInput(attrs={'placeholder': "email", "class": "input_creds", "autocomplete": "off"})
         self.fields['email'].label = "email"
         self.fields['password1'].widget = widgets.PasswordInput(
-            attrs={'placeholder': "пароль", "class": "form-control"})
+            attrs={'placeholder': "пароль", "class": "input_creds"})
         self.fields['password1'].label = "пароль"
         self.fields['password2'].widget = widgets.PasswordInput(
-            attrs={'placeholder': "пароль еще раз", "class": "form-control"})
+            attrs={'placeholder': "пароль еще раз", "class": "input_creds"})
         self.fields['password2'].label = "пароль еще раз"
 
     def clean_email(self):

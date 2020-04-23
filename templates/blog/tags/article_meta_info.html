@@ -2,7 +2,7 @@
 {% load cache %}
 {% with article.id|add:user.is_authenticated as cachekey %}
     {% cache 36000 metainfo cachekey %}
-        <footer class="entry-meta">
+        <footer class="entry-meta text-center">
             {% if show_category_bar %}
                 Категория <a href="{{ article.category.get_absolute_url }}" rel="category tag">{{ article.category.name }}</a>
                 &nbsp;|&nbsp;

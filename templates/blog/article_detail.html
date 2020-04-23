@@ -48,14 +48,13 @@
         </div><!-- #content -->
         {% if article.comment_status == "o" and OPEN_SITE_COMMENT %}
 
-
             {% include 'comments/tags/comment_list.html' %}
             {% if user.is_authenticated %}
                 {% include 'comments/tags/post_comment.html' %}
             {% else %}
                 <div class="comments-area">
-                    <h3 class="comment-meta">Вы не авторизованы, пожалуйста, <a
-                            href="{% url 'account:login' %}?next={{ request.get_full_path }}" rel="nofollow">войдите</a> и пишите комментариев сколько хотите
+                    <h3 class="comment-meta btn-nav-login">Вы не авторизованы, пожалуйста, <a
+                            href="#?next={{ request.get_full_path }}" rel="nofollow" class="btn-nav-login">войдите</a> и пишите комментариев сколько хотите
                     </h3>
 
                     {% load oauth_tags %}

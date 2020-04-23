@@ -70,42 +70,61 @@ $(document).on('webkitAnimationEnd', function() {
 	}, 400);
 });
 
-$( ".form-signin a.btn-block" ).click(function( event ) {
-    event.preventDefault();
-    username = document.getElementById("id_username").value;
-    password = document.getElementById("id_password").value;
-    csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
-    $("#errorlogin").html("");
-    $.ajax({
-        type:"POST",
-        url:'/login/',
-        data:{
-            'csrfmiddlewaretoken': csrfmiddlewaretoken,
-            'username': username,
-            'password': password,
-        },
-        dataType: 'json',
-        success : function(data){
-            console.log(data);
-            if(data['message'] == "Success"){
-                location.reload();
-            }
-            else if(data['message'] == "Failure"){
+// Get the modal
+var modal = $( ".modal" )
 
-                var html_data = `
-                <div class="row">
-                    <div class="col-sm-12 col-sm-offset-0">
-                      <div class="alert alert-danger py-2 mb-3" role="alert">
-                        <p class="text-center mb-0">${data['errors']}</p>
-                      </div>
-                    </div>
-                  </div>`
-                $(".sign_up_messages").html(html_data);
-            }
-            else{
-                $("#errorlogin").html("The E-mail and Password do not match.");
-            }
-        }
-    });
-    console.log("LOL");
+$( ".btn-nav-login" ).click(function() {
+	modal.css('display', 'block')
+	$( "body" ).addClass('modal_open')
+
 });
+
+// When the user clicks anywhere outside of the modal, close it
+$(document).click(function(e) {
+      if ($(e.target).is('.modal') || $(e.target).is('.close')) {
+            modal.css('display', 'none')
+		  $( "body" ).removeClass('modal_open')
+      }
+});
+
+
+//
+// $( ".form-signin a.btn-block" ).click(function( event ) {
+//     event.preventDefault();
+//     username = document.getElementById("id_username").value;
+//     password = document.getElementById("id_password").value;
+//     csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+//     $("#errorlogin").html("");
+//     $.ajax({
+//         type:"POST",
+//         url:'/login/',
+//         data:{
+//             'csrfmiddlewaretoken': csrfmiddlewaretoken,
+//             'username': username,
+//             'password': password,
+//         },
+//         dataType: 'json',
+//         success : function(data){
+//             console.log(data);
+//             if(data['message'] == "Success"){
+//                 location.reload();
+//             }
+//             else if(data['message'] == "Failure"){
+//
+//                 var html_data = `
+//                 <div class="row">
+//                     <div class="col-sm-12 col-sm-offset-0">
+//                       <div class="alert alert-danger py-2 mb-3" role="alert">
+//                         <p class="text-center mb-0">${data['errors']}</p>
+//                       </div>
+//                     </div>
+//                   </div>`
+//                 $(".sign_up_messages").html(html_data);
+//             }
+//             else{
+//                 $("#errorlogin").html("The E-mail and Password do not match.");
+//             }
+//         }
+//     });
+//     console.log("LOL");
+// });

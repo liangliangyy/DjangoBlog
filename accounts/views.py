@@ -84,8 +84,6 @@ class LogoutView(RedirectView):
         from DjangoBlog.utils import cache
         cache.clear()
         logout(request)
-
-        messages.success(self.request, f"Успешный выход")
         return super(LogoutView, self).get(request, *args, **kwargs)
 
 
@@ -126,7 +124,7 @@ class LoginView(FormView):
             return JsonResponse({"message": "Failure", 'errors': "\n".join(form_errors)}, content_type="application/json")
 
         for error in form_errors:
-            messages.add_message(self.request, messages.ERROR, ' '.join(error))
+            messages.add_message(self.request, messages.ERROR, ''.join(error))
         return super().form_invalid(form)
 
 
@@ -144,7 +142,6 @@ class LoginView(FormView):
                 return JsonResponse({"message": "Success"},
                                     content_type="application/json")
 
-            messages.success(self.request, 'Успешный вход')
             return super(LoginView, self).form_valid(form)
         else:
             messages.error(self.request, form.errors)

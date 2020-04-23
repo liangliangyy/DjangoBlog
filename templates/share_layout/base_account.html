@@ -17,14 +17,12 @@
     {% compress css %}
 
         <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-        <link href="{% static 'assets/css/ie10-viewport-bug-workaround.css' %}" rel="stylesheet">
+
         <!-- TODC Bootstrap core CSS -->
-        <link href="{% static 'assets/css/todc-bootstrap.min.css' %}" rel="stylesheet">
+{#        <link href="{% static 'assets/css/todc-bootstrap.min.css' %}" rel="stylesheet">#}
         <!-- Bootstrap CSS -->
-        <link href="{% static 'assets/css/bootstrap.min.css' %}" rel="stylesheet">
+{#        <link href="{% static 'assets/css/bootstrap.min.css' %}" rel="stylesheet">#}
         <!-- Custom styles for this template -->
-        <link href="{% static 'blog/css/floating-label.css' %}" rel="stylesheet">
-         <link href="{% static 'blog/css/oauth_style.css' %}" rel="stylesheet">
 
         <link href="http://lipis.github.io/bootstrap-social/assets/css/font-awesome.css" rel="stylesheet">
         <link href="http://lipis.github.io/bootstrap-social/bootstrap-social.css" rel="stylesheet">
@@ -45,11 +43,13 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    {% include 'head.html' %}
 </head>
 
 {% load blog_tags %}
 {% if weather|rain %}
 <link rel="stylesheet" href="{% static 'blog/css/rain.css' %}">
+
 <body class="back-row-toggle splat-toggle">
 <div class="rain front-row" style="z-index: -1;"></div>
 <div class="rain back-row" style="z-index: -1;"></div>
@@ -64,4 +64,5 @@
 
  </div><!-- #main .wrapper -->
 </body>
+
 </html>

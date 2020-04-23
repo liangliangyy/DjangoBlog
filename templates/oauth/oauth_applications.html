@@ -1,9 +1,14 @@
-<div class="widget-login">
+<div class="widget-login w-100 mb-5">
     {% if apps %}
-        <div class="social-buttons">
-            {% for icon,url in apps %}
-                <a href="{{ url }}" class="btn btn-{{ icon }}"><i class="fa fa-{{ icon }}"></i> {{ icon }}</a>
+        {% for icon,url in apps %}
+            <div class="social-buttons">
+                <a href="{{ url }}" class="btn btn-lg btn-{{ icon }}"><i class="fa fa-{{ icon }}"></i> {{ icon }}</a>
+            </div>
         {% endfor %}
-        </div>
     {% endif %}
 </div>
+
+{#<div class="wrap-input100 rs1-wrap-input100 validate-input mt-3 social-buttons">#}
+{#    <a href="/oauth/oauthlogin/?type=facebook&amp;next_url=/" class="btn btn-lg btn-facebook w-100"><i class="fa fa-facebook"></i> facebook</a>#}
+{#    </div>#}
+

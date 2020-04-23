@@ -34,10 +34,11 @@
       <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
       {% compress css %}
           <!-- Bootstrap CSS -->
+          <link rel="stylesheet" href="{% static 'assets/css/ie10-viewport-bug-workaround.css' %}">
           <link rel="stylesheet" id='twentytwelve-fonts-css' href="{% static 'assets/css/bootstrap.min.css' %}">
           <link rel='stylesheet' id='twentytwelve-fonts-css' href="{% static 'blog/fonts/fonts.css' %}" type='text/css' media='all'/>
           <link rel='stylesheet' id='twentytwelve-style-css' href="{% static 'blog/css/style.css' %}" type='text/css' media='all'/>
-          <link href="{% static 'blog/css/floating-label.css' %}" rel="stylesheet">
+          <link href="http://lipis.github.io/bootstrap-social/assets/css/font-awesome.css" rel="stylesheet">
           <link href="{% static 'blog/css/oauth_style.css' %}" rel="stylesheet">
           {% comment %}<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>{% endcomment %}
           <!--[if lt IE 9]>
@@ -45,6 +46,7 @@
           <![endif]-->
           <link rel="stylesheet" href="{% static 'pygments/default.css' %}"/>
           <link rel="stylesheet" href="{% static 'blog/css/nprogress.css' %}">
+          <link rel="stylesheet" href="{% static 'blog/css/login-modal.css' %}">
           {% block compress_css %}
 
           {% endblock %}
