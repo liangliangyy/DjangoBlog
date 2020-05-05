@@ -28,7 +28,7 @@
         {% endif %}
     </header><!-- .entry-header -->
 
-    <div class="entry-content" itemprop="articleBody">
+    <div class="entry-content markdown-body" itemprop="articleBody">
         {% if  isindex %}
             {{ article.body|custom_markdown|escape|truncatechars_content }}
             <div class="d-flex flex-row post-article-actions">

@@ -1,5 +1,6 @@
 {% extends 'share_layout/base.html' %}
 {% load blog_tags %}
+{% load cache %}
 {% block header %}
     <title>{{ SITE_NAME }} | {{ SITE_DESCRIPTION }}</title>
     <meta name="description" content="{{ SITE_SEO_DESCRIPTION }}"/>
@@ -11,11 +12,9 @@
     <meta property="og:site_name" content="{{ SITE_NAME }}"/>
 {% endblock %}
 {% block content %}
-    <div id="primary" class="site-content">
         <div id="content" role="main">
             {% if query %}
                 <header class="archive-header">
-
                     <h2 class="archive-title"> Поиск: <span style="color: red">{{ query }}</span></h2>
                 </header><!-- .archive-header -->
             {% endif %}
@@ -47,12 +46,8 @@
                 </header><!-- .archive-header -->
             {% endif %}
         </div><!-- #content -->
-    </div><!-- #primary -->
 {% endblock %}
-
 
 {% block sidebar %}
-    {% load_sidebar request.user 'i' %}
+    {% load_sidebar request.user 'i' request %}
 {% endblock %}
-
-

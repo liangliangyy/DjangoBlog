@@ -3,9 +3,6 @@
 from django.urls import path
 from django.views.decorators.cache import cache_page
 from . import views
-from haystack.forms import ModelSearchForm
-from haystack.query import SearchQuerySet
-from haystack.views import SearchView
 
 app_name = "blog"
 urlpatterns = [

@@ -8,6 +8,7 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
     outline: none;
     vertical-align: baseline;
     text-decoration: none;
+    text-align: justify;
 }
 
 ol, ul {
@@ -519,7 +520,9 @@ footer[role="contentinfo"] a:hover {
     line-height: 1.846153846;
     color: #757575;
 }
-
+.entry-content{
+    text-align: justify;
+}
 .comments-link a,
 .entry-meta a {
     color: #212529;
@@ -615,9 +618,27 @@ article.sticky .featured-post {
     margin: 0 0 24px;
     margin: 0 0 1.714285714rem;
     line-height: 1.714285714;
+    text-align: justify;
+}
+.entry-content.markdown-body strong {
+    font-family: sans-serif;
+    /*font-style: italic;*/
+    font-size: 90%;
+}
+
+.entry-content.markdown-body a {
+    color: #2d2f44;
+    text-decoration: underline;
+}
+
+.entry-content.markdown-body a:hover{
+    color: #e0bf4b;
+    text-decoration: none;
+}
+a.btn-nav-login{
+    text-decoration: underline;
 }
 .post-article-actions a{
-
     font-size: large;
     text-decoration: underline;
 }
@@ -808,8 +829,8 @@ img.aligncenter,
 
 .site-content article {
     border-bottom: 4px double #ededed;
-    margin-bottom: 72px;
-    margin-bottom: 5.142857143rem;
+    /*margin-bottom: 72px;*/
+    /*margin-bottom: 5.142857143rem;*/
     padding-bottom: 24px;
     padding-bottom: 1.714285714rem;
     word-wrap: break-word;
@@ -1716,7 +1737,12 @@ div {
 }
 
 .comment-tabs li.active a {
-    color: #2d4373;
+    color: #2d2f44;
+    border-bottom-color: #e0bf4b;
+}
+
+.comment-tabs li.active a:hover {
+    color: #e0bf4b;
     border-bottom-color: #e0bf4b;
 }
 
@@ -2142,11 +2168,16 @@ li #reply-title {
 .btn-vk:hover {
     background-color: #466482;
 }
+.social-buttons a.btn:focus{
+    box-shadow: 0 0 0 0.2rem #e0bf4b;
+}
+
 .social-buttons{
     display: inline-block;
     width: 49%;
     height: 50px;
 }
+
 @media(max-width:576px) {
     .social-buttons{
         padding: .5rem 0rem;

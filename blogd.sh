@@ -1,7 +1,6 @@
 #!/usr/bin/env sh
 TEST_SERVER_SOCKET=${TEST_SERVER_SOCKET:-0.0.0.0:8000}
 UWSGI_PARAMS=${UWSGI_PARAMS:---ini ./blogd.ini}
-BRANCH=${BRANCH:-master}
 
 format_arg(){
     echo ${1:-false} | tr [A-Z] [a-z]
@@ -14,20 +13,16 @@ format_arg(){
             psql -c "SELECT datname FROM pg_database WHERE datistemplate = false;" && break || sleep 10
         done
     }
-
-    [ -d /opt/blogd/site ] || mkdir -p /opt/blogd/site
-    ls -a /opt/blogd/site | grep '.git' || git clone --single-branch --branch $BRANCH https://github.com/mtuktarov/mtuktarov.ru.git /opt/blogd/site
-
-    cd /opt/blogd/site && git checkout $BRANCH && git pull origin $BRANCH
-    mkdir -p /opt/blogd/sockets
-    [ $(format_arg $MAKEMIGRATIONS) = true ] && ./manage.py makemigrations
-    [ $(format_arg $MIGRATE) = true ] && ./manage.py migrate
-    [ $(format_arg $ADD_SUPERUSER) = true ] && ./manage.py add_superuser
-    [ $(format_arg $CONFIGURE_GROUPS) = true ] && ./manage.py configure_groups
-    [ $(format_arg $RENAME_SITE) = true ] && ./manage.py rename_site
-    [ $(format_arg $COLLECT_STATIC) = true ] && ./manage.py collectstatic --noinput
-    [ $(format_arg $COMPRESS_STATIC) = true ] && ./manage.py compress --force
+    cp /opt/blogd/config/local_settings.py /opt/blogd/DjangoBlog/local_settings.py
+    cp -R /opt/blogd/media_tmp/* /opt/blogd/media
+    [ $(format_arg $MAKEMIGRATIONS) = true ] && /opt/blogd/manage.py makemigrations
+    [ $(format_arg $MIGRATE) = true ] && /opt/blogd/manage.py migrate
+    [ $(format_arg $ADD_SUPERUSER) = true ] && /opt/blogd/manage.py add_superuser
+    [ $(format_arg $CONFIGURE_GROUPS) = true ] && /opt/blogd/manage.py configure_groups
+    [ $(format_arg $RENAME_SITE) = true ] && /opt/blogd/manage.py rename_site
+    [ $(format_arg $COLLECT_STATIC) = true ] && /opt/blogd/manage.py collectstatic --noinput
+    [ $(format_arg $COMPRESS_STATIC) = true ] && /opt/blogd/manage.py compress --force
     [ $(format_arg $DJANGO_DISABLE_CACHE) = true ] ||  memcached -d
-    [ $(format_arg $TEST_SERVER) = true ] && ./manage.py runserver ${TEST_SERVER_SOCKET} ||
+    [ $(format_arg $TEST_SERVER) = true ] && /opt/blogd/manage.py runserver ${TEST_SERVER_SOCKET} ||
         uwsgi $UWSGI_PARAMS
 }

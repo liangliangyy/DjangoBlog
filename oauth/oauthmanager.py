@@ -314,7 +314,7 @@ class VKOauthManager(BaseOauthManager):
             self.access_token = token
             self.openid = str(obj['user_id'])
             self.email = str(obj['email'])
-            return self.access_token, self.email
+            return self.access_token
         else:
             raise OAuthAccessTokenException(rsp)
 
@@ -329,11 +329,7 @@ class VKOauthManager(BaseOauthManager):
             rsp = self.do_get(self.API_URL, params)
             datas = json.loads(rsp)['response'][0]
             user = OAuthUser()
-            if 'nickname' in datas and datas['nickname']:
-                user.nikename = datas['nickname']
-            else:
-                user.nikename = '{}.{}'.format(datas['first_name'], datas['last_name'])
-
+            user.nikename = '{} {}'.format(datas['first_name'], datas['last_name'])
             user.type = 'vk'
             user.token = self.access_token
             user.matedata = rsp

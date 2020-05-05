@@ -14,7 +14,7 @@ def seo_processor(requests):
     if value:
         return value
     else:
-        logger.info('set processor cache.')
+        # logger.debug('set processor cache.')
         setting = get_blog_setting()
         value = {
             'SITE_NAME': setting.sitename,

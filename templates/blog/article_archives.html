@@ -2,9 +2,7 @@
 {% load blog_tags %}
 {% load cache %}
 {% block header %}
-
     <title>Архив постов | {{ SITE_DESCRIPTION }}</title>
-
     <meta name="description" content="{{ SITE_SEO_DESCRIPTION }}"/>
     <meta name="keywords" content="{{ SITE_KEYWORDS }}"/>
     <meta property="og:type" content="blog"/>
@@ -12,13 +10,10 @@
     <meta property="og:description" content="{{ SITE_DESCRIPTION }}"/>
     <meta property="og:url" content="{{ SITE_BASE_URL }}"/>
     <meta property="og:site_name" content="{{ SITE_NAME }}"/>
-
 {% endblock %}
 {% block content %}
         <div id="content" role="main">
-
             <header class="archive-header">
-
                 <p class="archive-title">Название</p>
             </header><!-- .archive-header -->
 
@@ -46,12 +41,9 @@
                 </ul>
             </div>
         </div><!-- #content -->
-
 {% endblock %}
 
 
 {% block sidebar %}
     {% load_sidebar user 'i' request %}
 {% endblock %}
-
-

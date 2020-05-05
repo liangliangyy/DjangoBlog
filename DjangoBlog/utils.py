@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from django.core.cache import cache
+import hashlib
 from django.contrib.sites.models import Site
 from hashlib import md5
 import mistune
@@ -48,7 +49,7 @@ def cache_decorator(expiration=3 * 60):
                 else:
                     return value
             else:
-                logger.info('cache_decorator set cache:%s key:%s' % (func.__name__, key))
+                # logger.debug('cache_decorator set cache:%s key:%s' % (func.__name__, key))
                 value = func(*args, **kwargs)
                 if value is None:
                     cache.set(key, '__default_cache_value__', expiration)
@@ -221,7 +222,7 @@ def get_blog_setting():
             setting.show_menu_bar = False
             setting.save()
         value = BlogSettings.objects.first()
-        logger.info('set cache get_blog_setting')
+        # logger.debug('set cache get_blog_setting')
         cache.set('get_blog_setting', value)
         return value
 
@@ -244,21 +245,25 @@ def save_user_avatar(url):
         pass
     try:
         rsp = requests.get(url, timeout=2)
+        logger.info(rsp)
         if rsp.status_code == 200:
             basepath = r'{basedir}/avatar/'.format(basedir=setting.resource_path)
             if not os.path.exists(basepath):
                 os.makedirs(basepath)
-
             imgextensions = ['.jpg', '.png', 'jpeg', '.gif']
             isimage = len([i for i in imgextensions if url.endswith(i)]) > 0
+            logger.info('isimage: {}'.format(isimage))
             ext = os.path.splitext(url)[1] if isimage else '.jpg'
+            logger.info('ext: {}'.format(ext))
             savefilename = str(uuid.uuid4().hex) + ext
             logger.info('Save user avatar:' + basepath + savefilename)
             with open(basepath + savefilename, 'wb+') as file:
+                logger.info("{}".format(rsp.content))
                 file.write(rsp.content)
-            return "media/avatar/" % savefilename
+            return "{}".format(basepath + savefilename)
     except Exception as e:
         logger.error(e)
+        logger.info("return url: {}".format(url))
         return url
 
 
@@ -267,7 +272,7 @@ def delete_sidebar_cache(username):
     from blog.models import LINK_SHOW_TYPE
     keys = (make_template_fragment_key('sidebar', [username + x[0]]) for x in LINK_SHOW_TYPE)
     for k in keys:
-        logger.info('delete sidebar key:' + k)
+        # logger.debug('delete sidebar key:' + k)
         cache.delete(k)
 
 

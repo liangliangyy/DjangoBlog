@@ -52,7 +52,6 @@ def oauthlogin(request):
 
 
 def authorize(request):
-    logger.info("1authorize: {}".format(request))
     type = request.GET.get('type', None)
 
     if not type:
@@ -63,7 +62,7 @@ def authorize(request):
     code = request.GET.get('code', None)
 
     try:
-        rsp, email = manager.get_access_token_by_code(code)
+        rsp = manager.get_access_token_by_code(code)
     except OAuthAccessTokenException as e:
         logger.warning("OAuthAccessTokenException:" + str(e))
         return HttpResponseRedirect('/')
@@ -118,6 +117,7 @@ def authorize(request):
 
             return HttpResponseRedirect(url)
     else:
+        messages.success(request, 'Успешный вход!')
         return HttpResponseRedirect(nexturl)
 
 

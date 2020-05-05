@@ -1,5 +1,6 @@
 {% load static %}
 {% load compress %}
+{% load blog_tags %}
       <meta charset="UTF-8"/>
       <link rel="apple-touch-icon" sizes="57x57" href="{% static 'logo/apple-icon-57x57.png' %}">
       <link rel="apple-touch-icon" sizes="60x60" href="{% static 'logo/apple-icon-60x60.png' %}">
@@ -20,34 +21,48 @@
       <meta name="theme-color" content="#ffffff">
       <meta name="yandex-verification" content="48da2b58c4a727c9" />
       {% include 'share_layout/analyticscode.html' %}
-      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
        <link rel="profile" href="http://gmpg.org/xfn/11"/>
       <!--[if lt IE 9]>
       <script src="{% static 'blog/js/html5.js' %}" type="text/javascript"></script>
       <![endif]-->
-      <link rel="alternate" type="application/rss+xml" title="{{ SITE_NAME }} &raquo; Feed"
-            href="/feed"/>
+      <link rel="alternate" type="application/rss+xml" title="{{ SITE_NAME }} &raquo; Feed" href="/feed"/>
+
+
       <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  {% compress js %}
+      <script src="{% static 'assets/js/ie10-viewport-bug-workaround.js' %}"></script>
+      <script src="{% static 'assets/js/ie-emulation-modes-warning.js' %}"></script>
+      <script src="{% static 'assets/js/vendor/autoprefixer.js' %}"></script>
+  {% endcompress %}
       <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
       <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
       <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+      {% comment %}<script src="{% static 'blog/js/run_prettify.js' %}"></script>{% endcomment %}
       {% compress css %}
-          <!-- Bootstrap CSS -->
+            <link rel="stylesheet" href="{% static 'blog/css/editormd.css' %}">
+          <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
           <link rel="stylesheet" href="{% static 'assets/css/ie10-viewport-bug-workaround.css' %}">
-          <link rel="stylesheet" id='twentytwelve-fonts-css' href="{% static 'assets/css/bootstrap.min.css' %}">
-          <link rel='stylesheet' id='twentytwelve-fonts-css' href="{% static 'blog/fonts/fonts.css' %}" type='text/css' media='all'/>
-          <link rel='stylesheet' id='twentytwelve-style-css' href="{% static 'blog/css/style.css' %}" type='text/css' media='all'/>
-          <link href="http://lipis.github.io/bootstrap-social/assets/css/font-awesome.css" rel="stylesheet">
-          <link href="{% static 'blog/css/oauth_style.css' %}" rel="stylesheet">
-          {% comment %}<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>{% endcomment %}
+          <!-- Bootstrap CSS -->
+          <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+          <link rel='stylesheet' href="{% static 'blog/fonts/fonts.css' %}" type='text/css' media='all'/>
+
+          <link rel='stylesheet' href="{% static 'blog/css/oauth_style.css' %}" rel="stylesheet">
+
           <!--[if lt IE 9]>
           <link rel='stylesheet' id='twentytwelve-ie-css'  href='{% static 'blog/css/ie.css' %}' type='text/css' media='all' />
           <![endif]-->
           <link rel="stylesheet" href="{% static 'pygments/default.css' %}"/>
           <link rel="stylesheet" href="{% static 'blog/css/nprogress.css' %}">
           <link rel="stylesheet" href="{% static 'blog/css/login-modal.css' %}">
-          {% block compress_css %}
 
-          {% endblock %}
       {% endcompress %}
+         <link rel="stylesheet" href="https://lipis.github.io/bootstrap-social/assets/css/font-awesome.css">
+         <link rel="stylesheet" href="https://lipis.github.io/bootstrap-social/bootstrap-social.css">
+<link rel='stylesheet' href="{% static 'blog/css/style.css' %}" type='text/css' media='all'/>
+<title>{{ SITE_NAME }} | {{ SITE_DESCRIPTION }}</title>

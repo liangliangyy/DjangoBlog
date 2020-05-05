@@ -1,3 +1,4 @@
+{% load blog_tags %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,60 +10,26 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <meta name="robots" content="noindex">
-    <link href="{% static 'favicon.ico' %}" rel="icon" type="image/x-icon" />
-    <title>{{ SITE_NAME }} | {{ SITE_DESCRIPTION }}</title>
-    {% include 'share_layout/analyticscode.html' %}
-    {% load compress %}
-
-    {% compress css %}
-
-        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-
-        <!-- TODC Bootstrap core CSS -->
-{#        <link href="{% static 'assets/css/todc-bootstrap.min.css' %}" rel="stylesheet">#}
-        <!-- Bootstrap CSS -->
-{#        <link href="{% static 'assets/css/bootstrap.min.css' %}" rel="stylesheet">#}
-        <!-- Custom styles for this template -->
-
-        <link href="http://lipis.github.io/bootstrap-social/assets/css/font-awesome.css" rel="stylesheet">
-        <link href="http://lipis.github.io/bootstrap-social/bootstrap-social.css" rel="stylesheet">
-
-    {% endcompress %}
-        <!-- Optional JavaScript -->
-        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-    {% compress js %}
-        <script src="{% static 'assets/js/ie10-viewport-bug-workaround.js' %}"></script>
-        <script src="{% static 'assets/js/ie-emulation-modes-warning.js' %}"></script>
-
-    {% endcompress %}
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
     {% include 'head.html' %}
 </head>
-
-{% load blog_tags %}
 {% if weather|rain %}
-<link rel="stylesheet" href="{% static 'blog/css/rain.css' %}">
+    <link rel="stylesheet" href="{% static 'blog/css/rain.css' %}">
+    <body class="home blog custom-font-enabled back-row-toggle splat-toggle">
+    <div class="rain front-row" style="z-index: -1;"></div>
+    <div class="rain back-row" style="z-index: -1;"></div>
+    <script type="text/javascript" src="{% static 'blog/js/rain.js' %}"></script>
+  {% elif weather|snow %}
+    <link rel="stylesheet" href="{% static 'blog/css/snow.css' %}">
+    <body class="home blog custom-font-enabled back-row-toggle splat-toggle">
+    <script type="text/javascript" src="{% static 'blog/js/snow.js' %}"></script>
+  {% else %}
+    <body class="home blog custom-font-enabled">
+  {% endif %}
 
-<body class="back-row-toggle splat-toggle">
-<div class="rain front-row" style="z-index: -1;"></div>
-<div class="rain back-row" style="z-index: -1;"></div>
-<script type="text/javascript" src="{% static 'blog/js/rain.js' %}"></script>
-{% else %}
-<body>
-{% endif %}
-
-    <!-- <p>{{ form.non_field_errors }}</p> -->
         {% block content %}
         {% endblock %}
 
- </div><!-- #main .wrapper -->
+ </div>
 </body>
 
 </html>

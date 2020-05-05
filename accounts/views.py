@@ -89,7 +89,7 @@ class LogoutView(RedirectView):
 
 class CustomAuthForm(LoginForm):
     def __init__(self, *args, **kwargs):
-        self.error_messages['invalid_login'] = 'Неверный пользователь или пароль'
+        self.error_messages['invalid_login'] = 'Неверное имя пользователя или пароль'
         super().__init__(*args, **kwargs)
 
 
@@ -110,6 +110,7 @@ class LoginView(FormView):
         redirect_to = self.request.GET.get(self.redirect_field_name)
         if redirect_to is None:
             redirect_to = '/'
+        logger.info("redirect_to: {}".format(redirect_to))
         kwargs['redirect_to'] = redirect_to
         return super(LoginView, self).get_context_data(**kwargs)
 
@@ -139,8 +140,7 @@ class LoginView(FormView):
             auth.login(self.request, form.get_user())
             if self.request.is_ajax():
                 logger.info("ajax succesfull login request")
-                return JsonResponse({"message": "Success"},
-                                    content_type="application/json")
+                return JsonResponse({"message": "Success"}, content_type="application/json")
 
             return super(LoginView, self).form_valid(form)
         else:
@@ -150,10 +150,10 @@ class LoginView(FormView):
             })
 
     def get_success_url(self):
-
         redirect_to = self.request.POST.get(self.redirect_field_name)
+        logging.info("redirect_to: {}".format(redirect_to))
         if not is_safe_url(url=redirect_to, allowed_hosts=[self.request.get_host()]):
-            messages.error(self.request, 'username or password not correct')
+            messages.error(self.request, 'Неверное имя пользователя или пароль')
             redirect_to = self.success_url
         return redirect_to
 

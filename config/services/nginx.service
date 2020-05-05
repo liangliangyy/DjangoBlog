@@ -14,8 +14,12 @@ StandardError=journal
 ExecStartPre=/opt/blogd/src/config/docker_wrap.sh rm_byname %N
 ExecStartPre=-/usr/bin/docker pull nginx:stable-alpine
 ExecStart=/usr/bin/docker run --rm --name %N \
-    --volumes-from blogd_data \
-    -p 80:80 -p 443:443 \
+    -v /opt/blogd/media:/var/blogd/media \
+    -v /opt/blogd/static:/opt/blogd/static \
+    -v /opt/blogd/socket:/opt/blogd/socket \
+    -v /opt/blogd/ssl:/opt/blogd/ssl \
+    -v /opt/blogd/config/nginx:/etc/nginx/conf.d \
+    --network=blogd -p 80:80 -p 443:443 \
     nginx:stable-alpine
 
 ExecStartPost=/opt/blogd/src/config/docker_wrap.sh set_time_byname %N

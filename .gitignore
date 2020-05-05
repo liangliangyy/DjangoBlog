@@ -63,6 +63,7 @@ target/
 .idea
 .iml
 
+mtuktarov
 
 migrations/
 !migrations/__init__.py
@@ -83,3 +84,5 @@ werobot_session.db
 data
 sockets
 ssl
+local_settings.py
+./static/

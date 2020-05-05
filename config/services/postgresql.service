@@ -1,4 +1,4 @@
-[Unit]                                                                                                                                                                                
+[Unit]
 Description=The PostgreSQL object-relational database system provides reliability and data integrity.
 After=docker.service
 Requires=docker.socket
@@ -12,11 +12,10 @@ StandardOutput=journal
 StandardError=journal
 ExecStartPre=/opt/blogd/src/config/docker_wrap.sh rm_byname %N
 ExecStartPre=-/usr/bin/docker pull postgres:alpine
-ExecStartPre=-/usr/bin/docker run --name blogd_data -v /opt/blogd:/opt/blogd -v /opt/blogd/config/nginx:/etc/nginx/conf.d busybox:latest
-ExecStart=/usr/bin/docker run --rm --name %N \
+ExecStart=/usr/bin/docker run --rm --name %N -h %N\
     --env-file /opt/blogd/config/env \
-    --volumes-from blogd_data \
-    -p 172.17.0.1:5432:5432 \
+    -v /opt/blogd/postgres_data:/postgres_data \
+    --network=blogd -p 5432:5432 \
     postgres:alpine
 ExecStartPost=/opt/blogd/src/config/docker_wrap.sh set_time_byname %N
 ExecStop=/opt/blogd/src/config/docker_wrap.sh stop_byname %N

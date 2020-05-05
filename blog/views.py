@@ -62,12 +62,12 @@ class ArticleListView(ListView):
         '''
         value = cache.get(cache_key)
         if value:
-            logger.info('get view cache.key:{key}'.format(key=cache_key))
+            # logger.debug('get view cache.key:{key}'.format(key=cache_key))
             return value
         else:
             article_list = self.get_queryset_data()
             cache.set(cache_key, article_list)
-            logger.info('set view cache.key:{key}'.format(key=cache_key))
+            # logger.debug('set view cache.key:{key}'.format(key=cache_key))
             return article_list
 
     def get_queryset(self):

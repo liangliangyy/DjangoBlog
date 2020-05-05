@@ -11,10 +11,13 @@ TimeoutStopSec=15
 StandardOutput=journal
 StandardError=journal
 ExecStartPre=-/usr/bin/docker pull mtuktarov/blogd:latest
-ExecStart=/usr/bin/docker run --rm --name %N \
+ExecStart=/usr/bin/docker run --rm --name %N -h %N\
     --env-file /opt/blogd/config/env \
-    --volumes-from blogd_data \
-    -p 8000:8000 \
+    -v /opt/blogd/media:/opt/blogd/media \
+    -v /opt/blogd/static:/opt/blogd/static \
+    -v /opt/blogd/socket:/opt/blogd/socket \
+    -v /opt/blogd/config:/opt/blogd/config \
+    --network=blogd -p 8000:8000 \
     mtuktarov/blogd:latest
 
 ExecStartPost=/opt/blogd/src/config/docker_wrap.sh set_time_byname %N

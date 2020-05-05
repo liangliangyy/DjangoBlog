@@ -35,7 +35,7 @@
                             <button class="input_creds-form-btn btn btn-lg btn-block" type="submit">
                             Войти
                             </button>
-                            <input type="hidden" name="next" value="{{ redirect_to }}">
+                            <input type="hidden" name="next" value="{{ request.get_full_path }}">
                         </div>
                             {% load oauth_tags %}
                             {% load_oauth_applications request %}

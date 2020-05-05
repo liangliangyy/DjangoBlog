@@ -53,9 +53,9 @@
                 {% include 'comments/tags/post_comment.html' %}
             {% else %}
                 <div class="comments-area">
-                    <h3 class="comment-meta btn-nav-login">Вы не авторизованы, пожалуйста, <a
+                    <h5 class="comment-meta btn-nav-login">Вы не авторизованы, пожалуйста, <a
                             href="#?next={{ request.get_full_path }}" rel="nofollow" class="btn-nav-login">войдите</a> и пишите комментариев сколько хотите
-                    </h3>
+                    </h5>
 
                     {% load oauth_tags %}
                     {% load_oauth_applications request %}

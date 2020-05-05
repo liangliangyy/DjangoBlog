@@ -164,7 +164,7 @@ HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 AUTHENTICATION_BACKENDS = ['accounts.user_login_backend.EmailOrUsernameModelBackend']
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(SITE_ROOT, 'static')  
+STATIC_ROOT = os.path.join(SITE_ROOT, 'static')
 STATICFILES = os.path.join(SITE_ROOT, 'static')
 
 AUTH_USER_MODEL = 'accounts.BlogUser'
@@ -200,15 +200,7 @@ SITE_ID = 1
 ADMINS = []
 # WX ADMIN password(Two times md5)
 WXADMIN = '995F03AC401D6CABABAEF756FC4D43C7'
-
-try:
-    parent_dir = os.path.dirname(SITE_ROOT)
-    sys.path.insert(0, os.path.join(parent_dir, 'config'))
-    from local import *
-    LOG_FILE_NAME='../log/djangoblog.log'
-except ImportError:
-    LOG_FILE_NAME = 'djangoblog.log'
-
+LOG_FILE_NAME = 'djangoblog.log'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -333,7 +325,7 @@ MESSAGE_TAGS = {message_constants.DEBUG: 'debug',
                 message_constants.WARNING: 'warning',
                 message_constants.ERROR: 'danger', }
 
-# Emial:
+# Email:
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = os.getenv('DJANGO_EMAIL_HOST', 'smtp.gmail.com')
 EMAIL_PORT = os.getenv('DJANGO_EMAIL_PORT', 465)
@@ -342,3 +334,8 @@ EMAIL_HOST_PASSWORD = os.getenv('DJANGO_EMAIL_PASS', '')
 EMAIL_FILES = os.path.join(BASE_DIR, 'templates/email')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 SERVER_EMAIL = EMAIL_HOST_USER
+
+try:
+    from DjangoBlog.local_settings import *
+except ImportError:
+    pass

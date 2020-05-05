@@ -12,7 +12,7 @@ from accounts.models import BlogUser
 import logging
 
 GROUPS = ['new_users', 'devops', 'developers', 'qa', 'operators', 'product']
-MODELS = ['logentry', 'permission', 'group', 'contenttype', 'session', 'site', 'blogsettings', 'links', 'sidebar', 'tag', 'category', 'article', 'bloguser', 'comment', 'commands', 'emailsendlog', 'comment']
+MODELS = ['logentry', 'permission', 'group', 'contenttype', 'session', 'site', 'blogsettings', 'links', 'sidebar', 'tag', 'category', 'article', 'bloguser', 'comment', 'commands', 'emailsendlog']
 
 
 class Command(BaseCommand):

@@ -142,7 +142,8 @@ iframe {
     display: -ms-flexbox;
     display: flex;
     flex-wrap: wrap;
-    padding: 100px 65px 40px
+    padding: 5% 10%;
+    height: 90vh;
 }
 
 .input_creds-form-title {

@@ -14,12 +14,13 @@
 <html lang="ru-RU" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
 <!--<![endif]-->
   <head>
+      <meta name="viewport" content="width=device-width"/>
       {% include 'head.html' %}
 
       {% block header %}
       {% endblock %}
   </head>
-  {% if weather|rain %}
+{% if weather|rain %}
     <link rel="stylesheet" href="{% static 'blog/css/rain.css' %}">
     <body class="home blog custom-font-enabled back-row-toggle splat-toggle">
     <div class="rain front-row" style="z-index: -1;"></div>
@@ -32,7 +33,6 @@
   {% else %}
     <body class="home blog custom-font-enabled">
   {% endif %}
-
       {% include 'share_layout/nav.html' %}
 
     <div id="page" class="site row mx-auto mt-3 col-11 col-md-9 py-5">
@@ -56,8 +56,6 @@
       <script type="text/javascript" src="{% static 'blog/js/nprogress.js' %}"></script>
       <script type="application/javascript" src="{% static 'blog/js/blog.js' %}" ></script>
       <script type="application/javascript" src="{% static 'blog/js/navigation.js' %}"></script>
-    {% block compress_js %}
-      {% endblock %}
     {% endcompress %}
   </div> <!-- Optional JavaScript -->
 </html>
