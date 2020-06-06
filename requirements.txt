@@ -1,5 +1,5 @@
 coverage==5.1
-Django==3.0.6
+Django==3.0.7
 django-appconf==1.0.4
 django-autoslug==1.9.7
 django-compressor==2.4
