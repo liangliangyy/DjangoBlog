@@ -3,7 +3,7 @@ from blog.models import Article, Category, Tag
 from django.contrib.auth import get_user_model
 from DjangoBlog.utils import get_current_site
 from django.urls import reverse
-import datetime
+from django.utils import timezone
 from accounts.models import BlogUser
 from comments.templatetags.comments_tags import *
 from DjangoBlog.utils import get_max_articleid_commentid
@@ -27,8 +27,8 @@ class CommentsTest(TestCase):
 
         category = Category()
         category.name = "categoryccc"
-        category.created_time = datetime.datetime.now()
-        category.last_mod_time = datetime.datetime.now()
+        category.created_time = timezone.now()
+        category.last_mod_time = timezone.now()
         category.save()
 
         article = Article()

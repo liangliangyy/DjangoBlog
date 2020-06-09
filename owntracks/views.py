@@ -103,6 +103,7 @@ def get_datas(request):
         date = list(map(lambda x: int(x), request.GET.get('date').split('-')))
         querydate = django.utils.timezone.datetime(
             date[0], date[1], date[2], 0, 0, 0)
+    querydate = django.utils.timezone.make_aware(querydate)
     nextdate = querydate + datetime.timedelta(days=1)
     models = OwnTrackLog.objects.filter(
         created_time__range=(querydate, nextdate))

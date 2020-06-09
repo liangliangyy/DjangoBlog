@@ -2,11 +2,11 @@ from django.test import Client, RequestFactory, TestCase
 from blog.models import Article, Category, Tag
 from django.contrib.auth import get_user_model
 from DjangoBlog.utils import delete_view_cache, delete_sidebar_cache
-import datetime
 from accounts.models import BlogUser
 from django.urls import reverse
 from DjangoBlog.utils import *
 from django.conf import settings
+from django.utils import timezone
 
 
 # Create your tests here.
@@ -33,8 +33,8 @@ class AccountTest(TestCase):
 
         category = Category()
         category.name = "categoryaaa"
-        category.created_time = datetime.datetime.now()
-        category.last_mod_time = datetime.datetime.now()
+        category.created_time = timezone.now()
+        category.last_mod_time = timezone.now()
         category.save()
 
         article = Article()
@@ -80,8 +80,8 @@ class AccountTest(TestCase):
         delete_sidebar_cache(user.username)
         category = Category()
         category.name = "categoryaaa"
-        category.created_time = datetime.datetime.now()
-        category.last_mod_time = datetime.datetime.now()
+        category.created_time = timezone.now()
+        category.last_mod_time = timezone.now()
         category.save()
 
         article = Article()
