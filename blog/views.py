@@ -12,7 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from DjangoBlog.utils import cache, get_md5, get_blog_setting
 from django.shortcuts import get_object_or_404
-from blog.models import Article, Category, Tag, Links
+from blog.models import Article, Category, Tag, Links, LinkShowType
 from comments.forms import CommentForm
 import logging
 
@@ -30,7 +30,7 @@ class ArticleListView(ListView):
     page_type = ''
     paginate_by = settings.PAGINATE_BY
     page_kwarg = 'page'
-    link_type = 'l'
+    link_type = LinkShowType.L
 
     def get_view_cache_key(self):
         return self.request.get['pages']
@@ -89,7 +89,7 @@ class IndexView(ArticleListView):
     首页
     '''
     # 友情链接类型
-    link_type = 'i'
+    link_type = LinkShowType.I
 
     def get_queryset_data(self):
         article_list = Article.objects.filter(type='a', status='p')
