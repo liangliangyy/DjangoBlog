@@ -265,7 +265,7 @@ def delete_sidebar_cache(username):
     keys = (
         make_template_fragment_key(
             'sidebar', [
-                username + x[0]]) for x in LinkShowType.choices)
+                username + x]) for x in LinkShowType.values)
     for k in keys:
         logger.info('delete sidebar key:' + k)
         cache.delete(k)
