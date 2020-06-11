@@ -261,11 +261,11 @@ def save_user_avatar(url):
 
 def delete_sidebar_cache(username):
     from django.core.cache.utils import make_template_fragment_key
-    from blog.models import LINK_SHOW_TYPE
+    from blog.models import LinkShowType
     keys = (
         make_template_fragment_key(
             'sidebar', [
-                username + x[0]]) for x in LINK_SHOW_TYPE)
+                username + x]) for x in LinkShowType.values)
     for k in keys:
         logger.info('delete sidebar key:' + k)
         cache.delete(k)
