@@ -36,7 +36,7 @@ class DjangoBlogFeed(Feed):
         return get_user_model().objects.first().get_absolute_url()
 
     def items(self):
-        return Article.objects.order_by('-pk')[:5]
+        return Article.objects.filter(type='a', status='p').order_by('-pub_time')[:5]
 
     def item_title(self, item):
         return item.title
