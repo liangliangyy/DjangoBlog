@@ -38,9 +38,6 @@ ALLOWED_HOSTS = ['*', '127.0.0.1', 'example.com']
 # Application definition
 
 
-SITE_ROOT = os.path.dirname(os.path.abspath(__file__))
-SITE_ROOT = os.path.abspath(os.path.join(SITE_ROOT, '../'))
-
 INSTALLED_APPS = [
     # 'django.contrib.admin',
     'django.contrib.admin.apps.SimpleAdminConfig',
@@ -162,7 +159,7 @@ HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 AUTHENTICATION_BACKENDS = [
     'accounts.user_login_backend.EmailOrUsernameModelBackend']
 
-STATIC_ROOT = os.path.join(SITE_ROOT, 'collectedstatic')
+STATIC_ROOT = os.path.join(BASE_DIR, 'collectedstatic')
 
 STATIC_URL = '/static/'
 STATICFILES = os.path.join(BASE_DIR, 'static')
@@ -189,7 +186,7 @@ CACHES = {
         'LOCATION': os.environ.get('DJANGO_MEMCACHED_LOCATION') or '127.0.0.1:11211',
         'KEY_PREFIX': 'django_test' if TESTING else 'djangoblog',
         'TIMEOUT': 60 * 60 * 10
-    } if env_to_bool('DJANGO_MEMCACHED_ENABLE', True) else {
+    } if env_to_bool('DJANGO_MEMCACHED_ENABLE', False) else {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
         'TIMEOUT': 10800,
         'LOCATION': 'unique-snowflake',
@@ -293,6 +290,6 @@ COMPRESS_JS_FILTERS = [
     'compressor.filters.jsmin.JSMinFilter'
 ]
 
-MEDIA_ROOT = os.path.join(SITE_ROOT, 'uploads')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 MEDIA_URL = '/media/'
 X_FRAME_OPTIONS = 'SAMEORIGIN'

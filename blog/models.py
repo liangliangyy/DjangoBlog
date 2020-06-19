@@ -14,13 +14,13 @@ from mdeditor.fields import MDTextField
 
 logger = logging.getLogger(__name__)
 
-LINK_SHOW_TYPE = (
-    ('i', '首页'),
-    ('l', '列表页'),
-    ('p', '文章页面'),
-    ('a', '全站'),
-    ('s', '友情链接页面'),
-)
+
+class LinkShowType(models.TextChoices):
+    I = ('i', '首页')
+    L = ('l', '列表页')
+    P = ('p', '文章页面')
+    A = ('a', '全站')
+    S = ('s', '友情链接页面')
 
 
 class BaseModel(models.Model):
@@ -258,8 +258,8 @@ class Links(models.Model):
     show_type = models.CharField(
         '显示类型',
         max_length=1,
-        choices=LINK_SHOW_TYPE,
-        default='i')
+        choices=LinkShowType.choices,
+        default=LinkShowType.I)
     created_time = models.DateTimeField('创建时间', default=now)
     last_mod_time = models.DateTimeField('修改时间', default=now)
 

@@ -5,11 +5,11 @@ from DjangoBlog.utils import get_current_site, get_md5
 from blog.forms import BlogSearchForm
 from django.core.paginator import Paginator
 from blog.templatetags.blog_tags import load_pagination_info, load_articletags
-import datetime
 from accounts.models import BlogUser
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.conf import settings
 from django.urls import reverse
+from django.utils import timezone
 import os
 
 
@@ -42,8 +42,8 @@ class ArticleTest(TestCase):
 
         category = Category()
         category.name = "category"
-        category.created_time = datetime.datetime.now()
-        category.last_mod_time = datetime.datetime.now()
+        category.created_time = timezone.now()
+        category.last_mod_time = timezone.now()
         category.save()
 
         tag = Tag()

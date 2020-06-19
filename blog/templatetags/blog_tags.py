@@ -20,7 +20,7 @@ from django.template.defaultfilters import stringfilter
 from django.utils.safestring import mark_safe
 import random
 from django.urls import reverse
-from blog.models import Article, Category, Tag, Links, SideBar
+from blog.models import Article, Category, Tag, Links, SideBar, LinkShowType
 from django.utils.encoding import force_text
 from django.shortcuts import get_object_or_404
 import hashlib
@@ -144,7 +144,7 @@ def load_sidebar(user, linktype):
         '-views')[:blogsetting.sidebar_article_count]
     dates = Article.objects.datetimes('created_time', 'month', order='DESC')
     links = Links.objects.filter(is_enable=True).filter(
-        Q(show_type=str(linktype)) | Q(show_type='a'))
+        Q(show_type=str(linktype)) | Q(show_type=LinkShowType.A))
     commment_list = Comment.objects.filter(is_enable=True).order_by(
         '-id')[:blogsetting.sidebar_comment_count]
     # 标签云 计算字体大小
