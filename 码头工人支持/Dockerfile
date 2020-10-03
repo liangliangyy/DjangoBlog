@@ -65,4 +65,4 @@ ENV DJANGO_WXADMIN_PASSWORD DJANGO_BLOG_CHANGE_ME
 ENV DJANGO_WEROBOT_TOKEN DJANGO_BLOG_CHANGE_ME
 
 EXPOSE 80
-ENTRYPOINT ["sh",""./docker-support/entrypoint.sh"]
+ENTRYPOINT ["sh","./docker-support/entrypoint.sh"]
