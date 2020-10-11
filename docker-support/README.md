@@ -24,6 +24,7 @@ docker build -f .\docker-support\Dockerfile -t <你的 Docker Hub 用户名>/dja
 ```shell script
 docker run -it --rm <你的 Docker Hub 用户名>/django_blog:latest <指令>
 ```
+##### DJANGO_MYSQL_HOST获取：宿主机输入 ifconfig 中的docker0的inet addr
 
 例如：
 
