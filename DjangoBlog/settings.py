@@ -27,7 +27,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get(
-    'DJANGO_SECRET_KEY') or 'n9ceqv38)#&mwuat@(mjb_p%em$e8$qyr#fw9ot!=ba6lijx-6'
+    'DJANGO_SECRET_KEY'
+) or 'n9ceqv38)#&mwuat@(mjb_p%em$e8$qyr#fw9ot!=ba6lijx-6'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env_to_bool('DJANGO_DEBUG', True)
 # DEBUG = False
@@ -36,7 +37,6 @@ TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 # ALLOWED_HOSTS = []
 ALLOWED_HOSTS = ['*', '127.0.0.1', 'example.com']
 # Application definition
-
 
 INSTALLED_APPS = [
     # 'django.contrib.admin',
@@ -98,35 +98,39 @@ WSGI_APPLICATION = 'DjangoBlog.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('DJANGO_MYSQL_DATABASE') or 'djangoblog',
-        'USER': os.environ.get('DJANGO_MYSQL_USER') or 'root',
-        'PASSWORD': os.environ.get('DJANGO_MYSQL_PASSWORD') or 'djangoblog_123',
-        'HOST': os.environ.get('DJANGO_MYSQL_HOST') or '127.0.0.1',
-        'PORT': int(
-            os.environ.get('DJANGO_MYSQL_PORT') or 3306),
+        'NAME': 'djangoblog',
+        'USER': 'djangoblog',
+        'PASSWORD': 'DjAnGoBlOg123!@#',
+        'HOST': 'localhost',
+        'PORT': 3306,
         'OPTIONS': {
-            'charset': 'utf8mb4'},
-    }}
+            'charset': 'utf8mb4'
+        },
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
 
@@ -146,7 +150,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
-
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'DjangoBlog.whoosh_cn_backend.WhooshEngine',
@@ -157,7 +160,8 @@ HAYSTACK_CONNECTIONS = {
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 # Allow user login with username and password
 AUTHENTICATION_BACKENDS = [
-    'accounts.user_login_backend.EmailOrUsernameModelBackend']
+    'accounts.user_login_backend.EmailOrUsernameModelBackend'
+]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'collectedstatic')
 
@@ -183,7 +187,8 @@ CACHE_CONTROL_MAX_AGE = 2592000
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': os.environ.get('DJANGO_MEMCACHED_LOCATION') or '127.0.0.1:11211',
+        'LOCATION': os.environ.get('DJANGO_MEMCACHED_LOCATION')
+        or '127.0.0.1:11211',
         'KEY_PREFIX': 'django_test' if TESTING else 'djangoblog',
         'TIMEOUT': 60 * 60 * 10
     } if env_to_bool('DJANGO_MEMCACHED_ENABLE', False) else {
@@ -222,7 +227,8 @@ LOGGING = {
     },
     'formatters': {
         'verbose': {
-            'format': '[%(asctime)s] %(levelname)s [%(name)s.%(funcName)s:%(lineno)d %(module)s] %(message)s',
+            'format':
+            '[%(asctime)s] %(levelname)s [%(name)s.%(funcName)s:%(lineno)d %(module)s] %(message)s',
         }
     },
     'filters': {
@@ -279,16 +285,13 @@ STATICFILES_FINDERS = (
 COMPRESS_ENABLED = True
 # COMPRESS_OFFLINE = True
 
-
 COMPRESS_CSS_FILTERS = [
     # creates absolute urls from relative ones
     'compressor.filters.css_default.CssAbsoluteFilter',
     # css minimizer
     'compressor.filters.cssmin.CSSMinFilter'
 ]
-COMPRESS_JS_FILTERS = [
-    'compressor.filters.jsmin.JSMinFilter'
-]
+COMPRESS_JS_FILTERS = ['compressor.filters.jsmin.JSMinFilter']
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 MEDIA_URL = '/media/'
