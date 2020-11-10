@@ -17,6 +17,19 @@
     {% block header %}
     {% endblock %}
     <link rel="profile" href="http://gmpg.org/xfn/11"/>
+    <link rel="shortcut icon" href="{%static "blog/img/favicon.ico" %}" />
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script> 
+    <script type="text/x-mathjax-config"> 
+        MathJax.Hub.Config({ 
+            tex2jax: { 
+                skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'], 
+                inlineMath: [['$','$']] 
+            } 
+        }); 
+    </script>
+
+ 
+</head>
 
     <!--[if lt IE 9]>
     <script src="{% static 'blog/js/html5.js' %}" type="text/javascript"></script>
