@@ -1,3 +1,5 @@
+setuptools-scm==4.1.2
+seqeval==1.2.2
 coverage==5.2.1
 Django==3.1.1
 django-appconf==1.0.4
