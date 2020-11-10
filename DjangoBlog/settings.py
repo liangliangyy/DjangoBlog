@@ -30,12 +30,12 @@ SECRET_KEY = os.environ.get(
     'DJANGO_SECRET_KEY'
 ) or 'n9ceqv38)#&mwuat@(mjb_p%em$e8$qyr#fw9ot!=ba6lijx-6'
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env_to_bool('DJANGO_DEBUG', True)
-# DEBUG = False
+# DEBUG = env_to_bool('DJANGO_DEBUG', True)
+DEBUG = False
 TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 
 # ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['*', '127.0.0.1', 'example.com']
+ALLOWED_HOSTS = ['*', '127.0.0.1', 'totoroblog.com', '8.131.92.182']
 # Application definition
 
 INSTALLED_APPS = [
