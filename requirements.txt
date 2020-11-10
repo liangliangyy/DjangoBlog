@@ -36,3 +36,4 @@ requests==2.24.0
 rjsmin==1.1.0
 WeRoBot==1.12.0
 Whoosh==2.7.4
+gevent==1.4.0

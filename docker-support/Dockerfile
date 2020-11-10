@@ -3,6 +3,10 @@ WORKDIR /app
 
 COPY ./requirements.txt .
 
+RUN echo "https://mirror.tuna.tsinghua.edu.cn/alpine/v3.11/main" > /etc/apk/repositories \
+&& echo "https://mirror.tuna.tsinghua.edu.cn/alpine/v3.11/community" >> /etc/apk/repositories \
+&& echo "https://mirror.tuna.tsinghua.edu.cn/alpine/edge/testing" >> /etc/apk/repositories
+
 RUN apk --update --no-cache add python3 py3-pip py-gunicorn nginx mariadb-connector-c \
     && apk --update --no-cache add --virtual .build-deps \
         tzdata \
@@ -22,9 +26,9 @@ RUN apk --update --no-cache add python3 py3-pip py-gunicorn nginx mariadb-connec
         tcl-dev \
         harfbuzz-dev \
         fribidi-dev \
-	&& pip3 install --upgrade pip setuptools gevent \
+        && pip3 install --upgrade pip \
 	&& mkdir -p /run/nginx \
-    && pip3 install -r requirements.txt \
+    && pip3 install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple \
     && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "Asia/Shanghai" > /etc/timezone \
     && apk del .build-deps
@@ -62,4 +66,4 @@ ENV DJANGO_WXADMIN_PASSWORD DJANGO_BLOG_CHANGE_ME
 ENV DJANGO_WEROBOT_TOKEN DJANGO_BLOG_CHANGE_ME
 
 EXPOSE 80
-ENTRYPOINT ["./docker-support/entrypoint.sh"]
+ENTRYPOINT ["sh","./docker-support/entrypoint.sh"]
