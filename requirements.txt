@@ -12,7 +12,6 @@ elasticsearch==7.11.0
 elasticsearch-dsl==7.3.0
 gevent==21.1.2
 greenlet==0.4.17
-idna==3.1
 importlib-metadata==3.7.0
 ipaddress==1.0.23
 isort==5.7.0
