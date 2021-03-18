@@ -22,7 +22,7 @@ markdown2==2.4.0
 mccabe==0.6.1
 mistune==0.8.4
 mysqlclient==2.0.3
-Pillow==8.1.0
+Pillow==8.1.1
 pycparser==2.20
 Pygments==2.8.0
 pylint==2.7.1
