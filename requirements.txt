@@ -37,6 +37,6 @@ rcssmin==1.0.6
 requests==2.25.1
 rjsmin==1.1.0
 six==1.15.0
-urllib3==1.26.0
+urllib3==1.26.3
 WeRoBot==1.13.1
 Whoosh==2.7.4
