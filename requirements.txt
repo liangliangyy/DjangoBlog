@@ -3,7 +3,7 @@ Django==3.1.8
 django-appconf==1.0.4
 django-autoslug==1.9.8
 django-compressor==2.4
-django-debug-toolbar==3.2
+django-debug-toolbar==3.2.1
 django-haystack==3.0
 django-ipware==3.0.2
 django-mdeditor==0.1.18
