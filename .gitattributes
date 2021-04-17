@@ -1,1 +1,1 @@
-blog/static/** export-ignore
+blog/static/* linguist-vendored
