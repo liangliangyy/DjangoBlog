@@ -41,7 +41,7 @@ class ElasticSearchBackend(BaseSearchBackend):
         #     pass
 
     def _get_models(self, iterable):
-        models = iterable if iterable else Article.objects.all()
+        models = iterable if iterable and iterable[0] else Article.objects.all()
         docs = self.manager.convert_to_doc(models)
         return docs
 
@@ -83,10 +83,10 @@ class ElasticSearchBackend(BaseSearchBackend):
             'match', title=query_string)], minimum_should_match="70%")
 
         search = ArticleDocument.search() \
-            .query('bool', filter=[q]) \
-            .filter('term', status='p') \
-            .filter('term', type='a') \
-            .source(False)[start_offset: end_offset]
+                     .query('bool', filter=[q]) \
+                     .filter('term', status='p') \
+                     .filter('term', type='a') \
+                     .source(False)[start_offset: end_offset]
 
         results = search.execute()
         hits = results['hits'].total
