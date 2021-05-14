@@ -31,7 +31,7 @@ class OnlineMiddleware(object):
         start_time = time.time()
         response = self.get_response(request)
         http_user_agent = request.META.get('HTTP_USER_AGENT', '')
-        ip = get_client_ip(request)
+        ip, _ = get_client_ip(request)
         if 'spider'.upper() not in http_user_agent.upper():
             try:
                 cast_time = time.time() - start_time
