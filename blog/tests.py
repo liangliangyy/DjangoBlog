@@ -199,12 +199,11 @@ class ArticleTest(TestCase):
         self.assertEqual(rsp.status_code, 404)
 
     def test_commands(self):
+        from blog.documents import ELASTICSEARCH_ENABLED
+        if ELASTICSEARCH_ENABLED:
+            call_command("build_index")
         call_command("ping_baidu", "all")
         call_command("create_testdata")
         call_command("clear_cache")
         call_command("sync_user_avatar")
         call_command("build_search_words")
-
-        from blog.documents import ELASTICSEARCH_ENABLED
-        if ELASTICSEARCH_ENABLED:
-            call_command("build_index")

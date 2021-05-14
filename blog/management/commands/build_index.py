@@ -11,7 +11,7 @@
 @time: 2019-04-20 20:39
 """
 
-from blog.documents import ElapsedTimeDocument, ArticleDocumentManager
+from blog.documents import ElapsedTimeDocument, ArticleDocumentManager, ElaspedTimeDocumentManager
 
 from django.core.management.base import BaseCommand
 from blog.models import Article
@@ -22,9 +22,9 @@ class Command(BaseCommand):
     help = 'build search index'
 
     def handle(self, *args, **options):
+        manager = ElapsedTimeDocument()
+        ElaspedTimeDocumentManager.delete_index()
+        manager.init()
         manager = ArticleDocumentManager()
         manager.delete_index()
         manager.rebuild()
-
-        manager = ElapsedTimeDocument()
-        manager.init()

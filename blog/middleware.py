@@ -44,7 +44,6 @@ class OnlineMiddleware(object):
                         url=url,
                         time_taken=time_taken,
                         log_datetime=timezone.now(),
-                        type='blog',
                         useragent=http_user_agent,
                         ip=ip)
                 response.content = response.content.replace(

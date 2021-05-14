@@ -195,7 +195,7 @@ CACHES = {
 
 SITE_ID = 1
 BAIDU_NOTIFY_URL = os.environ.get('DJANGO_BAIDU_NOTIFY_URL') \
-    or 'http://data.zz.baidu.com/urls?site=https://www.lylinux.net&token=1uAOGrMsUm5syDGn'
+                   or 'http://data.zz.baidu.com/urls?site=https://www.lylinux.net&token=1uAOGrMsUm5syDGn'
 
 # Email:
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -293,3 +293,12 @@ COMPRESS_JS_FILTERS = [
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 MEDIA_URL = '/media/'
 X_FRAME_OPTIONS = 'SAMEORIGIN'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+if os.environ.get('DJANGO_ELASTICSEARCH_HOST'):
+    ELASTICSEARCH_DSL = {
+        'default': {
+            'hosts': os.environ.get('DJANGO_ELASTICSEARCH_HOST')
+        },
+    }
