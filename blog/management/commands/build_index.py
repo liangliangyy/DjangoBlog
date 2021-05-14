@@ -22,9 +22,8 @@ class Command(BaseCommand):
     help = 'build search index'
 
     def handle(self, *args, **options):
+        manager = ElapsedTimeDocument()
+        manager.init()
         manager = ArticleDocumentManager()
         manager.delete_index()
         manager.rebuild()
-
-        manager = ElapsedTimeDocument()
-        manager.init()
