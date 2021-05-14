@@ -43,6 +43,11 @@ class ElapsedTimeDocument(Document):
 
 
 class ElaspedTimeDocumentManager():
+    @staticmethod
+    def delete_index():
+        from elasticsearch import Elasticsearch
+        es = Elasticsearch(settings.ELASTICSEARCH_DSL['default']['hosts'])
+        es.indices.delete(index='performance', ignore=[400, 404])
 
     @staticmethod
     def create(url, time_taken, log_datetime, useragent, ip):
