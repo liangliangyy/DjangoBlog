@@ -28,7 +28,7 @@ class ElapsedTimeDocument(Document):
     url = Text()
     time_taken = Long()
     log_datetime = Date()
-    type = Text(analyzer='ik_max_word')
+    type = Text(analyzer='ik_max_word', search_analyzer='ik_smart')
     useragent = Text()
     ip = Text()
 
