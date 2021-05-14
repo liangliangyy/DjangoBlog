@@ -202,6 +202,9 @@ class ArticleTest(TestCase):
         call_command("ping_baidu", "all")
         call_command("create_testdata")
         call_command("clear_cache")
-        call_command("build_index")
-        call_command("build_search_words")
         call_command("sync_user_avatar")
+        call_command("build_search_words")
+
+        from documents import ELASTICSEARCH_ENABLED
+        if ELASTICSEARCH_ENABLED:
+            call_command("build_index")
