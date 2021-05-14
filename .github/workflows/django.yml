@@ -44,14 +44,11 @@ jobs:
           sudo sysctl -w fs.file-max=262144
           sudo sysctl -w vm.max_map_count=262144
 
-      - uses: getong/elasticsearch-action@v1.2
+      - uses: miyataka/elasticsearch-github-actions@1
         with:
-          elasticsearch version: '7.12.1'
-          host port: 9200
-          container port: 9200
-          host node port: 9300
-          node port: 9300
-          discovery type: 'single-node'
+          stack-version: '7.12.1'
+          plugins: 'https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v7.12.1/elasticsearch-analysis-ik-7.12.1.zip'
+
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v1
