@@ -15,6 +15,7 @@
 
 import time
 import logging
+from ipware import get_client_ip
 from blog.documents import ELASTICSEARCH_ENABLED, ElaspedTimeDocumentManager
 
 logger = logging.getLogger(__name__)
@@ -30,7 +31,7 @@ class OnlineMiddleware(object):
         start_time = time.time()
         response = self.get_response(request)
         http_user_agent = request.META.get('HTTP_USER_AGENT', '')
-
+        ip, _ = get_client_ip(request)
         if 'spider'.upper() not in http_user_agent.upper():
             try:
                 cast_time = time.time() - start_time
@@ -44,7 +45,8 @@ class OnlineMiddleware(object):
                         time_taken=time_taken,
                         log_datetime=timezone.now(),
                         type='blog',
-                        useragent=http_user_agent)
+                        useragent=http_user_agent,
+                        ip=ip)
                 response.content = response.content.replace(
                     b'<!!LOAD_TIMES!!>', str.encode(str(cast_time)[:5]))
             except Exception as e:

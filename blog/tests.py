@@ -11,6 +11,7 @@ from django.conf import settings
 from django.urls import reverse
 from django.utils import timezone
 import os
+from django.core.management import call_command
 
 
 # Create your tests here.
@@ -196,3 +197,14 @@ class ArticleTest(TestCase):
     def test_errorpage(self):
         rsp = self.client.get('/eee')
         self.assertEqual(rsp.status_code, 404)
+
+    def test_commands(self):
+        call_command("ping_baidu", "all")
+        call_command("create_testdata")
+        call_command("clear_cache")
+        call_command("sync_user_avatar")
+        call_command("build_search_words")
+
+        from blog.documents import ELASTICSEARCH_ENABLED
+        if ELASTICSEARCH_ENABLED:
+            call_command("build_index")
