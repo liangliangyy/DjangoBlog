@@ -1,0 +1,38 @@
+dist: xenial
+language: python
+sudo: required
+python:
+  - "3.6"
+  - "3.7"
+  - "3.8"
+
+services:
+  - mysql
+env:
+  global:
+    - DJANGO_SETTINGS_MODULE="travis_test.travis_settings"
+branches:
+  only:
+    - master
+# command to install dependencies
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install python-dev python3-dev libmysqlclient-dev -y
+  - sudo cp $TRAVIS_BUILD_DIR/travis_test/mysql.cnf /etc/mysql/conf.d/
+  - sudo service mysql restart
+install:
+  - pip install -r requirements.txt
+  - pip install python-coveralls
+  - pip install coverage codecov
+before_script:
+  - mysql -e 'CREATE DATABASE `djangoblog` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */;'
+  - python manage.py makemigrations
+  - python manage.py migrate
+  - python manage.py collectstatic --noinput
+  - python manage.py compress --force
+# command to run tests
+script:
+  - coverage run manage.py test
+after_success:
+  - coveralls
+  - codecov
