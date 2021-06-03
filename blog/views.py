@@ -1,3 +1,5 @@
+import uuid
+
 from django.shortcuts import render
 
 # Create your views here.
@@ -293,7 +295,7 @@ def fileupload(request):
                 type='files' if not isimage else 'image', timestr=timestr, filename=filename)
             if not os.path.exists(basepath):
                 os.makedirs(basepath)
-            savepath = os.path.join(basepath, filename)
+            savepath = os.path.join(basepath, f"{uuid.uuid4().hex}{os.path.splitext(filename)[-1]}")
             with open(savepath, 'wb+') as wfile:
                 for chunk in request.FILES[filename].chunks():
                     wfile.write(chunk)
@@ -321,7 +323,7 @@ def refresh_memcache(request):
             return HttpResponseForbidden()
     except Exception as e:
         logger.error(e)
-        return HttpResponse(e)
+        return HttpResponse("error")
 
 
 def page_not_found_view(
