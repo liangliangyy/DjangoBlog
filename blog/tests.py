@@ -76,6 +76,12 @@ class ArticleTest(TestCase):
             article.save()
             article.tags.add(tag)
             article.save()
+        from blog.documents import ELASTICSEARCH_ENABLED
+        if ELASTICSEARCH_ENABLED:
+            call_command("build_index")
+            response = self.client.get('/search', {'q': 'nicetitle'})
+            self.assertEqual(response.status_code, 200)
+
         response = self.client.get(article.get_absolute_url())
         self.assertEqual(response.status_code, 200)
         from DjangoBlog.spider_notify import SpiderNotify
@@ -133,6 +139,18 @@ class ArticleTest(TestCase):
         response = self.client.get('/links.html')
         self.assertEqual(response.status_code, 200)
 
+        rsp = self.client.get('/refresh')
+        self.assertEqual(rsp.status_code, 200)
+
+        response = self.client.get('/feed/')
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get('/sitemap.xml')
+        self.assertEqual(response.status_code, 200)
+        from DjangoBlog.utils import block_code
+        block = block_code("`python`", 'python')
+
+
     def __check_pagination__(self, p, type, value):
         s = load_pagination_info(p.page(1), type, value)
         self.assertIsNotNone(s)
@@ -146,23 +164,6 @@ class ArticleTest(TestCase):
         response = self.client.get(s['previous_url'])
         self.assertEqual(response.status_code, 200)
         response = self.client.get(s['next_url'])
-        self.assertEqual(response.status_code, 200)
-
-    def test_validate_feed(self):
-        user = BlogUser.objects.get_or_create(
-            email="liangliangyy12@gmail.com",
-            username="liangliangyy")[0]
-        user.set_password("liangliangyy")
-        user.save()
-        self.client.login(username='liangliangyy', password='liangliangyy')
-
-        rsp = self.client.get('/refresh')
-        self.assertEqual(rsp.status_code, 403)
-
-        response = self.client.get('/feed/')
-        self.assertEqual(response.status_code, 200)
-
-        response = self.client.get('/sitemap.xml')
         self.assertEqual(response.status_code, 200)
 
     def test_image(self):
