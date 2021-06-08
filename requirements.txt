@@ -1,5 +1,5 @@
 coverage==5.5
-Django==3.2.2
+Django==3.2.4
 django-appconf==1.0.4
 django-autoslug==1.9.8
 django-compressor==2.4.1
@@ -8,10 +8,10 @@ django-haystack==3.0
 django-ipware==3.0.2
 django-mdeditor==0.1.18
 django-uuslug==1.2.0
-elasticsearch==7.12.1
+elasticsearch==7.13.1
 elasticsearch-dsl==7.3.0
 gevent==21.1.2
-greenlet==0.4.17
+greenlet==1.1.0
 ipaddress==1.0.23
 isort==5.8.0
 jieba==0.42.1
@@ -24,7 +24,7 @@ mysqlclient==2.0.3
 Pillow==8.2.0
 pycparser==2.20
 Pygments==2.9.0
-pylint==2.8.2
+pylint==2.8.3
 pyparsing==2.4.7
 python-dateutil==2.8.1
 python-logstash==0.4.6
