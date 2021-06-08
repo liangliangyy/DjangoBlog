@@ -302,3 +302,8 @@ if os.environ.get('DJANGO_ELASTICSEARCH_HOST'):
             'hosts': os.environ.get('DJANGO_ELASTICSEARCH_HOST')
         },
     }
+    HAYSTACK_CONNECTIONS = {
+        'default': {
+            'ENGINE': 'DjangoBlog.elasticsearch_backend.ElasticSearchEngine',
+        },
+    }

@@ -66,4 +66,8 @@ jobs:
         run: |
           python manage.py makemigrations
           python manage.py migrate
-          python manage.py test
+          coverage run manage.py test
+          coverage xml
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1

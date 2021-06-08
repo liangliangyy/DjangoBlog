@@ -98,3 +98,6 @@ class CommentsTest(TestCase):
         self.assertIsNotNone(data)
         s = get_max_articleid_commentid()
         self.assertIsNotNone(s)
+
+        from comments.utils import send_comment_email
+        send_comment_email(comment)
