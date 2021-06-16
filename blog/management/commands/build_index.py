@@ -11,10 +11,10 @@
 @time: 2019-04-20 20:39
 """
 
-from blog.documents import ElapsedTimeDocument, ArticleDocumentManager, ElaspedTimeDocumentManager
+from blog.documents import ElapsedTimeDocument, ArticleDocumentManager, ElaspedTimeDocumentManager, \
+    ELASTICSEARCH_ENABLED
 
 from django.core.management.base import BaseCommand
-from blog.models import Article
 
 
 # TODO 参数化
@@ -22,9 +22,10 @@ class Command(BaseCommand):
     help = 'build search index'
 
     def handle(self, *args, **options):
-        manager = ElapsedTimeDocument()
-        ElaspedTimeDocumentManager.delete_index()
-        manager.init()
-        manager = ArticleDocumentManager()
-        manager.delete_index()
-        manager.rebuild()
+        if ELASTICSEARCH_ENABLED:
+            manager = ElapsedTimeDocument()
+            ElaspedTimeDocumentManager.delete_index()
+            manager.init()
+            manager = ArticleDocumentManager()
+            manager.delete_index()
+            manager.rebuild()

@@ -1,0 +1,66 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:latest
+    restart: always
+    command:
+      - mysqld
+      - --max_connections=3000
+      - --wait_timeout=600
+      - --interactive_timeout=600
+      - --thread_cache_size=50
+      - --default-authentication-plugin=mysql_native_password
+      - --character-set-server=utf8
+      - --collation-server=utf8_general_ci
+    environment:
+      - MYSQL_DATABASE=djangoblog
+      - MYSQL_ROOT_PASSWORD=DjAnGoBlOg!2!Q@W#E
+    ports:
+      - 3306:3306
+    volumes:
+      - ./bin/datas/mysql/:/var/lib/mysql
+    depends_on:
+      - memcached
+    container_name: db
+
+  djangoblog:
+    build: .
+    restart: always
+    command: bash -c 'sh /code/DjangoBlog/bin/docker_start.sh'
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./collectedstatic:/code/DjangoBlog/collectedstatic
+    environment:
+      - DJANGO_MYSQL_DATABASE=djangoblog
+      - DJANGO_MYSQL_USER=root
+      - DJANGO_MYSQL_PASSWORD=DjAnGoBlOg!2!Q@W#E
+      - DJANGO_MYSQL_HOST=db
+      - DJANGO_MYSQL_PORT=3306
+      - DJANGO_MEMCACHED_LOCATION=memcached:11211
+    links:
+      - db
+      - memcached
+    depends_on:
+      - db
+    container_name: djangoblog
+  nginx:
+    restart: always
+    image: nginx:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./bin/nginx.conf:/etc/nginx/nginx.conf
+      - ./collectedstatic:/code/DjangoBlog/collectedstatic
+    links:
+      - djangoblog:djangoblog
+    container_name: nginx
+
+  memcached:
+    restart: always
+    image: memcached:latest
+    container_name: memcached
+    ports:
+      - "11211:11211"
