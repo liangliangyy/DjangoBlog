@@ -4,7 +4,7 @@ WORKDIR /code/DjangoBlog/
 RUN  apt-get install  default-libmysqlclient-dev -y && \
     ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
 ADD requirements.txt requirements.txt
-RUN pip install -Ur requirements.txt -i https://mirrors.aliyun.com/pypi/simple && \
-        pip install gunicorn[gevent]  -i https://mirrors.aliyun.com/pypi/simple
+RUN pip install -Ur requirements.txt  && \
+        pip install gunicorn[gevent]
 ADD . .
 ENTRYPOINT ["/code/DjangoBlog/bin/docker_start.sh"]
