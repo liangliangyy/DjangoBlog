@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  es:
+    build: ./bin/es-support
+    container_name: es
+    ports:
+    - 9200:9200
+
+
+  djangoblog:
+    build: .
+    restart: always
+    command: bash -c 'sh /code/DjangoBlog/bin/docker_start.sh'
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./collectedstatic:/code/DjangoBlog/collectedstatic
+    environment:
+      - DJANGO_MYSQL_DATABASE=djangoblog
+      - DJANGO_MYSQL_USER=root
+      - DJANGO_MYSQL_PASSWORD=DjAnGoBlOg!2!Q@W#E
+      - DJANGO_MYSQL_HOST=db
+      - DJANGO_MYSQL_PORT=3306
+      - DJANGO_MEMCACHED_LOCATION=memcached:11211
+      - DJANGO_ELASTICSEARCH_HOST=es:9200
+    links:
+      - db
+      - memcached
+    depends_on:
+      - db
+    container_name: djangoblog
+

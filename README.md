@@ -20,6 +20,7 @@
 - 网站异常邮件提醒，若有未捕捉到的异常会自动发送提醒邮件。
 - 集成了微信公众号功能，现在可以使用微信公众号来管理你的vps了。
 
+
 ## 安装
 mysql客户端从`pymysql`修改成了`mysqlclient`，具体请参考 [pypi](https://pypi.org/project/mysqlclient/) 查看安装前的准备。
 
@@ -36,19 +37,6 @@ mysql客户端从`pymysql`修改成了`mysqlclient`，具体请参考 [pypi](htt
 - Windows电脑：
 
     下载 http://peak.telecommunity.com/dist/ez_setup.py 和 https://raw.github.com/pypa/pip/master/contrib/get-pip.py 这两个文件，双击运行。 
-
-### 配置
-配置都是在 `setting.py` 中，部分配置迁移到了后台配置中。
-
-很多 `setting` 配置我都是写在环境变量里面的.并没有提交到 `github` 中来.例如`SECRET_KEY`,`OAHUTH`,`mysql`以及邮件部分的配置等.你可以直接修改代码成你自己的,或者在环境变量里面加入对应的配置就可以了.
-
-`test`目录中的文件都是为了`travis`自动化测试使用的.不用去关注.或者直接使用.这样就可以集成`travis`自动化测试了.
-
-`bin`目录是在`linux`环境中使用`Nginx`+`Gunicorn`+`virtualenv`+`supervisor`来部署的脚本和`Nginx`配置文件.可以参考我的文章:
-
->[DjangoBlog部署教程](https://www.lylinux.net/article/2019/8/5/58.html)
-
-有详细的部署介绍.
 
 
 ## 运行
@@ -109,7 +97,17 @@ CREATE DATABASE `djangoblog` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8
 执行： `./manage.py runserver`
 
 
-浏览器打开: http://127.0.0.1:8000/  就可以看到效果了。
+浏览器打开: http://127.0.0.1:8000/  就可以看到效果了。  
+
+## 服务器部署
+
+本地安装部署请参考 [DjangoBlog部署教程](https://www.lylinux.net/article/2019/8/5/58.html)
+有详细的部署介绍.    
+
+本项目已经支持使用docker来部署，如果你有docker环境那么可以使用docker来部署，具体请参考:[docker部署](/docs/docker.md)
+
+
+
 ## 更多配置:
 [更多配置介绍](/docs/config.md)
 [集成elasticsearch](/docs/es.md)
