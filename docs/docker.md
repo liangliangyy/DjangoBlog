@@ -1,4 +1,8 @@
 # 使用docker部署
+![Docker Pulls](https://img.shields.io/docker/pulls/liangliangyy/djangoblog)
+![Docker Image Version (latest by date)](https://img.shields.io/docker/v/liangliangyy/djangoblog?sort=date)
+![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/liangliangyy/djangoblog)  
+
 使用docker部署支持如下两种方式：
 ## docker镜像方式
 本项目已经支持了docker部署，如果你已经有了`mysql`，那么直接使用基础镜像即可，启动命令如下所示：

@@ -7,3 +7,5 @@ collectedstatic/
 DjangoBlog/whoosh_index/
 uploads/
 settings_production.py
+*.md
+docs/
