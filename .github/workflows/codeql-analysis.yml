@@ -17,6 +17,11 @@ on:
   pull_request:
     # The branches below must be a subset of the branches above
     branches: [ master ]
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.txt'
+      - '**/*.css'
+      - '**/*.js'
   schedule:
     - cron: '33 6 * * 0'
 

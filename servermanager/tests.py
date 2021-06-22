@@ -7,7 +7,7 @@ from blog.models import Category, Article
 from .robot import search, category, recents
 from werobot.messages.messages import TextMessage
 from .robot import MessageHandler, CommandHandler
-from servermanager.Api.commonapi import TuLing
+from servermanager.api.commonapi import TuLing
 
 
 # Create your tests here.

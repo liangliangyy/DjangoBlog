@@ -17,8 +17,8 @@ from werobot import WeRoBot
 import re
 from werobot.replies import ArticlesReply, MusicReply, ImageReply, Article
 from .MemcacheStorage import MemcacheStorage
-from servermanager.Api.blogapi import BlogApi
-from servermanager.Api.commonapi import TuLing
+from servermanager.api.blogapi import BlogApi
+from servermanager.api.commonapi import TuLing
 import os
 import json
 from DjangoBlog.utils import get_md5
