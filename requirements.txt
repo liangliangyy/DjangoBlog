@@ -1,5 +1,5 @@
 coverage==5.5
-Django==3.2.4
+Django==3.2.5
 django-compressor==2.4.1
 django-haystack==3.0
 django-ipware==3.0.2
@@ -12,7 +12,7 @@ jieba==0.42.1
 jsonpickle==2.0.0
 mistune==0.8.4
 mysqlclient==2.0.3
-Pillow==8.2.0
+Pillow==8.3.0
 Pygments==2.9.0
 python-logstash==0.4.6
 python-memcached==1.59
@@ -22,6 +22,6 @@ raven==6.10.0
 rcssmin==1.0.6
 requests==2.25.1
 rjsmin==1.1.0
-urllib3==1.26.5
+urllib3==1.26.6
 WeRoBot==1.13.1
 Whoosh==2.7.4

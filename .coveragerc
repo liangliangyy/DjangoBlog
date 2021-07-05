@@ -6,7 +6,6 @@ omit =
     *tests*
     *.html
     *whoosh_cn_backend*
-    *apps*
     *oauth*
-    *travis_test*
     *settings.py*
+    *venv*
