@@ -21,7 +21,7 @@ from servermanager.api.blogapi import BlogApi
 from servermanager.api.commonapi import TuLing
 import os
 import json
-from DjangoBlog.utils import get_md5
+from DjangoBlog.utils import get_sha256
 from django.conf import settings
 import jsonpickle
 from servermanager.models import commands
@@ -202,7 +202,7 @@ class MessageHandler():
             passwd = settings.WXADMIN
             if settings.TESTING:
                 passwd = '123'
-            if passwd.upper() == get_md5(get_md5(info)).upper():
+            if passwd.upper() == get_sha256(get_sha256(info)).upper():
                 self.userinfo.isPasswordSet = True
                 self.savesession()
                 return "验证通过,请输入命令或者要执行的命令代码:输入helpme获得帮助"

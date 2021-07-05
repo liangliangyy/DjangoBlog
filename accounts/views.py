@@ -17,7 +17,7 @@ from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.views.decorators.debug import sensitive_post_parameters
 from django.utils.http import is_safe_url
-from DjangoBlog.utils import send_email, get_md5, get_current_site
+from DjangoBlog.utils import send_email, get_sha256, get_current_site
 from django.conf import settings
 
 logger = logging.getLogger(__name__)
@@ -36,7 +36,7 @@ class RegisterView(FormView):
             user.source = 'Register'
             user.save(True)
             site = get_current_site().domain
-            sign = get_md5(get_md5(settings.SECRET_KEY + str(user.id)))
+            sign = get_sha256(get_sha256(settings.SECRET_KEY + str(user.id)))
 
             if settings.DEBUG:
                 site = '127.0.0.1:8000'
@@ -147,7 +147,7 @@ def account_result(request):
     '''.format(email=user.email)
             title = '注册成功'
         else:
-            c_sign = get_md5(get_md5(settings.SECRET_KEY + str(user.id)))
+            c_sign = get_sha256(get_sha256(settings.SECRET_KEY + str(user.id)))
             sign = request.GET.get('sign')
             if sign != c_sign:
                 return HttpResponseForbidden()

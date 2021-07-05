@@ -13,7 +13,7 @@ from django.views.generic import FormView, RedirectView
 from oauth.forms import RequireEmailForm
 from django.urls import reverse
 from django.db import transaction
-from DjangoBlog.utils import send_email, get_md5, save_user_avatar
+from DjangoBlog.utils import send_email, get_sha256, save_user_avatar
 from DjangoBlog.utils import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseForbidden
@@ -127,10 +127,9 @@ def authorize(request):
 def emailconfirm(request, id, sign):
     if not sign:
         return HttpResponseForbidden()
-    if not get_md5(
-            settings.SECRET_KEY +
-            str(id) +
-            settings.SECRET_KEY).upper() == sign.upper():
+    if not get_sha256(settings.SECRET_KEY +
+                      str(id) +
+                      settings.SECRET_KEY).upper() == sign.upper():
         return HttpResponseForbidden()
     oauthuser = get_object_or_404(OAuthUser, pk=id)
     with transaction.atomic():
@@ -204,8 +203,8 @@ class RequireEmailView(FormView):
         oauthuser = get_object_or_404(OAuthUser, pk=oauthid)
         oauthuser.email = email
         oauthuser.save()
-        sign = get_md5(settings.SECRET_KEY +
-                       str(oauthuser.id) + settings.SECRET_KEY)
+        sign = get_sha256(settings.SECRET_KEY +
+                          str(oauthuser.id) + settings.SECRET_KEY)
         site = get_current_site().domain
         if settings.DEBUG:
             site = '127.0.0.1:8000'
