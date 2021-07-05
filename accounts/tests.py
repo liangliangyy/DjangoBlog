@@ -65,7 +65,7 @@ class AccountTest(TestCase):
                 BlogUser.objects.filter(
                     email='user123@user.com')))
         user = BlogUser.objects.filter(email='user123@user.com')[0]
-        sign = get_md5(get_md5(settings.SECRET_KEY + str(user.id)))
+        sign = get_sha256(get_sha256(settings.SECRET_KEY + str(user.id)))
         path = reverse('accounts:result')
         url = '{path}?type=validation&id={id}&sign={sign}'.format(
             path=path, id=user.id, sign=sign)

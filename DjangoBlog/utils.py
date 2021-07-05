@@ -14,7 +14,7 @@
 """
 from django.core.cache import cache
 from django.contrib.sites.models import Site
-from hashlib import md5
+from hashlib import sha256
 import mistune
 from mistune import escape, escape_link
 from pygments import highlight
@@ -34,8 +34,8 @@ def get_max_articleid_commentid():
     return (Article.objects.latest().pk, Comment.objects.latest().pk)
 
 
-def get_md5(str):
-    m = md5(str.encode('utf-8'))
+def get_sha256(str):
+    m = sha256(str.encode('utf-8'))
     return m.hexdigest()
 
 
@@ -50,7 +50,7 @@ def cache_decorator(expiration=3 * 60):
             if not key:
                 unique_str = repr((func, args, kwargs))
 
-                m = md5(unique_str.encode('utf-8'))
+                m = sha256(unique_str.encode('utf-8'))
                 key = m.hexdigest()
             value = cache.get(key)
             if value is not None:

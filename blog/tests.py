@@ -1,7 +1,7 @@
 from django.test import Client, RequestFactory, TestCase
 from blog.models import Article, Category, Tag, SideBar, Links
 from django.contrib.auth import get_user_model
-from DjangoBlog.utils import get_current_site, get_md5
+from DjangoBlog.utils import get_current_site, get_sha256
 from blog.forms import BlogSearchForm
 from django.core.paginator import Paginator
 from blog.templatetags.blog_tags import load_pagination_info, load_articletags
@@ -175,7 +175,7 @@ class ArticleTest(TestCase):
             file.write(rsp.content)
         rsp = self.client.post('/upload')
         self.assertEqual(rsp.status_code, 403)
-        sign = get_md5(get_md5(settings.SECRET_KEY))
+        sign = get_sha256(get_sha256(settings.SECRET_KEY))
         with open(imagepath, 'rb') as file:
             imgfile = SimpleUploadedFile(
                 'python.png', file.read(), content_type='image/jpg')

@@ -27,7 +27,7 @@ class DjangoBlogTest(TestCase):
         pass
 
     def test_utils(self):
-        md5 = get_md5('test')
+        md5 = get_sha256('test')
         self.assertIsNotNone(md5)
         c = CommonMarkdown.get_markdown('''
         # Title1
