@@ -10,6 +10,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: name/app
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
@@ -30,4 +36,4 @@ jobs:
             linux/arm/v7
             linux/arm/v6
             linux/386
-          tags: liangliangyy/djangoblog:${{ steps.release_version.outputs.tag }}
+          tags: liangliangyy/djangoblog:${{ github.event.release.tag_name }}
