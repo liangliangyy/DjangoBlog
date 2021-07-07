@@ -1,9 +1,8 @@
-name: docker
+name: publish release
 
 on:
-  push:
-    branches:
-      - 'master'
+  release:
+    types: [published]
 
 jobs:
   docker:
@@ -36,4 +35,4 @@ jobs:
             linux/arm/v7
             linux/arm/v6
             linux/386
-          tags: liangliangyy/djangoblog:latest
+          tags: liangliangyy/djangoblog:${{ steps.release_version.outputs.tag }}
