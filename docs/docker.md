@@ -1,7 +1,7 @@
 # 使用docker部署
 ![Docker Pulls](https://img.shields.io/docker/pulls/liangliangyy/djangoblog)
 ![Docker Image Version (latest by date)](https://img.shields.io/docker/v/liangliangyy/djangoblog?sort=date)
-![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/liangliangyy/djangoblog)  
+![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/liangliangyy/djangoblog)
 
 使用docker部署支持如下两种方式：
 ## docker镜像方式

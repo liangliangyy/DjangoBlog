@@ -2,6 +2,9 @@ name: docker
 
 on:
   push:
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.yml'
     branches:
       - 'master'
 
