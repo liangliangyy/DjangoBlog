@@ -31,7 +31,7 @@ mysql客户端从`pymysql`修改成了`mysqlclient`，具体请参考 [pypi](htt
 
     ```
     curl http://peak.telecommunity.com/dist/ez_setup.py | python
-    curl https://raw.github.com/pypa/pip/master/contrib/get-pip.py | python
+    curl https://bootstrap.pypa.io/get-pip.py | python
     ```
 
 - Windows电脑：
