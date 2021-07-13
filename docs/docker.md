@@ -19,7 +19,13 @@ docker-compose up -d
 ```
 本方式生成的mysql数据文件在 `bin/datas/mysql` 文件夹。  
 等启动完成后，访问 [http://127.0.0.1](http://127.0.0.1) 即可。
-
+### 使用es
+如果你期望使用es来作为后端的搜索引擎，那么可以使用如下命令来启动：
+```shell
+docker-compose -f docker-compose.yml -f docker-compose.es.yml build
+docker-compose -f docker-compose.yml -f docker-compose.es.yml up -d
+```
+本方式生成的es数据文件在 `bin/datas/es` 文件夹。
 ## 配置说明:
 
 本项目较多配置都基于环境变量，所有的环境变量如下所示:
