@@ -14,7 +14,7 @@ import elasticsearch.client
 from elasticsearch_dsl.connections import connections
 import time
 from blog.models import Article
-from elasticsearch_dsl import Document, InnerDoc, Date, Integer, Long, Text, Object, GeoPoint
+from elasticsearch_dsl import Document, InnerDoc, Date, Integer, Long, Text, Object, GeoPoint, Keyword
 
 from django.conf import settings
 
@@ -45,18 +45,18 @@ if ELASTICSEARCH_ENABLED:
 
 
 class GeoIp(InnerDoc):
-    continent_name = Text()
-    country_iso_code = Text()
-    country_name = Text()
+    continent_name = Keyword()
+    country_iso_code = Keyword()
+    country_name = Keyword()
     location = GeoPoint()
 
 
 class ElapsedTimeDocument(Document):
-    url = Text()
+    url = Keyword()
     time_taken = Long()
     log_datetime = Date()
     useragent = Text(analyzer='ik_max_word', search_analyzer='ik_smart')
-    ip = Text()
+    ip = Keyword()
     geoip = Object(GeoIp, required=False)
 
     class Index:
