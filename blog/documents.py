@@ -10,10 +10,11 @@
 @file: documents.py
 @time: 2019-04-05 13:05
 """
+import elasticsearch.client
 from elasticsearch_dsl.connections import connections
 import time
-from blog.models import Article, Category, Tag
-from elasticsearch_dsl import Document, Date, Integer, Long, Keyword, Text, Object, Boolean
+from blog.models import Article
+from elasticsearch_dsl import Document, InnerDoc, Date, Integer, Long, Text, Object, GeoPoint
 
 from django.conf import settings
 
@@ -22,6 +23,32 @@ ELASTICSEARCH_ENABLED = hasattr(settings, 'ELASTICSEARCH_DSL')
 if ELASTICSEARCH_ENABLED:
     connections.create_connection(
         hosts=[settings.ELASTICSEARCH_DSL['default']['hosts']])
+    from elasticsearch import Elasticsearch
+
+    es = Elasticsearch(settings.ELASTICSEARCH_DSL['default']['hosts'])
+    from elasticsearch.client import IngestClient
+
+    c = IngestClient(es)
+    try:
+        c.get_pipeline('geoip')
+    except elasticsearch.exceptions.NotFoundError:
+        c.put_pipeline('geoip', body='''{
+              "description" : "Add geoip info",
+              "processors" : [
+                {
+                  "geoip" : {
+                    "field" : "ip"
+                  }
+                }
+              ]
+            }''')
+
+
+class GeoIp(InnerDoc):
+    continent_name = Text()
+    country_iso_code = Text()
+    country_name = Text()
+    location = GeoPoint()
 
 
 class ElapsedTimeDocument(Document):
@@ -30,6 +57,7 @@ class ElapsedTimeDocument(Document):
     log_datetime = Date()
     useragent = Text(analyzer='ik_max_word', search_analyzer='ik_smart')
     ip = Text()
+    geoip = Object(GeoIp, required=False)
 
     class Index:
         name = 'performance'
@@ -51,20 +79,25 @@ class ElaspedTimeDocumentManager():
 
     @staticmethod
     def create(url, time_taken, log_datetime, useragent, ip):
-        # if not hasattr(ElaspedTimeDocumentManager, 'mapping_created'):
-        #     ElapsedTimeDocument.init()
-        #     setattr(ElaspedTimeDocumentManager, 'mapping_created', True)
+        from elasticsearch import Elasticsearch
+        es = Elasticsearch(settings.ELASTICSEARCH_DSL['default']['hosts'])
+
+        res = es.indices.exists(index="performance")
+        if not res:
+            ElapsedTimeDocument.init()
+
         doc = ElapsedTimeDocument(
             meta={
                 'id': int(
                     round(
                         time.time() *
-                        1000))},
+                        1000))
+            },
             url=url,
             time_taken=time_taken,
             log_datetime=log_datetime,
             useragent=useragent, ip=ip)
-        doc.save()
+        doc.save(pipeline="geoip")
 
 
 class ArticleDocument(Document):
