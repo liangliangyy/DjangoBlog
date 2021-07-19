@@ -94,15 +94,16 @@ class IndexView(ArticleListView):
     link_type = LinkShowType.I
 
     def get_queryset_data(self):
-        article_list = Article.objects.filter(type='a', status='p')
+        public_article_list = Article.objects.filter(type='a', status='p')
         user = self.request.user
-        if user:
-            self_article_list = Article.objects.filter(type='a', status='i', author_id=user.id)
-            article_list = article_list.union(self_article_list)
+
+        # the articles only the owner can view
+        self_article_list = Article.objects.filter(type='a', status='i', author_id=user.id)
+        article_list = public_article_list.union(self_article_list)
         return article_list
 
     def get_queryset_cache_key(self):
-        cache_key = 'index_{page}'.format(page=self.page_number)
+        cache_key = 'index_{page}_{user}'.format(page=self.page_number, user=self.request.user)
         return cache_key
 
 
@@ -122,7 +123,13 @@ class ArticleDetailView(DetailView):
         return obj
 
     def get_context_data(self, **kwargs):
-        articleid = int(self.kwargs[self.pk_url_kwarg])
+        article_id = int(self.kwargs[self.pk_url_kwarg])
+        article = Article.objects.filter(id=article_id)[0]
+        if article.status == 'i' and self.request.user.id != article.author_id:
+            # Only the owner can view this article
+            self.object = None
+            return super(ArticleDetailView, self).get_context_data(**kwargs)
+
         comment_form = CommentForm()
         user = self.request.user
         # 如果用户已经登录，则隐藏邮件和用户名输入框
@@ -143,7 +150,6 @@ class ArticleDetailView(DetailView):
 
         kwargs['next_article'] = self.object.next_article
         kwargs['prev_article'] = self.object.prev_article
-
         return super(ArticleDetailView, self).get_context_data(**kwargs)
 
 
@@ -161,8 +167,11 @@ class CategoryDetailView(ArticleListView):
         self.categoryname = categoryname
         categorynames = list(
             map(lambda c: c.name, category.get_sub_categorys()))
-        article_list = Article.objects.filter(
+        public_article_list = Article.objects.filter(
             category__name__in=categorynames, status='p')
+        user = self.request.user
+        self_article_list = Article.objects.filter(type='a', status='i', author_id=user.id)
+        article_list = public_article_list.union(self_article_list)
         return article_list
 
     def get_queryset_cache_key(self):
@@ -170,8 +179,8 @@ class CategoryDetailView(ArticleListView):
         category = get_object_or_404(Category, slug=slug)
         categoryname = category.name
         self.categoryname = categoryname
-        cache_key = 'category_list_{categoryname}_{page}'.format(
-            categoryname=categoryname, page=self.page_number)
+        cache_key = 'category_list_{categoryname}_{page}_{user}'.format(
+            categoryname=categoryname, page=self.page_number, user=self.request.user)
         return cache_key
 
     def get_context_data(self, **kwargs):
@@ -200,8 +209,12 @@ class AuthorDetailView(ArticleListView):
 
     def get_queryset_data(self):
         author_name = self.kwargs['author_name']
-        article_list = Article.objects.filter(
+        public_article_list = Article.objects.filter(
             author__username=author_name, type='a', status='p')
+
+        user = self.request.user
+        self_article_list = Article.objects.filter(type='a', status='i', author_id=user.id)
+        article_list = public_article_list.union(self_article_list)
         return article_list
 
     def get_context_data(self, **kwargs):
@@ -222,8 +235,12 @@ class TagDetailView(ArticleListView):
         tag = get_object_or_404(Tag, slug=slug)
         tag_name = tag.name
         self.name = tag_name
-        article_list = Article.objects.filter(
+        public_article_list = Article.objects.filter(
             tags__name=tag_name, type='a', status='p')
+
+        user = self.request.user
+        self_article_list = Article.objects.filter(type='a', status='i', author_id=user.id)
+        article_list = public_article_list.union(self_article_list)
         return article_list
 
     def get_queryset_cache_key(self):
@@ -253,10 +270,13 @@ class ArchivesView(ArticleListView):
     template_name = 'blog/article_archives.html'
 
     def get_queryset_data(self):
-        return Article.objects.filter(status='p').all()
+        user = self.request.user
+        public_article_list = Article.objects.filter(status='p')
+        self_article_list = Article.objects.filter(type='a', status='i', author_id=user.id)
+        return public_article_list.union(self_article_list).all()
 
     def get_queryset_cache_key(self):
-        cache_key = 'archives'
+        cache_key = 'archives_{user}'.format(user=self.request.user)
         return cache_key
 
 
