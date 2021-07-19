@@ -140,7 +140,11 @@ def account_result(request):
     logger.info(type)
     if user.is_active:
         return HttpResponseRedirect('/')
-    if type and type in ['register', 'validation']:
+    if settings.EMAIL_VERIFICATION is False:
+        user.is_active = True
+        user.save()
+        return HttpResponseRedirect('/')
+    elif type and type in ['register', 'validation']:
         if type == 'register':
             content = '''
     恭喜您注册成功，一封验证邮件已经发送到您 {email} 的邮箱，请验证您的邮箱后登录本站。
