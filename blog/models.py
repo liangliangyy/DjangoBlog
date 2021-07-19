@@ -61,6 +61,7 @@ class Article(BaseModel):
     STATUS_CHOICES = (
         ('d', '草稿'),
         ('p', '发表'),
+        ('i', '尽自己可见'),
     )
     COMMENT_STATUS = (
         ('o', '打开'),
