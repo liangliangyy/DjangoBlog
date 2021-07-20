@@ -112,9 +112,9 @@ class ElaspedTimeDocumentManager():
         ua.browser.Family = useragent.browser.family
         ua.browser.Version = useragent.browser.version_string
 
-        ua.browser = UserAgentOS()
-        ua.browser.Family = useragent.os.family
-        ua.browser.Version = useragent.os.version_string
+        ua.os = UserAgentOS()
+        ua.os.Family = useragent.os.family
+        ua.os.Version = useragent.os.version_string
 
         ua.device = UserAgentDevice()
         ua.device.Family = useragent.device.family
