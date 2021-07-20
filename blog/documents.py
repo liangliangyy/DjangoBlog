@@ -14,7 +14,7 @@ import elasticsearch.client
 from elasticsearch_dsl.connections import connections
 import time
 from blog.models import Article
-from elasticsearch_dsl import Document, InnerDoc, Date, Integer, Long, Text, Object, GeoPoint, Keyword
+from elasticsearch_dsl import Document, InnerDoc, Date, Integer, Long, Text, Object, GeoPoint, Keyword, Boolean
 
 from django.conf import settings
 
@@ -71,6 +71,7 @@ class UserAgent(InnerDoc):
     os = Object(UserAgentOS, required=False)
     device = Object(UserAgentDevice, required=False)
     string = Text()
+    is_bot = Boolean()
 
 
 class ElapsedTimeDocument(Document):
@@ -121,6 +122,7 @@ class ElaspedTimeDocumentManager():
         ua.device.Brand = useragent.device.brand
         ua.device.Model = useragent.device.model
         ua.string = useragent.ua_string
+        ua.is_bot = useragent.is_bot
 
         doc = ElapsedTimeDocument(
             meta={
