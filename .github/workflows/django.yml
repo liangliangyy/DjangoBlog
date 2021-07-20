@@ -2,14 +2,18 @@ name: Django CI
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - master
+      - dev
     paths-ignore:
       - '**/*.md'
       - '**/*.css'
       - '**/*.js'
       - '**/*.yml'
   pull_request:
-    branches: [ master ]
+    branches:
+      - master
+      - dev
     paths-ignore:
       - '**/*.md'
       - '**/*.css'
