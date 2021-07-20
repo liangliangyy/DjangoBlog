@@ -51,13 +51,35 @@ class GeoIp(InnerDoc):
     location = GeoPoint()
 
 
+class UserAgentBrowser(InnerDoc):
+    Family = Keyword()
+    Version = Keyword()
+
+
+class UserAgentOS(UserAgentBrowser):
+    pass
+
+
+class UserAgentDevice(InnerDoc):
+    Family = Keyword()
+    Brand = Keyword()
+    Model = Keyword()
+
+
+class UserAgent(InnerDoc):
+    browser = Object(UserAgentBrowser, required=False)
+    os = Object(UserAgentOS, required=False)
+    device = Object(UserAgentDevice, required=False)
+    string = Text()
+
+
 class ElapsedTimeDocument(Document):
     url = Keyword()
     time_taken = Long()
     log_datetime = Date()
-    useragent = Text(analyzer='ik_max_word', search_analyzer='ik_smart')
     ip = Keyword()
     geoip = Object(GeoIp, required=False)
+    useragent = Object(UserAgent, required=False)
 
     class Index:
         name = 'performance'
@@ -80,11 +102,25 @@ class ElaspedTimeDocumentManager():
     @staticmethod
     def create(url, time_taken, log_datetime, useragent, ip):
         from elasticsearch import Elasticsearch
-        es = Elasticsearch(settings.ELASTICSEARCH_DSL['default']['hosts'])
+        client = Elasticsearch(settings.ELASTICSEARCH_DSL['default']['hosts'])
 
-        res = es.indices.exists(index="performance")
+        res = client.indices.exists(index="performance")
         if not res:
             ElapsedTimeDocument.init()
+        ua = UserAgent()
+        ua.browser = UserAgentBrowser()
+        ua.browser.Family = useragent.browser.family
+        ua.browser.Version = useragent.browser.version_string
+
+        ua.browser = UserAgentOS()
+        ua.browser.Family = useragent.os.family
+        ua.browser.Version = useragent.os.version_string
+
+        ua.device = UserAgentDevice()
+        ua.device.Family = useragent.device.family
+        ua.device.Brand = useragent.device.brand
+        ua.device.Model = useragent.device.model
+        ua.string = useragent.ua_string
 
         doc = ElapsedTimeDocument(
             meta={
@@ -96,7 +132,7 @@ class ElaspedTimeDocumentManager():
             url=url,
             time_taken=time_taken,
             log_datetime=log_datetime,
-            useragent=useragent, ip=ip)
+            useragent=ua, ip=ip)
         doc.save(pipeline="geoip")
 
 

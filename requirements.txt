@@ -20,8 +20,9 @@ python-slugify==5.0.2
 pytz==2021.1
 raven==6.10.0
 rcssmin==1.0.6
-requests==2.25.1
+requests==2.26.0
 rjsmin==1.1.0
 urllib3==1.26.6
 WeRoBot==1.13.1
 Whoosh==2.7.4
+user-agents==2.2.0
