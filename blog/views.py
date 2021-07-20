@@ -189,7 +189,8 @@ class AuthorDetailView(ArticleListView):
     page_type = '作者文章归档'
 
     def get_queryset_cache_key(self):
-        author_name = self.kwargs['author_name']
+        from uuslug import slugify
+        author_name = slugify(self.kwargs['author_name'])
         cache_key = 'author_{author_name}_{page}'.format(
             author_name=author_name, page=self.page_number)
         return cache_key

@@ -7,7 +7,8 @@
 ## docker镜像方式
 本项目已经支持了docker部署，如果你已经有了`mysql`，那么直接使用基础镜像即可，启动命令如下所示：
 ```shell
- docker run -d  -p 8000:8000 -e DJANGO_MYSQL_HOST=mysqlhost -e DJANGO_MYSQL_PASSWORD=mysqlrootpassword -e DJANGO_MYSQL_USER=root -e DJANGO_MYSQL_DATABASE=djangoblog --name djangoblog liangliangyy/djangoblog
+docker pull liangliangyy/djangoblog:latest
+docker run -d  -p 8000:8000 -e DJANGO_MYSQL_HOST=mysqlhost -e DJANGO_MYSQL_PASSWORD=mysqlrootpassword -e DJANGO_MYSQL_USER=root -e DJANGO_MYSQL_DATABASE=djangoblog --name djangoblog liangliangyy/djangoblog:latest
 ```
 启动完成后，访问 http://127.0.0.1:8000 
 ## 使用docker-compose
