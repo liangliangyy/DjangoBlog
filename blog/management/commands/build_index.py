@@ -23,8 +23,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         if ELASTICSEARCH_ENABLED:
+            ElaspedTimeDocumentManager.build_index()
             manager = ElapsedTimeDocument()
-            ElaspedTimeDocumentManager.delete_index()
             manager.init()
             manager = ArticleDocumentManager()
             manager.delete_index()

@@ -93,7 +93,15 @@ class ElapsedTimeDocument(Document):
         doc_type = 'ElapsedTime'
 
 
-class ElaspedTimeDocumentManager():
+class ElaspedTimeDocumentManager:
+    @staticmethod
+    def build_index():
+        from elasticsearch import Elasticsearch
+        client = Elasticsearch(settings.ELASTICSEARCH_DSL['default']['hosts'])
+        res = client.indices.exists(index="performance")
+        if not res:
+            ElapsedTimeDocument.init()
+
     @staticmethod
     def delete_index():
         from elasticsearch import Elasticsearch
@@ -102,12 +110,7 @@ class ElaspedTimeDocumentManager():
 
     @staticmethod
     def create(url, time_taken, log_datetime, useragent, ip):
-        from elasticsearch import Elasticsearch
-        client = Elasticsearch(settings.ELASTICSEARCH_DSL['default']['hosts'])
-
-        res = client.indices.exists(index="performance")
-        if not res:
-            ElapsedTimeDocument.init()
+        ElaspedTimeDocumentManager.build_index()
         ua = UserAgent()
         ua.browser = UserAgentBrowser()
         ua.browser.Family = useragent.browser.family
