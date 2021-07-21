@@ -109,6 +109,7 @@ class ElaspedTimeDocumentManager:
 
     @staticmethod
     def create(url, time_taken, log_datetime, useragent, ip):
+        ElaspedTimeDocumentManager.build_index()
         ua = UserAgent()
         ua.browser = UserAgentBrowser()
         ua.browser.Family = useragent.browser.family
