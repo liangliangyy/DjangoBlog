@@ -1,4 +1,3 @@
-
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
     margin: 0;
     padding: 0;
@@ -143,6 +142,7 @@ img {
     content: "";
 }
 
+
 /* =Repeatable patterns
 -------------------------------------------------------------- */
 
@@ -224,7 +224,7 @@ article.post-password-required input[type=submit],
     background-image: -ms-linear-gradient(top, #f4f4f4, #e6e6e6);
     background-image: -webkit-linear-gradient(top, #f4f4f4, #e6e6e6);
     background-image: -o-linear-gradient(top, #f4f4f4, #e6e6e6);
-    background-image: linear-gradient(top, #f4f4f4, #e6e6e6);
+    background-image: linear-gradient(to bottom, #f4f4f4, #e6e6e6);
     border: 1px solid #d2d2d2;
     border-radius: 3px;
     box-shadow: 0 1px 2px rgba(64, 64, 64, 0.1);
@@ -257,7 +257,7 @@ article.post-password-required input[type=submit]:hover {
     background-image: -ms-linear-gradient(top, #f9f9f9, #ebebeb);
     background-image: -webkit-linear-gradient(top, #f9f9f9, #ebebeb);
     background-image: -o-linear-gradient(top, #f9f9f9, #ebebeb);
-    background-image: linear-gradient(top, #f9f9f9, #ebebeb);
+    background-image: linear-gradient(to bottom, #f9f9f9, #ebebeb);
 }
 
 .menu-toggle:active,
@@ -273,7 +273,7 @@ input[type="reset"]:active {
     background-image: -ms-linear-gradient(top, #ebebeb, #e1e1e1);
     background-image: -webkit-linear-gradient(top, #ebebeb, #e1e1e1);
     background-image: -o-linear-gradient(top, #ebebeb, #e1e1e1);
-    background-image: linear-gradient(top, #ebebeb, #e1e1e1);
+    background-image: linear-gradient(to bottom, #ebebeb, #e1e1e1);
     box-shadow: inset 0 0 8px 2px #c6c6c6, 0 1px 0 0 #f4f4f4;
     border-color: transparent;
 }
@@ -475,6 +475,7 @@ img.wp-smiley,
     margin-top: 0;
 }
 
+
 /* =Basic structure
 -------------------------------------------------------------- */
 
@@ -498,7 +499,6 @@ body.custom-font-enabled {
 a {
     outline: none;
     color: #21759b;
-    word-wrap: break-word;
 }
 
 a:hover {
@@ -725,6 +725,15 @@ footer[role="contentinfo"] a {
 footer[role="contentinfo"] a:hover {
     color: #21759b;
 }
+
+.site-info span[role=separator] {
+    padding: 0 0.3em 0 0.6em;
+}
+
+.site-info span[role=separator]::before {
+    content: '\002f';
+}
+
 
 /* =Main content and comment content
 -------------------------------------------------------------- */
@@ -1083,6 +1092,7 @@ footer.entry-meta {
     font-weight: normal;
 }
 
+
 /* =Archives
 -------------------------------------------------------------- */
 
@@ -1115,6 +1125,7 @@ footer.entry-meta {
     margin-bottom: 24px;
 }
 
+
 /* =Single image attachment view
 -------------------------------------------------------------- */
 
@@ -1141,6 +1152,7 @@ footer.entry-meta {
     margin-top: 8px;
     margin-top: 0.571428571rem;
 }
+
 
 /* =Aside post format
 -------------------------------------------------------------- */
@@ -1177,6 +1189,7 @@ article.format-aside blockquote:last-child,
 article.format-aside p:last-child {
     margin-bottom: 0;
 }
+
 
 /* =Post formats
 -------------------------------------------------------------- */
@@ -1286,6 +1299,7 @@ article.format-quote .entry-content blockquote {
     margin-right: 1.5rem;
 }
 
+
 /* =Comments
 -------------------------------------------------------------- */
 
@@ -1375,7 +1389,7 @@ article.format-quote .entry-content blockquote {
     background-image: -ms-linear-gradient(top, #009cee, #0088d0);
     background-image: -webkit-linear-gradient(top, #009cee, #0088d0);
     background-image: -o-linear-gradient(top, #009cee, #0088d0);
-    background-image: linear-gradient(top, #009cee, #0088d0);
+    background-image: linear-gradient(to bottom, #009cee, #0088d0);
     border-radius: 3px;
     border: 1px solid #007cbd;
 }
@@ -1473,9 +1487,18 @@ a.comment-edit-link:hover {
     color: #5e5e5e;
 }
 
+#respond #wp-comment-cookies-consent {
+    margin: 0 10px 0 0;
+}
+
+#respond .comment-form-cookies-consent label {
+    display: inline;
+}
+
 .required {
     color: red;
 }
+
 
 /* =Front page template
 -------------------------------------------------------------- */
@@ -1523,8 +1546,13 @@ a.comment-edit-link:hover {
     margin: 0.571428571rem 1.714285714rem 0.571428571rem 0;
 }
 
+
 /* =Widgets
 -------------------------------------------------------------- */
+
+.widget select {
+    max-width: 100%;
+}
 
 .widget-area .widget ul ul {
     margin-left: 12px;
@@ -1545,6 +1573,7 @@ a.comment-edit-link:hover {
     margin-left: 0.857142857rem;
 }
 
+.wp-calendar-nav,
 #wp-calendar {
     margin: 0;
     width: 100%;
@@ -1560,6 +1589,15 @@ a.comment-edit-link:hover {
     text-align: left;
 }
 
+.wp-calendar-nav {
+    display: table;
+}
+
+.wp-calendar-nav span {
+    display: table-cell;
+}
+
+.wp-calendar-nav-next,
 #wp-calendar #next {
     padding-right: 24px;
     padding-right: 1.714285714rem;
@@ -1618,6 +1656,7 @@ img#wpstats {
     margin: 0 auto 24px;
     margin: 0 auto 1.714285714rem;
 }
+
 
 /* =Media queries
 -------------------------------------------------------------- */
@@ -1870,6 +1909,7 @@ img#wpstats {
         box-shadow: none;
     }
 }
+
 
 /* =Print
 ----------------------------------------------- */
