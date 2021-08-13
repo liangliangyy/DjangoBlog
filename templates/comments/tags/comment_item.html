@@ -17,11 +17,12 @@
                    class="url">{{ comment_item.author.username }}
                 </a>
             </cite>
-            <span class="says">说道：</span>
+
         </div>
 
         <div class="comment-meta commentmetadata">
-            {{ comment_item.created_time }}
+            <div>{{ comment_item.created_time }}</div>
+            <div>回复给:@{{ comment_item.author.parent_comment.username }}</div>
         </div>
 
         <p>{{ comment_item.body |escape|custom_markdown }}</p>

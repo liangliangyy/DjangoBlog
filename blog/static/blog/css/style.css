@@ -2184,7 +2184,7 @@ div {
 }
 
 .commentlist .comment-meta:before, .pinglist .ping-meta:before {
-    content: "\f017";
+
     vertical-align: 4%;
     margin-right: 3px;
     font-size: 10px;
