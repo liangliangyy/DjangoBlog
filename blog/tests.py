@@ -123,7 +123,7 @@ class ArticleTest(TestCase):
 
         f = BlogSearchForm()
         f.search()
-        self.client.login(username='liangliangyy', password='liangliangyy')
+        # self.client.login(username='liangliangyy', password='liangliangyy')
         from DjangoBlog.spider_notify import SpiderNotify
         SpiderNotify.baidu_notify([article.get_full_url()])
 
@@ -149,7 +149,9 @@ class ArticleTest(TestCase):
         self.assertEqual(response.status_code, 200)
         from DjangoBlog.utils import block_code
         block = block_code("`python`", 'python')
-
+        self.client.get("/admin/blog/article/1/delete/")
+        self.client.get('/admin/servermanager/emailsendlog/')
+        self.client.get('admin/admin/logentry/')
 
     def __check_pagination__(self, p, type, value):
         s = load_pagination_info(p.page(1), type, value)
@@ -182,18 +184,12 @@ class ArticleTest(TestCase):
             form_data = {'python.png': imgfile}
             rsp = self.client.post(
                 '/upload?sign=' + sign, form_data, follow=True)
-
             self.assertEqual(rsp.status_code, 200)
+        os.remove(imagepath)
         from DjangoBlog.utils import save_user_avatar, send_email
         send_email(['qq@qq.com'], 'testTitle', 'testContent')
         save_user_avatar(
             'https://www.python.org/static/img/python-logo@2x.png')
-        """
-        data = SimpleUploadedFile(imagepath, b'file_content', content_type='image/jpg')
-        rsp = self.client.post('/upload', {'django.jpg': data})
-        self.assertEqual(rsp.status_code, 200)
-        SimpleUploadedFile()
-        """
 
     def test_errorpage(self):
         rsp = self.client.get('/eee')
