@@ -10,4 +10,5 @@ RUN pip install --upgrade pip  && \
         pip cache purge
         
 ADD . .
+RUN chmod +x /code/DjangoBlog/bin/docker_start.sh
 ENTRYPOINT ["/code/DjangoBlog/bin/docker_start.sh"]
