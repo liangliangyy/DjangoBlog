@@ -21,6 +21,7 @@ on:
       - '**/*.css'
       - '**/*.js'
       - '**/*.yml'
+      - '**/*.txt'
   pull_request:
     # The branches below must be a subset of the branches above
     branches:
@@ -31,6 +32,7 @@ on:
       - '**/*.css'
       - '**/*.js'
       - '**/*.yml'
+      - '**/*.txt'
   schedule:
     - cron: '33 6 * * 0'
 
