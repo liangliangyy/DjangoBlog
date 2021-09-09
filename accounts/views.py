@@ -89,6 +89,7 @@ class LoginView(FormView):
     template_name = 'account/login.html'
     success_url = '/'
     redirect_field_name = REDIRECT_FIELD_NAME
+    login_ttl = 2626560  # 一个月的时间
 
     @method_decorator(sensitive_post_parameters('password'))
     @method_decorator(csrf_protect)
@@ -115,6 +116,8 @@ class LoginView(FormView):
             logger.info(self.redirect_field_name)
 
             auth.login(self.request, form.get_user())
+            if self.request.POST.get("remember"):
+                self.request.session.set_expiry(self.login_ttl)
             return super(LoginView, self).form_valid(form)
             # return HttpResponseRedirect('/')
         else:
