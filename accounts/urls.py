@@ -14,10 +14,10 @@
 """
 
 from django.conf.urls import url
-from django.contrib.auth import views as auth_view
 from django.urls import path
-from . import views
+
 from .forms import LoginForm
+from . import views
 
 app_name = "accounts"
 
@@ -33,4 +33,11 @@ urlpatterns = [url(r'^login/$',
                    name='logout'),
                path(r'account/result.html',
                     views.account_result,
-                    name='result')]
+                    name='result'),
+               url(r'^forget_password/$',
+                   views.ForgetPasswordView.as_view(),
+                   name='forget_password'),
+               url(r'^forget_password_code/$',
+                   views.ForgetPasswordEmailCode.as_view(),
+                   name='forget_password_code'),
+               ]
