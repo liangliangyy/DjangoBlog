@@ -171,7 +171,7 @@ class ArticleTest(TestCase):
     def test_image(self):
         import requests
         rsp = requests.get(
-            'https://www.python.org/static/img/python-logo@2x.png')
+            'https://www.python-china.com/static/images/logo.png')
         imagepath = os.path.join(settings.BASE_DIR, 'python.png')
         with open(imagepath, 'wb') as file:
             file.write(rsp.content)
@@ -189,7 +189,7 @@ class ArticleTest(TestCase):
         from DjangoBlog.utils import save_user_avatar, send_email
         send_email(['qq@qq.com'], 'testTitle', 'testContent')
         save_user_avatar(
-            'https://www.python.org/static/img/python-logo@2x.png')
+            'https://www.python-china.com/static/images/logo.png')
 
     def test_errorpage(self):
         rsp = self.client.get('/eee')
