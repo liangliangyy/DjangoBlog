@@ -111,6 +111,7 @@ class TagAdmin(admin.ModelAdmin):
 
 
 class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'parent_category', 'index')
     exclude = ('slug', 'last_mod_time', 'created_time')
 
 

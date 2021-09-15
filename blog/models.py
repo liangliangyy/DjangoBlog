@@ -174,9 +174,10 @@ class Category(BaseModel):
         null=True,
         on_delete=models.CASCADE)
     slug = models.SlugField(default='no-slug', max_length=60, blank=True)
+    index = models.IntegerField(default=0, verbose_name="权重排序-越大越靠前")
 
     class Meta:
-        ordering = ['name']
+        ordering = ['-index']
         verbose_name = "分类"
         verbose_name_plural = verbose_name
 
