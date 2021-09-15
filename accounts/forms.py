@@ -12,11 +12,14 @@
 @file: forms.py
 @time: 2016/11/20 下午3:16
 """
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django import forms
 from django.forms import widgets
-from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+from django.contrib.auth import get_user_model, password_validation
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+
+from . import email
+from .models import BlogUser
 
 
 class LoginForm(AuthenticationForm):
@@ -50,3 +53,79 @@ class RegisterForm(UserCreationForm):
     class Meta:
         model = get_user_model()
         fields = ("username", "email")
+
+
+class ForgetPasswordForm(forms.Form):
+    new_password1 = forms.CharField(
+        label="新密码",
+        widget=forms.PasswordInput(
+            attrs={
+                "class": "form-control",
+                'placeholder': "密码"
+            }
+        ),
+    )
+
+    new_password2 = forms.CharField(
+        label="确认密码",
+        widget=forms.PasswordInput(
+            attrs={
+                "class": "form-control",
+                'placeholder': "确认密码"
+            }
+        ),
+    )
+
+    email = forms.EmailField(
+        label='邮箱',
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': "邮箱"
+            }
+        ),
+    )
+
+    code = forms.CharField(
+        label='验证码',
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': "验证码"
+            }
+        ),
+    )
+
+    def clean_new_password2(self):
+        password1 = self.data.get("new_password1")
+        password2 = self.data.get("new_password2")
+        if password1 and password2 and password1 != password2:
+            raise ValidationError("两次密码不一致")
+        password_validation.validate_password(password2)
+
+        return password2
+
+    def clean_email(self):
+        user_email = self.cleaned_data.get("email")
+        if not BlogUser.objects.filter(
+            email=user_email
+        ).exists():
+            # todo 这里的报错提示可以判断一个邮箱是不是注册过，如果不想暴露可以修改
+            raise ValidationError("未找到邮箱对应的用户")
+        return user_email
+
+    def clean_code(self):
+        code = self.cleaned_data.get("code")
+        error = email.verify(
+            email=self.cleaned_data.get("email"),
+            code=code,
+        )
+        if error:
+            raise ValidationError(error)
+        return code
+
+
+class ForgetPasswordCodeForm(forms.Form):
+    email = forms.EmailField(
+        label="邮箱号"
+    )
