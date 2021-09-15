@@ -12,24 +12,23 @@
 @file: blog_signals.py
 @time: 2017/8/12 上午10:18
 """
-import django
+import _thread
+import logging
+
 import django.dispatch
 from django.dispatch import receiver
 from django.conf import settings
 from django.contrib.admin.models import LogEntry
-from DjangoBlog.utils import get_current_site
 from django.core.mail import EmailMultiAlternatives
 from django.db.models.signals import post_save
-from django.contrib.auth.signals import user_logged_in, user_logged_out, user_login_failed
+from django.contrib.auth.signals import user_logged_in, user_logged_out
 
-from DjangoBlog.utils import cache, send_email, expire_view_cache, delete_sidebar_cache, delete_view_cache
-from DjangoBlog.spider_notify import SpiderNotify
 from oauth.models import OAuthUser
-from blog.models import Article, Category, Tag, Links, SideBar, BlogSettings
 from comments.models import Comment
 from comments.utils import send_comment_email
-import _thread
-import logging
+from DjangoBlog.utils import get_current_site
+from DjangoBlog.utils import cache, expire_view_cache, delete_sidebar_cache, delete_view_cache
+from DjangoBlog.spider_notify import SpiderNotify
 
 logger = logging.getLogger(__name__)
 
@@ -61,7 +60,7 @@ def send_email_signal_handler(sender, **kwargs):
         result = msg.send()
         log.send_result = result > 0
     except Exception as e:
-        logger.error(e)
+        logger.error(f"失败邮箱号: {emailto}, {e}")
         log.send_result = False
     log.save()
 

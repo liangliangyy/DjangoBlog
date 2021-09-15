@@ -1,24 +1,30 @@
-from django.shortcuts import render
 import logging
-from .forms import RegisterForm, LoginForm
-from django.contrib.auth import authenticate, login, logout
-# from django.views.generic.edit import FormView
-from django.views.generic import FormView, RedirectView
-from django.contrib.auth import get_user_model
-from django.shortcuts import get_object_or_404
-from django.http import HttpResponseRedirect, HttpResponseForbidden
-from django.urls import reverse
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from django.contrib.auth import REDIRECT_FIELD_NAME
-from django.views.decorators.csrf import csrf_protect
-from django.contrib import auth
-from django.views.decorators.cache import never_cache
-from django.shortcuts import redirect
-from django.utils.decorators import method_decorator
-from django.views.decorators.debug import sensitive_post_parameters
-from django.utils.http import is_safe_url
-from DjangoBlog.utils import send_email, get_sha256, get_current_site
+
 from django.conf import settings
+from django.contrib import auth
+from django.contrib.auth import REDIRECT_FIELD_NAME
+from django.contrib.auth import get_user_model
+from django.contrib.auth import logout
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.hashers import make_password
+from django.http import HttpResponseRedirect, HttpResponseForbidden
+from django.http.request import HttpRequest
+from django.http.response import HttpResponse
+from django.shortcuts import get_object_or_404
+from django.shortcuts import render
+from django.urls import reverse
+from django.utils.decorators import method_decorator
+from django.utils.http import is_safe_url
+from django.views import View
+from django.views.decorators.cache import never_cache
+from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.debug import sensitive_post_parameters
+from django.views.generic import FormView, RedirectView
+
+from DjangoBlog.utils import send_email, get_sha256, get_current_site, generate_code
+from . import utils
+from .forms import RegisterForm, LoginForm, ForgetPasswordForm, ForgetPasswordCodeForm
+from .models import BlogUser
 
 logger = logging.getLogger(__name__)
 
@@ -62,7 +68,7 @@ class RegisterView(FormView):
                 content=content)
 
             url = reverse('accounts:result') + \
-                '?type=register&id=' + str(user.id)
+                  '?type=register&id=' + str(user.id)
             return HttpResponseRedirect(url)
         else:
             return self.render_to_response({
@@ -89,6 +95,7 @@ class LoginView(FormView):
     template_name = 'account/login.html'
     success_url = '/'
     redirect_field_name = REDIRECT_FIELD_NAME
+    login_ttl = 2626560  # 一个月的时间
 
     @method_decorator(sensitive_post_parameters('password'))
     @method_decorator(csrf_protect)
@@ -115,6 +122,8 @@ class LoginView(FormView):
             logger.info(self.redirect_field_name)
 
             auth.login(self.request, form.get_user())
+            if self.request.POST.get("remember"):
+                self.request.session.set_expiry(self.login_ttl)
             return super(LoginView, self).form_valid(form)
             # return HttpResponseRedirect('/')
         else:
@@ -126,8 +135,8 @@ class LoginView(FormView):
 
         redirect_to = self.request.POST.get(self.redirect_field_name)
         if not is_safe_url(
-            url=redirect_to, allowed_hosts=[
-                self.request.get_host()]):
+                url=redirect_to, allowed_hosts=[
+                    self.request.get_host()]):
             redirect_to = self.success_url
         return redirect_to
 
@@ -163,3 +172,32 @@ def account_result(request):
         })
     else:
         return HttpResponseRedirect('/')
+
+
+class ForgetPasswordView(FormView):
+    form_class = ForgetPasswordForm
+    template_name = 'account/forget_password.html'
+
+    def form_valid(self, form):
+        if form.is_valid():
+            blog_user = BlogUser.objects.filter(email=form.cleaned_data.get("email")).get()
+            blog_user.password = make_password(form.cleaned_data["new_password2"])
+            blog_user.save()
+            return HttpResponseRedirect('/login/')
+        else:
+            return self.render_to_response({'form': form})
+
+
+class ForgetPasswordEmailCode(View):
+
+    def post(self, request: HttpRequest):
+        form = ForgetPasswordCodeForm(request.POST)
+        if not form.is_valid():
+            return HttpResponse("错误的邮箱")
+        to_email = form.cleaned_data["email"]
+
+        code = generate_code()
+        utils.send_verify_email(to_email, code)
+        utils.set_code(to_email, code)
+
+        return HttpResponse("ok")

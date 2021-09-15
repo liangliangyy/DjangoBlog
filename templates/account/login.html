@@ -25,7 +25,7 @@
                 <div class="checkbox">
                     {% comment %}<a class="pull-right">Need help?</a>{% endcomment %}
                     <label>
-                        <input type="checkbox" value="remember-me"> Stay signed in
+                        <input type="checkbox" value="remember-me" name="remember"> Stay signed in
                     </label>
                 </div>
                 {% load oauth_tags %}
@@ -37,6 +37,8 @@
             <a href="{% url "account:register" %}">Create Account</a>
             |
             <a href="/">Home Page</a>
+            |
+            <a href="{% url "account:forget_password" %}">忘记密码</a>
         </p>
 
     </div> <!-- /container -->

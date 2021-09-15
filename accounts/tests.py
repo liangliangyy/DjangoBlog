@@ -1,12 +1,12 @@
-from django.test import Client, RequestFactory, TestCase
-from blog.models import Article, Category, Tag
-from django.contrib.auth import get_user_model
-from DjangoBlog.utils import delete_view_cache, delete_sidebar_cache
-from accounts.models import BlogUser
-from django.urls import reverse
-from DjangoBlog.utils import *
 from django.conf import settings
+from django.test import Client, RequestFactory, TestCase
+from django.urls import reverse
 from django.utils import timezone
+
+from DjangoBlog.utils import *
+from accounts.models import BlogUser
+from blog.models import Article, Category
+from . import utils
 
 
 # Create your tests here.
@@ -15,6 +15,12 @@ class AccountTest(TestCase):
     def setUp(self):
         self.client = Client()
         self.factory = RequestFactory()
+        self.blog_user = BlogUser.objects.create_user(
+            username="test",
+            email="admin@admin.com",
+            password="12345678"
+        )
+        self.new_test = "xxx123--="
 
     def test_validate_account(self):
         site = get_current_site().domain
@@ -111,3 +117,101 @@ class AccountTest(TestCase):
 
         response = self.client.get(article.get_admin_url())
         self.assertIn(response.status_code, [301, 302, 200])
+
+    def test_verify_email_code(self):
+        to_email = "admin@admin.com"
+        code = generate_code()
+        utils.set_code(to_email, code)
+        utils.send_verify_email(to_email, code)
+
+        err = utils.verify("admin@admin.com", code)
+        self.assertEqual(err, None)
+
+        err = utils.verify("admin@123.com", code)
+        self.assertEqual(type(err), str)
+
+    def test_forget_password_email_code_success(self):
+        resp = self.client.post(
+            path=reverse("account:forget_password_code"),
+            data=dict(email="admin@admin.com")
+        )
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.content.decode("utf-8"), "ok")
+
+    def test_forget_password_email_code_fail(self):
+        resp = self.client.post(
+            path=reverse("account:forget_password_code"),
+            data=dict()
+        )
+        self.assertEqual(resp.content.decode("utf-8"), "错误的邮箱")
+
+        resp = self.client.post(
+            path=reverse("account:forget_password_code"),
+            data=dict(email="admin@com")
+        )
+        self.assertEqual(resp.content.decode("utf-8"), "错误的邮箱")
+
+    def test_forget_password_email_success(self):
+        code = generate_code()
+        utils.set_code(self.blog_user.email, code)
+        data = dict(
+            new_password1=self.new_test,
+            new_password2=self.new_test,
+            email=self.blog_user.email,
+            code=code,
+        )
+        resp = self.client.post(
+            path=reverse("account:forget_password"),
+            data=data
+        )
+        self.assertEqual(resp.status_code, 302)
+
+        # 验证用户密码是否修改成功
+        blog_user = BlogUser.objects.filter(
+            email=self.blog_user.email,
+        ).first()  # type: BlogUser
+        self.assertNotEqual(blog_user, None)
+        self.assertEqual(blog_user.check_password(data["new_password1"]), True)
+
+    def test_forget_password_email_not_user(self):
+        data = dict(
+            new_password1=self.new_test,
+            new_password2=self.new_test,
+            email="123@123.com",
+            code="123456",
+        )
+        resp = self.client.post(
+            path=reverse("account:forget_password"),
+            data=data
+        )
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertFormError(
+            response=resp,
+            form="form",
+            field="email",
+            errors="未找到邮箱对应的用户"
+        )
+
+    def test_forget_password_email_code_error(self):
+        code = generate_code()
+        utils.set_code(self.blog_user.email, code)
+        data = dict(
+            new_password1=self.new_test,
+            new_password2=self.new_test,
+            email=self.blog_user.email,
+            code="111111",
+        )
+        resp = self.client.post(
+            path=reverse("account:forget_password"),
+            data=data
+        )
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertFormError(
+            response=resp,
+            form="form",
+            field="code",
+            errors="验证码错误"
+        )
