@@ -1,30 +1,29 @@
 import logging
-import threading
 
+from django.conf import settings
+from django.contrib import auth
+from django.contrib.auth import REDIRECT_FIELD_NAME
+from django.contrib.auth import get_user_model
+from django.contrib.auth import logout
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.hashers import make_password
+from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.http.request import HttpRequest
 from django.http.response import HttpResponse
-from django.shortcuts import render
-from django.contrib.auth import logout
-from django.views.generic import FormView, RedirectView
-from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponseRedirect, HttpResponseForbidden
+from django.shortcuts import render
 from django.urls import reverse
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth import REDIRECT_FIELD_NAME
-from django.views.decorators.csrf import csrf_protect
-from django.contrib import auth
-from django.views.decorators.cache import never_cache
 from django.utils.decorators import method_decorator
-from django.views.decorators.debug import sensitive_post_parameters
 from django.utils.http import is_safe_url
-from django.conf import settings
 from django.views import View
-from django.contrib.auth.hashers import make_password
+from django.views.decorators.cache import never_cache
+from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.debug import sensitive_post_parameters
+from django.views.generic import FormView, RedirectView
 
-from DjangoBlog.utils import send_email, get_sha256, get_current_site
+from DjangoBlog.utils import send_email, get_sha256, get_current_site, generate_code
+from . import utils
 from .forms import RegisterForm, LoginForm, ForgetPasswordForm, ForgetPasswordCodeForm
-from . import email
 from .models import BlogUser
 
 logger = logging.getLogger(__name__)
@@ -69,7 +68,7 @@ class RegisterView(FormView):
                 content=content)
 
             url = reverse('accounts:result') + \
-                '?type=register&id=' + str(user.id)
+                  '?type=register&id=' + str(user.id)
             return HttpResponseRedirect(url)
         else:
             return self.render_to_response({
@@ -136,8 +135,8 @@ class LoginView(FormView):
 
         redirect_to = self.request.POST.get(self.redirect_field_name)
         if not is_safe_url(
-            url=redirect_to, allowed_hosts=[
-                self.request.get_host()]):
+                url=redirect_to, allowed_hosts=[
+                    self.request.get_host()]):
             redirect_to = self.success_url
         return redirect_to
 
@@ -197,11 +196,8 @@ class ForgetPasswordEmailCode(View):
             return HttpResponse("错误的邮箱")
         to_email = form.cleaned_data["email"]
 
-        code = email.generate_code()
-        email.set_code(to_email, code)
-
-        # 异步执行
-        t = threading.Thread(target=email.send, args=(to_email, code))
-        t.start()
+        code = generate_code()
+        utils.send_verify_email(to_email, code)
+        utils.set_code(to_email, code)
 
         return HttpResponse("ok")

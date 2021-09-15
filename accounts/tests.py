@@ -1,12 +1,12 @@
-from django.urls import reverse
 from django.conf import settings
-from django.utils import timezone
 from django.test import Client, RequestFactory, TestCase
+from django.urls import reverse
+from django.utils import timezone
 
-from accounts.models import BlogUser
 from DjangoBlog.utils import *
+from accounts.models import BlogUser
 from blog.models import Article, Category
-from . import email
+from . import utils
 
 
 # Create your tests here.
@@ -120,14 +120,14 @@ class AccountTest(TestCase):
 
     def test_verify_email_code(self):
         to_email = "admin@admin.com"
-        code = email.generate_code()
-        email.set_code(to_email, code)
-        email.send(to_email, code)
+        code = generate_code()
+        utils.set_code(to_email, code)
+        utils.send_verify_email(to_email, code)
 
-        err = email.verify("admin@admin.com", code)
+        err = utils.verify("admin@admin.com", code)
         self.assertEqual(err, None)
 
-        err = email.verify("admin@123.com", code)
+        err = utils.verify("admin@123.com", code)
         self.assertEqual(type(err), str)
 
     def test_forget_password_email_code_success(self):
@@ -153,8 +153,8 @@ class AccountTest(TestCase):
         self.assertEqual(resp.content.decode("utf-8"), "错误的邮箱")
 
     def test_forget_password_email_success(self):
-        code = email.generate_code()
-        email.set_code(self.blog_user.email, code)
+        code = generate_code()
+        utils.set_code(self.blog_user.email, code)
         data = dict(
             new_password1=self.new_test,
             new_password2=self.new_test,
@@ -195,8 +195,8 @@ class AccountTest(TestCase):
         )
 
     def test_forget_password_email_code_error(self):
-        code = email.generate_code()
-        email.set_code(self.blog_user.email, code)
+        code = generate_code()
+        utils.set_code(self.blog_user.email, code)
         data = dict(
             new_password1=self.new_test,
             new_password2=self.new_test,

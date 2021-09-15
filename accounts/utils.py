@@ -1,20 +1,14 @@
 import typing
-import random
-import string
 from datetime import timedelta
 
 from django.core.cache import cache
+
 from DjangoBlog.utils import send_email
 
 _code_ttl = timedelta(minutes=5)
 
 
-def generate_code() -> str:
-    """生成随机数验证码"""
-    return ''.join(random.sample(string.digits, 6))
-
-
-def send(to_mail: str, code: str, subject: str = "邮件验证码"):
+def send_verify_email(to_mail: str, code: str, subject: str = "邮件验证码"):
     """发送重设密码验证码
     Args:
         to_mail: 接受邮箱

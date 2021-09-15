@@ -13,12 +13,12 @@
 @time: 2016/11/20 下午3:16
 """
 from django import forms
-from django.forms import widgets
-from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model, password_validation
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.core.exceptions import ValidationError
+from django.forms import widgets
 
-from . import email
+from . import utils
 from .models import BlogUser
 
 
@@ -116,7 +116,7 @@ class ForgetPasswordForm(forms.Form):
 
     def clean_code(self):
         code = self.cleaned_data.get("code")
-        error = email.verify(
+        error = utils.verify(
             email=self.cleaned_data.get("email"),
             code=code,
         )

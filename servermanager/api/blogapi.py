@@ -1,19 +1,6 @@
-#!/usr/bin/env python
-# encoding: utf-8
+from haystack.query import SearchQuerySet
 
-
-"""
-@version: ??
-@author: liangliangyy
-@license: MIT Licence
-@contact: liangliangyy@gmail.com
-@site: https://www.lylinux.net/
-@software: PyCharm
-@file: blogapi.py
-@time: 2017/8/27 上午11:40
-"""
-from blog.models import Article, Category, Tag
-from haystack.query import EmptySearchQuerySet, SearchQuerySet
+from blog.models import Article, Category
 
 
 class BlogApi():
