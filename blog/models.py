@@ -1,16 +1,17 @@
 import logging
-from abc import ABCMeta, abstractmethod, abstractproperty
+from abc import abstractmethod
 
+from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
-from django.conf import settings
-from uuslug import slugify
-from django.core.exceptions import ValidationError
-from django.utils.translation import gettext_lazy as _
-from DjangoBlog.utils import get_current_site
-from DjangoBlog.utils import cache_decorator, cache
 from django.utils.timezone import now
+from django.utils.translation import gettext_lazy as _
 from mdeditor.fields import MDTextField
+from uuslug import slugify
+
+from DjangoBlog.utils import cache_decorator, cache
+from DjangoBlog.utils import get_current_site
 
 logger = logging.getLogger(__name__)
 
@@ -94,6 +95,7 @@ class Article(BaseModel):
         on_delete=models.CASCADE)
     article_order = models.IntegerField(
         '排序,数字越大越靠前', blank=False, null=False, default=0)
+    show_toc = models.BooleanField("是否显示toc目录", blank=False, null=False, default=False)
     category = models.ForeignKey(
         'Category',
         verbose_name='分类',

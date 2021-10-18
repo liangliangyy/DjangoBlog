@@ -1,17 +1,18 @@
-from django.test import Client, RequestFactory, TestCase
-from blog.models import Article, Category, Tag, SideBar, Links
-from django.contrib.auth import get_user_model
-from DjangoBlog.utils import get_current_site, get_sha256
-from blog.forms import BlogSearchForm
-from django.core.paginator import Paginator
-from blog.templatetags.blog_tags import load_pagination_info, load_articletags
-from accounts.models import BlogUser
-from django.core.files.uploadedfile import SimpleUploadedFile
+import os
+
 from django.conf import settings
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.core.management import call_command
+from django.core.paginator import Paginator
+from django.test import Client, RequestFactory, TestCase
 from django.urls import reverse
 from django.utils import timezone
-import os
-from django.core.management import call_command
+
+from DjangoBlog.utils import get_current_site, get_sha256
+from accounts.models import BlogUser
+from blog.forms import BlogSearchForm
+from blog.models import Article, Category, Tag, SideBar, Links
+from blog.templatetags.blog_tags import load_pagination_info, load_articletags
 
 
 # Create your tests here.
@@ -147,8 +148,7 @@ class ArticleTest(TestCase):
 
         response = self.client.get('/sitemap.xml')
         self.assertEqual(response.status_code, 200)
-        from DjangoBlog.utils import block_code
-        block = block_code("`python`", 'python')
+
         self.client.get("/admin/blog/article/1/delete/")
         self.client.get('/admin/servermanager/emailsendlog/')
         self.client.get('admin/admin/logentry/')
