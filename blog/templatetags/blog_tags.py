@@ -13,24 +13,24 @@
 @time: 2016/11/2 下午11:10
 """
 
-from django import template
-from django.db.models import Q
-from django.conf import settings
-from django.template.defaultfilters import stringfilter
-from django.utils.safestring import mark_safe
-import random
-from django.urls import reverse
-from blog.models import Article, Category, Tag, Links, SideBar, LinkShowType
-from django.utils.encoding import force_text
-from django.shortcuts import get_object_or_404
 import hashlib
-import urllib
-from comments.models import Comment
-from DjangoBlog.utils import cache_decorator, cache
-from django.contrib.auth import get_user_model
-from oauth.models import OAuthUser
-from DjangoBlog.utils import get_current_site
 import logging
+import random
+import urllib
+
+from django import template
+from django.conf import settings
+from django.db.models import Q
+from django.shortcuts import get_object_or_404
+from django.template.defaultfilters import stringfilter
+from django.urls import reverse
+from django.utils.safestring import mark_safe
+
+from DjangoBlog.utils import cache
+from DjangoBlog.utils import get_current_site
+from blog.models import Article, Category, Tag, Links, SideBar, LinkShowType
+from comments.models import Comment
+from oauth.models import OAuthUser
 
 logger = logging.getLogger(__name__)
 
@@ -62,6 +62,13 @@ def datetimeformat(data):
 def custom_markdown(content):
     from DjangoBlog.utils import CommonMarkdown
     return mark_safe(CommonMarkdown.get_markdown(content))
+
+
+@register.simple_tag
+def get_markdown_toc(content):
+    from DjangoBlog.utils import CommonMarkdown
+    body, toc = CommonMarkdown.get_markdown_with_toc(content)
+    return mark_safe(toc), mark_safe(body)
 
 
 @register.filter(is_safe=True)

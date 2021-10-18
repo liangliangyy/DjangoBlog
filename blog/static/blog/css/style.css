@@ -2479,17 +2479,26 @@ li #reply-title {
 }
 
 .breadcrumb {
-  margin-bottom: 20px;
-  list-style: none;
-  border-radius: 4px;
+    margin-bottom: 20px;
+    list-style: none;
+    border-radius: 4px;
 }
+
 .breadcrumb > li {
-  display: inline-block;
+    display: inline-block;
 }
+
 .breadcrumb > li + li:before {
-  color: #ccc;
-  content: "/\00a0";
+    color: #ccc;
+    content: "/\00a0";
 }
+
 .breadcrumb > .active {
-  color: #777;
+    color: #777;
+}
+
+.break_line {
+    height: 1px;
+    border: none;
+    /*border-top: 1px dashed #f5d6d6;*/
 }
