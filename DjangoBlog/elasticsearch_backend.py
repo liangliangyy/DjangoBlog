@@ -35,10 +35,6 @@ class ElasticSearchBackend(BaseSearchBackend):
             connection_alias,
             **connection_options)
         self.manager = ArticleDocumentManager()
-        # try:
-        #     self._rebuild(None)
-        # except:
-        #     pass
 
     def _get_models(self, iterable):
         models = iterable if iterable and iterable[0] else Article.objects.all()
@@ -95,9 +91,6 @@ class ElasticSearchBackend(BaseSearchBackend):
             app_label = 'blog'
             model_name = 'Article'
             additional_fields = {}
-
-            # if 'highlight' in raw_result:
-            #     additional_fields['highlighted'] = raw_result['highlight'].get(content_field, '')
 
             result_class = SearchResult
 
