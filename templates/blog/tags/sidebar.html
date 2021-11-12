@@ -122,7 +122,7 @@
                 </li>
 
             {% else %}
-                <li><a href="{% url "account:login" %}" rel="nofollow">登录</a>
+                <li><a href="{% url "account:login" %}" rel="nofollow">登录</a></li>
             {% endif %}
             {% if user.is_superuser %}
                 <li><a href="{% url "blog:refresh" %}" target="_blank">刷新缓存</a></li>

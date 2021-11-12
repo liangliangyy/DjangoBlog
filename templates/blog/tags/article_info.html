@@ -23,7 +23,7 @@
                 <a href="{{ article.get_absolute_url }}#comments" class="ds-thread-count" data-thread-key="3815"
                    rel="nofollow">
                     <span class="leave-reply">
-                    {% if article.comment and article.comment_set.count %}
+                    {% if article.comment_set and article.comment_set.count %}
                         {{ article.comment_set.count }}个评论
                     {% else %}
                         发表评论
