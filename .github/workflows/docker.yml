@@ -30,7 +30,7 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/djangoblog:latest
           
-      - name: multiple command
+      - name: ssh deploy
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
