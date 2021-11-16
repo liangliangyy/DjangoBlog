@@ -1,17 +1,3 @@
-#!/usr/bin/env python
-# encoding: utf-8
-
-
-"""
-@version: ??
-@author: liangliangyy
-@license: MIT Licence
-@contact: liangliangyy@gmail.com
-@site: https://www.lylinux.net/
-@software: PyCharm
-@file: forms.py
-@time: 2016/11/20 下午3:16
-"""
 from django import forms
 from django.contrib.auth import get_user_model, password_validation
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
@@ -108,7 +94,7 @@ class ForgetPasswordForm(forms.Form):
     def clean_email(self):
         user_email = self.cleaned_data.get("email")
         if not BlogUser.objects.filter(
-            email=user_email
+                email=user_email
         ).exists():
             # todo 这里的报错提示可以判断一个邮箱是不是注册过，如果不想暴露可以修改
             raise ValidationError("未找到邮箱对应的用户")

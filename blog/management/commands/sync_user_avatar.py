@@ -1,21 +1,7 @@
-#!/usr/bin/env python
-# encoding: utf-8
-
-
-"""
-@version: ??
-@author: liangliangyy
-@license: MIT Licence
-@contact: liangliangyy@gmail.com
-@site: https://www.lylinux.net/
-@software: PyCharm
-@file: sync_user_avatar.py
-@time: 2018/7/18 下午10:21
-"""
-
 from django.core.management.base import BaseCommand
+
+from djangoblog.utils import save_user_avatar
 from oauth.models import OAuthUser
-from DjangoBlog.utils import save_user_avatar
 
 
 class Command(BaseCommand):

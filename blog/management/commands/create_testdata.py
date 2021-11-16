@@ -1,22 +1,8 @@
-#!/usr/bin/env python
-# encoding: utf-8
-
-
-"""
-@version: ??
-@author: liangliangyy
-@license: MIT Licence
-@contact: liangliangyy@gmail.com
-@site: https://www.lylinux.net/
-@software: PyCharm
-@file: create_testdata.py
-@time: 2017/3/11 上午1:58
-"""
-
-from django.core.management.base import BaseCommand
-from blog.models import Article, Tag, Category
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
+from django.core.management.base import BaseCommand
+
+from blog.models import Article, Tag, Category
 
 
 class Command(BaseCommand):
@@ -49,6 +35,6 @@ class Command(BaseCommand):
             article.tags.add(basetag)
             article.save()
 
-        from DjangoBlog.utils import cache
+        from djangoblog.utils import cache
         cache.clear()
         self.stdout.write(self.style.SUCCESS('created test datas \n'))

@@ -3,7 +3,7 @@ from django.test import Client, RequestFactory, TestCase
 from django.urls import reverse
 from django.utils import timezone
 
-from DjangoBlog.utils import *
+from djangoblog.utils import *
 from accounts.models import BlogUser
 from blog.models import Article, Category
 from . import utils
@@ -83,7 +83,7 @@ class AccountTest(TestCase):
         user.is_superuser = True
         user.is_staff = True
         user.save()
-        delete_sidebar_cache(user.username)
+        delete_sidebar_cache()
         category = Category()
         category.name = "categoryaaa"
         category.created_time = timezone.now()

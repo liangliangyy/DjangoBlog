@@ -1,13 +1,12 @@
-from django.shortcuts import render
-
 # Create your views here.
-from .models import Comment
+from django import forms
+from django.contrib.auth import get_user_model
+from django.http import HttpResponseRedirect
+from django.views.generic.edit import FormView
+
 from blog.models import Article
 from .forms import CommentForm
-from django.views.generic.edit import FormView
-from django.http import HttpResponseRedirect
-from django.contrib.auth import get_user_model
-from django import forms
+from .models import Comment
 
 
 class CommentPostView(FormView):

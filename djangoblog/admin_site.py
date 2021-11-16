@@ -1,34 +1,25 @@
-#!/usr/bin/env python
-# encoding: utf-8
-
-
-"""
-@version: ??
-@author: liangliangyy
-@license: MIT Licence
-@contact: liangliangyy@gmail.com
-@site: https://www.lylinux.net/
-@software: PyCharm
-@file: admin_site.py
-@time: 2018/1/7 上午2:21
-"""
 from django.contrib.admin import AdminSite
-from DjangoBlog.utils import get_current_site
-from django.contrib.sites.admin import SiteAdmin
 from django.contrib.admin.models import LogEntry
+from django.contrib.sites.admin import SiteAdmin
 from django.contrib.sites.models import Site
-from DjangoBlog.logentryadmin import LogEntryAdmin
-from blog.admin import *
+
 from accounts.admin import *
-from oauth.admin import *
-from servermanager.admin import *
+from blog.admin import *
+from blog.models import *
 from comments.admin import *
+from comments.models import *
+from djangoblog.logentryadmin import LogEntryAdmin
+from oauth.admin import *
+from oauth.models import *
 from owntracks.admin import *
+from owntracks.models import *
+from servermanager.admin import *
+from servermanager.models import *
 
 
 class DjangoBlogAdminSite(AdminSite):
-    site_header = 'DjangoBlog administration'
-    site_title = 'DjangoBlog site admin'
+    site_header = 'djangoblog administration'
+    site_title = 'djangoblog site admin'
 
     def __init__(self, name='admin'):
         super().__init__(name)

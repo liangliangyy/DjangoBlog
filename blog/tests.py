@@ -8,7 +8,7 @@ from django.test import Client, RequestFactory, TestCase
 from django.urls import reverse
 from django.utils import timezone
 
-from DjangoBlog.utils import get_current_site, get_sha256
+from djangoblog.utils import get_current_site, get_sha256
 from accounts.models import BlogUser
 from blog.forms import BlogSearchForm
 from blog.models import Article, Category, Tag, SideBar, Links
@@ -85,7 +85,7 @@ class ArticleTest(TestCase):
 
         response = self.client.get(article.get_absolute_url())
         self.assertEqual(response.status_code, 200)
-        from DjangoBlog.spider_notify import SpiderNotify
+        from djangoblog.spider_notify import SpiderNotify
         SpiderNotify.notify(article.get_absolute_url())
         response = self.client.get(tag.get_absolute_url())
         self.assertEqual(response.status_code, 200)
@@ -125,7 +125,7 @@ class ArticleTest(TestCase):
         f = BlogSearchForm()
         f.search()
         # self.client.login(username='liangliangyy', password='liangliangyy')
-        from DjangoBlog.spider_notify import SpiderNotify
+        from djangoblog.spider_notify import SpiderNotify
         SpiderNotify.baidu_notify([article.get_full_url()])
 
         from blog.templatetags.blog_tags import gravatar_url, gravatar
@@ -186,7 +186,7 @@ class ArticleTest(TestCase):
                 '/upload?sign=' + sign, form_data, follow=True)
             self.assertEqual(rsp.status_code, 200)
         os.remove(imagepath)
-        from DjangoBlog.utils import save_user_avatar, send_email
+        from djangoblog.utils import save_user_avatar, send_email
         send_email(['qq@qq.com'], 'testTitle', 'testContent')
         save_user_avatar(
             'https://www.python.org/static/img/python-logo@2x.png')

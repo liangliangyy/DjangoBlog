@@ -4,7 +4,7 @@ venv/
 migrations/
 !migrations/__init__.py
 collectedstatic/
-DjangoBlog/whoosh_index/
+djangoblog/whoosh_index/
 uploads/
 settings_production.py
 *.md

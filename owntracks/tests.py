@@ -1,8 +1,9 @@
-from django.test import Client, RequestFactory, TestCase
-from .models import OwnTrackLog
-from accounts.models import BlogUser
-from owntracks.views import convert_to_amap
 import json
+
+from django.test import Client, RequestFactory, TestCase
+
+from accounts.models import BlogUser
+from .models import OwnTrackLog
 
 
 # Create your tests here.
@@ -52,7 +53,7 @@ class OwnTrackLogTest(TestCase):
         s.lon = 123.234
         s.lat = 34.234
         s.save()
-        
+
         rsp = self.client.get('/owntracks/show_dates')
         self.assertEqual(rsp.status_code, 200)
         rsp = self.client.get('/owntracks/show_maps')

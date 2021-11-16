@@ -55,5 +55,5 @@ docker-compose -f docker-compose.yml -f docker-compose.es.yml up -d
 
 第一次启动之后，使用如下命令来创建超级用户:
 ```shell
-docker exec -it djangoblog python /code/DjangoBlog/manage.py createsuperuser
+docker exec -it djangoblog python /code/djangoblog/manage.py createsuperuser
 ```

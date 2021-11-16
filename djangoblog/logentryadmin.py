@@ -1,27 +1,11 @@
-#!/usr/bin/env python
-# encoding: utf-8
-
-
-"""
-@version: ??
-@author: liangliangyy
-@license: MIT Licence
-@contact: liangliangyy@gmail.com
-@site: https://www.lylinux.net/
-@software: PyCharm
-@file: logentryadmin.py
-@time: 2018/5/24 下午10:37
-"""
+from django.contrib import admin
+from django.contrib.admin.models import LogEntry, ADDITION, CHANGE, DELETION
 from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse, NoReverseMatch
-from django.contrib.admin.models import LogEntry, ADDITION, CHANGE, DELETION
-from django.contrib.auth import get_user_model
-from django.contrib.contenttypes.models import ContentType
 from django.utils.encoding import force_text
 from django.utils.html import escape
-from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 from django.utils.safestring import mark_safe
-from django.contrib import admin
+from django.utils.translation import pgettext_lazy, ugettext_lazy as _
 
 action_names = {
     ADDITION: pgettext_lazy('logentry_admin:action_type', 'Addition'),
@@ -83,9 +67,9 @@ class LogEntryAdmin(admin.ModelAdmin):
 
     def has_change_permission(self, request, obj=None):
         return (
-            request.user.is_superuser or
-            request.user.has_perm('admin.change_logentry')
-        ) and request.method != 'POST'
+                       request.user.is_superuser or
+                       request.user.has_perm('admin.change_logentry')
+               ) and request.method != 'POST'
 
     def has_delete_permission(self, request, obj=None):
         return False

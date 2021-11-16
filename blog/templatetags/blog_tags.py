@@ -1,18 +1,3 @@
-#!/usr/bin/env python
-# encoding: utf-8
-
-
-"""
-@version: ??
-@author: liangliangyy
-@license: MIT Licence
-@contact: liangliangyy@gmail.com
-@site: https://www.lylinux.net/
-@software: PyCharm
-@file: blog_tags.py
-@time: 2016/11/2 下午11:10
-"""
-
 import hashlib
 import logging
 import random
@@ -26,8 +11,8 @@ from django.template.defaultfilters import stringfilter
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 
-from DjangoBlog.utils import cache
-from DjangoBlog.utils import get_current_site
+from djangoblog.utils import cache
+from djangoblog.utils import get_current_site
 from blog.models import Article, Category, Tag, Links, SideBar, LinkShowType
 from comments.models import Comment
 from oauth.models import OAuthUser
@@ -60,13 +45,13 @@ def datetimeformat(data):
 @register.filter(is_safe=True)
 @stringfilter
 def custom_markdown(content):
-    from DjangoBlog.utils import CommonMarkdown
+    from djangoblog.utils import CommonMarkdown
     return mark_safe(CommonMarkdown.get_markdown(content))
 
 
 @register.simple_tag
 def get_markdown_toc(content):
-    from DjangoBlog.utils import CommonMarkdown
+    from djangoblog.utils import CommonMarkdown
     body, toc = CommonMarkdown.get_markdown_with_toc(content)
     return mark_safe(toc), mark_safe(body)
 
@@ -80,7 +65,7 @@ def truncatechars_content(content):
     :return:
     """
     from django.template.defaultfilters import truncatechars_html
-    from DjangoBlog.utils import get_blog_setting
+    from djangoblog.utils import get_blog_setting
     blogsetting = get_blog_setting()
     return truncatechars_html(content, blogsetting.article_sub_length)
 
@@ -101,7 +86,7 @@ def load_breadcrumb(article):
     :return:
     """
     names = article.get_category_tree()
-    from DjangoBlog.utils import get_blog_setting
+    from djangoblog.utils import get_blog_setting
     blogsetting = get_blog_setting()
     site = get_current_site().domain
     names.append((blogsetting.sitename, '/'))
@@ -141,7 +126,7 @@ def load_sidebar(user, linktype):
     :return:
     """
     logger.info('load sidebar')
-    from DjangoBlog.utils import get_blog_setting
+    from djangoblog.utils import get_blog_setting
     blogsetting = get_blog_setting()
     recent_articles = Article.objects.filter(
         status='p')[:blogsetting.sidebar_article_count]
@@ -286,7 +271,7 @@ def load_article_detail(article, isindex, user):
     :param isindex:是否列表页，若是列表页只显示摘要
     :return:
     """
-    from DjangoBlog.utils import get_blog_setting
+    from djangoblog.utils import get_blog_setting
     blogsetting = get_blog_setting()
 
     return {
@@ -340,3 +325,9 @@ def query(qs, **kwargs):
           {% endfor %}
     """
     return qs.filter(**kwargs)
+
+
+@register.filter
+def addstr(arg1, arg2):
+    """concatenate arg1 & arg2"""
+    return str(arg1) + str(arg2)
