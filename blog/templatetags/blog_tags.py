@@ -11,10 +11,10 @@ from django.template.defaultfilters import stringfilter
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 
-from djangoblog.utils import cache
-from djangoblog.utils import get_current_site
 from blog.models import Article, Category, Tag, Links, SideBar, LinkShowType
 from comments.models import Comment
+from djangoblog.utils import cache
+from djangoblog.utils import get_current_site
 from oauth.models import OAuthUser
 
 logger = logging.getLogger(__name__)
@@ -26,8 +26,6 @@ register = template.Library()
 def timeformat(data):
     try:
         return data.strftime(settings.TIME_FORMAT)
-        # print(data.strftime(settings.TIME_FORMAT))
-        # return "ddd"
     except Exception as e:
         logger.error(e)
         return ""
@@ -125,50 +123,57 @@ def load_sidebar(user, linktype):
     加载侧边栏
     :return:
     """
-    logger.info('load sidebar')
-    from djangoblog.utils import get_blog_setting
-    blogsetting = get_blog_setting()
-    recent_articles = Article.objects.filter(
-        status='p')[:blogsetting.sidebar_article_count]
-    sidebar_categorys = Category.objects.all()
-    extra_sidebars = SideBar.objects.filter(
-        is_enable=True).order_by('sequence')
-    most_read_articles = Article.objects.filter(status='p').order_by(
-        '-views')[:blogsetting.sidebar_article_count]
-    dates = Article.objects.datetimes('created_time', 'month', order='DESC')
-    links = Links.objects.filter(is_enable=True).filter(
-        Q(show_type=str(linktype)) | Q(show_type=LinkShowType.A))
-    commment_list = Comment.objects.filter(is_enable=True).order_by(
-        '-id')[:blogsetting.sidebar_comment_count]
-    # 标签云 计算字体大小
-    # 根据总数计算出平均值 大小为 (数目/平均值)*步长
-    increment = 5
-    tags = Tag.objects.all()
-    sidebar_tags = None
-    if tags and len(tags) > 0:
-        s = [t for t in [(t, t.get_article_count()) for t in tags] if t[1]]
-        count = sum([t[1] for t in s])
-        dd = 1 if (count == 0 or not len(tags)) else count / len(tags)
-        import random
-        sidebar_tags = list(
-            map(lambda x: (x[0], x[1], (x[1] / dd) * increment + 10), s))
-        random.shuffle(sidebar_tags)
+    value = cache.get("sidebar" + linktype)
+    if value:
+        value['user'] = user
+        return value
+    else:
+        logger.info('load sidebar')
+        from djangoblog.utils import get_blog_setting
+        blogsetting = get_blog_setting()
+        recent_articles = Article.objects.filter(
+            status='p')[:blogsetting.sidebar_article_count]
+        sidebar_categorys = Category.objects.all()
+        extra_sidebars = SideBar.objects.filter(
+            is_enable=True).order_by('sequence')
+        most_read_articles = Article.objects.filter(status='p').order_by(
+            '-views')[:blogsetting.sidebar_article_count]
+        dates = Article.objects.datetimes('created_time', 'month', order='DESC')
+        links = Links.objects.filter(is_enable=True).filter(
+            Q(show_type=str(linktype)) | Q(show_type=LinkShowType.A))
+        commment_list = Comment.objects.filter(is_enable=True).order_by(
+            '-id')[:blogsetting.sidebar_comment_count]
+        # 标签云 计算字体大小
+        # 根据总数计算出平均值 大小为 (数目/平均值)*步长
+        increment = 5
+        tags = Tag.objects.all()
+        sidebar_tags = None
+        if tags and len(tags) > 0:
+            s = [t for t in [(t, t.get_article_count()) for t in tags] if t[1]]
+            count = sum([t[1] for t in s])
+            dd = 1 if (count == 0 or not len(tags)) else count / len(tags)
+            import random
+            sidebar_tags = list(
+                map(lambda x: (x[0], x[1], (x[1] / dd) * increment + 10), s))
+            random.shuffle(sidebar_tags)
 
-    return {
-        'recent_articles': recent_articles,
-        'sidebar_categorys': sidebar_categorys,
-        'most_read_articles': most_read_articles,
-        'article_dates': dates,
-        'sidebar_comments': commment_list,
-        'user': user,
-        'sidabar_links': links,
-        'show_google_adsense': blogsetting.show_google_adsense,
-        'google_adsense_codes': blogsetting.google_adsense_codes,
-        'open_site_comment': blogsetting.open_site_comment,
-        'show_gongan_code': blogsetting.show_gongan_code,
-        'sidebar_tags': sidebar_tags,
-        'extra_sidebars': extra_sidebars
-    }
+        value = {
+            'recent_articles': recent_articles,
+            'sidebar_categorys': sidebar_categorys,
+            'most_read_articles': most_read_articles,
+            'article_dates': dates,
+            'sidebar_comments': commment_list,
+            'sidabar_links': links,
+            'show_google_adsense': blogsetting.show_google_adsense,
+            'google_adsense_codes': blogsetting.google_adsense_codes,
+            'open_site_comment': blogsetting.open_site_comment,
+            'show_gongan_code': blogsetting.show_gongan_code,
+            'sidebar_tags': sidebar_tags,
+            'extra_sidebars': extra_sidebars
+        }
+        cache.set("sidebar" + linktype, value, 60 * 60 * 60 * 3)
+        value['user'] = user
+        return value
 
 
 @register.inclusion_tag('blog/tags/article_meta_info.html')

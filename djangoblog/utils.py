@@ -177,6 +177,7 @@ def save_user_avatar(url):
     '''
     setting = get_blog_setting()
     logger.info(url)
+
     try:
         imgname = url.split('/')[-1]
         if imgname:
@@ -184,9 +185,6 @@ def save_user_avatar(url):
                 basedir=setting.resource_path, img=imgname)
             if os.path.exists(path):
                 os.remove(path)
-    except BaseException:
-        pass
-    try:
         rsp = requests.get(url, timeout=2)
         if rsp.status_code == 200:
             basepath = r'{basedir}/avatar/'.format(
@@ -208,11 +206,8 @@ def save_user_avatar(url):
 
 
 def delete_sidebar_cache():
-    from django.core.cache.utils import make_template_fragment_key
     from blog.models import LinkShowType
-    keys = (
-        make_template_fragment_key(
-            'sidebar', ["sidebar" + x]) for x in LinkShowType.values)
+    keys = ["sidebar" + x for x in LinkShowType.values]
     for k in keys:
         logger.info('delete sidebar key:' + k)
         cache.delete(k)

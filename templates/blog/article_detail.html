@@ -1,6 +1,6 @@
 {% extends 'share_layout/base.html' %}
 {% load blog_tags %}
-{% load cache %}
+
 {% block header %}
     <title>{{ article.title }} | {{ SITE_DESCRIPTION }}</title>
     <meta property="og:type" content="article"/>
@@ -72,30 +72,5 @@
 {% endblock %}
 
 {% block sidebar %}
-    {% with "sidear"|addstr:"p" as cachekey %}
-        {% cache 36000 sidebar cachekey %}
-            {% load_sidebar user "p" %}
-        {% endcache %}
-    {% endwith %}
-    <div class="widget-area" role="complementary">
-        <aside id="meta-2" class="widget widget_meta"><h3 class="widget-title">功能</h3>
-            <ul>
-                <li><a href="/admin/" rel="nofollow">管理站点</a></li>
-                {% if user.is_authenticated %}
-                    <li><a href="{% url "account:logout" %}" rel="nofollow">登出</a>
-                    </li>
-
-                {% else %}
-                    <li><a href="{% url "account:login" %}" rel="nofollow">登录</a></li>
-                {% endif %}
-                {% if user.is_superuser %}
-                    <li><a href="{% url "blog:refresh" %}" target="_blank">刷新缓存</a></li>
-                    <li><a href="{% url 'owntracks:show_dates' %}" target="_blank">运动轨迹记录</a></li>
-                {% endif %}
-                <li><a href="http://gitbook.lylinux.net" target="_blank" rel="nofollow">GitBook</a></li>
-            </ul>
-        </aside>
-        <div id="rocket" class="show" title="点我返回顶部"></div>
-    </div><!-- #secondary -->
-
+    {% load_sidebar user "p" %}
 {% endblock %}

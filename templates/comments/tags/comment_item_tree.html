@@ -26,12 +26,12 @@
         </div>
         <p>
             {% if comment_item.parent_comment %}
-            <div>回复 <a
-                    href="#comment-{{ comment_item.parent_comment.pk }}">@{{ comment_item.parent_comment.author.username }}</a>
-            </div>
-        {% endif %}
+                <div>回复 <a
+                        href="#comment-{{ comment_item.parent_comment.pk }}">@{{ comment_item.parent_comment.author.username }}</a>
+                </div>
+            {% endif %}
         </p>
-        <p>{{ comment_item.body |escape|custom_markdown }}</p>
+        <p>{{ comment_item.body|custom_markdown }}</p>
 
         <div class="reply"><a rel="nofollow" class="comment-reply-link"
                               href="javascript:void(0)"
