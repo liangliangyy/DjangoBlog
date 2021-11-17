@@ -41,3 +41,4 @@ jobs:
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/djangoblog:latest
             cd ${{ secrets.DOCKERPATH }}
             docker-compose up -d
+            docker restart memcached
