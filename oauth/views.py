@@ -1,26 +1,26 @@
-from django.shortcuts import render
-
+import datetime
+import logging
 # Create your views here.
 from urllib.parse import urlparse
-import datetime
-from django.conf import settings
-from django.http import HttpResponse, HttpResponseRedirect
-from django.contrib.auth import get_user_model
-from .models import OAuthUser
-from django.contrib.auth import login
-from django.shortcuts import get_object_or_404
-from django.views.generic import FormView, RedirectView
-from oauth.forms import RequireEmailForm
-from django.urls import reverse
-from django.db import transaction
-from DjangoBlog.utils import send_email, get_sha256, save_user_avatar
-from DjangoBlog.utils import get_current_site
-from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponseForbidden
-from .oauthmanager import get_manager_by_type, OAuthAccessTokenException
-from DjangoBlog.blog_signals import oauth_user_login_signal
 
-import logging
+from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.contrib.auth import login
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
+from django.http import HttpResponseForbidden
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from django.shortcuts import render
+from django.urls import reverse
+from django.views.generic import FormView
+
+from djangoblog.blog_signals import oauth_user_login_signal
+from djangoblog.utils import get_current_site
+from djangoblog.utils import send_email, get_sha256
+from oauth.forms import RequireEmailForm
+from .models import OAuthUser
+from .oauthmanager import get_manager_by_type, OAuthAccessTokenException
 
 logger = logging.getLogger(__name__)
 

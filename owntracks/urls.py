@@ -1,18 +1,5 @@
-#!/usr/bin/env python
-# encoding: utf-8
-
-
-"""
-@version: ??
-@author: liangliangyy
-@license: MIT Licence
-@contact: liangliangyy@gmail.com
-@site: https://www.lylinux.net/
-@software: PyCharm
-@file: urls.py
-@time: 2018/2/25 下午3:04
-"""
 from django.urls import path
+
 from . import views
 
 app_name = "owntracks"

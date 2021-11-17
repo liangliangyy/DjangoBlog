@@ -1,17 +1,7 @@
 # encoding: utf-8
 
 from __future__ import absolute_import, division, print_function, unicode_literals
-from whoosh.writing import AsyncWriter
-from whoosh.searching import ResultsPage
-from whoosh.qparser import QueryParser
-from whoosh.highlight import ContextFragmenter, HtmlFormatter
-from whoosh.highlight import highlight as whoosh_highlight
-from whoosh.filedb.filestore import FileStorage, RamStorage
-from whoosh.fields import BOOLEAN, DATETIME, IDLIST, KEYWORD, NGRAM, NGRAMWORDS, NUMERIC, Schema, TEXT
-from whoosh.fields import ID as WHOOSH_ID
-from whoosh.analysis import StemmingAnalyzer
-from whoosh import index
-from jieba.analyse import ChineseAnalyzer
+
 import json
 import os
 import re
@@ -19,20 +9,30 @@ import shutil
 import threading
 import warnings
 
+import six
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
-import six
 from django.utils.datetime_safe import datetime
 from django.utils.encoding import force_text
-
 from haystack.backends import BaseEngine, BaseSearchBackend, BaseSearchQuery, EmptyResults, log_query
 from haystack.constants import DJANGO_CT, DJANGO_ID, ID
 from haystack.exceptions import MissingDependency, SearchBackendError, SkipDocument
 from haystack.inputs import Clean, Exact, PythonData, Raw
 from haystack.models import SearchResult
-from haystack.utils import log as logging
 from haystack.utils import get_identifier, get_model_ct
+from haystack.utils import log as logging
 from haystack.utils.app_loading import haystack_get_model
+from jieba.analyse import ChineseAnalyzer
+from whoosh import index
+from whoosh.analysis import StemmingAnalyzer
+from whoosh.fields import BOOLEAN, DATETIME, IDLIST, KEYWORD, NGRAM, NGRAMWORDS, NUMERIC, Schema, TEXT
+from whoosh.fields import ID as WHOOSH_ID
+from whoosh.filedb.filestore import FileStorage, RamStorage
+from whoosh.highlight import ContextFragmenter, HtmlFormatter
+from whoosh.highlight import highlight as whoosh_highlight
+from whoosh.qparser import QueryParser
+from whoosh.searching import ResultsPage
+from whoosh.writing import AsyncWriter
 
 try:
     import whoosh
@@ -853,14 +853,14 @@ class WhooshSearchBackend(BaseSearchBackend):
 
             # Try to handle most built-in types.
             if isinstance(
-                converted_value,
-                (list,
-                 tuple,
-                 set,
-                 dict,
-                 six.integer_types,
-                 float,
-                 complex)):
+                    converted_value,
+                    (list,
+                     tuple,
+                     set,
+                     dict,
+                     six.integer_types,
+                     float,
+                     complex)):
                 return converted_value
         except BaseException:
             # If it fails (SyntaxError or its ilk) or we don't trust it,
@@ -957,7 +957,7 @@ class WhooshSearchQuery(BaseSearchQuery):
                 'contains',
                 'startswith',
                 'endswith',
-                    'fuzzy']:
+                'fuzzy']:
                 if value.input_type_name == 'exact':
                     query_frag = prepared_value
                 else:

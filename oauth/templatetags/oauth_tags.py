@@ -1,21 +1,7 @@
-#!/usr/bin/env python
-# encoding: utf-8
-
-
-"""
-@version: ??
-@author: liangliangyy
-@license: MIT Licence
-@contact: liangliangyy@gmail.com
-@site: https://www.lylinux.net/
-@software: PyCharm
-@file: oauth_tags.py
-@time: 2017/3/4 下午3:22
-"""
-from oauth.oauthmanager import get_oauth_apps
-from django.urls import reverse
 from django import template
-from django.conf import settings
+from django.urls import reverse
+
+from oauth.oauthmanager import get_oauth_apps
 
 register = template.Library()
 
@@ -27,7 +13,7 @@ def load_oauth_applications(request):
         baseurl = reverse('oauth:oauthlogin')
         path = request.get_full_path()
 
-        apps = list(map(lambda x: (x.ICON_NAME, '{baseurl}?type={type}&next_url={next}' .format(
+        apps = list(map(lambda x: (x.ICON_NAME, '{baseurl}?type={type}&next_url={next}'.format(
             baseurl=baseurl, type=x.ICON_NAME, next=path)), applications))
     else:
         apps = []

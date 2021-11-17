@@ -1,21 +1,7 @@
-#!/usr/bin/env python
-# encoding: utf-8
-
-
-"""
-@version: ??
-@author: liangliangyy
-@license: MIT Licence
-@contact: liangliangyy@gmail.com
-@site: https://www.lylinux.net/
-@software: PyCharm
-@file: utils.py
-@time: 2018/10/8 10:24 PM
-"""
-
-from DjangoBlog.utils import send_email
-from DjangoBlog.utils import get_current_site
 import logging
+
+from djangoblog.utils import get_current_site
+from djangoblog.utils import send_email
 
 logger = logging.getLogger(__name__)
 

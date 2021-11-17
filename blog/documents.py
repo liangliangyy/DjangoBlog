@@ -1,22 +1,11 @@
-#!/usr/bin/env python
-# encoding: utf-8
-"""
-@version: ??
-@author: liangliangyy
-@license: MIT Licence
-@contact: liangliangyy@gmail.com
-@site: https://www.lylinux.net/
-@software: PyCharm
-@file: documents.py
-@time: 2019-04-05 13:05
-"""
-import elasticsearch.client
-from elasticsearch_dsl.connections import connections
 import time
-from blog.models import Article
-from elasticsearch_dsl import Document, InnerDoc, Date, Integer, Long, Text, Object, GeoPoint, Keyword, Boolean
 
+import elasticsearch.client
 from django.conf import settings
+from elasticsearch_dsl import Document, InnerDoc, Date, Integer, Long, Text, Object, GeoPoint, Keyword, Boolean
+from elasticsearch_dsl.connections import connections
+
+from blog.models import Article
 
 ELASTICSEARCH_ENABLED = hasattr(settings, 'ELASTICSEARCH_DSL')
 

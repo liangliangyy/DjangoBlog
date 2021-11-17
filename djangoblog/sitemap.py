@@ -1,23 +1,7 @@
-#!/usr/bin/env python
-# encoding: utf-8
-
-
-"""
-@version: ??
-@author: liangliangyy
-@license: MIT Licence
-@contact: liangliangyy@gmail.com
-@site: https://www.lylinux.net/
-@software: PyCharm
-@file: sitemap.py
-@time: 2016/12/15 下午10:26
-"""
-
 from django.contrib.sitemaps import Sitemap
-from blog.models import Article, Category, Tag
-from accounts.models import BlogUser
-from django.contrib.sitemaps import GenericSitemap
 from django.urls import reverse
+
+from blog.models import Article, Category, Tag
 
 
 class StaticViewSitemap(Sitemap):

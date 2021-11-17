@@ -1,8 +1,9 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.urls import reverse
-from DjangoBlog.utils import get_current_site
 from django.utils.timezone import now
+
+from djangoblog.utils import get_current_site
 
 
 # Create your models here.

@@ -1,18 +1,18 @@
-from django.shortcuts import render
-
 # Create your views here.
-import json
 import datetime
 import itertools
-from itertools import groupby
-from django.http import HttpResponse
-from .models import OwnTrackLog
+import json
 import logging
-from django.shortcuts import render
-from django.http import JsonResponse
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
+from itertools import groupby
+
 import requests
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+from django.http import JsonResponse
+from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
+
+from .models import OwnTrackLog
 
 logger = logging.getLogger(__name__)
 

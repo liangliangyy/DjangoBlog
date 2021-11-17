@@ -21,7 +21,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import FormView, RedirectView
 
-from DjangoBlog.utils import send_email, get_sha256, get_current_site, generate_code
+from djangoblog.utils import send_email, get_sha256, get_current_site, generate_code, delete_sidebar_cache
 from . import utils
 from .forms import RegisterForm, LoginForm, ForgetPasswordForm, ForgetPasswordCodeForm
 from .models import BlogUser
@@ -84,9 +84,8 @@ class LogoutView(RedirectView):
         return super(LogoutView, self).dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        from DjangoBlog.utils import cache
-        cache.clear()
         logout(request)
+        delete_sidebar_cache()
         return super(LogoutView, self).get(request, *args, **kwargs)
 
 
@@ -116,9 +115,7 @@ class LoginView(FormView):
         form = AuthenticationForm(data=self.request.POST, request=self.request)
 
         if form.is_valid():
-            from DjangoBlog.utils import cache
-            if cache and cache is not None:
-                cache.clear()
+            delete_sidebar_cache()
             logger.info(self.redirect_field_name)
 
             auth.login(self.request, form.get_user())

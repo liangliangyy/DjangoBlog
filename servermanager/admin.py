@@ -1,6 +1,5 @@
 from django.contrib import admin
 # Register your models here.
-from .models import commands, EmailSendLog
 
 
 class CommandsAdmin(admin.ModelAdmin):

@@ -1,22 +1,22 @@
-import uuid
-
-from django.shortcuts import render
-
+import datetime
+import logging
 # Create your views here.
 import os
-import datetime
-from django.views.generic.list import ListView
-from django.views.generic.detail import DetailView
-from django.conf import settings
+import uuid
+
 from django import forms
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden
-from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from DjangoBlog.utils import cache, get_sha256, get_blog_setting
+from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
+from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
+from django.views.generic.detail import DetailView
+from django.views.generic.list import ListView
+
+from djangoblog.utils import cache, get_sha256, get_blog_setting
 from blog.models import Article, Category, Tag, Links, LinkShowType
 from comments.forms import CommentForm
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -316,7 +316,7 @@ def refresh_memcache(request):
     try:
 
         if request.user.is_superuser:
-            from DjangoBlog.utils import cache
+            from djangoblog.utils import cache
             if cache and cache is not None:
                 cache.clear()
             return HttpResponse("ok")

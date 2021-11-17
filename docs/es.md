@@ -17,7 +17,7 @@ ELASTICSEARCH_DSL = {
 ```python
 HAYSTACK_CONNECTIONS = {
     'default': {
-        'ENGINE': 'DjangoBlog.elasticsearch_backend.ElasticSearchEngine',
+        'ENGINE': 'djangoblog.elasticsearch_backend.ElasticSearchEngine',
     },
 }
 ```

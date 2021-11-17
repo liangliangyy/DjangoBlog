@@ -122,7 +122,7 @@ class CommonMarkdown:
 
 
 def send_email(emailto, title, content):
-    from DjangoBlog.blog_signals import send_email_signal
+    from djangoblog.blog_signals import send_email_signal
     send_email_signal.send(
         send_email.__class__,
         emailto=emailto,
@@ -150,7 +150,7 @@ def get_blog_setting():
         from blog.models import BlogSettings
         if not BlogSettings.objects.count():
             setting = BlogSettings()
-            setting.sitename = 'DjangoBlog'
+            setting.sitename = 'djangoblog'
             setting.site_description = '基于Django的博客系统'
             setting.site_seo_description = '基于Django的博客系统'
             setting.site_keywords = 'Django,Python'
@@ -177,6 +177,7 @@ def save_user_avatar(url):
     '''
     setting = get_blog_setting()
     logger.info(url)
+
     try:
         imgname = url.split('/')[-1]
         if imgname:
@@ -184,9 +185,6 @@ def save_user_avatar(url):
                 basedir=setting.resource_path, img=imgname)
             if os.path.exists(path):
                 os.remove(path)
-    except BaseException:
-        pass
-    try:
         rsp = requests.get(url, timeout=2)
         if rsp.status_code == 200:
             basepath = r'{basedir}/avatar/'.format(
@@ -207,13 +205,9 @@ def save_user_avatar(url):
         return url
 
 
-def delete_sidebar_cache(username):
-    from django.core.cache.utils import make_template_fragment_key
+def delete_sidebar_cache():
     from blog.models import LinkShowType
-    keys = (
-        make_template_fragment_key(
-            'sidebar', [
-                username + x]) for x in LinkShowType.values)
+    keys = ["sidebar" + x for x in LinkShowType.values]
     for k in keys:
         logger.info('delete sidebar key:' + k)
         cache.delete(k)

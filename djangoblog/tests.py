@@ -1,21 +1,6 @@
-#!/usr/bin/env python
-# encoding: utf-8
-
-
-"""
-@version: ??
-@author: liangliangyy
-@license: MIT Licence
-@contact: liangliangyy@gmail.com
-@site: https://www.lylinux.net/
-@software: PyCharm
-@file: tests.py
-@time: 2017/10/25 下午10:16
-"""
-
 from django.test import TestCase
 
-from DjangoBlog.utils import *
+from djangoblog.utils import *
 
 
 class DjangoBlogTest(TestCase):

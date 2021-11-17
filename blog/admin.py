@@ -1,11 +1,12 @@
-from django.contrib import admin
-# Register your models here.
-from .models import Article, Category, Tag, Links, SideBar, BlogSettings
 from django import forms
+from django.contrib import admin
 from django.contrib.auth import get_user_model
-from django.utils.translation import ugettext_lazy as _
 from django.urls import reverse
 from django.utils.html import format_html
+from django.utils.translation import ugettext_lazy as _
+
+# Register your models here.
+from .models import Article
 
 
 class ArticleListFilter(admin.SimpleListFilter):
@@ -101,7 +102,7 @@ class ArticlelAdmin(admin.ModelAdmin):
             url = obj.get_full_url()
             return url
         else:
-            from DjangoBlog.utils import get_current_site
+            from djangoblog.utils import get_current_site
             site = get_current_site().domain
             return site
 

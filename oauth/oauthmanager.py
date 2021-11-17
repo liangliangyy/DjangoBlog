@@ -1,26 +1,12 @@
-#!/usr/bin/env python
-# encoding: utf-8
-
-
-"""
-@version: ??
-@author: liangliangyy
-@license: MIT Licence
-@contact: liangliangyy@gmail.com
-@site: https://www.lylinux.net/
-@software: PyCharm
-@file: oauthmanager.py
-@time: 2016/11/26 下午5:09
-"""
-
-from abc import ABCMeta, abstractmethod, abstractproperty
-from oauth.models import OAuthUser, OAuthConfig
-from django.conf import settings
-import requests
 import json
 import logging
 import urllib.parse
-from DjangoBlog.utils import parse_dict_to_url, cache_decorator
+from abc import ABCMeta, abstractmethod
+
+import requests
+
+from djangoblog.utils import cache_decorator
+from oauth.models import OAuthUser, OAuthConfig
 
 logger = logging.getLogger(__name__)
 

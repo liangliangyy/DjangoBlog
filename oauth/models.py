@@ -1,9 +1,8 @@
-from django.db import models
-
 # Create your models here.
 from django.conf import settings
-from django.utils.timezone import now
 from django.core.exceptions import ValidationError
+from django.db import models
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 
 
@@ -57,7 +56,7 @@ class OAuthConfig(models.Model):
     def clean(self):
         if OAuthConfig.objects.filter(
                 type=self.type).exclude(
-                id=self.id).count():
+            id=self.id).count():
             raise ValidationError(_(self.type + '已经存在'))
 
     def __str__(self):

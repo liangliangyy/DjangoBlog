@@ -25,11 +25,11 @@ services:
   djangoblog:
     build: .
     restart: always
-    command: bash -c 'sh /code/DjangoBlog/bin/docker_start.sh'
+    command: bash -c 'sh /code/djangoblog/bin/docker_start.sh'
     ports:
       - "8000:8000"
     volumes:
-      - ./collectedstatic:/code/DjangoBlog/collectedstatic
+      - ./collectedstatic:/code/djangoblog/collectedstatic
     environment:
       - DJANGO_MYSQL_DATABASE=djangoblog
       - DJANGO_MYSQL_USER=root

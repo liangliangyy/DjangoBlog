@@ -1,20 +1,7 @@
-#!/usr/bin/env python
-# encoding: utf-8
-"""
-@version: ??
-@author: liangliangyy
-@license: MIT Licence
-@contact: liangliangyy@gmail.com
-@site: https://www.lylinux.net/
-@software: PyCharm
-@file: build_index.py
-@time: 2019-04-20 20:39
-"""
+from django.core.management.base import BaseCommand
 
 from blog.documents import ElapsedTimeDocument, ArticleDocumentManager, ElaspedTimeDocumentManager, \
     ELASTICSEARCH_ENABLED
-
-from django.core.management.base import BaseCommand
 
 
 # TODO 参数化
