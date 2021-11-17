@@ -3,6 +3,7 @@ import logging
 import random
 import urllib
 
+import bleach
 from django import template
 from django.conf import settings
 from django.db.models import Q
@@ -13,6 +14,7 @@ from django.utils.safestring import mark_safe
 
 from blog.models import Article, Category, Tag, Links, SideBar, LinkShowType
 from comments.models import Comment
+from djangoblog.utils import CommonMarkdown
 from djangoblog.utils import cache
 from djangoblog.utils import get_current_site
 from oauth.models import OAuthUser
@@ -40,10 +42,10 @@ def datetimeformat(data):
         return ""
 
 
-@register.filter(is_safe=True)
+@register.filter()
 @stringfilter
 def custom_markdown(content):
-    from djangoblog.utils import CommonMarkdown
+    content = bleach.clean(content)
     return mark_safe(CommonMarkdown.get_markdown(content))
 
 
@@ -256,16 +258,6 @@ def load_pagination_info(page_obj, page_type, tag_name):
         'next_url': next_url,
         'page_obj': page_obj
     }
-
-
-"""
-@register.inclusion_tag('nav.html')
-def load_nav_info():
-    category_list = Category.objects.all()
-    return {
-        'nav_category_list': category_list
-    }
-"""
 
 
 @register.inclusion_tag('blog/tags/article_info.html')

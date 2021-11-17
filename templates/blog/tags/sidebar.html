@@ -15,7 +15,7 @@
             <aside class="widget_text widget widget_custom_html"><p class="widget-title">
                 {{ sidebar.name }}</p>
                 <div class="textwidget custom-html-widget">
-                    {{ sidebar.content|custom_markdown }}
+                    {{ sidebar.content|custom_markdown|safe }}
                 </div>
             </aside>
         {% endfor %}

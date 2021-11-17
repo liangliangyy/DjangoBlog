@@ -24,9 +24,9 @@
             <div>{{ comment_item.created_time }}</div>
             <div>回复给:@{{ comment_item.author.parent_comment.username }}</div>
         </div>
-
-        <p>{{ comment_item.body |custom_markdown }}</p>
-
+        {% autoescape on %}
+            <p>{{ comment_item.body|custom_markdown }}</p>
+        {% endautoescape %}
         <div class="reply"><a rel="nofollow" class="comment-reply-link"
                               href="javascript:void(0)"
                               onclick="do_reply({{ comment_item.pk }})"
