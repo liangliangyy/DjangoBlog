@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
 NAME="djangoblog" # Name of the application
-DJANGODIR=/code/DjangoBlog # Django project directory
+DJANGODIR=/code/djangoBlog # Django project directory
 USER=root # the user to run as
 GROUP=root # the group to run as
 NUM_WORKERS=1 # how many worker processes should Gunicorn spawn

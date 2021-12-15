@@ -14,9 +14,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 
-from djangoblog.utils import cache, get_sha256, get_blog_setting
 from blog.models import Article, Category, Tag, Links, LinkShowType
 from comments.forms import CommentForm
+from djangoblog.utils import cache, get_sha256, get_blog_setting
 
 logger = logging.getLogger(__name__)
 
@@ -296,7 +296,9 @@ def fileupload(request):
                 type='files' if not isimage else 'image', timestr=timestr, filename=filename)
             if not os.path.exists(basepath):
                 os.makedirs(basepath)
-            savepath = os.path.join(basepath, f"{uuid.uuid4().hex}{os.path.splitext(filename)[-1]}")
+            savepath = os.path.normpath(os.path.join(basepath, f"{uuid.uuid4().hex}{os.path.splitext(filename)[-1]}"))
+            if not savepath.startswith(basepath):
+                return HttpResponse("only for post")
             with open(savepath, 'wb+') as wfile:
                 for chunk in request.FILES[filename].chunks():
                     wfile.write(chunk)
