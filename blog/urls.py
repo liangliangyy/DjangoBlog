@@ -55,7 +55,4 @@ urlpatterns = [
         r'upload',
         views.fileupload,
         name='upload'),
-    path(
-        r'refresh',
-        views.refresh_memcache,
-        name='refresh')]
+]

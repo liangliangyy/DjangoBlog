@@ -6,7 +6,6 @@ import uuid
 
 from django import forms
 from django.conf import settings
-from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
@@ -311,22 +310,6 @@ def fileupload(request):
 
     else:
         return HttpResponse("only for post")
-
-
-@login_required
-def refresh_memcache(request):
-    try:
-
-        if request.user.is_superuser:
-            from djangoblog.utils import cache
-            if cache and cache is not None:
-                cache.clear()
-            return HttpResponse("ok")
-        else:
-            return HttpResponseForbidden()
-    except Exception as e:
-        logger.error(e)
-        return HttpResponse("error")
 
 
 def page_not_found_view(
