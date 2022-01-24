@@ -8,11 +8,11 @@ from django.test import Client, RequestFactory, TestCase
 from django.urls import reverse
 from django.utils import timezone
 
-from djangoblog.utils import get_current_site, get_sha256
 from accounts.models import BlogUser
 from blog.forms import BlogSearchForm
 from blog.models import Article, Category, Tag, SideBar, Links
 from blog.templatetags.blog_tags import load_pagination_info, load_articletags
+from djangoblog.utils import get_current_site, get_sha256
 
 
 # Create your tests here.
@@ -98,12 +98,7 @@ class ArticleTest(TestCase):
         s = load_articletags(article)
         self.assertIsNotNone(s)
 
-        rsp = self.client.get('/refresh')
-        self.assertEqual(rsp.status_code, 302)
-
         self.client.login(username='liangliangyy', password='liangliangyy')
-        rsp = self.client.get('/refresh')
-        self.assertEqual(rsp.status_code, 200)
 
         response = self.client.get(reverse('blog:archives'))
         self.assertEqual(response.status_code, 200)
@@ -139,9 +134,6 @@ class ArticleTest(TestCase):
         link.save()
         response = self.client.get('/links.html')
         self.assertEqual(response.status_code, 200)
-
-        rsp = self.client.get('/refresh')
-        self.assertEqual(rsp.status_code, 200)
 
         response = self.client.get('/feed/')
         self.assertEqual(response.status_code, 200)
