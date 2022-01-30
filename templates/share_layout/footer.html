@@ -1,3 +1,4 @@
+{% load blog_tags %}
 <footer id="colophon" role="contentinfo">
     <div class="site-info" style="text-align: center">
         Copyright&copy;&nbsp;{{ CURRENT_YEAR }}&nbsp;
@@ -33,6 +34,9 @@
         <a href="https://www.lylinux.net" target="blank">lylinux</a>
         |
         本页面加载耗时:<!!LOAD_TIMES!!>s
+        |
+        {%  get_running_time as runningtime %}
+        本站已运行{{ runningtime }}天
     </div>
     {% if BEIAN_CODE %}
         <div class="site-info" style="text-align: center">

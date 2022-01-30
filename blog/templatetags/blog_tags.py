@@ -2,7 +2,7 @@ import hashlib
 import logging
 import random
 import urllib
-
+import datetime
 import bleach
 from django import template
 from django.conf import settings
@@ -18,10 +18,22 @@ from djangoblog.utils import CommonMarkdown
 from djangoblog.utils import cache
 from djangoblog.utils import get_current_site
 from oauth.models import OAuthUser
+from django.utils import timezone
 
 logger = logging.getLogger(__name__)
 
 register = template.Library()
+
+
+@register.simple_tag
+def get_running_time():
+    """
+    获取站点运行时间
+    """
+    set_time = datetime.datetime(2018, 8, 13) #设置站点起始时间
+    now_time = timezone.now().replace(tzinfo=None)  #获取当前时间
+    run_times = (now_time - set_time).days  #计算两个时间的差
+    return run_times
 
 
 @register.simple_tag
