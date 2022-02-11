@@ -41,34 +41,32 @@ class CommentsTest(TestCase):
         article.status = 'p'
         article.save()
 
-        commenturl = reverse(
+        comment_url = reverse(
             'comments:postcomment', kwargs={
                 'article_id': article.id})
 
-        response = self.client.post(commenturl,
+        response = self.client.post(comment_url,
                                     {
                                         'body': '123ffffffffff'
-                                    })
-
-        self.assertEqual(response.status_code, 200)
-
-        article = Article.objects.get(pk=article.pk)
-        self.assertEqual(len(article.comment_list()), 0)
-
-        response = self.client.post(commenturl,
-                                    {
-                                        'body': '123ffffffffff',
-                                        'email': user.email,
-                                        'name': user.username
                                     })
 
         self.assertEqual(response.status_code, 302)
 
         article = Article.objects.get(pk=article.pk)
         self.assertEqual(len(article.comment_list()), 1)
+
+        response = self.client.post(comment_url,
+                                    {
+                                        'body': '123ffffffffff',
+                                    })
+
+        self.assertEqual(response.status_code, 302)
+
+        article = Article.objects.get(pk=article.pk)
+        self.assertEqual(len(article.comment_list()), 2)
         parent_comment_id = article.comment_list()[0].id
 
-        response = self.client.post(commenturl,
+        response = self.client.post(comment_url,
                                     {
                                         'body': '''
                                         # Title1
@@ -83,15 +81,13 @@ class CommentsTest(TestCase):
 
 
         ''',
-                                        'email': user.email,
-                                        'name': user.username,
                                         'parent_comment_id': parent_comment_id
                                     })
 
         self.assertEqual(response.status_code, 302)
 
         article = Article.objects.get(pk=article.pk)
-        self.assertEqual(len(article.comment_list()), 2)
+        self.assertEqual(len(article.comment_list()), 3)
         comment = Comment.objects.get(id=parent_comment_id)
         tree = parse_commenttree(article.comment_list(), comment)
         self.assertEqual(len(tree), 1)

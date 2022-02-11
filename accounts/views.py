@@ -35,6 +35,10 @@ class RegisterView(FormView):
     form_class = RegisterForm
     template_name = 'account/registration_form.html'
 
+    @method_decorator(csrf_protect)
+    def dispatch(self, *args, **kwargs):
+        return super(RegisterView, self).dispatch(*args, **kwargs)
+
     def form_valid(self, form):
         if form.is_valid():
             user = form.save(False)

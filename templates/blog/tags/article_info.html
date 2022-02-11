@@ -51,16 +51,16 @@
             <p class='read-more'><a
                     href=' {{ article.get_absolute_url }}'>Read more</a></p>
         {% else %}
-            {% get_markdown_toc article.body as markdown %}
-            {% if article.show_toc %}
 
+            {% if article.show_toc %}
+                {% get_markdown_toc article.body as toc %}
                 <b>目录:</b>
-                {{ markdown.0|safe }}
+                {{ toc|safe }}
 
                 <hr class="break_line"/>
             {% endif %}
             <div class="article">
-                {{ markdown.1|safe }}
+                {{ article.body|custom_markdown|escape }}
             </div>
         {% endif %}
 
