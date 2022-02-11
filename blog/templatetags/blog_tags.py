@@ -53,7 +53,7 @@ def custom_markdown(content):
 def get_markdown_toc(content):
     from djangoblog.utils import CommonMarkdown
     body, toc = CommonMarkdown.get_markdown_with_toc(content)
-    return mark_safe(toc), mark_safe(body)
+    return mark_safe(toc)
 
 
 @register.filter(is_safe=True)
