@@ -1,4 +1,5 @@
 # Create your views here.
+from django.core.exceptions import ValidationError
 from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
@@ -40,6 +41,8 @@ class CommentPostView(FormView):
         article_id = self.kwargs['article_id']
         article = Article.objects.get(pk=article_id)
 
+        if article.comment_status == 'c' or article.status == 'c':
+            raise ValidationError("该文章评论已关闭.")
         comment = form.save(False)
         comment.article = article
 
