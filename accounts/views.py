@@ -153,8 +153,8 @@ def account_result(request):
     if type and type in ['register', 'validation']:
         if type == 'register':
             content = '''
-    恭喜您注册成功，一封验证邮件已经发送到您 {email} 的邮箱，请验证您的邮箱后登录本站。
-    '''.format(email=user.email)
+    恭喜您注册成功，一封验证邮件已经发送到您的邮箱，请验证您的邮箱后登录本站。
+    '''
             title = '注册成功'
         else:
             c_sign = get_sha256(get_sha256(settings.SECRET_KEY + str(user.id)))
