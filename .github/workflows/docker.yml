@@ -30,15 +30,4 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/djangoblog:latest
           
-      - name: ssh deploy
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.KEY }}
-          port: ${{ secrets.PORT }}
-          script: |
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/djangoblog:latest
-            cd ${{ secrets.DOCKERPATH }}
-            docker-compose up -d
-            docker restart memcached
+    
