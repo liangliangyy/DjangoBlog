@@ -1,8 +1,8 @@
-coverage==6.2
+coverage==6.3.2
 bleach==4.1.0
-Django==4.0.2
+Django==4.0.3
 django-compressor==3.1
-django-haystack==3.1.1
+django-haystack==3.2.dev0
 django-ipware==4.0.2
 django-mdeditor==0.1.20
 django-uuslug==2.0.0
@@ -17,7 +17,7 @@ Pillow==9.0.1
 Pygments==2.11.2
 python-logstash==0.4.6
 python-memcached==1.59
-python-slugify==6.1.0
+python-slugify==6.1.1
 pytz==2021.3
 raven==6.10.0
 requests==2.26.0
