@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf import settings
-from django.conf.urls import url
+from django.urls import include, re_path
 from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
 from django.urls import include
@@ -36,19 +36,19 @@ handler404 = 'blog.views.page_not_found_view'
 handler500 = 'blog.views.server_error_view'
 handle403 = 'blog.views.permission_denied_view'
 urlpatterns = [
-                  url(r'^admin/', admin_site.urls),
-                  url(r'', include('blog.urls', namespace='blog')),
-                  url(r'mdeditor/', include('mdeditor.urls')),
-                  url(r'', include('comments.urls', namespace='comment')),
-                  url(r'', include('accounts.urls', namespace='account')),
-                  url(r'', include('oauth.urls', namespace='oauth')),
-                  url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps},
+                  re_path(r'^admin/', admin_site.urls),
+                  re_path(r'', include('blog.urls', namespace='blog')),
+                  re_path(r'mdeditor/', include('mdeditor.urls')),
+                  re_path(r'', include('comments.urls', namespace='comment')),
+                  re_path(r'', include('accounts.urls', namespace='account')),
+                  re_path(r'', include('oauth.urls', namespace='oauth')),
+                  re_path(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps},
                       name='django.contrib.sitemaps.views.sitemap'),
-                  url(r'^feed/$', DjangoBlogFeed()),
-                  url(r'^rss/$', DjangoBlogFeed()),
-                  url(r'^search', include('haystack.urls'), name='search'),
-                  url(r'', include('servermanager.urls', namespace='servermanager')),
-                  url(r'', include('owntracks.urls', namespace='owntracks'))
+                  re_path(r'^feed/$', DjangoBlogFeed()),
+                  re_path(r'^rss/$', DjangoBlogFeed()),
+                  re_path(r'^search', include('haystack.urls'), name='search'),
+                  re_path(r'', include('servermanager.urls', namespace='servermanager')),
+                  re_path(r'', include('owntracks.urls', namespace='owntracks'))
               ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
