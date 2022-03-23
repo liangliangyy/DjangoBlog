@@ -35,8 +35,10 @@ TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 
 # ALLOWED_HOSTS = []
 ALLOWED_HOSTS = ['*', '127.0.0.1', 'example.com']
-# Application definition
+# django 4.0新增配置
 CSRF_TRUSTED_ORIGINS = ['http://example.com']
+# Application definition
+
 
 INSTALLED_APPS = [
     # 'django.contrib.admin',
