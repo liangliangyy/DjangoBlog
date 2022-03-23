@@ -36,7 +36,7 @@ TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 # ALLOWED_HOSTS = []
 ALLOWED_HOSTS = ['*', '127.0.0.1', 'example.com']
 # Application definition
-
+CSRF_TRUSTED_ORIGINS = ['http://example.com']
 
 INSTALLED_APPS = [
     # 'django.contrib.admin',
