@@ -62,3 +62,8 @@ SERVER_EMAIL = os.environ.get('DJANGO_EMAIL_USER')
 django.db.migrations.exceptions.MigrationSchemaMissing: Unable to create the django_migrations table ((1064, "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(6) NOT NULL)' at line 1"))
 ```
 可能是因为你的mysql版本低于5.6，需要升级mysql版本>=5.6即可。
+
+django 4.0登录可能会报错CSRF，需要配置下`settings.py`中的`CSRF_TRUSTED_ORIGINS`
+
+https://github.com/liangliangyy/DjangoBlog/blob/master/djangoblog/settings.py#L39
+
