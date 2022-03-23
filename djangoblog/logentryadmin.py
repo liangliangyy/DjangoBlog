@@ -2,10 +2,10 @@ from django.contrib import admin
 from django.contrib.admin.models import LogEntry, ADDITION, CHANGE, DELETION
 from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse, NoReverseMatch
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
-from django.utils.translation import pgettext_lazy, ugettext_lazy as _
+from django.utils.translation import pgettext_lazy, gettext_lazy  as _
 
 action_names = {
     ADDITION: pgettext_lazy('logentry_admin:action_type', 'Addition'),
@@ -96,7 +96,7 @@ class LogEntryAdmin(admin.ModelAdmin):
 
     def user_link(self, obj):
         content_type = ContentType.objects.get_for_model(type(obj.user))
-        user_link = escape(force_text(obj.user))
+        user_link = escape(force_str(obj.user))
         try:
             # try returning an actual link instead of object repr string
             url = reverse(

@@ -13,7 +13,7 @@ import six
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.datetime_safe import datetime
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from haystack.backends import BaseEngine, BaseSearchBackend, BaseSearchQuery, EmptyResults, log_query
 from haystack.constants import DJANGO_CT, DJANGO_ID, ID
 from haystack.exceptions import MissingDependency, SearchBackendError, SkipDocument
@@ -376,7 +376,7 @@ class WhooshSearchBackend(BaseSearchBackend):
                 'hits': 0,
             }
 
-        query_string = force_text(query_string)
+        query_string = force_str(query_string)
 
         # A one-character query (non-wildcard) gets nabbed by a stopwords
         # filter and should yield zero results.
@@ -467,7 +467,7 @@ class WhooshSearchBackend(BaseSearchBackend):
 
             for nq in narrow_queries:
                 recent_narrowed_results = narrow_searcher.search(
-                    self.parser.parse(force_text(nq)), limit=None)
+                    self.parser.parse(force_str(nq)), limit=None)
 
                 if len(recent_narrowed_results) <= 0:
                     return {
@@ -614,7 +614,7 @@ class WhooshSearchBackend(BaseSearchBackend):
 
             for nq in narrow_queries:
                 recent_narrowed_results = narrow_searcher.search(
-                    self.parser.parse(force_text(nq)), limit=None)
+                    self.parser.parse(force_str(nq)), limit=None)
 
                 if len(recent_narrowed_results) <= 0:
                     return {
@@ -771,7 +771,7 @@ class WhooshSearchBackend(BaseSearchBackend):
         spelling_suggestion = None
         reader = self.index.reader()
         corrector = reader.corrector(self.content_field_name)
-        cleaned_query = force_text(query_string)
+        cleaned_query = force_str(query_string)
 
         if not query_string:
             return spelling_suggestion
@@ -811,12 +811,12 @@ class WhooshSearchBackend(BaseSearchBackend):
             else:
                 value = 'false'
         elif isinstance(value, (list, tuple)):
-            value = u','.join([force_text(v) for v in value])
+            value = u','.join([force_str(v) for v in value])
         elif isinstance(value, (six.integer_types, float)):
             # Leave it alone.
             pass
         else:
-            value = force_text(value)
+            value = force_str(value)
         return value
 
     def _to_python(self, value):
@@ -873,9 +873,9 @@ class WhooshSearchBackend(BaseSearchBackend):
 class WhooshSearchQuery(BaseSearchQuery):
     def _convert_datetime(self, date):
         if hasattr(date, 'hour'):
-            return force_text(date.strftime('%Y%m%d%H%M%S'))
+            return force_str(date.strftime('%Y%m%d%H%M%S'))
         else:
-            return force_text(date.strftime('%Y%m%d000000'))
+            return force_str(date.strftime('%Y%m%d000000'))
 
     def clean(self, query_fragment):
         """

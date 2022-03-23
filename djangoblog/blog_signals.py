@@ -18,9 +18,9 @@ from oauth.models import OAuthUser
 
 logger = logging.getLogger(__name__)
 
-oauth_user_login_signal = django.dispatch.Signal(providing_args=['id'])
+oauth_user_login_signal = django.dispatch.Signal(['id'])
 send_email_signal = django.dispatch.Signal(
-    providing_args=['emailto', 'title', 'content'])
+    ['emailto', 'title', 'content'])
 
 
 @receiver(send_email_signal)

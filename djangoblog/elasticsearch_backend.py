@@ -1,4 +1,4 @@
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from elasticsearch_dsl import Q
 from haystack.backends import BaseEngine, BaseSearchBackend, BaseSearchQuery, log_query
 from haystack.models import SearchResult
@@ -98,9 +98,9 @@ class ElasticSearchBackend(BaseSearchBackend):
 class ElasticSearchQuery(BaseSearchQuery):
     def _convert_datetime(self, date):
         if hasattr(date, 'hour'):
-            return force_text(date.strftime('%Y%m%d%H%M%S'))
+            return force_str(date.strftime('%Y%m%d%H%M%S'))
         else:
-            return force_text(date.strftime('%Y%m%d000000'))
+            return force_str(date.strftime('%Y%m%d000000'))
 
     def clean(self, query_fragment):
         """
