@@ -189,6 +189,14 @@ CACHES = {
         'LOCATION': 'unique-snowflake',
     }
 }
+# 使用redis作为缓存
+if os.environ.get("DJANGO_REDIS_URL"):
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+            'LOCATION': f'redis://{os.environ.get("DJANGO_REDIS_URL")}',
+        }
+    }
 
 SITE_ID = 1
 BAIDU_NOTIFY_URL = os.environ.get('DJANGO_BAIDU_NOTIFY_URL') \
