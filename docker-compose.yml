@@ -21,7 +21,7 @@ services:
     volumes:
       - ./bin/datas/mysql/:/var/lib/mysql
     depends_on:
-      - memcached
+      - redis
     container_name: db
 
   djangoblog:
@@ -38,10 +38,10 @@ services:
       - DJANGO_MYSQL_PASSWORD=DjAnGoBlOg!2!Q@W#E
       - DJANGO_MYSQL_HOST=db
       - DJANGO_MYSQL_PORT=3306
-      - DJANGO_MEMCACHED_LOCATION=memcached:11211
+      - DJANGO_REDIS_URL=redis:6379
     links:
       - db
-      - memcached
+      - redis
     depends_on:
       - db
     container_name: djangoblog
@@ -58,9 +58,9 @@ services:
       - djangoblog:djangoblog
     container_name: nginx
 
-  memcached:
+  redis:
     restart: always
-    image: memcached:latest
-    container_name: memcached
+    image: redis:latest
+    container_name: redis
     ports:
-      - "11211:11211"
+      - "6379:6379"
