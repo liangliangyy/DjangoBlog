@@ -16,7 +16,6 @@ mysqlclient==2.1.0
 Pillow==9.0.1
 Pygments==2.11.2
 python-logstash==0.4.6
-python-memcached==1.59
 python-slugify==6.1.1
 pytz==2022.1
 raven==6.10.0
