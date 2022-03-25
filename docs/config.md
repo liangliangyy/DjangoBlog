@@ -1,22 +1,10 @@
 # 主要功能配置介绍:
 
 ## 缓存：
-缓存默认使用`memcache`缓存，如果你没有`memcache`环境，则将`settings.py`中的`locmemcache`改为`default`,并删除默认的`default`配置即可。
-```python
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1:11211',
-        'KEY_PREFIX': 'django_test' if TESTING else 'djangoblog',
-        'TIMEOUT': 60 * 60 * 10
-    },
-    'locmemcache': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'TIMEOUT': 10800,
-        'LOCATION': 'unique-snowflake',
-    }
-}
-```
+缓存默认使用`localmem`缓存，如果你有`redis`环境，可以设置`DJANGO_REDIS_URL`环境变量，则会自动使用该redis来作为缓存，或者你也可以直接修改如下代码来使用。
+https://github.com/liangliangyy/DjangoBlog/blob/ffcb2c3711de805f2067dd3c1c57449cd24d84ee/djangoblog/settings.py#L185-L199
+
+
 ## oauth登录:
 
 现在已经支持QQ，微博，Google，GitHub，Facebook登录，需要在其对应的开放平台申请oauth登录权限，然后在  
@@ -62,6 +50,7 @@ SERVER_EMAIL = os.environ.get('DJANGO_EMAIL_USER')
 django.db.migrations.exceptions.MigrationSchemaMissing: Unable to create the django_migrations table ((1064, "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(6) NOT NULL)' at line 1"))
 ```
 可能是因为你的mysql版本低于5.6，需要升级mysql版本>=5.6即可。
+
 
 django 4.0登录可能会报错CSRF，需要配置下`settings.py`中的`CSRF_TRUSTED_ORIGINS`
 
