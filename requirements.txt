@@ -24,4 +24,4 @@ urllib3==1.26.9
 WeRoBot==1.13.1
 Whoosh==2.7.4
 user-agents==2.2.0
-redis==4.1.4
+redis==4.2.2

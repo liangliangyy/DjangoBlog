@@ -34,8 +34,7 @@ def cache_decorator(expiration=3 * 60):
             try:
                 view = args[0]
                 key = view.get_cache_key()
-            except BaseException as e:
-                logger.warning(e)
+            except:
                 key = None
             if not key:
                 unique_str = repr((func, args, kwargs))
