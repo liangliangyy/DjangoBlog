@@ -23,7 +23,7 @@
                 <a href="{{ article.get_absolute_url }}#comments" class="ds-thread-count" data-thread-key="3815"
                    rel="nofollow">
                     <span class="leave-reply">
-                    {% if article.comment and article.comment_set.count %}
+                    {% if article.comment_set and article.comment_set.count %}
                         {{ article.comment_set.count }}个评论
                     {% else %}
                         发表评论
@@ -51,7 +51,17 @@
             <p class='read-more'><a
                     href=' {{ article.get_absolute_url }}'>Read more</a></p>
         {% else %}
-            {{ article.body|custom_markdown }}
+
+            {% if article.show_toc %}
+                {% get_markdown_toc article.body as toc %}
+                <b>目录:</b>
+                {{ toc|safe }}
+
+                <hr class="break_line"/>
+            {% endif %}
+            <div class="article">
+                {{ article.body|custom_markdown|escape }}
+            </div>
         {% endif %}
 
     </div><!-- .entry-content -->

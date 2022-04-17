@@ -3,10 +3,12 @@
 {% load compress %}
 <!DOCTYPE html>
 <!--[if IE 7]>
-<html class="ie ie7" lang="zh-CN" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
+<html class="ie ie7" lang="zh-CN"
+      prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
 <![endif]-->
 <!--[if IE 8]>
-<html class="ie ie8" lang="zh-CN" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
+<html class="ie ie8" lang="zh-CN"
+      prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
 <![endif]-->
 <!--[if !(IE 7) & !(IE 8)]><!-->
 <html lang="zh-CN" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
@@ -24,11 +26,11 @@
 
     <link rel="alternate" type="application/rss+xml" title="{{ SITE_NAME }} &raquo; Feed"
           href="/feed"/>
-
+    <link rel='stylesheet preload' as="font" id='twentytwelve-fonts-css'
+          href='{% static 'blog/fonts/fonts.css' %}'
+          type='text/css' media='all'/>
     {% compress css %}
-        <link rel='stylesheet' id='twentytwelve-fonts-css'
-              href='{% static 'blog/fonts/fonts.css' %}'
-              type='text/css' media='all'/>
+
         <link rel='stylesheet' id='twentytwelve-style-css' href='{% static 'blog/css/style.css' %}' type='text/css'
               media='all'/>
         <link href="{% static 'blog/css/oauth_style.css' %}" rel="stylesheet">
@@ -74,7 +76,7 @@
 </body>
 <footer>
     {% compress js %}
-        <script type="text/javascript" src="{% static 'blog/js/jquery-3.1.1.js' %}"></script>
+        <script type="text/javascript" src="{% static 'blog/js/jquery-3.6.0.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'blog/js/nprogress.js' %}"></script>
         <script src="{% static 'blog/js/blog.js' %}" type="application/javascript"></script>
         <script src="{% static 'blog/js/navigation.js' %}" type="application/javascript"></script>

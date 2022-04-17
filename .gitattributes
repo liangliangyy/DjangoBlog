@@ -1,3 +1,6 @@
-*.js linguist-language=python
-*.css linguist-language=python
-*.html linguist-language=python
+blog/static/* linguist-vendored
+*.js linguist-vendored
+*.css linguist-vendored
+* text=auto
+*.sh text eol=lf
+*.conf text eol=lf

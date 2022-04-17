@@ -1,26 +1,26 @@
-#!/bin/bash
+#!/usr/bin/env bash
 NAME="djangoblog" # Name of the application
-DJANGODIR=/code/DjangoBlog # Django project directory
+DJANGODIR=/code/djangoblog # Django project directory
 USER=root # the user to run as
 GROUP=root # the group to run as
 NUM_WORKERS=1 # how many worker processes should Gunicorn spawn
-#DJANGO_SETTINGS_MODULE=DjangoBlog.settings # which settings file should Django use
-DJANGO_WSGI_MODULE=DjangoBlog.wsgi # WSGI module name
+#DJANGO_SETTINGS_MODULE=djangoblog.settings # which settings file should Django use
+DJANGO_WSGI_MODULE=djangoblog.wsgi # WSGI module name
 
 
 echo "Starting $NAME as `whoami`"
 
 # Activate the virtual environment
 cd $DJANGODIR
-export DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
+
 export PYTHONPATH=$DJANGODIR:$PYTHONPATH
 #pip install -Ur requirements.txt -i http://pypi.douban.com/simple/  --trusted-host pypi.douban.com && \
 #        pip install gunicorn  -i http://pypi.douban.com/simple/ --trusted-host pypi.douban.com
-python manage.py makemigrations 
-python manage.py migrate
-python manage.py collectstatic --noinput 
-python manage.py compress --force
-python manage.py build_index
+python manage.py makemigrations && \
+  python manage.py migrate && \
+  python manage.py collectstatic --noinput  && \
+  python manage.py compress --force && \
+  python manage.py build_index && \
 # Start your Django Unicorn
 # Programs meant to be run under supervisor should not daemonize themselves (do not use --daemon)
 exec gunicorn ${DJANGO_WSGI_MODULE}:application \

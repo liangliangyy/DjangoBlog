@@ -1,32 +1,18 @@
-#!/usr/bin/env python
-# encoding: utf-8
-
-
-"""
-@version: ??
-@author: liangliangyy
-@license: MIT Licence 
-@contact: liangliangyy@gmail.com
-@site: https://www.lylinux.net/
-@software: PyCharm
-@file: robot.py
-@time: 2017/8/27 上午1:55
-"""
-
-from werobot import WeRoBot
-import re
-from werobot.replies import ArticlesReply, MusicReply, ImageReply, Article
-from .MemcacheStorage import MemcacheStorage
-from servermanager.Api.blogapi import BlogApi
-from servermanager.Api.commonapi import TuLing
 import os
-import json
-from DjangoBlog.utils import get_md5
-from django.conf import settings
-import jsonpickle
-from servermanager.models import commands
+import re
 
-robot = WeRoBot(token='lylinux', enable_session=True)
+import jsonpickle
+from werobot import WeRoBot
+from werobot.replies import ArticlesReply, Article
+from django.conf import settings
+from djangoblog.utils import get_sha256
+from servermanager.api.blogapi import BlogApi
+from servermanager.api.commonapi import TuLing
+from servermanager.models import commands
+from .MemcacheStorage import MemcacheStorage
+
+robot = WeRoBot(token=os.environ.get('DJANGO_WEROBOT_TOKEN')
+                      or 'lylinux', enable_session=True)
 memstorage = MemcacheStorage()
 if memstorage.is_available:
     robot.config['SESSION_STORAGE'] = memstorage
@@ -44,9 +30,7 @@ tuling = TuLing()
 
 def convert_to_articlereply(articles, message):
     reply = ArticlesReply(message=message)
-    from blog.templatetags.blog_tags import custom_markdown, truncatechars_content
-    from DjangoBlog.utils import CommonMarkdown
-    from django.utils.safestring import mark_safe
+    from blog.templatetags.blog_tags import truncatechars_content
     for post in articles:
         imgs = re.findall(r'(?:http\:|https\:)?\/\/.*\.(?:png|jpg)', post.body)
         imgurl = ''
@@ -114,12 +98,12 @@ def help(message, session):
         '''
 
 
-@robot.filter(re.compile('^weather\:.*$', re.I))
+@robot.filter(re.compile(r'^weather\:.*$', re.I))
 def weather(message, session):
     return "建设中..."
 
 
-@robot.filter(re.compile('^idcard\:.*$', re.I))
+@robot.filter(re.compile(r'^idcard\:.*$', re.I))
 def idcard(message, session):
     return "建设中..."
 
@@ -135,7 +119,10 @@ class CommandHandler():
         self.commands = commands.objects.all()
 
     def run(self, title):
-        cmd = list(filter(lambda x: x.title.upper() == title.upper(), self.commands))
+        cmd = list(
+            filter(
+                lambda x: x.title.upper() == title.upper(),
+                self.commands))
         if cmd:
             return self.__run_command__(cmd[0].command)
         else:
@@ -145,7 +132,7 @@ class CommandHandler():
         try:
             str = os.popen(cmd).read()
             return str
-        except:
+        except BaseException:
             return '命令执行出错!'
 
     def get_help(self):
@@ -167,7 +154,7 @@ class MessageHandler():
         try:
             info = session[userid]
             self.userinfo = jsonpickle.decode(info)
-        except:
+        except BaseException:
             userinfo = WxUserInfo()
             self.userinfo = userinfo
 
@@ -197,8 +184,8 @@ class MessageHandler():
         if self.userinfo.isAdmin and not self.userinfo.isPasswordSet:
             passwd = settings.WXADMIN
             if settings.TESTING:
-                passwd='123'
-            if passwd.upper() == get_md5(get_md5(info)).upper():
+                passwd = '123'
+            if passwd.upper() == get_sha256(get_sha256(info)).upper():
                 self.userinfo.isPasswordSet = True
                 self.savesession()
                 return "验证通过,请输入命令或者要执行的命令代码:输入helpme获得帮助"

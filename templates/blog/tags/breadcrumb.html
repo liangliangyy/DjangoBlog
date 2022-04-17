@@ -1,14 +1,19 @@
-<div class="breadcrumb">
+<ul itemscope itemtype="https://schema.org/BreadcrumbList" class="breadcrumb">
+
     {% for name,url in names %}
-        <div itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+        <li itemprop="itemListElement" itemscope
+            itemtype="https://schema.org/ListItem">
+            <a href="{{ url }}" itemprop="item" >
+                <span itemprop="name">{{ name }}</span></a>
+            <meta itemprop="position" content="{{ forloop.counter }}"/>
 
-            <a href="{{ url }}" itemprop="url">
-
-                <span itemprop="title"> {{ name }}</span>
-
-            </a>&nbsp;&rsaquo;
-
-        </div>
+        </li>
     {% endfor %}
-    {{ title }}
-</div>
+    <li class="active" itemprop="itemListElement" itemscope
+        itemtype="https://schema.org/ListItem">
+        <span itemprop="name">{{ title }}</span>
+        <meta itemprop="position" content="{{ count }}"/>
+    </li>
+
+</ul>
+

@@ -11,6 +11,7 @@
     <link rel="icon" href="../../favicon.ico">
     <meta name="robots" content="noindex">
     <title>{{ SITE_NAME }} | {{ SITE_DESCRIPTION }}</title>
+    <link href="{% static 'account/css/account.css' %}" rel="stylesheet">
     {% load compress %}
     {% compress css %}
         <!-- Bootstrap core CSS -->
@@ -41,4 +42,6 @@
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 
 </body>
+    <script type="text/javascript" src="{% static 'blog/js/jquery-3.6.0.min.js' %}"></script>
+    <script src="{% static 'account/js/account.js' %}" type="text/javascript"></script>
 </html>

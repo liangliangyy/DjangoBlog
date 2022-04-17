@@ -1,6 +1,6 @@
 {% extends 'share_layout/base.html' %}
 {% load blog_tags %}
-{% load cache %}
+
 {% block header %}
     <title>{{ article.title }} | {{ SITE_DESCRIPTION }}</title>
     <meta property="og:type" content="article"/>
@@ -72,9 +72,5 @@
 {% endblock %}
 
 {% block sidebar %}
-    {% with request.user.username|add:'p' as cachekey %}
-        {% cache 36000 sidebar cachekey %}
-            {% load_sidebar user 'p' %}
-        {% endcache %}
-    {% endwith %}
+    {% load_sidebar user "p" %}
 {% endblock %}

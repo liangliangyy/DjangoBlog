@@ -38,9 +38,5 @@
 
 {% endblock %}
 {% block sidebar %}
-    {% with request.user.username|add:linktype as cachekey %}
-        {% cache 36000 sidebar cachekey %}
-            {% load_sidebar user linktype %}
-        {% endcache %}
-    {% endwith %}
+    {% load_sidebar user linktype %}
 {% endblock %}

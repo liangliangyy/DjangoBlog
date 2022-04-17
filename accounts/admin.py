@@ -1,12 +1,12 @@
 from django import forms
-from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from django.contrib.auth.forms import UserChangeForm
+from django.contrib.auth.forms import UsernameField
+from django.utils.translation import gettext_lazy as _
+
 # Register your models here.
 from .models import BlogUser
-from django.utils.translation import gettext, gettext_lazy as _
-from django.contrib.auth.forms import UsernameField
 
 
 class BlogUserCreationForm(forms.ModelForm):
@@ -58,6 +58,13 @@ class BlogUserChangeForm(UserChangeForm):
 class BlogUserAdmin(UserAdmin):
     form = BlogUserChangeForm
     add_form = BlogUserCreationForm
-    list_display = ('id', 'nickname', 'username', 'email', 'last_login', 'date_joined', 'source')
+    list_display = (
+        'id',
+        'nickname',
+        'username',
+        'email',
+        'last_login',
+        'date_joined',
+        'source')
     list_display_links = ('id', 'username')
     ordering = ('-id',)
