@@ -174,6 +174,7 @@ def load_sidebar(user, linktype):
             'extra_sidebars': extra_sidebars
         }
         cache.set("sidebar" + linktype, value, 60 * 60 * 60 * 3)
+        logger.info('set sidebar cache.key:{key}'.format(key="sidebar" + linktype))
         value['user'] = user
         return value
 
@@ -301,6 +302,7 @@ def gravatar_url(email, size=40):
         url = "https://www.gravatar.com/avatar/%s?%s" % (hashlib.md5(
             email.lower()).hexdigest(), urllib.parse.urlencode({'d': default, 's': str(size)}))
         cache.set(cachekey, url, 60 * 60 * 10)
+        logger.info('set gravatar cache.key:{key}'.format(key=cachekey))
         return url
 
 
