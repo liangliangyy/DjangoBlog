@@ -285,8 +285,9 @@ def load_article_detail(article, isindex, user):
 def gravatar_url(email, size=40):
     """获得gravatar头像"""
     cachekey = 'gravatat/' + email
-    if cache.get(cachekey):
-        return cache.get(cachekey)
+    url = cache.get(cachekey)
+    if url:
+        return url
     else:
         usermodels = OAuthUser.objects.filter(email=email)
         if usermodels:
