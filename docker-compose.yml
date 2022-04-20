@@ -11,7 +11,7 @@ services:
       - --interactive_timeout=600
       - --thread_cache_size=50
       - --default-authentication-plugin=mysql_native_password
-      - --character-set-server=utf8
+      - --character-set-server=utf8mb4
       - --collation-server=utf8_general_ci
     environment:
       - MYSQL_DATABASE=djangoblog
