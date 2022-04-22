@@ -66,7 +66,7 @@ class ArticleListView(ListView):
             return value
         else:
             article_list = self.get_queryset_data()
-            cache.set(cache_key, article_list)
+            cache.set(cache_key, article_list, 60 * 60) # 缓存有效时间1小时
             logger.info('set view cache.key:{key}'.format(key=cache_key))
             return article_list
 

@@ -166,7 +166,7 @@ def get_blog_setting():
             setting.save()
         value = BlogSettings.objects.first()
         logger.info('set cache get_blog_setting')
-        cache.set('get_blog_setting', value)
+        cache.set('get_blog_setting', value, 60 * 60 * 24) # 缓存有效时间24小时
         return value
 
 

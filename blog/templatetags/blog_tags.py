@@ -173,7 +173,7 @@ def load_sidebar(user, linktype):
             'sidebar_tags': sidebar_tags,
             'extra_sidebars': extra_sidebars
         }
-        cache.set("sidebar" + linktype, value, 60 * 60 * 60 * 3)
+        cache.set("sidebar" + linktype, value, 60 * 60 ) # 侧边栏缓存有效时间1小时
         logger.info('set sidebar cache.key:{key}'.format(key="sidebar" + linktype))
         value['user'] = user
         return value
