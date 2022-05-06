@@ -60,7 +60,9 @@
                 <hr class="break_line"/>
             {% endif %}
             <div class="article">
-                {{ article.body|custom_markdown|escape }}
+
+                    {{ article.body|custom_markdown|escape }}
+
             </div>
         {% endif %}
 
