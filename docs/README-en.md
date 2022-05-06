@@ -22,7 +22,7 @@ A blog system based on `python3.8` and `Django4.0`.
 - Website exception email notification. When there is an unhandle exception, system will send an email notification.
 - Wechat official account feature integrated. Now, you can use wechat official account to manage your VPS.
 
-## Installation
+## Installation:
 Change MySQL client from `pymysql` to `mysqlclient`, more details please reference [pypi](https://pypi.org/project/mysqlclient/) , checkout preperation before installation.
 
 Install via pip: `pip install -Ur requirements.txt`
