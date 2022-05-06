@@ -3,7 +3,6 @@ import logging
 import random
 import urllib
 
-import bleach
 from django import template
 from django.conf import settings
 from django.db.models import Q
@@ -45,7 +44,6 @@ def datetimeformat(data):
 @register.filter()
 @stringfilter
 def custom_markdown(content):
-    content = bleach.clean(content)
     return mark_safe(CommonMarkdown.get_markdown(content))
 
 
