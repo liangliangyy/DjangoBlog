@@ -1,6 +1,6 @@
 coverage==6.4
 bleach==5.0.0
-Django==4.0.4
+Django==4.0.5
 django-compressor==4.0
 django-haystack==3.2.1
 django-ipware==4.0.2
@@ -19,9 +19,9 @@ python-logstash==0.4.6
 python-slugify==6.1.2
 pytz==2022.1
 raven==6.10.0
-requests==2.27.1
+requests==2.28.0
 urllib3==1.26.9
 WeRoBot==1.13.1
 Whoosh==2.7.4
 user-agents==2.2.0
-redis==4.3.1
+redis==4.3.3
