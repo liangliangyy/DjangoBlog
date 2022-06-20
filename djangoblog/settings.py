@@ -218,6 +218,10 @@ ADMINS = [('admin', os.environ.get('DJANGO_ADMIN_EMAIL') or 'admin@admin.com')]
 WXADMIN = os.environ.get(
     'DJANGO_WXADMIN_PASSWORD') or '995F03AC401D6CABABAEF756FC4D43C7'
 
+LOG_PATH = os.path.join(BASE_DIR, 'logs')
+if not os.path.exists(LOG_PATH):
+    os.makedirs(LOG_PATH, exist_ok=True)
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -241,10 +245,14 @@ LOGGING = {
     'handlers': {
         'log_file': {
             'level': 'INFO',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': 'djangoblog.log',
-            'maxBytes': 16777216,  # 16 MB
-            'formatter': 'verbose'
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': os.path.join(LOG_PATH, 'djangoblog.log'),
+            'when': 'D',
+            'formatter': 'verbose',
+            'interval': 1,
+            'delay': True,
+            'backupCount': 5,
+            'encoding': 'utf-8'
         },
         'console': {
             'level': 'DEBUG',
