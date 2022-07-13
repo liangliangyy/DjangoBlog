@@ -1,10 +1,10 @@
 import datetime
 import logging
-# Create your views here.
 import os
 import uuid
 
 from django.conf import settings
+from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
@@ -119,9 +119,23 @@ class ArticleDetailView(DetailView):
         comment_form = CommentForm()
 
         article_comments = self.object.comment_list()
+        parent_comments = article_comments.filter(parent_comment=None)
+        blog_setting = get_blog_setting()
+        paginator = Paginator(parent_comments, blog_setting.article_comment_count)
+        page = self.request.GET.get('comment_page', 1)
+        p_comments = paginator.page(page)
+        next_page = p_comments.next_page_number() if p_comments.has_next() else None
+        prev_page = p_comments.previous_page_number() if p_comments.has_previous() else None
 
+        if next_page:
+            kwargs[
+                'comment_next_page_url'] = self.object.get_absolute_url() + f'?comment_page={next_page}#commentlist-container'
+        if prev_page:
+            kwargs[
+                'comment_prev_page_url'] = self.object.get_absolute_url() + f'?comment_page={prev_page}#commentlist-container'
         kwargs['form'] = comment_form
         kwargs['article_comments'] = article_comments
+        kwargs['p_comments'] = p_comments
         kwargs['comment_count'] = len(
             article_comments) if article_comments else 0
 

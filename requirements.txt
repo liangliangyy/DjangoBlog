@@ -12,7 +12,7 @@ gevent==21.12.0
 jieba==0.42.1
 jsonpickle==2.1.0
 Markdown==3.3.7
-mysqlclient==2.1.0
+mysqlclient==2.1.1
 Pillow==9.1.1
 Pygments==2.12.0
 python-logstash==0.4.6
@@ -24,4 +24,4 @@ urllib3==1.26.9
 WeRoBot==1.13.1
 Whoosh==2.7.4
 user-agents==2.2.0
-redis==4.3.3
+redis==4.3.4
