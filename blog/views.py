@@ -120,8 +120,8 @@ class ArticleDetailView(DetailView):
 
         article_comments = self.object.comment_list()
         parent_comments = article_comments.filter(parent_comment=None)
-
-        paginator = Paginator(parent_comments, 5)
+        blog_setting = get_blog_setting()
+        paginator = Paginator(parent_comments, blog_setting.article_comment_count)
         page = self.request.GET.get('comment_page', 1)
         p_comments = paginator.page(page)
         next_page = p_comments.next_page_number() if p_comments.has_next() else None

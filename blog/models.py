@@ -294,7 +294,7 @@ class SideBar(models.Model):
 
 
 class BlogSettings(models.Model):
-    '''站点设置 '''
+    """blog的配置"""
     sitename = models.CharField(
         "网站名称",
         max_length=200,
@@ -318,6 +318,7 @@ class BlogSettings(models.Model):
     article_sub_length = models.IntegerField("文章摘要长度", default=300)
     sidebar_article_count = models.IntegerField("侧边栏文章数目", default=10)
     sidebar_comment_count = models.IntegerField("侧边栏评论数目", default=5)
+    article_comment_count = models.IntegerField("文章评论数目", default=5)
     show_google_adsense = models.BooleanField('是否显示谷歌广告', default=False)
     google_adsense_codes = models.TextField(
         '广告内容', max_length=2000, null=True, blank=True, default='')
