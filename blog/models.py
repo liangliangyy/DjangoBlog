@@ -145,7 +145,7 @@ class Article(BaseModel):
             logger.info('get article comments:{id}'.format(id=self.id))
             return value
         else:
-            comments = self.comment_set.filter(is_enable=True)
+            comments = self.comment_set.filter(is_enable=True).order_by('-id')
             cache.set(cache_key, comments, 60 * 100)
             logger.info('set article comments:{id}'.format(id=self.id))
             return comments
