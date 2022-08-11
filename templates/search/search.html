@@ -15,8 +15,16 @@
         <div id="content" role="main">
             {% if query %}
                 <header class="archive-header">
-
-                    <h2 class="archive-title"> 搜索：<span style="color: red">{{ query }}</span></h2>
+                    {% if suggestion %}
+                        <h2 class="archive-title">
+                            已显示<span style="color: red"> “{{ suggestion }}” </span>的搜索结果。&nbsp;&nbsp;
+                            仍然搜索：<a style="text-transform: none;" href="/search/?q={{ query }}&is_suggest=no">{{ query }}</a> <br>
+                        </h2>
+                    {% else %}
+                        <h2 class="archive-title">
+                            搜索：<span style="color: red">{{ query }} </span> &nbsp;&nbsp;
+                        </h2>
+                    {% endif %}
                 </header><!-- .archive-header -->
             {% endif %}
             {% if query and page.object_list %}

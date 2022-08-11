@@ -11,10 +11,11 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
+from haystack.views import SearchView
 
-from blog.models import Article, Category, Tag, Links, LinkShowType
+from blog.models import Article, Category, LinkShowType, Links, Tag
 from comments.forms import CommentForm
-from djangoblog.utils import cache, get_sha256, get_blog_setting
+from djangoblog.utils import cache, get_blog_setting, get_sha256
 
 logger = logging.getLogger(__name__)
 
@@ -265,6 +266,23 @@ class LinkListView(ListView):
 
     def get_queryset(self):
         return Links.objects.filter(is_enable=True)
+
+
+class EsSearchView(SearchView):
+    def get_context(self):
+        paginator, page = self.build_page()
+        context = {
+            "query": self.query,
+            "form": self.form,
+            "page": page,
+            "paginator": paginator,
+            "suggestion": None,
+        }
+        if hasattr(self.results, "query") and self.results.query.backend.include_spelling:
+            context["suggestion"] = self.results.query.get_spelling_suggestion()
+        context.update(self.extra_context())
+
+        return context
 
 
 @csrf_exempt

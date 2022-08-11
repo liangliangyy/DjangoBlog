@@ -1,6 +1,7 @@
 from django.utils.encoding import force_str
 from elasticsearch_dsl import Q
 from haystack.backends import BaseEngine, BaseSearchBackend, BaseSearchQuery, log_query
+from haystack.forms import ModelSearchForm
 from haystack.models import SearchResult
 from haystack.utils import log as logging
 
@@ -18,6 +19,7 @@ class ElasticSearchBackend(BaseSearchBackend):
             connection_alias,
             **connection_options)
         self.manager = ArticleDocumentManager()
+        self.include_spelling = True
 
     def _get_models(self, iterable):
         models = iterable if iterable and iterable[0] else Article.objects.all()
@@ -51,6 +53,21 @@ class ElasticSearchBackend(BaseSearchBackend):
     def clear(self, models=None, commit=True):
         self.remove(None)
 
+    @staticmethod
+    def get_suggestion(body: str):
+        """获取建议 keyword """
+        search = ArticleDocument.search() \
+            .query("match", body=body) \
+            .suggest('suggest_search', body, term={'field': 'body'}) \
+            .execute()
+
+        keywords = []
+        for suggest in search.suggest.suggest_search:
+            if suggest["options"]:
+                keywords.append(suggest["options"][0]["text"])
+                
+        return ' '.join(keywords) if keywords else body
+
     @log_query
     def search(self, query_string, **kwargs):
         logger.info('search query_string:' + query_string)
@@ -58,8 +75,16 @@ class ElasticSearchBackend(BaseSearchBackend):
         start_offset = kwargs.get('start_offset')
         end_offset = kwargs.get('end_offset')
 
-        q = Q('bool', should=[Q('match', body=query_string), Q(
-            'match', title=query_string)], minimum_should_match="70%")
+        # 搜索建议
+        is_suggest = getattr(self, "is_suggest", None)
+        if is_suggest is not False:
+            suggestion = self.get_suggestion(query_string)
+        else:
+            suggestion = query_string
+
+        q = Q('bool',
+              should=[Q('match', body=suggestion), Q('match', title=suggestion)],
+              minimum_should_match="70%")
 
         search = ArticleDocument.search() \
                      .query('bool', filter=[q]) \
@@ -85,7 +110,7 @@ class ElasticSearchBackend(BaseSearchBackend):
                 **additional_fields)
             raw_results.append(result)
         facets = {}
-        spelling_suggestion = None
+        spelling_suggestion = None if query_string == suggestion else suggestion
 
         return {
             'results': raw_results,
@@ -133,6 +158,25 @@ class ElasticSearchQuery(BaseSearchQuery):
     def get_count(self):
         results = self.get_results()
         return len(results) if results else 0
+
+    def get_spelling_suggestion(self, preferred_query=None):
+        return self._spelling_suggestion
+
+    def build_params(self, spelling_query=None):
+        kwargs = super(ElasticSearchQuery, self).build_params(spelling_query=spelling_query)
+        return kwargs
+
+
+class ElasticSearchModelSearchForm(ModelSearchForm):
+
+    def search(self):
+        # 是否建议搜索
+        self.searchqueryset.query.backend.is_suggest = True
+        if self.data.get("is_suggest") == "no":
+            self.searchqueryset.query.backend.is_suggest = False
+
+        sqs = super().search()
+        return sqs
 
 
 class ElasticSearchEngine(BaseEngine):
