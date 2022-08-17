@@ -54,19 +54,22 @@ class ElasticSearchBackend(BaseSearchBackend):
         self.remove(None)
 
     @staticmethod
-    def get_suggestion(body: str):
-        """获取建议 keyword """
+    def get_suggestion(query: str) -> str:
+        """获取推荐词, 如果没有找到添加原搜索词"""
+
         search = ArticleDocument.search() \
-            .query("match", body=body) \
-            .suggest('suggest_search', body, term={'field': 'body'}) \
+            .query("match", body=query) \
+            .suggest('suggest_search', query, term={'field': 'body'}) \
             .execute()
 
         keywords = []
         for suggest in search.suggest.suggest_search:
             if suggest["options"]:
                 keywords.append(suggest["options"][0]["text"])
-                
-        return ' '.join(keywords) if keywords else body
+            else:
+                keywords.append(suggest["text"])
+
+        return ' '.join(keywords)
 
     @log_query
     def search(self, query_string, **kwargs):
@@ -75,9 +78,8 @@ class ElasticSearchBackend(BaseSearchBackend):
         start_offset = kwargs.get('start_offset')
         end_offset = kwargs.get('end_offset')
 
-        # 搜索建议
-        is_suggest = getattr(self, "is_suggest", None)
-        if is_suggest is not False:
+        # 推荐词搜索
+        if getattr(self, "is_suggest", None):
             suggestion = self.get_suggestion(query_string)
         else:
             suggestion = query_string
@@ -171,10 +173,7 @@ class ElasticSearchModelSearchForm(ModelSearchForm):
 
     def search(self):
         # 是否建议搜索
-        self.searchqueryset.query.backend.is_suggest = True
-        if self.data.get("is_suggest") == "no":
-            self.searchqueryset.query.backend.is_suggest = False
-
+        self.searchqueryset.query.backend.is_suggest = self.data.get("is_suggest") != "no"
         sqs = super().search()
         return sqs
 
