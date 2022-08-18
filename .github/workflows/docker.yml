@@ -38,6 +38,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/djangoblog:${{DOCKER_TAG}}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/djangoblog:${{env.DOCKER_TAG}}
           
     
