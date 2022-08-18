@@ -14,14 +14,17 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf import settings
-from django.urls import include, re_path
 from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
 from django.urls import include
+from django.urls import re_path
+from haystack.views import search_view_factory
 
+from blog.views import EsSearchView
 from djangoblog.admin_site import admin_site
+from djangoblog.elasticsearch_backend import ElasticSearchModelSearchForm
 from djangoblog.feeds import DjangoBlogFeed
-from djangoblog.sitemap import StaticViewSitemap, ArticleSiteMap, CategorySiteMap, TagSiteMap, UserSiteMap
+from djangoblog.sitemap import ArticleSiteMap, CategorySiteMap, StaticViewSitemap, TagSiteMap, UserSiteMap
 
 sitemaps = {
 
@@ -43,10 +46,11 @@ urlpatterns = [
                   re_path(r'', include('accounts.urls', namespace='account')),
                   re_path(r'', include('oauth.urls', namespace='oauth')),
                   re_path(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps},
-                      name='django.contrib.sitemaps.views.sitemap'),
+                          name='django.contrib.sitemaps.views.sitemap'),
                   re_path(r'^feed/$', DjangoBlogFeed()),
                   re_path(r'^rss/$', DjangoBlogFeed()),
-                  re_path(r'^search', include('haystack.urls'), name='search'),
+                  re_path('^search', search_view_factory(view_class=EsSearchView, form_class=ElasticSearchModelSearchForm),
+                          name='search'),
                   re_path(r'', include('servermanager.urls', namespace='servermanager')),
                   re_path(r'', include('owntracks.urls', namespace='owntracks'))
               ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
