@@ -13,11 +13,11 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
-      - name: Set env to staging
+      - name: Set env to docker dev tag
         if: endsWith(github.ref, '/dev')
         run: |
           echo "DOCKER_TAG=test" >> $GITHUB_ENV
-      - name: Set env to production
+      - name: Set env to docker latest tag
         if: endsWith(github.ref, '/master')
         run: |
          echo "DOCKER_TAG=latest" >> $GITHUB_ENV
