@@ -91,8 +91,15 @@ python manage.py compress --force
 ### 开始运行：
 执行： `python manage.py runserver`
 
-
 浏览器打开: http://127.0.0.1:8000/  就可以看到效果了。  
+
+### 重新部署项目代码
+
+如果项目代码删除了部署了新的代码，重新运行以下命令即可
+
+```
+python manage.py makemigrations
+```
 
 ## 服务器部署
 
