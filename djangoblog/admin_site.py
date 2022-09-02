@@ -25,7 +25,7 @@ class DjangoBlogAdminSite(AdminSite):
         super().__init__(name)
 
     def has_permission(self, request):
-        return request.user.is_superuser
+        return request.user.is_staff
 
     # def get_urls(self):
     #     urls = super().get_urls()
