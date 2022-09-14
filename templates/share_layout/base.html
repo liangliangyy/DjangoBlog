@@ -29,6 +29,7 @@
     <link rel='stylesheet preload' as="font" id='twentytwelve-fonts-css'
           href='{% static 'blog/fonts/fonts.css' %}'
           type='text/css' media='all'/>
+    <link rel="dns-prefetch" href="//cdn.mathjax.org" />
     {% compress css %}
 
         <link rel='stylesheet' id='twentytwelve-style-css' href='{% static 'blog/css/style.css' %}' type='text/css'
@@ -75,11 +76,13 @@
 
 </body>
 <footer>
+    <script src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     {% compress js %}
         <script type="text/javascript" src="{% static 'blog/js/jquery-3.6.0.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'blog/js/nprogress.js' %}"></script>
         <script src="{% static 'blog/js/blog.js' %}" type="application/javascript"></script>
         <script src="{% static 'blog/js/navigation.js' %}" type="application/javascript"></script>
+        <script src="{% static 'mathjax/js/mathjax-config.js' %}" type="application/javascript"></script>
         {% block compress_js %}
         {% endblock %}
     {% endcompress %}
