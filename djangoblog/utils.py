@@ -49,7 +49,7 @@ def cache_decorator(expiration=3 * 60):
                 else:
                     return value
             else:
-                logger.info(
+                logger.debug(
                     'cache_decorator set cache:%s key:%s' %
                     (func.__name__, key))
                 value = func(*args, **kwargs)
