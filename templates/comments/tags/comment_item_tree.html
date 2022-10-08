@@ -32,7 +32,7 @@
             {% endif %}
         </p>
 
-        <p>{{ comment_item.body|custom_markdown }}</p>
+        <p>{{ comment_item.body|escape|custom_markdown }}</p>
 
         <div class="reply"><a rel="nofollow" class="comment-reply-link"
                               href="javascript:void(0)"
