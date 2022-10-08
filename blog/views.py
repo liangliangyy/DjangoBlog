@@ -123,7 +123,16 @@ class ArticleDetailView(DetailView):
         parent_comments = article_comments.filter(parent_comment=None)
         blog_setting = get_blog_setting()
         paginator = Paginator(parent_comments, blog_setting.article_comment_count)
-        page = self.request.GET.get('comment_page', 1)
+        page = self.request.GET.get('comment_page', '1')
+        if not page.isnumeric():
+            page = 1
+        else:
+            page = int(page)
+            if page < 1:
+                page = 1
+            if page > paginator.num_pages:
+                page = paginator.num_pages
+
         p_comments = paginator.page(page)
         next_page = p_comments.next_page_number() if p_comments.has_next() else None
         prev_page = p_comments.previous_page_number() if p_comments.has_previous() else None
