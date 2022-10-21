@@ -1,5 +1,6 @@
 import logging
-from datetime import datetime
+
+from django.utils import timezone
 
 from djangoblog.utils import cache, get_blog_setting
 from .models import Category, Article
@@ -33,6 +34,6 @@ def seo_processor(requests):
             'ANALYTICS_CODE': setting.analyticscode,
             "BEIAN_CODE_GONGAN": setting.gongan_beiancode,
             "SHOW_GONGAN_CODE": setting.show_gongan_code,
-            "CURRENT_YEAR": datetime.now().year}
+            "CURRENT_YEAR": timezone.now().year}
         cache.set(key, value, 60 * 60 * 10)
         return value

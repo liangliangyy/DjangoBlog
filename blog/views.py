@@ -1,4 +1,3 @@
-import datetime
 import logging
 import os
 import uuid
@@ -8,6 +7,7 @@ from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
+from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
@@ -309,7 +309,7 @@ def fileupload(request):
             return HttpResponseForbidden()
         response = []
         for filename in request.FILES:
-            timestr = datetime.datetime.now().strftime('%Y/%m/%d')
+            timestr = timezone.now().strftime('%Y/%m/%d')
             imgextensions = ['jpg', 'png', 'jpeg', 'bmp']
             fname = u''.join(str(filename))
             isimage = len([i for i in imgextensions if fname.find(i) >= 0]) > 0
