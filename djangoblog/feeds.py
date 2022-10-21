@@ -1,11 +1,10 @@
-from datetime import datetime
-
 from django.contrib.auth import get_user_model
 from django.contrib.syndication.views import Feed
+from django.utils import timezone
 from django.utils.feedgenerator import Rss201rev2Feed
 
-from djangoblog.utils import CommonMarkdown
 from blog.models import Article
+from djangoblog.utils import CommonMarkdown
 
 
 class DjangoBlogFeed(Feed):
@@ -31,7 +30,7 @@ class DjangoBlogFeed(Feed):
         return CommonMarkdown.get_markdown(item.body)
 
     def feed_copyright(self):
-        now = datetime.now()
+        now = timezone.now()
         return "Copyright© {year} 且听风吟".format(year=now.year)
 
     def item_link(self, item):

@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.shortcuts import render
+from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import OwnTrackLog
@@ -45,7 +46,7 @@ def manage_owntrack_log(request):
 @login_required
 def show_maps(request):
     if request.user.is_superuser:
-        defaultdate = str(datetime.datetime.now().date())
+        defaultdate = str(timezone.now().date())
         date = request.GET.get('date', defaultdate)
         context = {
             'date': date

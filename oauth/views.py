@@ -1,4 +1,3 @@
-import datetime
 import logging
 # Create your views here.
 from urllib.parse import urlparse
@@ -13,6 +12,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
+from django.utils import timezone
 from django.views.generic import FormView
 
 from djangoblog.blog_signals import oauth_user_login_signal
@@ -73,8 +73,7 @@ def authorize(request):
     user = manager.get_oauth_userinfo()
     if user:
         if not user.nikename or not user.nikename.strip():
-            import datetime
-            user.nikename = "djangoblog" + datetime.datetime.now().strftime('%y%m%d%I%M%S')
+            user.nikename = "djangoblog" + timezone.now().strftime('%y%m%d%I%M%S')
         try:
             temp = OAuthUser.objects.get(type=type, openid=user.openid)
             temp.picture = user.picture
@@ -102,7 +101,7 @@ def authorize(request):
                         except ObjectDoesNotExist:
                             author.username = user.nikename
                         else:
-                            author.username = "djangoblog" + datetime.datetime.now().strftime('%y%m%d%I%M%S')
+                            author.username = "djangoblog" + timezone.now().strftime('%y%m%d%I%M%S')
                         author.source = 'authorize'
                         author.save()
 
@@ -141,7 +140,7 @@ def emailconfirm(request, id, sign):
             if result[1]:
                 author.source = 'emailconfirm'
                 author.username = oauthuser.nikename.strip() if oauthuser.nikename.strip(
-                ) else "djangoblog" + datetime.datetime.now().strftime('%y%m%d%I%M%S')
+                ) else "djangoblog" + timezone.now().strftime('%y%m%d%I%M%S')
                 author.save()
         oauthuser.author = author
         oauthuser.save()
