@@ -4,15 +4,15 @@ services:
   db:
     image: mysql:latest
     restart: always
-    command:
-      - mysqld
-      - --max_connections=3000
-      - --wait_timeout=600
-      - --interactive_timeout=600
-      - --thread_cache_size=50
-      - --default-authentication-plugin=mysql_native_password
-      - --character-set-server=utf8
-      - --collation-server=utf8_general_ci
+#    command:
+#      - mysqld
+#      - --max_connections=3000
+#      - --wait_timeout=600
+#      - --interactive_timeout=600
+#      - --thread_cache_size=50
+#      - --default-authentication-plugin=mysql_native_password
+#      - --character-set-server=utf8
+#      - --collation-server=utf8_general_ci
     environment:
       - MYSQL_DATABASE=djangoblog
       - MYSQL_ROOT_PASSWORD=DjAnGoBlOg!2!Q@W#E

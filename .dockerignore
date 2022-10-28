@@ -9,3 +9,4 @@ uploads/
 settings_production.py
 *.md
 docs/
+logs/
