@@ -2,7 +2,7 @@ version: '3'
 
 services:
   es:
-    image: liangliangyy/elasticsearch-analysis-ik:7.16.1
+    image: liangliangyy/elasticsearch-analysis-ik:8.5.2
     container_name: es
     restart: always
     environment:
@@ -14,7 +14,7 @@ services:
       - ./bin/datas/es/:/usr/share/elasticsearch/data/
 
   kibana:
-    image: kibana:7.13.2
+    image: kibana:8.5.2
     restart: always
     container_name: kibana
     ports:
