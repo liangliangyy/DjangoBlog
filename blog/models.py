@@ -318,7 +318,7 @@ class BlogSettings(models.Model):
     article_sub_length = models.IntegerField("文章摘要长度", default=300)
     sidebar_article_count = models.IntegerField("侧边栏文章数目", default=10)
     sidebar_comment_count = models.IntegerField("侧边栏评论数目", default=5)
-    article_comment_count = models.IntegerField("文章评论数目", default=5)
+    article_comment_count = models.IntegerField("文章页面默认显示评论数目", default=5)
     show_google_adsense = models.BooleanField('是否显示谷歌广告', default=False)
     google_adsense_codes = models.TextField(
         '广告内容', max_length=2000, null=True, blank=True, default='')
@@ -343,11 +343,6 @@ class BlogSettings(models.Model):
         null=True,
         blank=True,
         default='')
-    resource_path = models.CharField(
-        "静态文件保存地址",
-        max_length=300,
-        null=False,
-        default='/var/www/resource/')
 
     class Meta:
         verbose_name = '网站配置'
