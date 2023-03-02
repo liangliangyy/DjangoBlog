@@ -86,7 +86,8 @@ def convert_to_amap(locations):
         }
         rsp = requests.get(url=api, params=query)
         result = json.loads(rsp.text)
-        convert_result.append(result['locations'])
+        if "locations" in result:
+            convert_result.append(result['locations'])
         item = list(itertools.islice(it, 30))
 
     return ";".join(convert_result)
