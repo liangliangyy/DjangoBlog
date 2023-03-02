@@ -296,7 +296,7 @@ def gravatar_url(email, size=40):
                 return o[0].picture
         email = email.encode('utf-8')
 
-        default = static('blog/images/default_avatar.jpg')
+        default = static('blog/img/avatar.png')
 
         url = "https://www.gravatar.com/avatar/%s?%s" % (hashlib.md5(
             email.lower()).hexdigest(), urllib.parse.urlencode({'d': default, 's': str(size)}))

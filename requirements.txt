@@ -1,7 +1,7 @@
-coverage==7.0.5
-bleach==5.0.1
+coverage==7.2.1
+bleach==6.0.0
 Django==4.1.7
-django-compressor==4.3
+django-compressor==4.3.1
 django-haystack==3.2.1
 django-ipware==4.0.2
 django-mdeditor==0.1.20
@@ -16,12 +16,12 @@ mysqlclient==2.1.1
 Pillow==9.4.0
 Pygments==2.14.0
 python-logstash==0.4.8
-python-slugify==7.0.0
-pytz==2022.7
+python-slugify==8.0.1
+pytz==2022.7.1
 raven==6.10.0
-requests==2.28.1
+requests==2.28.2
 urllib3==1.26.14
 WeRoBot==1.13.1
 Whoosh==2.7.4
 user-agents==2.2.0
-redis==4.4.2
+redis==4.5.1
