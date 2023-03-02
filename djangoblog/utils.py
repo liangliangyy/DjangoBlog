@@ -11,8 +11,10 @@ from hashlib import sha256
 
 import markdown
 import requests
+from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.cache import cache
+from django.templatetags.static import static
 
 logger = logging.getLogger(__name__)
 
@@ -179,27 +181,26 @@ def save_user_avatar(url):
     logger.info(url)
 
     try:
+        basedir = os.path.join(settings.STATICFILES, 'avatar')
+
         imgname = url.split('/')[-1]
         if imgname:
-            path = r'{basedir}/avatar/{img}'.format(
-                basedir=setting.resource_path, img=imgname)
+            path = f'{basedir}/{imgname}'
             if os.path.exists(path):
                 os.remove(path)
         rsp = requests.get(url, timeout=2)
         if rsp.status_code == 200:
-            basepath = r'{basedir}/avatar/'.format(
-                basedir=setting.resource_path)
-            if not os.path.exists(basepath):
-                os.makedirs(basepath)
+            if not os.path.exists(basedir):
+                os.makedirs(basedir)
 
-            imgextensions = ['.jpg', '.png', 'jpeg', '.gif']
-            isimage = len([i for i in imgextensions if url.endswith(i)]) > 0
+            image_extensions = ['.jpg', '.png', 'jpeg', '.gif']
+            isimage = len([i for i in image_extensions if url.endswith(i)]) > 0
             ext = os.path.splitext(url)[1] if isimage else '.jpg'
-            savefilename = str(uuid.uuid4().hex) + ext
-            logger.info('保存用户头像:' + basepath + savefilename)
-            with open(basepath + savefilename, 'wb+') as file:
+            save_filename = str(uuid.uuid4().hex) + ext
+            logger.info('保存用户头像:' + basedir + save_filename)
+            with open(os.path.join(basedir, save_filename), 'wb+') as file:
                 file.write(rsp.content)
-            return 'https://resource.lylinux.net/avatar/' + savefilename
+            return static('avatar/' + save_filename)
     except Exception as e:
         logger.error(e)
         return url
@@ -217,3 +218,11 @@ def delete_view_cache(prefix, keys):
     from django.core.cache.utils import make_template_fragment_key
     key = make_template_fragment_key(prefix, keys)
     cache.delete(key)
+
+
+def get_resource_url():
+    if settings.STATIC_URL:
+        return settings.STATIC_URL
+    else:
+        site = get_current_site()
+        return 'http://' + site.domain + '/static/'

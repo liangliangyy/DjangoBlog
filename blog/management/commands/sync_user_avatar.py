@@ -1,4 +1,5 @@
 from django.core.management.base import BaseCommand
+from django.template.context_processors import static
 
 from djangoblog.utils import save_user_avatar
 from oauth.models import OAuthUser
@@ -8,8 +9,9 @@ class Command(BaseCommand):
     help = 'sync user avatar'
 
     def handle(self, *args, **options):
+        static_url = static("avatar/")
         users = OAuthUser.objects.filter(picture__isnull=False).exclude(
-            picture__istartswith='https://resource.lylinux.net').all()
+            picture__istartswith=static_url).all()
         self.stdout.write('开始同步{count}个用户头像'.format(count=len(users)))
         for u in users:
             self.stdout.write('开始同步:{id}'.format(id=u.nikename))
