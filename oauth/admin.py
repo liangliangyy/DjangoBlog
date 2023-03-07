@@ -9,17 +9,17 @@ logger = logging.getLogger(__name__)
 
 
 class OAuthUserAdmin(admin.ModelAdmin):
-    search_fields = ('nikename', 'email')
+    search_fields = ('nickname', 'email')
     list_per_page = 20
     list_display = (
         'id',
-        'nikename',
+        'nickname',
         'link_to_usermodel',
         'show_user_image',
         'type',
         'email',
     )
-    list_display_links = ('id', 'nikename')
+    list_display_links = ('id', 'nickname')
     list_filter = ('author', 'type',)
     readonly_fields = []
 

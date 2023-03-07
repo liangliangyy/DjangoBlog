@@ -67,8 +67,6 @@ target/
 # virtualenv
 venv/
 
-migrations/
-!migrations/__init__.py
 collectedstatic/
 djangoblog/whoosh_index/
 google93fd32dbd906620a.html

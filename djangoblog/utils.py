@@ -177,17 +177,10 @@ def save_user_avatar(url):
     :param url:头像url
     :return: 本地路径
     '''
-    setting = get_blog_setting()
     logger.info(url)
 
     try:
         basedir = os.path.join(settings.STATICFILES, 'avatar')
-
-        imgname = url.split('/')[-1]
-        if imgname:
-            path = f'{basedir}/{imgname}'
-            if os.path.exists(path):
-                os.remove(path)
         rsp = requests.get(url, timeout=2)
         if rsp.status_code == 200:
             if not os.path.exists(basedir):
@@ -203,7 +196,7 @@ def save_user_avatar(url):
             return static('avatar/' + save_filename)
     except Exception as e:
         logger.error(e)
-        return url
+        return static('blog/img/avatar.png')
 
 
 def delete_sidebar_cache():
