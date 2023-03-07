@@ -24,11 +24,15 @@ class Command(BaseCommand):
         for u in users:
             self.stdout.write(f'开始同步:{u.nickname}')
             url = u.picture
-            if self.test_picture(url):
-                continue
             if url.startswith(static_url):
-                manage = get_manager_by_type(u.type)
-                url = manage.get_picture(u.metadata)
+                if self.test_picture(url):
+                    continue
+                else:
+                    if u.metadata:
+                        manage = get_manager_by_type(u.type)
+                        url = manage.get_picture(u.metadata)
+                    else:
+                        continue
             url = save_user_avatar(url)
             if url:
                 self.stdout.write(
