@@ -3,7 +3,7 @@ bleach==6.0.0
 Django==4.1.7
 django-compressor==4.3.1
 django-haystack==3.2.1
-django-ipware==4.0.2
+django-ipware==5.0.0
 django-mdeditor==0.1.20
 django-uuslug==2.0.0
 elasticsearch==7.16.1

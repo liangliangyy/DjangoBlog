@@ -51,6 +51,10 @@ class BaseOauthManager(metaclass=ABCMeta):
     def get_oauth_userinfo(self):
         pass
 
+    @abstractmethod
+    def get_picture(self, metadata):
+        pass
+
     def do_get(self, url, params, headers=None):
         rsp = requests.get(url=url, params=params, headers=headers)
         logger.info(rsp.text)
@@ -122,9 +126,9 @@ class WBOauthManager(BaseOauthManager):
         try:
             datas = json.loads(rsp)
             user = OAuthUser()
-            user.matedata = rsp
+            user.metadata = rsp
             user.picture = datas['avatar_large']
-            user.nikename = datas['screen_name']
+            user.nickname = datas['screen_name']
             user.openid = datas['id']
             user.type = 'weibo'
             user.token = self.access_token
@@ -135,6 +139,10 @@ class WBOauthManager(BaseOauthManager):
             logger.error(e)
             logger.error('weibo oauth error.rsp:' + rsp)
             return None
+
+    def get_picture(self, metadata):
+        datas = json.loads(metadata)
+        return datas['avatar_large']
 
 
 class GoogleOauthManager(BaseOauthManager):
@@ -197,9 +205,9 @@ class GoogleOauthManager(BaseOauthManager):
 
             datas = json.loads(rsp)
             user = OAuthUser()
-            user.matedata = rsp
+            user.metadata = rsp
             user.picture = datas['picture']
-            user.nikename = datas['name']
+            user.nickname = datas['name']
             user.openid = datas['sub']
             user.token = self.access_token
             user.type = 'google'
@@ -210,6 +218,10 @@ class GoogleOauthManager(BaseOauthManager):
             logger.error(e)
             logger.error('google oauth error.rsp:' + rsp)
             return None
+
+    def get_picture(self, metadata):
+        datas = json.loads(metadata)
+        return datas['picture']
 
 
 class GitHubOauthManager(BaseOauthManager):
@@ -268,11 +280,11 @@ class GitHubOauthManager(BaseOauthManager):
             datas = json.loads(rsp)
             user = OAuthUser()
             user.picture = datas['avatar_url']
-            user.nikename = datas['name']
+            user.nickname = datas['name']
             user.openid = datas['id']
             user.type = 'github'
             user.token = self.access_token
-            user.matedata = rsp
+            user.metadata = rsp
             if 'email' in datas and datas['email']:
                 user.email = datas['email']
             return user
@@ -280,6 +292,10 @@ class GitHubOauthManager(BaseOauthManager):
             logger.error(e)
             logger.error('github oauth error.rsp:' + rsp)
             return None
+
+    def get_picture(self, metadata):
+        datas = json.loads(metadata)
+        return datas['avatar_url']
 
 
 class FaceBookOauthManager(BaseOauthManager):
@@ -337,11 +353,11 @@ class FaceBookOauthManager(BaseOauthManager):
             rsp = self.do_get(self.API_URL, params)
             datas = json.loads(rsp)
             user = OAuthUser()
-            user.nikename = datas['name']
+            user.nickname = datas['name']
             user.openid = datas['id']
             user.type = 'facebook'
             user.token = self.access_token
-            user.matedata = rsp
+            user.metadata = rsp
             if 'email' in datas and datas['email']:
                 user.email = datas['email']
             if 'picture' in datas and datas['picture'] and datas['picture']['data'] and datas['picture']['data']['url']:
@@ -350,6 +366,10 @@ class FaceBookOauthManager(BaseOauthManager):
         except Exception as e:
             logger.error(e)
             return None
+
+    def get_picture(self, metadata):
+        datas = json.loads(metadata)
+        return str(datas['picture']['data']['url'])
 
 
 class QQOauthManager(BaseOauthManager):
@@ -425,16 +445,20 @@ class QQOauthManager(BaseOauthManager):
             logger.info(rsp)
             obj = json.loads(rsp)
             user = OAuthUser()
-            user.nikename = obj['nickname']
+            user.nickname = obj['nickname']
             user.openid = openid
             user.type = 'qq'
             user.token = self.access_token
-            user.matedata = rsp
+            user.metadata = rsp
             if 'email' in obj:
                 user.email = obj['email']
             if 'figureurl' in obj:
                 user.picture = str(obj['figureurl'])
             return user
+
+    def get_picture(self, metadata):
+        datas = json.loads(metadata)
+        return str(datas['figureurl'])
 
 
 @cache_decorator(expiration=100 * 60)

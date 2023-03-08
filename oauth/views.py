@@ -72,13 +72,13 @@ def authorize(request):
         return HttpResponseRedirect(manager.get_authorization_url(nexturl))
     user = manager.get_oauth_userinfo()
     if user:
-        if not user.nikename or not user.nikename.strip():
-            user.nikename = "djangoblog" + timezone.now().strftime('%y%m%d%I%M%S')
+        if not user.nickname or not user.nickname.strip():
+            user.nickname = "djangoblog" + timezone.now().strftime('%y%m%d%I%M%S')
         try:
             temp = OAuthUser.objects.get(type=type, openid=user.openid)
             temp.picture = user.picture
-            temp.matedata = user.matedata
-            temp.nikename = user.nikename
+            temp.metadata = user.metadata
+            temp.nickname = user.nickname
             user = temp
         except ObjectDoesNotExist:
             pass
@@ -97,9 +97,9 @@ def authorize(request):
                     author = result[0]
                     if result[1]:
                         try:
-                            get_user_model().objects.get(username=user.nikename)
+                            get_user_model().objects.get(username=user.nickname)
                         except ObjectDoesNotExist:
-                            author.username = user.nikename
+                            author.username = user.nickname
                         else:
                             author.username = "djangoblog" + timezone.now().strftime('%y%m%d%I%M%S')
                         author.source = 'authorize'
@@ -139,7 +139,7 @@ def emailconfirm(request, id, sign):
             author = result[0]
             if result[1]:
                 author.source = 'emailconfirm'
-                author.username = oauthuser.nikename.strip() if oauthuser.nikename.strip(
+                author.username = oauthuser.nickname.strip() if oauthuser.nickname.strip(
                 ) else "djangoblog" + timezone.now().strftime('%y%m%d%I%M%S')
                 author.save()
         oauthuser.author = author

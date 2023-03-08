@@ -143,7 +143,8 @@ class ArticleTest(TestCase):
 
         self.client.get("/admin/blog/article/1/delete/")
         self.client.get('/admin/servermanager/emailsendlog/')
-        self.client.get('admin/admin/logentry/')
+        self.client.get('/admin/admin/logentry/')
+        self.client.get('/admin/admin/logentry/1/change/')
 
     def __check_pagination__(self, p, type, value):
         s = load_pagination_info(p.page(1), type, value)
@@ -188,6 +189,14 @@ class ArticleTest(TestCase):
         self.assertEqual(rsp.status_code, 404)
 
     def test_commands(self):
+        user = BlogUser.objects.get_or_create(
+            email="liangliangyy@gmail.com",
+            username="liangliangyy")[0]
+        user.set_password("liangliangyy")
+        user.is_staff = True
+        user.is_superuser = True
+        user.save()
+
         from blog.documents import ELASTICSEARCH_ENABLED
         if ELASTICSEARCH_ENABLED:
             call_command("build_index")
