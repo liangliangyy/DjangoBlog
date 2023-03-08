@@ -19,21 +19,26 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         static_url = static("../")
-        users = OAuthUser.objects.filter(picture__isnull=False).all()
+        users = OAuthUser.objects.all()
         self.stdout.write(f'开始同步{len(users)}个用户头像')
         for u in users:
             self.stdout.write(f'开始同步:{u.nickname}')
             url = u.picture
-            if url.startswith(static_url):
-                if self.test_picture(url):
-                    continue
-                else:
-                    if u.metadata:
-                        manage = get_manager_by_type(u.type)
-                        url = manage.get_picture(u.metadata)
-                    else:
+            if url:
+                if url.startswith(static_url):
+                    if self.test_picture(url):
                         continue
-            url = save_user_avatar(url)
+                    else:
+                        if u.metadata:
+                            manage = get_manager_by_type(u.type)
+                            url = manage.get_picture(u.metadata)
+                            url = save_user_avatar(url)
+                        else:
+                            url = static('blog/img/avatar.png')
+                else:
+                    url = save_user_avatar(url)
+            else:
+                url = static('blog/img/avatar.png')
             if url:
                 self.stdout.write(
                     f'结束同步:{u.nickname}.url:{url}')
