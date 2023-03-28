@@ -1,6 +1,7 @@
 # Create your views here.
 from django.core.exceptions import ValidationError
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic.edit import FormView
@@ -20,14 +21,13 @@ class CommentPostView(FormView):
 
     def get(self, request, *args, **kwargs):
         article_id = self.kwargs['article_id']
-
-        article = Article.objects.get(pk=article_id)
+        article = get_object_or_404(Article, pk=article_id)
         url = article.get_absolute_url()
         return HttpResponseRedirect(url + "#comments")
 
     def form_invalid(self, form):
         article_id = self.kwargs['article_id']
-        article = Article.objects.get(pk=article_id)
+        article = get_object_or_404(Article, pk=article_id)
 
         return self.render_to_response({
             'form': form,
@@ -39,7 +39,7 @@ class CommentPostView(FormView):
         user = self.request.user
 
         article_id = self.kwargs['article_id']
-        article = Article.objects.get(pk=article_id)
+        article = get_object_or_404(Article, pk=article_id)
 
         if article.comment_status == 'c' or article.status == 'c':
             raise ValidationError("该文章评论已关闭.")
