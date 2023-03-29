@@ -49,6 +49,9 @@
     {% if ANALYTICS_CODE %}
         {{ ANALYTICS_CODE| safe }}
     {% endif %}
+    {% if GLOBAL_FOOTER %}
+        {{ GLOBAL_FOOTER|safe }}
+    {% endif %}
 </footer><!-- #colophon -->
 
 
