@@ -29,7 +29,7 @@
     <link rel='stylesheet preload' as="font" id='twentytwelve-fonts-css'
           href='{% static 'blog/fonts/fonts.css' %}'
           type='text/css' media='all'/>
-    <link rel="dns-prefetch" href="//cdn.mathjax.org" />
+    <link rel="dns-prefetch" href="//cdn.mathjax.org"/>
     {% compress css %}
 
         <link rel='stylesheet' id='twentytwelve-style-css' href='{% static 'blog/css/style.css' %}' type='text/css'
@@ -44,6 +44,9 @@
         {% block compress_css %}
         {% endblock %}
     {% endcompress %}
+    {% if GLOBAL_HEADER %}
+        {{ GLOBAL_HEADER|safe }}
+    {% endif %}
 </head>
 
 <body class="home blog custom-font-enabled">

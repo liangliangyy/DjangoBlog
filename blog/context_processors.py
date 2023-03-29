@@ -34,6 +34,9 @@ def seo_processor(requests):
             'ANALYTICS_CODE': setting.analyticscode,
             "BEIAN_CODE_GONGAN": setting.gongan_beiancode,
             "SHOW_GONGAN_CODE": setting.show_gongan_code,
-            "CURRENT_YEAR": timezone.now().year}
+            "CURRENT_YEAR": timezone.now().year,
+            "GLOBAL_HEADER": setting.global_header,
+            "GLOBAL_FOOTER": setting.global_footer,
+        }
         cache.set(key, value, 60 * 60 * 10)
         return value

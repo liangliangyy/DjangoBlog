@@ -323,6 +323,8 @@ class BlogSettings(models.Model):
     google_adsense_codes = models.TextField(
         '广告内容', max_length=2000, null=True, blank=True, default='')
     open_site_comment = models.BooleanField('是否打开网站评论功能', default=True)
+    global_header = models.TextField("公共头部", null=True, blank=True, default='')
+    global_footer = models.TextField("公共尾部", null=True, blank=True, default='')
     beiancode = models.CharField(
         '备案号',
         max_length=2000,
