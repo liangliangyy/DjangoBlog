@@ -226,7 +226,7 @@ class OauthLoginTest(TestCase):
 
         self.assertEqual(response.status_code, 302)
         sign = get_sha256(settings.SECRET_KEY +
-                          str(1) + settings.SECRET_KEY)
+                          str(oauth_user_id) + settings.SECRET_KEY)
 
         url = reverse('oauth:bindsuccess', kwargs={
             'oauthid': oauth_user_id,
