@@ -169,7 +169,6 @@ class GoogleOauthManager(BaseOauthManager):
             'redirect_uri': self.callback_url,
             'scope': 'openid email',
         }
-        # url = self.AUTH_URL + "?" + urllib.parse.urlencode(params, quote_via=urllib.parse.quote)
         url = self.AUTH_URL + "?" + urllib.parse.urlencode(params)
         return url
 
@@ -412,7 +411,7 @@ class QQOauthManager(BaseOauthManager):
             d = urllib.parse.parse_qs(rsp)
             if 'access_token' in d:
                 token = d['access_token']
-                self.access_token = token
+                self.access_token = token[0]
                 return token
         else:
             raise OAuthAccessTokenException(rsp)
