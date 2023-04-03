@@ -25,3 +25,4 @@ WeRoBot==1.13.1
 Whoosh==2.7.4
 user-agents==2.2.0
 redis==4.5.4
+openai==0.27.2

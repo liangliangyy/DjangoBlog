@@ -1,14 +1,16 @@
+import logging
 import os
 import re
 
 import jsonpickle
+from django.conf import settings
 from werobot import WeRoBot
 from werobot.replies import ArticlesReply, Article
-from django.conf import settings
+from werobot.session.filestorage import FileStorage
+
 from djangoblog.utils import get_sha256
 from servermanager.api.blogapi import BlogApi
-from servermanager.api.commonapi import TuLing
-from servermanager.models import commands
+from servermanager.api.commonapi import ChatGPT, CommandHandler
 from .MemcacheStorage import MemcacheStorage
 
 robot = WeRoBot(token=os.environ.get('DJANGO_WEROBOT_TOKEN')
@@ -17,18 +19,16 @@ memstorage = MemcacheStorage()
 if memstorage.is_available:
     robot.config['SESSION_STORAGE'] = memstorage
 else:
-    from werobot.session.filestorage import FileStorage
-    import os
-    from django.conf import settings
-
     if os.path.exists(os.path.join(settings.BASE_DIR, 'werobot_session')):
         os.remove(os.path.join(settings.BASE_DIR, 'werobot_session'))
     robot.config['SESSION_STORAGE'] = FileStorage(filename='werobot_session')
+
 blogapi = BlogApi()
-tuling = TuLing()
+cmd_handler = CommandHandler()
+logger = logging.getLogger(__name__)
 
 
-def convert_to_articlereply(articles, message):
+def convert_to_article_reply(articles, message):
     reply = ArticlesReply(message=message)
     from blog.templatetags.blog_tags import truncatechars_content
     for post in articles:
@@ -53,7 +53,7 @@ def search(message, session):
     result = blogapi.search_articles(searchstr)
     if result:
         articles = list(map(lambda x: x.object, result))
-        reply = convert_to_articlereply(articles, message)
+        reply = convert_to_article_reply(articles, message)
         return reply
     else:
         return '没有找到相关文章。'
@@ -70,7 +70,7 @@ def category(message, session):
 def recents(message, session):
     articles = blogapi.get_recent_articles()
     if articles:
-        reply = convert_to_articlereply(articles, message)
+        reply = convert_to_article_reply(articles, message)
         return reply
     else:
         return "暂时还没有文章"
@@ -114,38 +114,7 @@ def echo(message, session):
     return handler.handler()
 
 
-class CommandHandler():
-    def __init__(self):
-        self.commands = commands.objects.all()
-
-    def run(self, title):
-        cmd = list(
-            filter(
-                lambda x: x.title.upper() == title.upper(),
-                self.commands))
-        if cmd:
-            return self.__run_command__(cmd[0].command)
-        else:
-            return "未找到相关命令，请输入hepme获得帮助。"
-
-    def __run_command__(self, cmd):
-        try:
-            str = os.popen(cmd).read()
-            return str
-        except BaseException:
-            return '命令执行出错!'
-
-    def get_help(self):
-        rsp = ''
-        for cmd in self.commands:
-            rsp += '{c}:{d}\n'.format(c=cmd.title, d=cmd.describe)
-        return rsp
-
-
-cmdhandler = CommandHandler()
-
-
-class MessageHandler():
+class MessageHandler:
     def __init__(self, message, session):
         userid = message.source
         self.message = message
@@ -154,7 +123,7 @@ class MessageHandler():
         try:
             info = session[userid]
             self.userinfo = jsonpickle.decode(info)
-        except BaseException:
+        except Exception as e:
             userinfo = WxUserInfo()
             self.userinfo = userinfo
 
@@ -166,7 +135,7 @@ class MessageHandler():
     def is_password_set(self):
         return self.userinfo.isPasswordSet
 
-    def savesession(self):
+    def save_session(self):
         info = jsonpickle.encode(self.userinfo)
         self.session[self.userid] = info
 
@@ -175,11 +144,11 @@ class MessageHandler():
 
         if self.userinfo.isAdmin and info.upper() == 'EXIT':
             self.userinfo = WxUserInfo()
-            self.savesession()
+            self.save_session()
             return "退出成功"
         if info.upper() == 'ADMIN':
             self.userinfo.isAdmin = True
-            self.savesession()
+            self.save_session()
             return "输入管理员密码"
         if self.userinfo.isAdmin and not self.userinfo.isPasswordSet:
             passwd = settings.WXADMIN
@@ -187,27 +156,27 @@ class MessageHandler():
                 passwd = '123'
             if passwd.upper() == get_sha256(get_sha256(info)).upper():
                 self.userinfo.isPasswordSet = True
-                self.savesession()
+                self.save_session()
                 return "验证通过,请输入命令或者要执行的命令代码:输入helpme获得帮助"
             else:
                 if self.userinfo.Count >= 3:
                     self.userinfo = WxUserInfo()
-                    self.savesession()
+                    self.save_session()
                     return "超过验证次数"
                 self.userinfo.Count += 1
-                self.savesession()
+                self.save_session()
                 return "验证失败，请重新输入管理员密码:"
         if self.userinfo.isAdmin and self.userinfo.isPasswordSet:
             if self.userinfo.Command != '' and info.upper() == 'Y':
-                return cmdhandler.run(self.userinfo.Command)
+                return cmd_handler.run(self.userinfo.Command)
             else:
                 if info.upper() == 'HELPME':
-                    return cmdhandler.get_help()
+                    return cmd_handler.get_help()
                 self.userinfo.Command = info
-                self.savesession()
+                self.save_session()
                 return "确认执行: " + info + " 命令?"
-        rsp = tuling.getdata(info)
-        return rsp
+
+        return ChatGPT.chat(info)
 
 
 class WxUserInfo():
@@ -216,17 +185,3 @@ class WxUserInfo():
         self.isPasswordSet = False
         self.Count = 0
         self.Command = ''
-
-
-"""
-@robot.handler
-def hello(message, session):
-    blogapi = BlogApi()
-    result = blogapi.search_articles(message.content)
-    if result:
-        articles = list(map(lambda x: x.object, result))
-        reply = convert_to_articlereply(articles, message)
-        return reply
-    else:
-        return '没有找到相关文章。'
-"""
