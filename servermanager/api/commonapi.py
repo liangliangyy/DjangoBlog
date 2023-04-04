@@ -8,8 +8,8 @@ from servermanager.models import commands
 logger = logging.getLogger(__name__)
 
 openai.api_key = os.environ.get('OPENAI_API_KEY')
-if os.environ.get('PROXY'):
-    openai.proxy = os.environ.get('PROXY')
+if os.environ.get('HTTP_PROXY'):
+    openai.proxy = os.environ.get('HTTP_PROXY')
 
 
 class ChatGPT:
