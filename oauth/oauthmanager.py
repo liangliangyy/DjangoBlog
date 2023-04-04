@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 import urllib.parse
 from abc import ABCMeta, abstractmethod
 
@@ -145,7 +146,28 @@ class WBOauthManager(BaseOauthManager):
         return datas['avatar_large']
 
 
-class GoogleOauthManager(BaseOauthManager):
+class ProxyManagerMixin:
+    def __init__(self, *args, **kwargs):
+        if os.environ.get("HTTP_PROXY"):
+            self.proxies = {
+                "http": os.environ.get("HTTP_PROXY"),
+                "https": os.environ.get("HTTP_PROXY")
+            }
+        else:
+            self.proxies = None
+
+    def do_get(self, url, params, headers=None):
+        rsp = requests.get(url=url, params=params, headers=headers, proxies=self.proxies)
+        logger.info(rsp.text)
+        return rsp.text
+
+    def do_post(self, url, params, headers=None):
+        rsp = requests.post(url, params, headers=headers, proxies=self.proxies)
+        logger.info(rsp.text)
+        return rsp.text
+
+
+class GoogleOauthManager(ProxyManagerMixin, BaseOauthManager):
     AUTH_URL = 'https://accounts.google.com/o/oauth2/v2/auth'
     TOKEN_URL = 'https://www.googleapis.com/oauth2/v4/token'
     API_URL = 'https://www.googleapis.com/oauth2/v3/userinfo'
@@ -223,7 +245,7 @@ class GoogleOauthManager(BaseOauthManager):
         return datas['picture']
 
 
-class GitHubOauthManager(BaseOauthManager):
+class GitHubOauthManager(ProxyManagerMixin, BaseOauthManager):
     AUTH_URL = 'https://github.com/login/oauth/authorize'
     TOKEN_URL = 'https://github.com/login/oauth/access_token'
     API_URL = 'https://api.github.com/user'
@@ -240,14 +262,13 @@ class GitHubOauthManager(BaseOauthManager):
             access_token=access_token,
             openid=openid)
 
-    def get_authorization_url(self, nexturl='/'):
+    def get_authorization_url(self, next_url='/'):
         params = {
             'client_id': self.client_id,
             'response_type': 'code',
-            'redirect_uri': self.callback_url + '&next_url=' + nexturl,
+            'redirect_uri': f'{self.callback_url}&next_url={next_url}',
             'scope': 'user'
         }
-        # url = self.AUTH_URL + "?" + urllib.parse.urlencode(params, quote_via=urllib.parse.quote)
         url = self.AUTH_URL + "?" + urllib.parse.urlencode(params)
         return url
 
@@ -297,7 +318,7 @@ class GitHubOauthManager(BaseOauthManager):
         return datas['avatar_url']
 
 
-class FaceBookOauthManager(BaseOauthManager):
+class FaceBookOauthManager(ProxyManagerMixin, BaseOauthManager):
     AUTH_URL = 'https://www.facebook.com/v2.10/dialog/oauth'
     TOKEN_URL = 'https://graph.facebook.com/v2.10/oauth/access_token'
     API_URL = 'https://graph.facebook.com/me'
@@ -314,11 +335,11 @@ class FaceBookOauthManager(BaseOauthManager):
             access_token=access_token,
             openid=openid)
 
-    def get_authorization_url(self, nexturl='/'):
+    def get_authorization_url(self, next_url='/'):
         params = {
             'client_id': self.client_id,
             'response_type': 'code',
-            'redirect_uri': self.callback_url,  # + '&next_url=' + nexturl,
+            'redirect_uri': self.callback_url,
             'scope': 'email,public_profile'
         }
         url = self.AUTH_URL + "?" + urllib.parse.urlencode(params)
@@ -389,11 +410,11 @@ class QQOauthManager(BaseOauthManager):
             access_token=access_token,
             openid=openid)
 
-    def get_authorization_url(self, nexturl='/'):
+    def get_authorization_url(self, next_url='/'):
         params = {
             'response_type': 'code',
             'client_id': self.client_id,
-            'redirect_uri': self.callback_url + '&next_url=' + nexturl,
+            'redirect_uri': self.callback_url + '&next_url=' + next_url,
         }
         url = self.AUTH_URL + "?" + urllib.parse.urlencode(params)
         return url

@@ -30,6 +30,11 @@ class CommandHandler:
         self.commands = commands.objects.all()
 
     def run(self, title):
+        """
+        运行命令
+        :param title: 命令
+        :return: 返回命令执行结果
+        """
         cmd = list(
             filter(
                 lambda x: x.title.upper() == title.upper(),
