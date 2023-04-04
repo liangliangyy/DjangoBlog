@@ -1,32 +1,64 @@
-import json
 import logging
+import os
 
-import requests
+import openai
+
+from servermanager.models import commands
 
 logger = logging.getLogger(__name__)
 
+openai.api_key = os.environ.get('OPENAI_API_KEY')
+if os.environ.get('PROXY'):
+    openai.proxy = os.environ.get('PROXY')
 
-class TuLing:
-    def __init__(self):
-        self.__key__ = '2f1446eb0321804291b0a1e217c25bb5'
-        self.__appid__ = 137762
 
-    def _build_req_url(self, content):
-        return 'http://www.tuling123.com/openapi/api?key=%s&info=%s&userid=%s' % (
-            self.__key__, content, self.__appid__)
+class ChatGPT:
 
-    def UserAgent(self, url):
-        rsp = requests.get(url)
-        return rsp.content
-
-    def getdata(self, content):
+    @staticmethod
+    def chat(prompt):
         try:
-            requrl = self._build_req_url(content)
-            res = self.UserAgent(requrl).decode('utf-8')
-
-            jsons = json.loads(res, encoding='utf-8')
-            if str(jsons["code"]) == '100000':
-                return jsons["text"]
+            completion = openai.ChatCompletion.create(model="gpt-3.5-turbo",
+                                                      messages=[{"role": "user", "content": prompt}])
+            return completion.choices[0].message.content
         except Exception as e:
             logger.error(e)
-        return "哎呀，出错啦。"
+            return "服务器出错了"
+
+
+class CommandHandler:
+    def __init__(self):
+        self.commands = commands.objects.all()
+
+    def run(self, title):
+        """
+        运行命令
+        :param title: 命令
+        :return: 返回命令执行结果
+        """
+        cmd = list(
+            filter(
+                lambda x: x.title.upper() == title.upper(),
+                self.commands))
+        if cmd:
+            return self.__run_command__(cmd[0].command)
+        else:
+            return "未找到相关命令，请输入hepme获得帮助。"
+
+    def __run_command__(self, cmd):
+        try:
+            res = os.popen(cmd).read()
+            return res
+        except BaseException:
+            return '命令执行出错!'
+
+    def get_help(self):
+        rsp = ''
+        for cmd in self.commands:
+            rsp += '{c}:{d}\n'.format(c=cmd.title, d=cmd.describe)
+        return rsp
+
+
+if __name__ == '__main__':
+    chatbot = ChatGPT()
+    prompt = "写一篇1000字关于AI的论文"
+    print(chatbot.chat(prompt))

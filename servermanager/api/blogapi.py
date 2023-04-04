@@ -3,7 +3,7 @@ from haystack.query import SearchQuerySet
 from blog.models import Article, Category
 
 
-class BlogApi():
+class BlogApi:
     def __init__(self):
         self.searchqueryset = SearchQuerySet()
         self.searchqueryset.auto_query('')

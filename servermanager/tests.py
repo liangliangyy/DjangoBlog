@@ -2,10 +2,9 @@ from django.test import Client, RequestFactory, TestCase
 from django.utils import timezone
 from werobot.messages.messages import TextMessage
 
-from djangoblog.utils import get_current_site
 from accounts.models import BlogUser
 from blog.models import Category, Article
-from servermanager.api.commonapi import TuLing
+from servermanager.api.commonapi import ChatGPT
 from .models import commands
 from .robot import MessageHandler, CommandHandler
 from .robot import search, category, recents
@@ -17,13 +16,11 @@ class ServerManagerTest(TestCase):
         self.client = Client()
         self.factory = RequestFactory()
 
-    def test_tuling(self):
-        t = TuLing()
-        content = t.getdata('test')
+    def test_chat_gpt(self):
+        content = ChatGPT.chat("你好")
         self.assertIsNotNone(content)
 
     def test_validate_comment(self):
-        site = get_current_site().domain
         user = BlogUser.objects.create_superuser(
             email="liangliangyy1@gmail.com",
             username="liangliangyy1",
