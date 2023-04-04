@@ -319,8 +319,8 @@ class GitHubOauthManager(ProxyManagerMixin, BaseOauthManager):
 
 
 class FaceBookOauthManager(ProxyManagerMixin, BaseOauthManager):
-    AUTH_URL = 'https://www.facebook.com/v2.10/dialog/oauth'
-    TOKEN_URL = 'https://graph.facebook.com/v2.10/oauth/access_token'
+    AUTH_URL = 'https://www.facebook.com/v16.0/dialog/oauth'
+    TOKEN_URL = 'https://graph.facebook.com/v16.0/oauth/access_token'
     API_URL = 'https://graph.facebook.com/me'
     ICON_NAME = 'facebook'
 
