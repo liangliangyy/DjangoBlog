@@ -5,7 +5,7 @@ from django.urls import reverse, NoReverseMatch
 from django.utils.encoding import force_str
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
-from django.utils.translation import pgettext_lazy, gettext_lazy  as _
+from django.utils.translation import pgettext_lazy, gettext_lazy as _
 
 action_names = {
     ADDITION: pgettext_lazy('logentry_admin:action_type', 'Addition'),
@@ -17,37 +17,41 @@ action_names = {
 class LogEntryAdmin(admin.ModelAdmin):
     date_hierarchy = 'action_time'
 
-    readonly_fields = ([f.name for f in LogEntry._meta.fields] +
-                       ['object_link', 'action_description', 'user_link',
-                        'get_change_message'])
+    readonly_fields = [f.name for f in LogEntry._meta.fields] + [
+        'object_link',
+        'action_description',
+        'user_link',
+        'get_change_message',
+    ]
 
     fieldsets = (
-        (_('Metadata'), {
-            'fields': (
-                'action_time',
-                'user_link',
-                'action_description',
-                'object_link',
-            )
-        }),
-        (_('Details'), {
-            'fields': (
-                'get_change_message',
-                'content_type',
-                'object_id',
-                'object_repr',
-            )
-        }),
+        (
+            _('Metadata'),
+            {
+                'fields': (
+                    'action_time',
+                    'user_link',
+                    'action_description',
+                    'object_link',
+                )
+            },
+        ),
+        (
+            _('Details'),
+            {
+                'fields': (
+                    'get_change_message',
+                    'content_type',
+                    'object_id',
+                    'object_repr',
+                )
+            },
+        ),
     )
 
-    list_filter = [
-        'content_type'
-    ]
+    list_filter = ['content_type']
 
-    search_fields = [
-        'object_repr',
-        'change_message'
-    ]
+    search_fields = ['object_repr', 'change_message']
 
     list_display_links = [
         'action_time',
@@ -67,9 +71,8 @@ class LogEntryAdmin(admin.ModelAdmin):
 
     def has_change_permission(self, request, obj=None):
         return (
-                       request.user.is_superuser or
-                       request.user.has_perm('admin.change_logentry')
-               ) and request.method != 'POST'
+            request.user.is_superuser or request.user.has_perm('admin.change_logentry')
+        ) and request.method != 'POST'
 
     def has_delete_permission(self, request, obj=None):
         return False
@@ -82,9 +85,10 @@ class LogEntryAdmin(admin.ModelAdmin):
             # try returning an actual link instead of object repr string
             try:
                 url = reverse(
-                    'admin:{}_{}_change'.format(content_type.app_label,
-                                                content_type.model),
-                    args=[obj.object_id]
+                    'admin:{}_{}_change'.format(
+                        content_type.app_label, content_type.model
+                    ),
+                    args=[obj.object_id],
                 )
                 object_link = '<a href="{}">{}</a>'.format(url, object_link)
             except NoReverseMatch:
@@ -100,9 +104,8 @@ class LogEntryAdmin(admin.ModelAdmin):
         try:
             # try returning an actual link instead of object repr string
             url = reverse(
-                'admin:{}_{}_change'.format(content_type.app_label,
-                                            content_type.model),
-                args=[obj.user.pk]
+                'admin:{}_{}_change'.format(content_type.app_label, content_type.model),
+                args=[obj.user.pk],
             )
             user_link = '<a href="{}">{}</a>'.format(url, user_link)
         except NoReverseMatch:

@@ -34,10 +34,10 @@ Same as before, Configure your own error msg recvie email information with`ADMIN
 ```python
 EMAIL_HOST = 'smtp.zoho.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = os.environ.get('DJANGO_EMAIL_USER')
-EMAIL_HOST_PASSWORD = os.environ.get('DJANGO_EMAIL_PASSWORD')
+EMAIL_HOST_USER = os.getenv('DJANGO_EMAIL_USER')
+EMAIL_HOST_PASSWORD = os.getenv('DJANGO_EMAIL_PASSWORD')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-SERVER_EMAIL = os.environ.get('DJANGO_EMAIL_USER')
+SERVER_EMAIL = os.getenv('DJANGO_EMAIL_USER')
 ```
 with your email account information.
 

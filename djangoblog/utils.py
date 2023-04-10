@@ -21,7 +21,8 @@ logger = logging.getLogger(__name__)
 
 def get_max_articleid_commentid():
     from blog.models import Article
-    from comments.models import Comment
+    from comments import Comment
+
     return (Article.objects.latest().pk, Comment.objects.latest().pk)
 
 
@@ -52,8 +53,8 @@ def cache_decorator(expiration=3 * 60):
                     return value
             else:
                 logger.debug(
-                    'cache_decorator set cache:%s key:%s' %
-                    (func.__name__, key))
+                    'cache_decorator set cache:%s key:%s' % (func.__name__, key)
+                )
                 value = func(*args, **kwargs)
                 if value is None:
                     cache.set(key, '__default_cache_value__', expiration)
@@ -125,11 +126,10 @@ class CommonMarkdown:
 
 def send_email(emailto, title, content):
     from djangoblog.blog_signals import send_email_signal
+
     send_email_signal.send(
-        send_email.__class__,
-        emailto=emailto,
-        title=title,
-        content=content)
+        send_email.__class__, emailto=emailto, title=title, content=content
+    )
 
 
 def generate_code() -> str:
@@ -139,8 +139,13 @@ def generate_code() -> str:
 
 def parse_dict_to_url(dict):
     from urllib.parse import quote
-    url = '&'.join(['{}={}'.format(quote(k, safe='/'), quote(v, safe='/'))
-                    for k, v in dict.items()])
+
+    url = '&'.join(
+        [
+            '{}={}'.format(quote(k, safe='/'), quote(v, safe='/'))
+            for k, v in dict.items()
+        ]
+    )
     return url
 
 
@@ -150,6 +155,7 @@ def get_blog_setting():
         return value
     else:
         from blog.models import BlogSettings
+
         if not BlogSettings.objects.count():
             setting = BlogSettings()
             setting.sitename = 'djangoblog'
@@ -201,6 +207,7 @@ def save_user_avatar(url):
 
 def delete_sidebar_cache():
     from blog.models import LinkShowType
+
     keys = ["sidebar" + x for x in LinkShowType.values]
     for k in keys:
         logger.info('delete sidebar key:' + k)
@@ -209,6 +216,7 @@ def delete_sidebar_cache():
 
 def delete_view_cache(prefix, keys):
     from django.core.cache.utils import make_template_fragment_key
+
     key = make_template_fragment_key(prefix, keys)
     cache.delete(key)
 

@@ -23,10 +23,10 @@ owntracks是一个位置追踪软件，可以定时的将你的坐标提交到�
 ```python
 EMAIL_HOST = 'smtp.zoho.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = os.environ.get('DJANGO_EMAIL_USER')
-EMAIL_HOST_PASSWORD = os.environ.get('DJANGO_EMAIL_PASSWORD')
+EMAIL_HOST_USER = os.getenv('DJANGO_EMAIL_USER')
+EMAIL_HOST_PASSWORD = os.getenv('DJANGO_EMAIL_PASSWORD')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-SERVER_EMAIL = os.environ.get('DJANGO_EMAIL_USER')
+SERVER_EMAIL = os.getenv('DJANGO_EMAIL_USER')
 ```
 为你自己的邮箱配置。
 

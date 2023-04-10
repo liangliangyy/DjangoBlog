@@ -14,7 +14,13 @@ from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.datetime_safe import datetime
 from django.utils.encoding import force_str
-from haystack.backends import BaseEngine, BaseSearchBackend, BaseSearchQuery, EmptyResults, log_query
+from haystack.backends import (
+    BaseEngine,
+    BaseSearchBackend,
+    BaseSearchQuery,
+    EmptyResults,
+    log_query,
+)
 from haystack.constants import DJANGO_CT, DJANGO_ID, ID
 from haystack.exceptions import MissingDependency, SearchBackendError, SkipDocument
 from haystack.inputs import Clean, Exact, PythonData, Raw
@@ -25,7 +31,17 @@ from haystack.utils.app_loading import haystack_get_model
 from jieba.analyse import ChineseAnalyzer
 from whoosh import index
 from whoosh.analysis import StemmingAnalyzer
-from whoosh.fields import BOOLEAN, DATETIME, IDLIST, KEYWORD, NGRAM, NGRAMWORDS, NUMERIC, Schema, TEXT
+from whoosh.fields import (
+    BOOLEAN,
+    DATETIME,
+    IDLIST,
+    KEYWORD,
+    NGRAM,
+    NGRAMWORDS,
+    NUMERIC,
+    Schema,
+    TEXT,
+)
 from whoosh.fields import ID as WHOOSH_ID
 from whoosh.filedb.filestore import FileStorage, RamStorage
 from whoosh.highlight import ContextFragmenter, HtmlFormatter
@@ -38,17 +54,18 @@ try:
     import whoosh
 except ImportError:
     raise MissingDependency(
-        "The 'whoosh' backend requires the installation of 'Whoosh'. Please refer to the documentation.")
+        "The 'whoosh' backend requires the installation of 'Whoosh'. Please refer to the documentation."
+    )
 
 # Handle minimum requirement.
 if not hasattr(whoosh, '__version__') or whoosh.__version__ < (2, 5, 0):
-    raise MissingDependency(
-        "The 'whoosh' backend requires version 2.5.0 or greater.")
+    raise MissingDependency("The 'whoosh' backend requires version 2.5.0 or greater.")
 
 # Bubble up the correct error.
 
 DATETIME_REGEX = re.compile(
-    '^(?P<year>\d{4})-(?P<month>\d{2})-(?P<day>\d{2})T(?P<hour>\d{2}):(?P<minute>\d{2}):(?P<second>\d{2})(\.\d{3,6}Z?)?$')
+    '^(?P<year>\d{4})-(?P<month>\d{2})-(?P<day>\d{2})T(?P<hour>\d{2}):(?P<minute>\d{2}):(?P<second>\d{2})(\.\d{3,6}Z?)?$'
+)
 LOCALS = threading.local()
 LOCALS.RAM_STORE = None
 
@@ -59,6 +76,7 @@ class WhooshHtmlFormatter(HtmlFormatter):
     We use it to have consistent results across backends. Specifically,
     Solr, Xapian and Elasticsearch are using this formatting.
     """
+
     template = '<%(tag)s>%(t)s</%(tag)s>'
 
 
@@ -75,22 +93,34 @@ class WhooshSearchBackend(BaseSearchBackend):
     # The '\\' must come first, so as not to overwrite the other slash
     # replacements.
     RESERVED_CHARACTERS = (
-        '\\', '+', '-', '&&', '||', '!', '(', ')', '{', '}',
-        '[', ']', '^', '"', '~', '*', '?', ':', '.',
+        '\\',
+        '+',
+        '-',
+        '&&',
+        '||',
+        '!',
+        '(',
+        ')',
+        '{',
+        '}',
+        '[',
+        ']',
+        '^',
+        '"',
+        '~',
+        '*',
+        '?',
+        ':',
+        '.',
     )
 
     def __init__(self, connection_alias, **connection_options):
-        super(
-            WhooshSearchBackend,
-            self).__init__(
-            connection_alias,
-            **connection_options)
+        super(WhooshSearchBackend, self).__init__(
+            connection_alias, **connection_options
+        )
         self.setup_complete = False
         self.use_file_storage = True
-        self.post_limit = getattr(
-            connection_options,
-            'POST_LIMIT',
-            128 * 1024 * 1024)
+        self.post_limit = getattr(connection_options, 'POST_LIMIT', 128 * 1024 * 1024)
         self.path = connection_options.get('PATH')
 
         if connection_options.get('STORAGE', 'file') != 'file':
@@ -98,8 +128,9 @@ class WhooshSearchBackend(BaseSearchBackend):
 
         if self.use_file_storage and not self.path:
             raise ImproperlyConfigured(
-                "You must specify a 'PATH' in your settings for connection '%s'." %
-                connection_alias)
+                "You must specify a 'PATH' in your settings for connection '%s'."
+                % connection_alias
+            )
 
         self.log = logging.getLogger('haystack')
 
@@ -108,6 +139,7 @@ class WhooshSearchBackend(BaseSearchBackend):
         Defers loading until needed.
         """
         from haystack import connections
+
         new_index = False
 
         # Make sure the index is there.
@@ -117,8 +149,9 @@ class WhooshSearchBackend(BaseSearchBackend):
 
         if self.use_file_storage and not os.access(self.path, os.W_OK):
             raise IOError(
-                "The path to your Whoosh index '%s' is not writable for the current user/group." %
-                self.path)
+                "The path to your Whoosh index '%s' is not writable for the current user/group."
+                % self.path
+            )
 
         if self.use_file_storage:
             self.storage = FileStorage(self.path)
@@ -131,7 +164,8 @@ class WhooshSearchBackend(BaseSearchBackend):
             self.storage = LOCALS.RAM_STORE
 
         self.content_field_name, self.schema = self.build_schema(
-            connections[self.connection_alias].get_unified_index().all_searchfields())
+            connections[self.connection_alias].get_unified_index().all_searchfields()
+        )
         self.parser = QueryParser(self.content_field_name, schema=self.schema)
 
         if new_index is True:
@@ -159,34 +193,59 @@ class WhooshSearchBackend(BaseSearchBackend):
             if field_class.is_multivalued:
                 if field_class.indexed is False:
                     schema_fields[field_class.index_fieldname] = IDLIST(
-                        stored=True, field_boost=field_class.boost)
+                        stored=True, field_boost=field_class.boost
+                    )
                 else:
                     schema_fields[field_class.index_fieldname] = KEYWORD(
-                        stored=True, commas=True, scorable=True, field_boost=field_class.boost)
+                        stored=True,
+                        commas=True,
+                        scorable=True,
+                        field_boost=field_class.boost,
+                    )
             elif field_class.field_type in ['date', 'datetime']:
                 schema_fields[field_class.index_fieldname] = DATETIME(
-                    stored=field_class.stored, sortable=True)
+                    stored=field_class.stored, sortable=True
+                )
             elif field_class.field_type == 'integer':
                 schema_fields[field_class.index_fieldname] = NUMERIC(
-                    stored=field_class.stored, numtype=int, field_boost=field_class.boost)
+                    stored=field_class.stored,
+                    numtype=int,
+                    field_boost=field_class.boost,
+                )
             elif field_class.field_type == 'float':
                 schema_fields[field_class.index_fieldname] = NUMERIC(
-                    stored=field_class.stored, numtype=float, field_boost=field_class.boost)
+                    stored=field_class.stored,
+                    numtype=float,
+                    field_boost=field_class.boost,
+                )
             elif field_class.field_type == 'boolean':
                 # Field boost isn't supported on BOOLEAN as of 1.8.2.
                 schema_fields[field_class.index_fieldname] = BOOLEAN(
-                    stored=field_class.stored)
+                    stored=field_class.stored
+                )
             elif field_class.field_type == 'ngram':
                 schema_fields[field_class.index_fieldname] = NGRAM(
-                    minsize=3, maxsize=15, stored=field_class.stored, field_boost=field_class.boost)
+                    minsize=3,
+                    maxsize=15,
+                    stored=field_class.stored,
+                    field_boost=field_class.boost,
+                )
             elif field_class.field_type == 'edge_ngram':
-                schema_fields[field_class.index_fieldname] = NGRAMWORDS(minsize=2, maxsize=15, at='start',
-                                                                        stored=field_class.stored,
-                                                                        field_boost=field_class.boost)
+                schema_fields[field_class.index_fieldname] = NGRAMWORDS(
+                    minsize=2,
+                    maxsize=15,
+                    at='start',
+                    stored=field_class.stored,
+                    field_boost=field_class.boost,
+                )
             else:
                 # schema_fields[field_class.index_fieldname] = TEXT(stored=True, analyzer=StemmingAnalyzer(), field_boost=field_class.boost, sortable=True)
                 schema_fields[field_class.index_fieldname] = TEXT(
-                    stored=True, analyzer=ChineseAnalyzer(), field_boost=field_class.boost, sortable=True)
+                    stored=True,
+                    analyzer=ChineseAnalyzer(),
+                    field_boost=field_class.boost,
+                    sortable=True,
+                )
             if field_class.document is True:
                 content_field_name = field_class.index_fieldname
                 schema_fields[field_class.index_fieldname].spelling = True
@@ -195,7 +254,8 @@ class WhooshSearchBackend(BaseSearchBackend):
         # are found.
         if len(schema_fields) <= initial_key_count:
             raise SearchBackendError(
-                "No fields were found in any search_indexes. Please correct this before attempting to search.")
+                "No fields were found in any search_indexes. Please correct this before attempting to search."
+            )
 
         return (content_field_name, Schema(**schema_fields))
 
@@ -231,13 +291,10 @@ class WhooshSearchBackend(BaseSearchBackend):
                     # to avoid the possibility of that generating encoding errors while
                     # processing the log message:
                     self.log.error(
-                        u"%s while preparing object for update" %
-                        e.__class__.__name__,
+                        u"%s while preparing object for update" % e.__class__.__name__,
                         exc_info=True,
-                        extra={
-                            "data": {
-                                "index": index,
-                                "object": get_identifier(obj)}})
+                        extra={"data": {"index": index, "object": get_identifier(obj)}},
+                    )
 
         if len(iterable) > 0:
             # For now, commit no matter what, as we run into locking issues
@@ -253,9 +310,8 @@ class WhooshSearchBackend(BaseSearchBackend):
 
         try:
             self.index.delete_by_query(
-                q=self.parser.parse(
-                    u'%s:"%s"' %
-                    (ID, whoosh_id)))
+                q=self.parser.parse(u'%s:"%s"' % (ID, whoosh_id))
+            )
         except Exception as e:
             if not self.silently_fail:
                 raise
@@ -264,7 +320,8 @@ class WhooshSearchBackend(BaseSearchBackend):
                 "Failed to remove document '%s' from Whoosh: %s",
                 whoosh_id,
                 e,
-                exc_info=True)
+                exc_info=True,
+            )
 
     def clear(self, models=None, commit=True):
         if not self.setup_complete:
@@ -282,13 +339,11 @@ class WhooshSearchBackend(BaseSearchBackend):
                 models_to_delete = []
 
                 for model in models:
-                    models_to_delete.append(
-                        u"%s:%s" %
-                        (DJANGO_CT, get_model_ct(model)))
+                    models_to_delete.append(u"%s:%s" % (DJANGO_CT, get_model_ct(model)))
 
                 self.index.delete_by_query(
-                    q=self.parser.parse(
-                        u" OR ".join(models_to_delete)))
+                    q=self.parser.parse(u" OR ".join(models_to_delete))
+                )
         except Exception as e:
             if not self.silently_fail:
                 raise
@@ -298,10 +353,10 @@ class WhooshSearchBackend(BaseSearchBackend):
                     "Failed to clear Whoosh index of models '%s': %s",
                     ','.join(models_to_delete),
                     e,
-                    exc_info=True)
+                    exc_info=True,
+                )
             else:
-                self.log.error(
-                    "Failed to clear Whoosh index: %s", e, exc_info=True)
+                self.log.error("Failed to clear Whoosh index: %s", e, exc_info=True)
 
     def delete_index(self):
         # Per the Whoosh mailing list, if wiping out everything from the index,
@@ -347,25 +402,26 @@ class WhooshSearchBackend(BaseSearchBackend):
 
     @log_query
     def search(
-            self,
-            query_string,
-            sort_by=None,
-            start_offset=0,
-            end_offset=None,
-            fields='',
-            highlight=False,
-            facets=None,
-            date_facets=None,
-            query_facets=None,
-            narrow_queries=None,
-            spelling_query=None,
-            within=None,
-            dwithin=None,
-            distance_point=None,
-            models=None,
-            limit_to_registered_models=None,
-            result_class=None,
-            **kwargs):
+        self,
+        query_string,
+        sort_by=None,
+        start_offset=0,
+        end_offset=None,
+        fields='',
+        highlight=False,
+        facets=None,
+        date_facets=None,
+        query_facets=None,
+        narrow_queries=None,
+        spelling_query=None,
+        within=None,
+        dwithin=None,
+        distance_point=None,
+        models=None,
+        limit_to_registered_models=None,
+        result_class=None,
+        **kwargs
+    ):
         if not self.setup_complete:
             self.setup()
 
@@ -400,8 +456,10 @@ class WhooshSearchBackend(BaseSearchBackend):
                     reverse_counter += 1
 
             if reverse_counter and reverse_counter != len(sort_by):
-                raise SearchBackendError("Whoosh requires all order_by fields"
-                                         " to use the same sort direction")
+                raise SearchBackendError(
+                    "Whoosh requires all order_by fields"
+                    " to use the same sort direction"
+                )
 
             for order_by in sort_by:
                 if order_by.startswith('-'):
@@ -418,29 +476,25 @@ class WhooshSearchBackend(BaseSearchBackend):
             sort_by = sort_by_list[0]
 
         if facets is not None:
-            warnings.warn(
-                "Whoosh does not handle faceting.",
-                Warning,
-                stacklevel=2)
+            warnings.warn("Whoosh does not handle faceting.", Warning, stacklevel=2)
 
         if date_facets is not None:
             warnings.warn(
-                "Whoosh does not handle date faceting.",
-                Warning,
-                stacklevel=2)
+                "Whoosh does not handle date faceting.", Warning, stacklevel=2
+            )
 
         if query_facets is not None:
             warnings.warn(
-                "Whoosh does not handle query faceting.",
-                Warning,
-                stacklevel=2)
+                "Whoosh does not handle query faceting.", Warning, stacklevel=2
+            )
 
         narrowed_results = None
         self.index = self.index.refresh()
 
         if limit_to_registered_models is None:
             limit_to_registered_models = getattr(
-                settings, 'HAYSTACK_LIMIT_TO_REGISTERED_MODELS', True)
+                settings, 'HAYSTACK_LIMIT_TO_REGISTERED_MODELS', True
+            )
 
         if models and len(models):
             model_choices = sorted(get_model_ct(model) for model in models)
@@ -455,8 +509,9 @@ class WhooshSearchBackend(BaseSearchBackend):
             if narrow_queries is None:
                 narrow_queries = set()
 
-            narrow_queries.add(' OR '.join(
-                ['%s:%s' % (DJANGO_CT, rm) for rm in model_choices]))
+            narrow_queries.add(
+                ' OR '.join(['%s:%s' % (DJANGO_CT, rm) for rm in model_choices])
+            )
 
         narrow_searcher = None
 
@@ -467,7 +522,8 @@ class WhooshSearchBackend(BaseSearchBackend):
 
             for nq in narrow_queries:
                 recent_narrowed_results = narrow_searcher.search(
-                    self.parser.parse(force_str(nq)), limit=None)
+                    self.parser.parse(force_str(nq)), limit=None
+                )
 
                 if len(recent_narrowed_results) <= 0:
                     return {
@@ -493,8 +549,7 @@ class WhooshSearchBackend(BaseSearchBackend):
                     'hits': 0,
                 }
 
-            page_num, page_length = self.calculate_page(
-                start_offset, end_offset)
+            page_num, page_length = self.calculate_page(start_offset, end_offset)
 
             search_kwargs = {
                 'pagelen': page_length,
@@ -507,11 +562,7 @@ class WhooshSearchBackend(BaseSearchBackend):
                 search_kwargs['filter'] = narrowed_results
 
             try:
-                raw_page = searcher.search_page(
-                    parsed_query,
-                    page_num,
-                    **search_kwargs
-                )
+                raw_page = searcher.search_page(parsed_query, page_num, **search_kwargs)
             except ValueError:
                 if not self.silently_fail:
                     raise
@@ -536,7 +587,8 @@ class WhooshSearchBackend(BaseSearchBackend):
                 highlight=highlight,
                 query_string=query_string,
                 spelling_query=spelling_query,
-                result_class=result_class)
+                result_class=result_class,
+            )
             searcher.close()
 
             if hasattr(narrow_searcher, 'close'):
@@ -547,10 +599,10 @@ class WhooshSearchBackend(BaseSearchBackend):
             if self.include_spelling:
                 if spelling_query:
                     spelling_suggestion = self.create_spelling_suggestion(
-                        spelling_query)
+                        spelling_query
+                    )
                 else:
-                    spelling_suggestion = self.create_spelling_suggestion(
-                        query_string)
+                    spelling_suggestion = self.create_spelling_suggestion(query_string)
             else:
                 spelling_suggestion = None
 
@@ -561,15 +613,16 @@ class WhooshSearchBackend(BaseSearchBackend):
             }
 
     def more_like_this(
-            self,
-            model_instance,
-            additional_query_string=None,
-            start_offset=0,
-            end_offset=None,
-            models=None,
-            limit_to_registered_models=None,
-            result_class=None,
-            **kwargs):
+        self,
+        model_instance,
+        additional_query_string=None,
+        start_offset=0,
+        end_offset=None,
+        models=None,
+        limit_to_registered_models=None,
+        result_class=None,
+        **kwargs
+    ):
         if not self.setup_complete:
             self.setup()
 
@@ -584,7 +637,8 @@ class WhooshSearchBackend(BaseSearchBackend):
 
         if limit_to_registered_models is None:
             limit_to_registered_models = getattr(
-                settings, 'HAYSTACK_LIMIT_TO_REGISTERED_MODELS', True)
+                settings, 'HAYSTACK_LIMIT_TO_REGISTERED_MODELS', True
+            )
 
         if models and len(models):
             model_choices = sorted(get_model_ct(model) for model in models)
@@ -599,8 +653,9 @@ class WhooshSearchBackend(BaseSearchBackend):
             if narrow_queries is None:
                 narrow_queries = set()
 
-            narrow_queries.add(' OR '.join(
-                ['%s:%s' % (DJANGO_CT, rm) for rm in model_choices]))
+            narrow_queries.add(
+                ' OR '.join(['%s:%s' % (DJANGO_CT, rm) for rm in model_choices])
+            )
 
         if additional_query_string and additional_query_string != '*':
             narrow_queries.add(additional_query_string)
@@ -614,7 +669,8 @@ class WhooshSearchBackend(BaseSearchBackend):
 
             for nq in narrow_queries:
                 recent_narrowed_results = narrow_searcher.search(
-                    self.parser.parse(force_str(nq)), limit=None)
+                    self.parser.parse(force_str(nq)), limit=None
+                )
 
                 if len(recent_narrowed_results) <= 0:
                     return {
@@ -639,8 +695,7 @@ class WhooshSearchBackend(BaseSearchBackend):
             results = searcher.search(parsed_query)
 
             if len(results):
-                raw_results = results[0].more_like_this(
-                    field_name, top=end_offset)
+                raw_results = results[0].more_like_this(field_name, top=end_offset)
 
             # Handle the case where the results have been narrowed.
             if narrowed_results is not None and hasattr(raw_results, 'filter'):
@@ -676,13 +731,15 @@ class WhooshSearchBackend(BaseSearchBackend):
         return results
 
     def _process_results(
-            self,
-            raw_page,
-            highlight=False,
-            query_string='',
-            spelling_query=None,
-            result_class=None):
+        self,
+        raw_page,
+        highlight=False,
+        query_string='',
+        spelling_query=None,
+        result_class=None,
+    ):
         from haystack import connections
+
         results = []
 
         # It's important to grab the hits first before slicing. Otherwise, this
@@ -709,22 +766,23 @@ class WhooshSearchBackend(BaseSearchBackend):
                     string_key = str(key)
 
                     if string_key in index.fields and hasattr(
-                            index.fields[string_key], 'convert'):
+                        index.fields[string_key], 'convert'
+                    ):
                         # Special-cased due to the nature of KEYWORD fields.
                         if index.fields[string_key].is_multivalued:
                             if value is None or len(value) == 0:
                                 additional_fields[string_key] = []
                             else:
-                                additional_fields[string_key] = value.split(
-                                    ',')
+                                additional_fields[string_key] = value.split(',')
                         else:
-                            additional_fields[string_key] = index.fields[string_key].convert(
-                                value)
+                            additional_fields[string_key] = index.fields[
+                                string_key
+                            ].convert(value)
                     else:
                         additional_fields[string_key] = self._to_python(value)
 
-                del (additional_fields[DJANGO_CT])
-                del (additional_fields[DJANGO_ID])
+                del additional_fields[DJANGO_CT]
+                del additional_fields[DJANGO_ID]
 
                 if highlight:
                     sa = StemmingAnalyzer()
@@ -736,7 +794,7 @@ class WhooshSearchBackend(BaseSearchBackend):
                         terms,
                         sa,
                         ContextFragmenter(),
-                        formatter
+                        formatter,
                     )
                     additional_fields['highlighted'] = {
                         self.content_field_name: [whoosh_result],
@@ -747,18 +805,17 @@ class WhooshSearchBackend(BaseSearchBackend):
                     model_name,
                     raw_result[DJANGO_ID],
                     score,
-                    **additional_fields)
+                    **additional_fields
+                )
                 results.append(result)
             else:
                 hits -= 1
 
         if self.include_spelling:
             if spelling_query:
-                spelling_suggestion = self.create_spelling_suggestion(
-                    spelling_query)
+                spelling_suggestion = self.create_spelling_suggestion(spelling_query)
             else:
-                spelling_suggestion = self.create_spelling_suggestion(
-                    query_string)
+                spelling_suggestion = self.create_spelling_suggestion(query_string)
 
         return {
             'results': results,
@@ -845,7 +902,8 @@ class WhooshSearchBackend(BaseSearchBackend):
                     date_values['day'],
                     date_values['hour'],
                     date_values['minute'],
-                    date_values['second'])
+                    date_values['second'],
+                )
 
         try:
             # Attempt to use json to load the values.
@@ -853,14 +911,9 @@ class WhooshSearchBackend(BaseSearchBackend):
 
             # Try to handle most built-in types.
             if isinstance(
-                    converted_value,
-                    (list,
-                     tuple,
-                     set,
-                     dict,
-                     six.integer_types,
-                     float,
-                     complex)):
+                converted_value,
+                (list, tuple, set, dict, six.integer_types, float, complex),
+            ):
                 return converted_value
         except BaseException:
             # If it fails (SyntaxError or its ilk) or we don't trust it,
@@ -904,6 +957,7 @@ class WhooshSearchQuery(BaseSearchQuery):
 
     def build_query_fragment(self, field, filter_type, value):
         from haystack import connections
+
         query_frag = ''
         is_datetime = False
 
@@ -933,8 +987,9 @@ class WhooshSearchQuery(BaseSearchQuery):
         if field == 'content':
             index_fieldname = ''
         else:
-            index_fieldname = u'%s:' % connections[self._using].get_unified_index(
-            ).get_index_fieldname(field)
+            index_fieldname = u'%s:' % connections[
+                self._using
+            ].get_unified_index().get_index_fieldname(field)
 
         filter_types = {
             'content': '%s',
@@ -957,7 +1012,8 @@ class WhooshSearchQuery(BaseSearchQuery):
                 'contains',
                 'startswith',
                 'endswith',
-                'fuzzy']:
+                'fuzzy',
+            ]:
                 if value.input_type_name == 'exact':
                     query_frag = prepared_value
                 else:
@@ -969,15 +1025,15 @@ class WhooshSearchQuery(BaseSearchQuery):
                         possible_values = prepared_value.split(' ')
                     else:
                         if is_datetime is True:
-                            prepared_value = self._convert_datetime(
-                                prepared_value)
+                            prepared_value = self._convert_datetime(prepared_value)
 
                         possible_values = [prepared_value]
 
                     for possible_value in possible_values:
                         terms.append(
-                            filter_types[filter_type] %
-                            self.backend._from_python(possible_value))
+                            filter_types[filter_type]
+                            % self.backend._from_python(possible_value)
+                        )
 
                     if len(terms) == 1:
                         query_frag = terms[0]

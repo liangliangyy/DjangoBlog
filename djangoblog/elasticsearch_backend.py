@@ -13,11 +13,9 @@ logger = logging.getLogger(__name__)
 
 class ElasticSearchBackend(BaseSearchBackend):
     def __init__(self, connection_alias, **connection_options):
-        super(
-            ElasticSearchBackend,
-            self).__init__(
-            connection_alias,
-            **connection_options)
+        super(ElasticSearchBackend, self).__init__(
+            connection_alias, **connection_options
+        )
         self.manager = ArticleDocumentManager()
         self.include_spelling = True
 
@@ -42,7 +40,6 @@ class ElasticSearchBackend(BaseSearchBackend):
         self.manager.update_docs(docs)
 
     def update(self, index, iterable, commit=True):
-
         models = self._get_models(iterable)
         self.manager.update_docs(models)
 
@@ -57,10 +54,12 @@ class ElasticSearchBackend(BaseSearchBackend):
     def get_suggestion(query: str) -> str:
         """获取推荐词, 如果没有找到添加原搜索词"""
 
-        search = ArticleDocument.search() \
-            .query("match", body=query) \
-            .suggest('suggest_search', query, term={'field': 'body'}) \
+        search = (
+            ArticleDocument.search()
+            .query("match", body=query)
+            .suggest('suggest_search', query, term={'field': 'body'})
             .execute()
+        )
 
         keywords = []
         for suggest in search.suggest.suggest_search:
@@ -84,15 +83,19 @@ class ElasticSearchBackend(BaseSearchBackend):
         else:
             suggestion = query_string
 
-        q = Q('bool',
-              should=[Q('match', body=suggestion), Q('match', title=suggestion)],
-              minimum_should_match="70%")
+        q = Q(
+            'bool',
+            should=[Q('match', body=suggestion), Q('match', title=suggestion)],
+            minimum_should_match="70%",
+        )
 
-        search = ArticleDocument.search() \
-                     .query('bool', filter=[q]) \
-                     .filter('term', status='p') \
-                     .filter('term', type='a') \
-                     .source(False)[start_offset: end_offset]
+        search = (
+            ArticleDocument.search()
+            .query('bool', filter=[q])
+            .filter('term', status='p')
+            .filter('term', type='a')
+            .source(False)[start_offset:end_offset]
+        )
 
         results = search.execute()
         hits = results['hits'].total
@@ -109,7 +112,8 @@ class ElasticSearchBackend(BaseSearchBackend):
                 model_name,
                 raw_result['_id'],
                 raw_result['_score'],
-                **additional_fields)
+                **additional_fields
+            )
             raw_results.append(result)
         facets = {}
         spelling_suggestion = None if query_string == suggestion else suggestion
@@ -165,15 +169,18 @@ class ElasticSearchQuery(BaseSearchQuery):
         return self._spelling_suggestion
 
     def build_params(self, spelling_query=None):
-        kwargs = super(ElasticSearchQuery, self).build_params(spelling_query=spelling_query)
+        kwargs = super(ElasticSearchQuery, self).build_params(
+            spelling_query=spelling_query
+        )
         return kwargs
 
 
 class ElasticSearchModelSearchForm(ModelSearchForm):
-
     def search(self):
         # 是否建议搜索
-        self.searchqueryset.query.backend.is_suggest = self.data.get("is_suggest") != "no"
+        self.searchqueryset.query.backend.is_suggest = (
+            self.data.get("is_suggest") != "no"
+        )
         sqs = super().search()
         return sqs
 

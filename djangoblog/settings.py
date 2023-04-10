@@ -13,23 +13,23 @@ import os
 import sys
 
 
-def env_to_bool(env, default):
-    str_val = os.environ.get(env)
-    return default if str_val is None else str_val == 'True'
-
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# 将存放子应用的apps目录加入到系统目录
+sys.path.insert(0, os.path.join(BASE_DIR, "apps"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get(
-    'DJANGO_SECRET_KEY') or 'n9ceqv38)#&mwuat@(mjb_p%em$e8$qyr#fw9ot!=ba6lijx-6'
+SECRET_KEY = os.getenv(
+    'DJANGO_SECRET_KEY', 'n9ceqv38)#&mwuat@(mjb_p%em$e8$qyr#fw9ot!=ba6lijx-6'
+)
+
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env_to_bool('DJANGO_DEBUG', True)
+DEBUG = os.getenv('DJANGO_DEBUG', True)
 # DEBUG = False
 TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 
@@ -41,6 +41,7 @@ CSRF_TRUSTED_ORIGINS = ['http://example.com']
 
 
 INSTALLED_APPS = [
+    'simpleui',
     # 'django.contrib.admin',
     'django.contrib.admin.apps.SimpleAdminConfig',
     'django.contrib.auth',
@@ -58,7 +59,7 @@ INSTALLED_APPS = [
     'oauth',
     'servermanager',
     'owntracks',
-    'compressor'
+    'compressor',
 ]
 
 MIDDLEWARE = [
@@ -73,7 +74,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.http.ConditionalGetMiddleware',
-    'blog.middleware.OnlineMiddleware'
+    'blog.middleware.OnlineMiddleware',
 ]
 
 ROOT_URLCONF = 'djangoblog.urls'
@@ -89,7 +90,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'blog.context_processors.seo_processor'
+                'blog.context_processors.seo_processor',
             ],
         },
     },
@@ -100,19 +101,29 @@ WSGI_APPLICATION = 'djangoblog.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
+#
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': os.getenv('DJANGO_MYSQL_DATABASE', 'djangoblog'),
+#         'USER': os.getenv('DJANGO_MYSQL_USER', 'root'),
+#         'PASSWORD': os.getenv('DJANGO_MYSQL_PASSWORD', 'djangoblog_123'),
+#         'HOST': os.getenv('DJANGO_MYSQL_HOST', '127.0.0.1'),
+#         'PORT': int(os.getenv('DJANGO_MYSQL_PORT', 3306)),
+#         'OPTIONS': {
+#             'charset': 'utf8mb4'},
+#     }}
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('DJANGO_MYSQL_DATABASE') or 'djangoblog',
-        'USER': os.environ.get('DJANGO_MYSQL_USER') or 'root',
-        'PASSWORD': os.environ.get('DJANGO_MYSQL_PASSWORD') or 'djangoblog_123',
-        'HOST': os.environ.get('DJANGO_MYSQL_HOST') or '127.0.0.1',
-        'PORT': int(
-            os.environ.get('DJANGO_MYSQL_PORT') or 3306),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         'OPTIONS': {
-            'charset': 'utf8mb4'},
-    }}
+            # 防止数据库锁死
+            'timeout': 20,
+        },
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
@@ -158,8 +169,7 @@ HAYSTACK_CONNECTIONS = {
 # Automatically update searching index
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 # Allow user login with username and password
-AUTHENTICATION_BACKENDS = [
-    'accounts.user_login_backend.EmailOrUsernameModelBackend']
+AUTHENTICATION_BACKENDS = ['accounts.user_login_backend.EmailOrUsernameModelBackend']
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'collectedstatic')
 
@@ -173,9 +183,7 @@ TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 DATE_TIME_FORMAT = '%Y-%m-%d'
 
 # bootstrap color styles
-BOOTSTRAP_COLOR_TYPES = [
-    'default', 'primary', 'success', 'info', 'warning', 'danger'
-]
+BOOTSTRAP_COLOR_TYPES = ['default', 'primary', 'success', 'info', 'warning', 'danger']
 
 # paginate
 PAGINATE_BY = 10
@@ -190,33 +198,34 @@ CACHES = {
     }
 }
 # 使用redis作为缓存
-if os.environ.get("DJANGO_REDIS_URL"):
+if os.getenv('DJANGO_REDIS_URL'):
     CACHES = {
         'default': {
             'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-            'LOCATION': f'redis://{os.environ.get("DJANGO_REDIS_URL")}',
+            'LOCATION': f'redis://{os.getenv("DJANGO_REDIS_URL")}',
         }
     }
 
 SITE_ID = 1
-BAIDU_NOTIFY_URL = os.environ.get('DJANGO_BAIDU_NOTIFY_URL') \
-                   or 'http://data.zz.baidu.com/urls?site=https://www.lylinux.net&token=1uAOGrMsUm5syDGn'
+BAIDU_NOTIFY_URL = os.getenv(
+    'DJANGO_BAIDU_NOTIFY_URL',
+    'http://data.zz.baidu.com/urls?site=https://www.lylinux.net&token=1uAOGrMsUm5syDGn',
+)
 
 # Email:
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_USE_TLS = env_to_bool('DJANGO_EMAIL_TLS', False)
-EMAIL_USE_SSL = env_to_bool('DJANGO_EMAIL_SSL', True)
-EMAIL_HOST = os.environ.get('DJANGO_EMAIL_HOST') or 'smtp.mxhichina.com'
-EMAIL_PORT = int(os.environ.get('DJANGO_EMAIL_PORT') or 465)
-EMAIL_HOST_USER = os.environ.get('DJANGO_EMAIL_USER')
-EMAIL_HOST_PASSWORD = os.environ.get('DJANGO_EMAIL_PASSWORD')
+EMAIL_USE_TLS = os.getenv('DJANGO_EMAIL_TLS', False)
+EMAIL_USE_SSL = os.getenv('DJANGO_EMAIL_SSL', True)
+EMAIL_HOST = os.getenv('DJANGO_EMAIL_HOST', 'smtp.mxhichina.com')
+EMAIL_PORT = int(os.getenv('DJANGO_EMAIL_PORT', 465))
+EMAIL_HOST_USER = os.getenv('DJANGO_EMAIL_USER')
+EMAIL_HOST_PASSWORD = os.getenv('DJANGO_EMAIL_PASSWORD')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 SERVER_EMAIL = EMAIL_HOST_USER
 # Setting debug=false did NOT handle except email notifications
-ADMINS = [('admin', os.environ.get('DJANGO_ADMIN_EMAIL') or 'admin@admin.com')]
+ADMINS = [('admin', os.getenv('DJANGO_ADMIN_EMAIL', 'admin@admin.com'))]
 # WX ADMIN password(Two times md5)
-WXADMIN = os.environ.get(
-    'DJANGO_WXADMIN_PASSWORD') or '995F03AC401D6CABABAEF756FC4D43C7'
+WXADMIN = os.getenv('DJANGO_WXADMIN_PASSWORD', '995F03AC401D6CABABAEF756FC4D43C7')
 
 LOG_PATH = os.path.join(BASE_DIR, 'logs')
 if not os.path.exists(LOG_PATH):
@@ -252,13 +261,13 @@ LOGGING = {
             'interval': 1,
             'delay': True,
             'backupCount': 5,
-            'encoding': 'utf-8'
+            'encoding': 'utf-8',
         },
         'console': {
             'level': 'DEBUG',
             'filters': ['require_debug_true'],
             'class': 'logging.StreamHandler',
-            'formatter': 'verbose'
+            'formatter': 'verbose',
         },
         'null': {
             'class': 'logging.NullHandler',
@@ -266,8 +275,8 @@ LOGGING = {
         'mail_admins': {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
-        }
+            'class': 'django.utils.log.AdminEmailHandler',
+        },
     },
     'loggers': {
         'djangoblog': {
@@ -279,8 +288,8 @@ LOGGING = {
             'handlers': ['mail_admins'],
             'level': 'ERROR',
             'propagate': False,
-        }
-    }
+        },
+    },
 }
 
 STATICFILES_FINDERS = (
@@ -297,11 +306,9 @@ COMPRESS_CSS_FILTERS = [
     # creates absolute urls from relative ones
     'compressor.filters.css_default.CssAbsoluteFilter',
     # css minimizer
-    'compressor.filters.cssmin.CSSMinFilter'
+    'compressor.filters.cssmin.CSSMinFilter',
 ]
-COMPRESS_JS_FILTERS = [
-    'compressor.filters.jsmin.JSMinFilter'
-]
+COMPRESS_JS_FILTERS = ['compressor.filters.jsmin.JSMinFilter']
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 MEDIA_URL = '/media/'
@@ -309,11 +316,9 @@ X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-if os.environ.get('DJANGO_ELASTICSEARCH_HOST'):
+if os.getenv('DJANGO_ELASTICSEARCH_HOST'):
     ELASTICSEARCH_DSL = {
-        'default': {
-            'hosts': os.environ.get('DJANGO_ELASTICSEARCH_HOST')
-        },
+        'default': {'hosts': os.getenv('DJANGO_ELASTICSEARCH_HOST')},
     }
     HAYSTACK_CONNECTIONS = {
         'default': {
