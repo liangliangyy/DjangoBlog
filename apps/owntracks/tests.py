@@ -3,7 +3,7 @@ import json
 from django.test import Client, RequestFactory, TestCase
 
 from accounts.models import BlogUser
-from .models import OwnTrackLog
+from owntracks.models import OwnTrackLog
 
 
 # Create your tests here.

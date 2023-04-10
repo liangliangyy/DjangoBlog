@@ -5,9 +5,9 @@ from werobot.messages.messages import TextMessage
 from accounts.models import BlogUser
 from blog.models import Category, Article
 from servermanager.api.commonapi import ChatGPT
-from .models import commands
-from .robot import MessageHandler, CommandHandler
-from .robot import search, category, recents
+from servermanager.models import commands
+from servermanager.robot import MessageHandler, CommandHandler
+from servermanager.robot import search, category, recents
 
 
 # Create your tests here.

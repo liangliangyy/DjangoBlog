@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 def get_max_articleid_commentid():
     from blog.models import Article
-    from comments import Comment
+    from comments.models import Comment
 
     return (Article.objects.latest().pk, Comment.objects.latest().pk)
 
