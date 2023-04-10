@@ -101,29 +101,19 @@ WSGI_APPLICATION = 'djangoblog.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
-#
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': os.getenv('DJANGO_MYSQL_DATABASE', 'djangoblog'),
-#         'USER': os.getenv('DJANGO_MYSQL_USER', 'root'),
-#         'PASSWORD': os.getenv('DJANGO_MYSQL_PASSWORD', 'djangoblog_123'),
-#         'HOST': os.getenv('DJANGO_MYSQL_HOST', '127.0.0.1'),
-#         'PORT': int(os.getenv('DJANGO_MYSQL_PORT', 3306)),
-#         'OPTIONS': {
-#             'charset': 'utf8mb4'},
-#     }}
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.getenv('DJANGO_MYSQL_DATABASE', 'djangoblog'),
+        'USER': os.getenv('DJANGO_MYSQL_USER', 'root'),
+        'PASSWORD': os.getenv('DJANGO_MYSQL_PASSWORD', 'djangoblog_123'),
+        'HOST': os.getenv('DJANGO_MYSQL_HOST', '127.0.0.1'),
+        'PORT': int(os.getenv('DJANGO_MYSQL_PORT', 3306)),
         'OPTIONS': {
-            # 防止数据库锁死
-            'timeout': 20,
-        },
-    }
-}
+            'charset': 'utf8mb4'},
+    }}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
