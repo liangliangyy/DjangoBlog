@@ -17,6 +17,12 @@ class CommentsTest(TestCase):
         self.client = Client()
         self.factory = RequestFactory()
 
+    def update_article_comment_status(self, article):
+        comments = article.comment_set.all()
+        for comment in comments:
+            comment.is_enable = True
+            comment.save()
+
     def test_validate_comment(self):
         site = get_current_site().domain
         user = BlogUser.objects.create_superuser(
@@ -53,6 +59,9 @@ class CommentsTest(TestCase):
         self.assertEqual(response.status_code, 302)
 
         article = Article.objects.get(pk=article.pk)
+        self.assertEqual(len(article.comment_list()), 0)
+        self.update_article_comment_status(article)
+
         self.assertEqual(len(article.comment_list()), 1)
 
         response = self.client.post(comment_url,
@@ -63,6 +72,7 @@ class CommentsTest(TestCase):
         self.assertEqual(response.status_code, 302)
 
         article = Article.objects.get(pk=article.pk)
+        self.update_article_comment_status(article)
         self.assertEqual(len(article.comment_list()), 2)
         parent_comment_id = article.comment_list()[0].id
 
@@ -85,7 +95,7 @@ class CommentsTest(TestCase):
                                     })
 
         self.assertEqual(response.status_code, 302)
-
+        self.update_article_comment_status(article)
         article = Article.objects.get(pk=article.pk)
         self.assertEqual(len(article.comment_list()), 3)
         comment = Comment.objects.get(id=parent_comment_id)

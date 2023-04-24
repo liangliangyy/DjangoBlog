@@ -88,26 +88,26 @@ def model_post_save_callback(
             clearcache = True
 
     if isinstance(instance, Comment):
+        if instance.is_enable:
+            path = instance.article.get_absolute_url()
+            site = get_current_site().domain
+            if site.find(':') > 0:
+                site = site[0:site.find(':')]
 
-        path = instance.article.get_absolute_url()
-        site = get_current_site().domain
-        if site.find(':') > 0:
-            site = site[0:site.find(':')]
+            expire_view_cache(
+                path,
+                servername=site,
+                serverport=80,
+                key_prefix='blogdetail')
+            if cache.get('seo_processor'):
+                cache.delete('seo_processor')
+            comment_cache_key = 'article_comments_{id}'.format(
+                id=instance.article.id)
+            cache.delete(comment_cache_key)
+            delete_sidebar_cache()
+            delete_view_cache('article_comments', [str(instance.article.pk)])
 
-        expire_view_cache(
-            path,
-            servername=site,
-            serverport=80,
-            key_prefix='blogdetail')
-        if cache.get('seo_processor'):
-            cache.delete('seo_processor')
-        comment_cache_key = 'article_comments_{id}'.format(
-            id=instance.article.id)
-        cache.delete(comment_cache_key)
-        delete_sidebar_cache()
-        delete_view_cache('article_comments', [str(instance.article.pk)])
-
-        _thread.start_new(send_comment_email, (instance,))
+            _thread.start_new(send_comment_email, (instance,))
 
     if clearcache:
         cache.clear()
