@@ -26,7 +26,7 @@ class Comment(models.Model):
         null=True,
         on_delete=models.CASCADE)
     is_enable = models.BooleanField(
-        '是否显示', default=True, blank=False, null=False)
+        '是否显示', default=False, blank=False, null=False)
 
     class Meta:
         ordering = ['-id']
@@ -36,6 +36,3 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.body
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
