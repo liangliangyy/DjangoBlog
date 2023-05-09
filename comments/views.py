@@ -45,7 +45,10 @@ class CommentPostView(FormView):
             raise ValidationError("该文章评论已关闭.")
         comment = form.save(False)
         comment.article = article
-
+        from djangoblog.utils import get_blog_setting
+        settings = get_blog_setting()
+        if not settings.comment_need_review:
+            comment.is_enable = True
         comment.author = user
 
         if form.cleaned_data['parent_comment_id']:

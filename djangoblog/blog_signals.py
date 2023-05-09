@@ -9,11 +9,11 @@ from django.core.mail import EmailMultiAlternatives
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+from comments.models import Comment
+from comments.utils import send_comment_email
 from djangoblog.spider_notify import SpiderNotify
 from djangoblog.utils import cache, expire_view_cache, delete_sidebar_cache, delete_view_cache
 from djangoblog.utils import get_current_site
-from comments.models import Comment
-from comments.utils import send_comment_email
 from oauth.models import OAuthUser
 
 logger = logging.getLogger(__name__)
@@ -107,7 +107,7 @@ def model_post_save_callback(
             delete_sidebar_cache()
             delete_view_cache('article_comments', [str(instance.article.pk)])
 
-            _thread.start_new(send_comment_email, (instance,))
+            _thread.start_new_thread(send_comment_email, (instance,))
 
     if clearcache:
         cache.clear()

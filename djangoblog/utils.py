@@ -152,7 +152,7 @@ def get_blog_setting():
         from blog.models import BlogSettings
         if not BlogSettings.objects.count():
             setting = BlogSettings()
-            setting.sitename = 'djangoblog'
+            setting.site_name = 'djangoblog'
             setting.site_description = '基于Django的博客系统'
             setting.site_seo_description = '基于Django的博客系统'
             setting.site_keywords = 'Django,Python'
@@ -161,9 +161,10 @@ def get_blog_setting():
             setting.sidebar_comment_count = 5
             setting.show_google_adsense = False
             setting.open_site_comment = True
-            setting.analyticscode = ''
-            setting.beiancode = ''
+            setting.analytics_code = ''
+            setting.beian_code = ''
             setting.show_gongan_code = False
+            setting.comment_need_review = False
             setting.save()
         value = BlogSettings.objects.first()
         logger.info('set cache get_blog_setting')

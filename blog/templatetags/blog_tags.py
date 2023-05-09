@@ -88,7 +88,7 @@ def load_breadcrumb(article):
     from djangoblog.utils import get_blog_setting
     blogsetting = get_blog_setting()
     site = get_current_site().domain
-    names.append((blogsetting.sitename, '/'))
+    names.append((blogsetting.site_name, '/'))
     names = names[::-1]
 
     return {
