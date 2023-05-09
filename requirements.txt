@@ -19,7 +19,6 @@ python-logstash==0.4.8
 python-slugify==8.0.1
 pytz==2023.3
 requests==2.30.0
-urllib3==2.0.2
 WeRoBot==1.13.1
 Whoosh==2.7.4
 user-agents==2.2.0
