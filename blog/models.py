@@ -295,7 +295,7 @@ class SideBar(models.Model):
 
 class BlogSettings(models.Model):
     """blog的配置"""
-    sitename = models.CharField(
+    site_name = models.CharField(
         "网站名称",
         max_length=200,
         null=False,
@@ -325,13 +325,13 @@ class BlogSettings(models.Model):
     open_site_comment = models.BooleanField('是否打开网站评论功能', default=True)
     global_header = models.TextField("公共头部", null=True, blank=True, default='')
     global_footer = models.TextField("公共尾部", null=True, blank=True, default='')
-    beiancode = models.CharField(
+    beian_code = models.CharField(
         '备案号',
         max_length=2000,
         null=True,
         blank=True,
         default='')
-    analyticscode = models.TextField(
+    analytics_code = models.TextField(
         "网站统计代码",
         max_length=1000,
         null=False,
@@ -345,13 +345,15 @@ class BlogSettings(models.Model):
         null=True,
         blank=True,
         default='')
+    comment_need_review = models.BooleanField(
+        '评论是否需要审核', default=False, null=False)
 
     class Meta:
         verbose_name = '网站配置'
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.sitename
+        return self.site_name
 
     def clean(self):
         if BlogSettings.objects.exclude(id=self.id).count():

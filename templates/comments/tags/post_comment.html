@@ -15,7 +15,11 @@
             </p>
             {{ form.parent_comment_id }}
             <div class="form-submit">
-                <span class="comment-markdown"> 支持markdown,评论经审核后才会显示。</span>
+                {% if COMMENT_NEED_REVIEW %}
+                    <span class="comment-markdown"> 支持markdown，评论经审核后才会显示。</span>
+                {% else %}
+                    <span class="comment-markdown"> 支持markdown。</span>
+                {% endif %}
                 <input name="submit" type="submit" id="submit" class="submit" value="发表评论"/>
                 <small class="cancel-comment" id="cancel_comment" style="display: none">
                     <a href="javascript:void(0)" id="cancel-comment-reply-link" onclick="cancel_reply()">取消回复</a>

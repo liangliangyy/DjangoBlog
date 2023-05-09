@@ -6,7 +6,6 @@ from accounts.models import BlogUser
 from blog.models import Category, Article
 from comments.models import Comment
 from comments.templatetags.comments_tags import *
-from djangoblog.utils import get_current_site
 from djangoblog.utils import get_max_articleid_commentid
 
 
@@ -16,6 +15,10 @@ class CommentsTest(TestCase):
     def setUp(self):
         self.client = Client()
         self.factory = RequestFactory()
+        from blog.models import BlogSettings
+        value = BlogSettings()
+        value.comment_need_review = True
+        value.save()
 
     def update_article_comment_status(self, article):
         comments = article.comment_set.all()
@@ -24,7 +27,6 @@ class CommentsTest(TestCase):
             comment.save()
 
     def test_validate_comment(self):
-        site = get_current_site().domain
         user = BlogUser.objects.create_superuser(
             email="liangliangyy1@gmail.com",
             username="liangliangyy1",
