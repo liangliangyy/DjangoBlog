@@ -9,6 +9,7 @@ import string
 import uuid
 from hashlib import sha256
 
+import bleach
 import markdown
 import requests
 from django.conf import settings
@@ -220,3 +221,12 @@ def get_resource_url():
     else:
         site = get_current_site()
         return 'http://' + site.domain + '/static/'
+
+
+ALLOWED_TAGS = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code', 'em', 'i', 'li', 'ol', 'pre', 'strong', 'ul', 'h1',
+                'h2', 'p']
+ALLOWED_ATTRIBUTES = {'a': ['href', 'title'], 'abbr': ['title'], 'acronym': ['title']}
+
+
+def sanitize_html(html):
+    return bleach.clean(html, tags=ALLOWED_TAGS, attributes=ALLOWED_ATTRIBUTES)
