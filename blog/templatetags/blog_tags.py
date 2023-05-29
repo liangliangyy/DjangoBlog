@@ -14,7 +14,7 @@ from django.utils.safestring import mark_safe
 
 from blog.models import Article, Category, Tag, Links, SideBar, LinkShowType
 from comments.models import Comment
-from djangoblog.utils import CommonMarkdown
+from djangoblog.utils import CommonMarkdown, sanitize_html
 from djangoblog.utils import cache
 from djangoblog.utils import get_current_site
 from oauth.models import OAuthUser
@@ -53,6 +53,13 @@ def get_markdown_toc(content):
     from djangoblog.utils import CommonMarkdown
     body, toc = CommonMarkdown.get_markdown_with_toc(content)
     return mark_safe(toc)
+
+
+@register.filter()
+@stringfilter
+def comment_markdown(content):
+    content = CommonMarkdown.get_markdown(content)
+    return mark_safe(sanitize_html(content))
 
 
 @register.filter(is_safe=True)
