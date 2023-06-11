@@ -1,15 +1,13 @@
-from django.conf import settings
 from django.test import Client, RequestFactory, TestCase
 from django.urls import reverse
 from django.utils import timezone
+from django.contrib.sites.shortcuts import get_current_site
 
-from djangoblog.utils import *
 from accounts.models import BlogUser
 from blog.models import Article, Category
+from djangoblog.utils import *
 from . import utils
 
-
-# Create your tests here.
 
 class AccountTest(TestCase):
     def setUp(self):
@@ -33,72 +31,72 @@ class AccountTest(TestCase):
         loginresult = self.client.login(
             username='liangliangyy1',
             password='qwer!@#$ggg')
-        self.assertEqual(loginresult, True)
+        self.assertTrue(loginresult)
         response = self.client.get('/admin/')
         self.assertEqual(response.status_code, 200)
 
-        category = Category()
-        category.name = "categoryaaa"
-        category.created_time = timezone.now()
-        category.last_mod_time = timezone.now()
-        category.save()
+        category = Category.objects.create(
+            name="categoryaaa",
+            created_time=timezone.now(),
+            last_mod_time=timezone.now()
+        )
 
-        article = Article()
-        article.title = "nicetitleaaa"
-        article.body = "nicecontentaaa"
-        article.author = user
-        article.category = category
-        article.type = 'a'
-        article.status = 'p'
-        article.save()
+        article = Article.objects.create(
+            title="nicetitleaaa",
+            body="nicecontentaaa",
+            author=user,
+            category=category,
+            type='a',
+            status='p'
+        )
 
         response = self.client.get(article.get_admin_url())
         self.assertEqual(response.status_code, 200)
 
     def test_validate_register(self):
-        self.assertEquals(
-            0, len(
-                BlogUser.objects.filter(
-                    email='user123@user.com')))
+        self.assertEqual(
+            0, BlogUser.objects.filter(email='user123@user.com').count())
+
         response = self.client.post(reverse('account:register'), {
             'username': 'user1233',
             'email': 'user123@user.com',
             'password1': 'password123!q@wE#R$T',
             'password2': 'password123!q@wE#R$T',
         })
-        self.assertEquals(
-            1, len(
-                BlogUser.objects.filter(
-                    email='user123@user.com')))
-        user = BlogUser.objects.filter(email='user123@user.com')[0]
+
+        self.assertEqual(
+            1, BlogUser.objects.filter(email='user123@user.com').count())
+
+        user = BlogUser.objects.filter(email='user123@user.com').first()
+
         sign = get_sha256(get_sha256(settings.SECRET_KEY + str(user.id)))
         path = reverse('accounts:result')
         url = '{path}?type=validation&id={id}&sign={sign}'.format(
             path=path, id=user.id, sign=sign)
+
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
         self.client.login(username='user1233', password='password123!q@wE#R$T')
-        user = BlogUser.objects.filter(email='user123@user.com')[0]
         user.is_superuser = True
         user.is_staff = True
         user.save()
         delete_sidebar_cache()
-        category = Category()
-        category.name = "categoryaaa"
-        category.created_time = timezone.now()
-        category.last_mod_time = timezone.now()
-        category.save()
 
-        article = Article()
-        article.category = category
-        article.title = "nicetitle333"
-        article.body = "nicecontentttt"
-        article.author = user
+        category = Category.objects.create(
+            name="categoryaaa",
+            created_time=timezone.now(),
+            last_mod_time=timezone.now()
+        )
 
-        article.type = 'a'
-        article.status = 'p'
-        article.save()
+        article = Article.objects.create(
+            category=category,
+            title="nicetitle333",
+            body="nicecontentttt",
+            author=user,
+            type='a',
+            status='p'
+        )
 
         response = self.client.get(article.get_admin_url())
         self.assertEqual(response.status_code, 200)
@@ -124,11 +122,11 @@ class AccountTest(TestCase):
         utils.set_code(to_email, code)
         utils.send_verify_email(to_email, code)
 
-        err = utils.verify("admin@admin.com", code)
-        self.assertEqual(err, None)
+        err = utils.verify(to_email, code)
+        self.assertIsNone(err)
 
         err = utils.verify("admin@123.com", code)
-        self.assertEqual(type(err), str)
+        self.assertIsInstance(err, str)
 
     def test_forget_password_email_code_success(self):
         resp = self.client.post(
@@ -167,12 +165,9 @@ class AccountTest(TestCase):
         )
         self.assertEqual(resp.status_code, 302)
 
-        # 验证用户密码是否修改成功
-        blog_user = BlogUser.objects.filter(
-            email=self.blog_user.email,
-        ).first()  # type: BlogUser
-        self.assertNotEqual(blog_user, None)
-        self.assertEqual(blog_user.check_password(data["new_password1"]), True)
+        blog_user = BlogUser.objects.filter(email=self.blog_user.email).first()
+        self.assertIsNotNone(blog_user)
+        self.assertTrue(blog_user.check_password(data["new_password1"]))
 
     def test_forget_password_email_not_user(self):
         data = dict(

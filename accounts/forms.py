@@ -10,7 +10,7 @@ from .models import BlogUser
 
 class LoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
-        super(LoginForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields['username'].widget = widgets.TextInput(
             attrs={'placeholder': "username", "class": "form-control"})
         self.fields['password'].widget = widgets.PasswordInput(
@@ -19,8 +19,7 @@ class LoginForm(AuthenticationForm):
 
 class RegisterForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
-        super(RegisterForm, self).__init__(*args, **kwargs)
-
+        super().__init__(*args, **kwargs)
         self.fields['username'].widget = widgets.TextInput(
             attrs={'placeholder': "username", "class": "form-control"})
         self.fields['email'].widget = widgets.EmailInput(
@@ -83,8 +82,8 @@ class ForgetPasswordForm(forms.Form):
     )
 
     def clean_new_password2(self):
-        password1 = self.data.get("new_password1")
-        password2 = self.data.get("new_password2")
+        password1 = self.cleaned_data.get("new_password1")
+        password2 = self.cleaned_data.get("new_password2")
         if password1 and password2 and password1 != password2:
             raise ValidationError("两次密码不一致")
         password_validation.validate_password(password2)
@@ -93,10 +92,7 @@ class ForgetPasswordForm(forms.Form):
 
     def clean_email(self):
         user_email = self.cleaned_data.get("email")
-        if not BlogUser.objects.filter(
-                email=user_email
-        ).exists():
-            # todo 这里的报错提示可以判断一个邮箱是不是注册过，如果不想暴露可以修改
+        if not BlogUser.objects.filter(email=user_email).exists():
             raise ValidationError("未找到邮箱对应的用户")
         return user_email
 
