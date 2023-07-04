@@ -5,8 +5,8 @@ RUN  apt-get install  default-libmysqlclient-dev -y && \
     ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
 ADD requirements.txt requirements.txt
 RUN pip install --upgrade pip  && \
-        pip install -Ur requirements.txt  && \
-        pip install gunicorn[gevent] && \
+        pip install --no-cache-dir -r requirements.txt  && \
+        pip install --no-cache-dir gunicorn[gevent] && \
         pip cache purge
         
 ADD . .
