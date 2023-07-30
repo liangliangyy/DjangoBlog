@@ -24,6 +24,7 @@ services:
     volumes:
       - ./collectedstatic:/code/djangoblog/collectedstatic
       - ./logs:/code/djangoblog/logs
+      - ./uploads:/code/djangoblog/uploads
     environment:
       - DJANGO_MYSQL_DATABASE=djangoblog
       - DJANGO_MYSQL_USER=root

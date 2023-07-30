@@ -30,6 +30,7 @@ services:
       - "8000:8000"
     volumes:
       - ./collectedstatic:/code/djangoblog/collectedstatic
+      - ./uploads:/code/djangoblog/uploads
     environment:
       - DJANGO_MYSQL_DATABASE=djangoblog
       - DJANGO_MYSQL_USER=root
