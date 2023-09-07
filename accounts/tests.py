@@ -1,11 +1,11 @@
-from django.conf import settings
 from django.test import Client, RequestFactory, TestCase
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
-from djangoblog.utils import *
 from accounts.models import BlogUser
 from blog.models import Article, Category
+from djangoblog.utils import *
 from . import utils
 
 
@@ -39,8 +39,8 @@ class AccountTest(TestCase):
 
         category = Category()
         category.name = "categoryaaa"
-        category.created_time = timezone.now()
-        category.last_mod_time = timezone.now()
+        category.creation_time = timezone.now()
+        category.last_modify_time = timezone.now()
         category.save()
 
         article = Article()
@@ -86,8 +86,8 @@ class AccountTest(TestCase):
         delete_sidebar_cache()
         category = Category()
         category.name = "categoryaaa"
-        category.created_time = timezone.now()
-        category.last_mod_time = timezone.now()
+        category.creation_time = timezone.now()
+        category.last_modify_time = timezone.now()
         category.save()
 
         article = Article()
@@ -191,7 +191,7 @@ class AccountTest(TestCase):
             response=resp,
             form="form",
             field="email",
-            errors="未找到邮箱对应的用户"
+            errors=_("email does not exist")
         )
 
     def test_forget_password_email_code_error(self):
@@ -213,5 +213,5 @@ class AccountTest(TestCase):
             response=resp,
             form="form",
             field="code",
-            errors="验证码错误"
+            errors=_('Verification code error')
         )

@@ -1,9 +1,10 @@
 {% extends 'share_layout/base.html' %}
 {% load blog_tags %}
 {% load cache %}
+{% load i18n %}
 {% block header %}
 
-    <title>文章归档 | {{ SITE_DESCRIPTION }}</title>
+    <title>{% trans 'article archive' %} | {{ SITE_DESCRIPTION }}</title>
 
     <meta name="description" content="{{ SITE_SEO_DESCRIPTION }}"/>
     <meta name="keywords" content="{{ SITE_KEYWORDS }}"/>
@@ -20,7 +21,7 @@
 
             <header class="archive-header">
 
-                <p class="archive-title">文章归档</p>
+                <p class="archive-title">{% trans 'article archive' %}</p>
             </header><!-- .archive-header -->
 
             <div class="entry-content">
@@ -28,11 +29,11 @@
                 {% regroup article_list by pub_time.year as year_post_group %}
                 <ul>
                     {% for year in year_post_group %}
-                        <li>{{ year.grouper }} 年
+                        <li>{{ year.grouper }} {% trans 'year' %}
                             {% regroup year.list by pub_time.month as month_post_group %}
                             <ul>
                                 {% for month in month_post_group %}
-                                    <li>{{ month.grouper }} 月
+                                    <li>{{ month.grouper }} {% trans 'month' %}
                                         <ul>
                                             {% for article in month.list %}
                                                 <li><a href="{{ article.get_absolute_url }}">{{ article.title }}</a>

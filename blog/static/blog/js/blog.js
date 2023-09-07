@@ -42,7 +42,7 @@ function debounce(func, wait) {
 		clearTimeout(timeout);
 		timeout = setTimeout(func, wait);
 	};
-};
+}
 function slideTopSet() {
 	var top = $(document).scrollTop();
 

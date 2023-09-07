@@ -1,7 +1,8 @@
 FROM python:3
 ENV PYTHONUNBUFFERED 1
 WORKDIR /code/djangoblog/
-RUN  apt-get install  default-libmysqlclient-dev -y && \
+RUN  apt-get update && \
+     apt-get install  default-libmysqlclient-dev gettext -y && \
     ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
 ADD requirements.txt requirements.txt
 RUN pip install --upgrade pip  && \

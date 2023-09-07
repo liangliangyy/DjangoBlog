@@ -6,6 +6,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic.edit import FormView
 
+from accounts.models import BlogUser
 from blog.models import Article
 from .forms import CommentForm
 from .models import Comment
@@ -37,7 +38,7 @@ class CommentPostView(FormView):
     def form_valid(self, form):
         """提交的数据验证合法后的逻辑"""
         user = self.request.user
-
+        author = BlogUser.objects.get(pk=user.pk)
         article_id = self.kwargs['article_id']
         article = get_object_or_404(Article, pk=article_id)
 
@@ -49,7 +50,7 @@ class CommentPostView(FormView):
         settings = get_blog_setting()
         if not settings.comment_need_review:
             comment.is_enable = True
-        comment.author = user
+        comment.author = author
 
         if form.cleaned_data['parent_comment_id']:
             parent_comment = Comment.objects.get(

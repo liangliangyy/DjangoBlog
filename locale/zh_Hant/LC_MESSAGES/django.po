@@ -1,0 +1,643 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-09-07 23:54+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: .\accounts\admin.py:13
+msgid "password"
+msgstr ""
+
+#: .\accounts\admin.py:14
+msgid "Enter password again"
+msgstr ""
+
+#: .\accounts\admin.py:25 .\accounts\forms.py:89
+msgid "passwords do not match"
+msgstr ""
+
+#: .\accounts\admin.py:40
+msgid "Password"
+msgstr ""
+
+#: .\accounts\admin.py:42
+msgid ""
+"Raw passwords are not stored, so there is no way to see this user's "
+"password, but you can change the password using <a href=\"{}\">this form</a>."
+msgstr ""
+
+#: .\accounts\forms.py:36
+msgid "email already exists"
+msgstr ""
+
+#: .\accounts\forms.py:46 .\accounts\forms.py:50
+msgid "New password"
+msgstr ""
+
+#: .\accounts\forms.py:60
+msgid "Confirm password"
+msgstr ""
+
+#: .\accounts\forms.py:70 .\accounts\forms.py:116
+msgid "Email"
+msgstr ""
+
+#: .\accounts\forms.py:76 .\accounts\forms.py:80
+msgid "Code"
+msgstr ""
+
+#: .\accounts\forms.py:100 .\accounts\tests.py:194
+msgid "email does not exist"
+msgstr ""
+
+#: .\accounts\models.py:12
+msgid "nick name"
+msgstr ""
+
+#: .\accounts\models.py:13 .\blog\models.py:29 .\blog\models.py:266
+#: .\blog\models.py:284 .\comments\models.py:13 .\oauth\models.py:23
+#: .\oauth\models.py:53
+msgid "creation time"
+msgstr ""
+
+#: .\accounts\models.py:14 .\comments\models.py:14 .\oauth\models.py:24
+#: .\oauth\models.py:54
+msgid "last modify time"
+msgstr ""
+
+#: .\accounts\models.py:15
+msgid "create source"
+msgstr ""
+
+#: .\accounts\models.py:33 .\djangoblog\logentryadmin.py:113
+msgid "user"
+msgstr ""
+
+#: .\accounts\tests.py:216 .\accounts\utils.py:38
+msgid "Verification code error"
+msgstr ""
+
+#: .\accounts\utils.py:13
+msgid "Verify Email"
+msgstr ""
+
+#: .\accounts\utils.py:21
+#, python-brace-format
+msgid ""
+"You are resetting the password, the verification code is：{code}, valid "
+"within 5 minutes, please keep it properly"
+msgstr ""
+
+#: .\blog\admin.py:13 .\blog\models.py:92 .\comments\models.py:17
+#: .\oauth\models.py:12 .\templates\blog\tags\article_meta_info.html:33
+msgid "author"
+msgstr ""
+
+#: .\blog\admin.py:53
+msgid "Publish selected articles"
+msgstr ""
+
+#: .\blog\admin.py:54
+msgid "Draft selected articles"
+msgstr ""
+
+#: .\blog\admin.py:55
+msgid "Close article comments"
+msgstr ""
+
+#: .\blog\admin.py:56
+msgid "Open article comments"
+msgstr ""
+
+#: .\blog\admin.py:89 .\blog\models.py:101 .\blog\models.py:183
+#: .\templates\blog\tags\article_meta_info.html:17
+#: .\templates\blog\tags\sidebar.html:40
+msgid "category"
+msgstr ""
+
+#: .\blog\models.py:20 .\blog\models.py:179
+msgid "index"
+msgstr ""
+
+#: .\blog\models.py:21
+msgid "list"
+msgstr ""
+
+#: .\blog\models.py:22
+msgid "post"
+msgstr ""
+
+#: .\blog\models.py:23
+msgid "all"
+msgstr ""
+
+#: .\blog\models.py:24
+msgid "slide"
+msgstr ""
+
+#: .\blog\models.py:30 .\blog\models.py:267 .\blog\models.py:285
+msgid "modify time"
+msgstr ""
+
+#: .\blog\models.py:63
+msgid "Draft"
+msgstr ""
+
+#: .\blog\models.py:64
+msgid "Published"
+msgstr ""
+
+#: .\blog\models.py:67
+msgid "Open"
+msgstr ""
+
+#: .\blog\models.py:68
+msgid "Close"
+msgstr ""
+
+#: .\blog\models.py:71 .\comments\admin.py:47
+msgid "Article"
+msgstr ""
+
+#: .\blog\models.py:72
+msgid "Page"
+msgstr ""
+
+#: .\blog\models.py:74 .\blog\models.py:280
+msgid "title"
+msgstr ""
+
+#: .\blog\models.py:75
+msgid "body"
+msgstr ""
+
+#: .\blog\models.py:77
+msgid "publish time"
+msgstr ""
+
+#: .\blog\models.py:79
+msgid "status"
+msgstr ""
+
+#: .\blog\models.py:84
+msgid "comment status"
+msgstr ""
+
+#: .\blog\models.py:88 .\oauth\models.py:43
+msgid "type"
+msgstr ""
+
+#: .\blog\models.py:89
+msgid "views"
+msgstr ""
+
+#: .\blog\models.py:97 .\blog\models.py:258 .\blog\models.py:282
+msgid "order"
+msgstr ""
+
+#: .\blog\models.py:98
+msgid "show toc"
+msgstr ""
+
+#: .\blog\models.py:105 .\blog\models.py:249
+#: .\templates\blog\tags\article_meta_info.html:22
+msgid "tag"
+msgstr ""
+
+#: .\blog\models.py:115 .\comments\models.py:21
+msgid "article"
+msgstr ""
+
+#: .\blog\models.py:171
+msgid "category name"
+msgstr ""
+
+#: .\blog\models.py:174
+msgid "parent category"
+msgstr ""
+
+#: .\blog\models.py:234
+msgid "tag name"
+msgstr ""
+
+#: .\blog\models.py:256
+msgid "link name"
+msgstr ""
+
+#: .\blog\models.py:257 .\blog\models.py:271
+msgid "link"
+msgstr ""
+
+#: .\blog\models.py:260
+msgid "is show"
+msgstr ""
+
+#: .\blog\models.py:262
+msgid "show type"
+msgstr ""
+
+#: .\blog\models.py:281
+msgid "content"
+msgstr ""
+
+#: .\blog\models.py:283 .\oauth\models.py:52
+msgid "is enable"
+msgstr ""
+
+#: .\blog\models.py:289
+msgid "sidebar"
+msgstr ""
+
+#: .\blog\models.py:299
+msgid "site name"
+msgstr ""
+
+#: .\blog\models.py:305
+msgid "site description"
+msgstr ""
+
+#: .\blog\models.py:311
+msgid "site seo description"
+msgstr ""
+
+#: .\blog\models.py:313
+msgid "site keywords"
+msgstr ""
+
+#: .\blog\models.py:318
+msgid "article sub length"
+msgstr ""
+
+#: .\blog\models.py:319
+msgid "sidebar article count"
+msgstr ""
+
+#: .\blog\models.py:320
+msgid "sidebar comment count"
+msgstr ""
+
+#: .\blog\models.py:321
+msgid "article comment count"
+msgstr ""
+
+#: .\blog\models.py:322
+msgid "show adsense"
+msgstr ""
+
+#: .\blog\models.py:324
+msgid "adsense code"
+msgstr ""
+
+#: .\blog\models.py:325
+msgid "open site comment"
+msgstr ""
+
+#: .\blog\models.py:360
+msgid "只能有一个配置"
+msgstr ""
+
+#: .\blog\views.py:349
+msgid ""
+"Sorry, the page you requested is not found, please click the home page to "
+"see other?"
+msgstr ""
+
+#: .\blog\views.py:357
+msgid "Sorry, the server is busy, please click the home page to see other?"
+msgstr ""
+
+#: .\blog\views.py:370
+msgid "Sorry, you do not have permission to access this page?"
+msgstr ""
+
+#: .\comments\admin.py:15
+msgid "Disable comments"
+msgstr ""
+
+#: .\comments\admin.py:16
+msgid "Enable comments"
+msgstr ""
+
+#: .\comments\admin.py:46
+msgid "User"
+msgstr ""
+
+#: .\comments\models.py:25
+msgid "parent comment"
+msgstr ""
+
+#: .\comments\models.py:29
+msgid "enable"
+msgstr ""
+
+#: .\comments\models.py:34 .\templates\blog\tags\article_info.html:30
+msgid "comment"
+msgstr ""
+
+#: .\comments\utils.py:13
+msgid "Thanks for your comment"
+msgstr ""
+
+#: .\comments\utils.py:15
+#, python-brace-format
+msgid ""
+"\n"
+"                    <p>Thank you very much for your comments on this site</"
+"p>\n"
+"                    You can visit\n"
+"                    <a href=\"{article_url}\" rel=\"bookmark\">{comment."
+"article.title}</a>\n"
+"                    to review your comments,\n"
+"                    Thank you again!\n"
+"                    <br />\n"
+"                    If the link above cannot be opened, please copy this "
+"link to your browser.\n"
+"                    {article_url}\n"
+"                   "
+msgstr ""
+
+#: .\comments\utils.py:29
+#, python-brace-format
+msgid ""
+"\n"
+"                   Your comment on <a href=\"{article_url}\" rel=\"bookmark"
+"\">{comment.article.title}</a><br/> {comment.parent_comment.body} <br/> has "
+"received a reply. go check it out\n"
+"                     <br/>\n"
+"                     If the link above cannot be opened, please copy this "
+"link to your browser.\n"
+"                     {article_url}\n"
+"                    "
+msgstr ""
+
+#: .\djangoblog\logentryadmin.py:11
+msgctxt "logentry_admin:action_type"
+msgid "Addition"
+msgstr ""
+
+#: .\djangoblog\logentryadmin.py:12
+msgctxt "logentry_admin:action_type"
+msgid "Deletion"
+msgstr ""
+
+#: .\djangoblog\logentryadmin.py:13
+msgctxt "logentry_admin:action_type"
+msgid "Change"
+msgstr ""
+
+#: .\djangoblog\logentryadmin.py:25
+msgid "Metadata"
+msgstr ""
+
+#: .\djangoblog\logentryadmin.py:33
+msgid "Details"
+msgstr ""
+
+#: .\djangoblog\logentryadmin.py:95
+msgid "object"
+msgstr ""
+
+#: .\djangoblog\logentryadmin.py:128
+msgid "action"
+msgstr ""
+
+#: .\djangoblog\logentryadmin.py:133
+msgid "change message"
+msgstr ""
+
+#: .\djangoblog\settings.py:140
+msgid "English"
+msgstr ""
+
+#: .\djangoblog\settings.py:141
+msgid "Simplified Chinese"
+msgstr ""
+
+#: .\djangoblog\settings.py:142
+msgid "Traditional Chinese"
+msgstr ""
+
+#: .\oauth\models.py:17
+msgid "nickname"
+msgstr ""
+
+#: .\oauth\models.py:30
+msgid "oauth user"
+msgstr ""
+
+#: .\oauth\models.py:37
+msgid "weibo"
+msgstr ""
+
+#: .\oauth\models.py:38
+msgid "google"
+msgstr ""
+
+#: .\oauth\models.py:48
+msgid "callback url"
+msgstr ""
+
+#: .\oauth\models.py:59
+msgid "already exists"
+msgstr ""
+
+#: .\oauth\views.py:154
+msgid ""
+"\n"
+"     <p>Congratulations, you have successfully bound your email address. You "
+"can use {oauthuser.type} to directly log in to this website without a "
+"password. You are welcome to continue to follow this site, the address is</"
+"p>\n"
+"\n"
+"                 <a href=\"{'http://' + site}\" rel=\"bookmark\">{'http://' "
+"+ site}</a>\n"
+"\n"
+"                 Thank you again!\n"
+"                 <br />\n"
+"                 If the link above cannot be opened, please copy this link "
+"to your browser.\n"
+"                 {site}\n"
+"    "
+msgstr ""
+
+#: .\oauth\views.py:165
+msgid "Congratulations on your successful binding!"
+msgstr ""
+
+#: .\oauth\views.py:217
+#, python-brace-format
+msgid ""
+"\n"
+"               <p>Please click the link below to bind your email</p>\n"
+"\n"
+"                 <a href=\"{url}\" rel=\"bookmark\">{url}</a>\n"
+"\n"
+"                 Thank you again!\n"
+"                 <br />\n"
+"                 If the link above cannot be opened, please copy this link "
+"to your browser.\n"
+"                 {url}\n"
+"                "
+msgstr ""
+
+#: .\oauth\views.py:227 .\oauth\views.py:239
+msgid "Bind your email"
+msgstr ""
+
+#: .\oauth\views.py:241
+msgid ""
+"Congratulations, the binding is just one step away. Please log in to your "
+"email to check the email to complete the binding. Thank you."
+msgstr ""
+
+#: .\oauth\views.py:243
+msgid "Binding successful"
+msgstr ""
+
+#: .\oauth\views.py:245
+#, python-brace-format
+msgid ""
+"Congratulations, you have successfully bound your email address. You can use "
+"{oauthuser.type} to directly log in to this website without a password. You "
+"are welcome to continue to follow this site."
+msgstr ""
+
+#: .\templates\account\forget_password.html:7
+msgid "forget the password"
+msgstr ""
+
+#: .\templates\account\forget_password.html:18
+msgid "get verification code"
+msgstr ""
+
+#: .\templates\account\forget_password.html:19
+msgid "submit"
+msgstr ""
+
+#: .\templates\account\result.html:18 .\templates\blog\tags\sidebar.html:126
+msgid "login"
+msgstr ""
+
+#: .\templates\account\result.html:22
+msgid "back to the homepage"
+msgstr ""
+
+#: .\templates\blog\article_archives.html:7
+#: .\templates\blog\article_archives.html:24
+msgid "article archive"
+msgstr ""
+
+#: .\templates\blog\article_archives.html:32
+msgid "year"
+msgstr ""
+
+#: .\templates\blog\article_archives.html:36
+msgid "month"
+msgstr ""
+
+#: .\templates\blog\tags\article_info.html:12
+msgid "pin to top"
+msgstr ""
+
+#: .\templates\blog\tags\article_info.html:28
+msgid "comments"
+msgstr ""
+
+#: .\templates\blog\tags\article_info.html:58
+msgid "toc"
+msgstr ""
+
+#: .\templates\blog\tags\article_meta_info.html:7
+msgid "Published on"
+msgstr "发表于"
+
+#: .\templates\blog\tags\article_meta_info.html:36
+#, python-format
+msgid ""
+"\n"
+"               title=\"View all articles published by "
+"%(article.author.username)s\"\n"
+"                    "
+msgstr ""
+
+#: .\templates\blog\tags\article_meta_info.html:50
+msgid "edit"
+msgstr ""
+
+#: .\templates\blog\tags\article_pagination.html:4
+msgid "article navigation"
+msgstr ""
+
+#: .\templates\blog\tags\article_pagination.html:9
+msgid "earlier articles"
+msgstr ""
+
+#: .\templates\blog\tags\article_pagination.html:12
+msgid "newer articles"
+msgstr ""
+
+#: .\templates\blog\tags\article_tag_list.html:5
+msgid "tags"
+msgstr ""
+
+#: .\templates\blog\tags\sidebar.html:7
+msgid "search"
+msgstr ""
+
+#: .\templates\blog\tags\sidebar.html:50
+msgid "recent comments"
+msgstr ""
+
+#: .\templates\blog\tags\sidebar.html:57
+msgid "published in"
+msgstr ""
+
+#: .\templates\blog\tags\sidebar.html:65
+msgid "recent articles"
+msgstr ""
+
+#: .\templates\blog\tags\sidebar.html:77
+msgid "bookmark"
+msgstr ""
+
+#: .\templates\blog\tags\sidebar.html:96
+msgid "Tag Cloud"
+msgstr ""
+
+#: .\templates\blog\tags\sidebar.html:107
+msgid "Welcome to star or fork the source code of this site"
+msgstr ""
+
+#: .\templates\blog\tags\sidebar.html:118
+msgid "Function"
+msgstr ""
+
+#: .\templates\blog\tags\sidebar.html:120
+msgid "management site"
+msgstr ""
+
+#: .\templates\blog\tags\sidebar.html:122
+msgid "logout"
+msgstr ""
+
+#: .\templates\blog\tags\sidebar.html:129
+msgid "Track record"
+msgstr ""
+
+#: .\templates\blog\tags\sidebar.html:135
+msgid "Click me to return to the top"
+msgstr ""

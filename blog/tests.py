@@ -46,7 +46,7 @@ class ArticleTest(TestCase):
 
         category = Category()
         category.name = "category"
-        category.created_time = timezone.now()
+        category.creation_time = timezone.now()
         category.last_mod_time = timezone.now()
         category.save()
 
@@ -105,19 +105,19 @@ class ArticleTest(TestCase):
         response = self.client.get(reverse('blog:archives'))
         self.assertEqual(response.status_code, 200)
 
-        p = Paginator(Article.objects.all(), 2)
-        self.__check_pagination__(p, '', '')
+        p = Paginator(Article.objects.all(), settings.PAGINATE_BY)
+        self.check_pagination(p, '', '')
 
-        p = Paginator(Article.objects.filter(tags=tag), 2)
-        self.__check_pagination__(p, '分类标签归档', tag.slug)
+        p = Paginator(Article.objects.filter(tags=tag), settings.PAGINATE_BY)
+        self.check_pagination(p, '分类标签归档', tag.slug)
 
         p = Paginator(
             Article.objects.filter(
-                author__username='liangliangyy'), 2)
-        self.__check_pagination__(p, '作者文章归档', 'liangliangyy')
+                author__username='liangliangyy'), settings.PAGINATE_BY)
+        self.check_pagination(p, '作者文章归档', 'liangliangyy')
 
-        p = Paginator(Article.objects.filter(category=category), 2)
-        self.__check_pagination__(p, '分类目录归档', category.slug)
+        p = Paginator(Article.objects.filter(category=category), settings.PAGINATE_BY)
+        self.check_pagination(p, '分类目录归档', category.slug)
 
         f = BlogSearchForm()
         f.search()
@@ -148,20 +148,16 @@ class ArticleTest(TestCase):
         self.client.get('/admin/admin/logentry/')
         self.client.get('/admin/admin/logentry/1/change/')
 
-    def __check_pagination__(self, p, type, value):
-        s = load_pagination_info(p.page(1), type, value)
-        self.assertIsNotNone(s)
-        response = self.client.get(s['previous_url'])
-        self.assertEqual(response.status_code, 200)
-        response = self.client.get(s['next_url'])
-        self.assertEqual(response.status_code, 200)
-
-        s = load_pagination_info(p.page(2), type, value)
-        self.assertIsNotNone(s)
-        response = self.client.get(s['previous_url'])
-        self.assertEqual(response.status_code, 200)
-        response = self.client.get(s['next_url'])
-        self.assertEqual(response.status_code, 200)
+    def check_pagination(self, p, type, value):
+        for page in range(1, p.num_pages + 1):
+            s = load_pagination_info(p.page(page), type, value)
+            self.assertIsNotNone(s)
+            if s['previous_url']:
+                response = self.client.get(s['previous_url'])
+                self.assertEqual(response.status_code, 200)
+            if s['next_url']:
+                response = self.client.get(s['next_url'])
+                self.assertEqual(response.status_code, 200)
 
     def test_image(self):
         import requests

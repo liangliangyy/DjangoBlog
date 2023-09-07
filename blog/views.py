@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.templatetags.static import static
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
@@ -92,6 +93,11 @@ class IndexView(ArticleListView):
     '''
     # 友情链接类型
     link_type = LinkShowType.I
+
+    def dispatch(self, request, *args, **kwargs):
+        from django.utils.translation import get_language
+        print(get_language())
+        return super(IndexView, self).dispatch(request, *args, **kwargs)
 
     def get_queryset_data(self):
         article_list = Article.objects.filter(type='a', status='p')
@@ -344,7 +350,7 @@ def page_not_found_view(
     url = request.get_full_path()
     return render(request,
                   template_name,
-                  {'message': '哎呀，您访问的地址 ' + url + ' 是一个未知的地方。请点击首页看看别的？',
+                  {'message': _('Sorry, the page you requested is not found, please click the home page to see other?'),
                    'statuscode': '404'},
                   status=404)
 
@@ -352,7 +358,7 @@ def page_not_found_view(
 def server_error_view(request, template_name='blog/error_page.html'):
     return render(request,
                   template_name,
-                  {'message': '哎呀，出错了，我已经收集到了错误信息，之后会抓紧抢修，请点击首页看看别的？',
+                  {'message': _('Sorry, the server is busy, please click the home page to see other?'),
                    'statuscode': '500'},
                   status=500)
 
@@ -365,4 +371,5 @@ def permission_denied_view(
         logger.error(exception)
     return render(
         request, template_name, {
-            'message': '哎呀，您没有权限访问此页面，请点击首页看看别的？', 'statuscode': '403'}, status=403)
+            'message': _('Sorry, you do not have permission to access this page?'),
+            'statuscode': '403'}, status=403)

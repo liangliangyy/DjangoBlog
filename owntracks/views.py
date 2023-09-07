@@ -59,7 +59,7 @@ def show_maps(request):
 
 @login_required
 def show_log_dates(request):
-    dates = OwnTrackLog.objects.values_list('created_time', flat=True)
+    dates = OwnTrackLog.objects.values_list('creation_time', flat=True)
     results = list(sorted(set(map(lambda x: x.strftime('%Y-%m-%d'), dates))))
 
     context = {
@@ -108,7 +108,7 @@ def get_datas(request):
     querydate = django.utils.timezone.make_aware(querydate)
     nextdate = querydate + datetime.timedelta(days=1)
     models = OwnTrackLog.objects.filter(
-        created_time__range=(querydate, nextdate))
+        creation_time__range=(querydate, nextdate))
     result = list()
     if models and len(models):
         for tid, item in groupby(

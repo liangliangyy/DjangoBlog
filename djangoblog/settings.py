@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 import os
 import sys
 
+from django.utils.translation import gettext_lazy as _
+
 
 def env_to_bool(env, default):
     str_val = os.environ.get(env)
@@ -62,8 +64,10 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.gzip.GZipMiddleware',
     # 'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -132,8 +136,14 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internationalization
-# https://docs.djangoproject.com/en/1.10/topics/i18n/
+LANGUAGES = (
+    ('en', _('English')),
+    ('zh-hans', _('Simplified Chinese')),
+    ('zh-hant', _('Traditional Chinese')),
+)
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale'),
+)
 
 LANGUAGE_CODE = 'zh-hans'
 
@@ -182,13 +192,13 @@ PAGINATE_BY = 10
 # http cache timeout
 CACHE_CONTROL_MAX_AGE = 2592000
 # cache setting
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'TIMEOUT': 10800,
-        'LOCATION': 'unique-snowflake',
-    }
-}
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+#         'TIMEOUT': 10800,
+#         'LOCATION': 'unique-snowflake',
+#     }
+# }
 # 使用redis作为缓存
 if os.environ.get("DJANGO_REDIS_URL"):
     CACHES = {
