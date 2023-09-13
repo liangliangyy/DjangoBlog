@@ -349,7 +349,7 @@ class BlogSettings(models.Model):
         '评论是否需要审核', default=False, null=False)
 
     class Meta:
-        verbose_name = '网站配置'
+        verbose_name = _('Website configuration')
         verbose_name_plural = verbose_name
 
     def __str__(self):
@@ -357,7 +357,7 @@ class BlogSettings(models.Model):
 
     def clean(self):
         if BlogSettings.objects.exclude(id=self.id).count():
-            raise ValidationError(_('只能有一个配置'))
+            raise ValidationError(_('There can only be one configuration'))
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)

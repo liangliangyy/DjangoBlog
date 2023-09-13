@@ -1,36 +1,29 @@
-{% load blog_tags %}
-{% load cache %}
 {% load i18n %}
-{% with article.id|add:user.is_authenticated as cachekey %}
-    {% cache 36000 metainfo cachekey %}
-        <footer class="entry-meta">
-            {% trans 'Published on' %}<a href="{{ article.get_absolute_url }}"
-                                         title="{% datetimeformat article.pub_time %}"
-                                         itemprop="datePublished" content="{% datetimeformat article.pub_time %}"
-                                         rel="bookmark">
-
-            <time class="entry-date updated"
-                  datetime="{{ article.pub_time }}">
-                {% datetimeformat article.pub_time %}</time>
-        </a>。
-            {% if article.type == 'a' %}
-                {% trans 'category' %}:
-                <a href="{{ article.category.get_absolute_url }}" rel="category tag">{{ article.category.name }}</a>
-
-                {% if article.tags.all %}
-
-                    {% trans 'tag' %}
-                    {% for t in article.tags.all %}
-                        <a href="{{ t.get_absolute_url }}" rel="tag">{{ t.name }}</a>
-                        {% if t != article.tags.all.last %}
-                            ，
-                        {% endif %}
-                    {% endfor %}
+{% load blog_tags %}
 
 
+<footer class="entry-meta">
+    {% trans 'posted in' %}
+    <a href="{{ article.category.get_absolute_url }}" rel="category tag">{{ article.category.name }}</a>
+
+
+    </a>
+    {% if article.type == 'a' %}
+        {% if article.tags.all %}
+
+            {% trans 'and tagged' %}
+            {% for t in article.tags.all %}
+                <a href="{{ t.get_absolute_url }}" rel="tag">{{ t.name }}</a>
+                {% if t != article.tags.all.last %}
+                    ,
                 {% endif %}
-            {% endif %}
-            <span class="by-author">{% trans 'author' %}
+            {% endfor %}
+
+
+        {% endif %}
+    {% endif %}
+    .{% trans 'by ' %}
+    <span class="by-author">
         <span class="author vcard">
             <a class="url fn n" href="{{ article.author.get_absolute_url }}"
                     {% blocktranslate %}
@@ -45,12 +38,22 @@
         </span>
             </span>
     </a>
-        </span>。
-                {% if user.is_superuser %}
-                    <a href="{{ article.get_admin_url }}">{% trans 'edit' %}</a>
-                {% endif %}
-    </span>
-        </footer><!-- .entry-meta -->
 
-    {% endcache %}
-{% endwith %}
+
+        </span>
+{% trans 'on' %}
+     <a href="{{ article.get_absolute_url }}"
+        title="{% datetimeformat article.pub_time %}"
+        itemprop="datePublished" content="{% datetimeformat article.pub_time %}"
+        rel="bookmark">
+
+    <time class="entry-date updated"
+          datetime="{{ article.pub_time }}">
+        {% datetimeformat article.pub_time %}</time>
+         {% if user.is_superuser %}
+             <a href="{{ article.get_admin_url }}">{% trans 'edit' %}</a>
+         {% endif %}
+    </span>
+</footer><!-- .entry-meta -->
+
+

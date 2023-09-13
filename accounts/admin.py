@@ -1,6 +1,5 @@
 from django import forms
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.forms import UsernameField
 from django.utils.translation import gettext_lazy as _
@@ -36,16 +35,6 @@ class BlogUserCreationForm(forms.ModelForm):
 
 
 class BlogUserChangeForm(UserChangeForm):
-    password = ReadOnlyPasswordHashField(
-        label=_("Password"),
-        help_text=_(
-            "Raw passwords are not stored, so there is no way to see this "
-            "user's password, but you can change the password using "
-            "<a href=\"{}\">this form</a>."
-        ),
-    )
-    email = forms.EmailField(label="Email", widget=forms.EmailInput)
-
     class Meta:
         model = BlogUser
         fields = '__all__'

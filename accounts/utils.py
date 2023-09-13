@@ -2,8 +2,8 @@ import typing
 from datetime import timedelta
 
 from django.core.cache import cache
-from django.utils.translation import gettext_lazy as _
 from django.utils.translation import gettext
+from django.utils.translation import gettext_lazy as _
 
 from djangoblog.utils import send_email
 
@@ -18,7 +18,8 @@ def send_verify_email(to_mail: str, code: str, subject: str = _("Verify Email"))
         code: 验证码
     """
     html_content = _(
-        f"You are resetting the password, the verification code is：{code}, valid within 5 minutes, please keep it properly")
+        "You are resetting the password, the verification code is：%(code)s, valid within 5 minutes, please keep it "
+        "properly") % {'code': code}
     send_email([to_mail], subject, html_content)
 
 

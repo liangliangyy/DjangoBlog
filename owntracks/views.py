@@ -5,12 +5,14 @@ import json
 import logging
 from itertools import groupby
 
+import django.utils.timezone
 import requests
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.utils import timezone
+from django.utils.timezone import utc
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import OwnTrackLog
@@ -95,9 +97,6 @@ def convert_to_amap(locations):
 
 @login_required
 def get_datas(request):
-    import django.utils.timezone
-    from django.utils.timezone import utc
-
     now = django.utils.timezone.now().replace(tzinfo=utc)
     querydate = django.utils.timezone.datetime(
         now.year, now.month, now.day, 0, 0, 0)
@@ -118,7 +117,7 @@ def get_datas(request):
             d["name"] = tid
             paths = list()
             locations = convert_to_amap(
-                sorted(item, key=lambda x: x.created_time))
+                sorted(item, key=lambda x: x.creation_time))
             for i in locations.split(';'):
                 paths.append(i.split(','))
             d["path"] = paths

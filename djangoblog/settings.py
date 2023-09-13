@@ -192,13 +192,13 @@ PAGINATE_BY = 10
 # http cache timeout
 CACHE_CONTROL_MAX_AGE = 2592000
 # cache setting
-# CACHES = {
-#     'default': {
-#         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-#         'TIMEOUT': 10800,
-#         'LOCATION': 'unique-snowflake',
-#     }
-# }
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'TIMEOUT': 10800,
+        'LOCATION': 'unique-snowflake',
+    }
+}
 # 使用redis作为缓存
 if os.environ.get("DJANGO_REDIS_URL"):
     CACHES = {

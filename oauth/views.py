@@ -151,16 +151,16 @@ def emailconfirm(request, id, sign):
     login(request, author)
 
     site = 'http://' + get_current_site().domain
-    content = _(f'''
-     <p>Congratulations, you have successfully bound your email address. You can use {oauthuser.type} to directly log in to this website without a password. You are welcome to continue to follow this site, the address is</p>
-
-                 <a href="{'http://' + site}" rel="bookmark">{'http://' + site}</a>
-
-                 Thank you again!
-                 <br />
-                 If the link above cannot be opened, please copy this link to your browser.
-                 {site}
-    ''')
+    content = _('''
+     <p>Congratulations, you have successfully bound your email address. You can use
+      %(oauthuser_type)s to directly log in to this website without a password.</p>
+       You are welcome to continue to follow this site, the address is
+        <a href="%(site)s" rel="bookmark">%(site)s</a>
+            Thank you again!
+            <br />
+        If the link above cannot be opened, please copy this link to your browser.
+        %(site)s
+    ''') % {'oauthuser_type': oauthuser.type, 'site': site}
 
     send_email(emailto=[oauthuser.email, ], title=_('Congratulations on your successful binding!'), content=content)
     url = reverse('oauth:bindsuccess', kwargs={
@@ -214,16 +214,17 @@ class RequireEmailView(FormView):
         })
         url = "http://{site}{path}".format(site=site, path=path)
 
-        content = _(f"""
+        content = _("""
                <p>Please click the link below to bind your email</p>
 
-                 <a href="{url}" rel="bookmark">{url}</a>
+                 <a href="%(url)s" rel="bookmark">%(url)s</a>
 
                  Thank you again!
                  <br />
                  If the link above cannot be opened, please copy this link to your browser.
-                 {url}
-                """)
+                  <br />
+                 %(url)s
+                """) % {'url': url}
         send_email(emailto=[email, ], title=_('Bind your email'), content=content)
         url = reverse('oauth:bindsuccess', kwargs={
             'oauthid': oauthid
@@ -238,11 +239,14 @@ def bindsuccess(request, oauthid):
     if type == 'email':
         title = _('Bind your email')
         content = _(
-            'Congratulations, the binding is just one step away. Please log in to your email to check the email to complete the binding. Thank you.')
+            'Congratulations, the binding is just one step away. '
+            'Please log in to your email to check the email to complete the binding. Thank you.')
     else:
         title = _('Binding successful')
         content = _(
-            f"Congratulations, you have successfully bound your email address. You can use {oauthuser.type} to directly log in to this website without a password. You are welcome to continue to follow this site.")
+            "Congratulations, you have successfully bound your email address. You can use %(oauthuser_type)s"
+            " to directly log in to this website without a password. You are welcome to continue to follow this site." % {
+                'oauthuser_type': oauthuser.type})
     return render(request, 'oauth/bindsuccess.html', {
         'title': title,
         'content': content

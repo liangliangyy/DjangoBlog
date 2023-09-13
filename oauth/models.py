@@ -14,7 +14,7 @@ class OAuthUser(models.Model):
         null=True,
         on_delete=models.CASCADE)
     openid = models.CharField(max_length=50)
-    nickname = models.CharField(max_length=50, verbose_name=_('nickname'))
+    nickname = models.CharField(max_length=50, verbose_name=_('nick name'))
     token = models.CharField(max_length=150, null=True, blank=True)
     picture = models.CharField(max_length=350, blank=True, null=True)
     type = models.CharField(blank=False, null=False, max_length=50)

@@ -94,11 +94,6 @@ class IndexView(ArticleListView):
     # 友情链接类型
     link_type = LinkShowType.I
 
-    def dispatch(self, request, *args, **kwargs):
-        from django.utils.translation import get_language
-        print(get_language())
-        return super(IndexView, self).dispatch(request, *args, **kwargs)
-
     def get_queryset_data(self):
         article_list = Article.objects.filter(type='a', status='p')
         return article_list
@@ -373,3 +368,8 @@ def permission_denied_view(
         request, template_name, {
             'message': _('Sorry, you do not have permission to access this page?'),
             'statuscode': '403'}, status=403)
+
+
+def clean_cache_view(request):
+    cache.clear()
+    return HttpResponse('ok')
