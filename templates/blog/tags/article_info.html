@@ -1,5 +1,6 @@
 {% load blog_tags %}
 {% load cache %}
+{% load i18n %}
 <article id="post-{{ article.pk }} "
          class="post-{{ article.pk }} post type-post status-publish format-standard hentry">
     <header class="entry-header">
@@ -8,7 +9,7 @@
             {% if  isindex %}
                 {% if article.article_order > 0 %}
                     <a href="{{ article.get_absolute_url }}"
-                       rel="bookmark">【置顶】{{ article.title }}</a>
+                       rel="bookmark">【{% trans 'pin to top' %}】{{ article.title }}</a>
                 {% else %}
                     <a href="{{ article.get_absolute_url }}"
                        rel="bookmark">{{ article.title }}</a>
@@ -24,9 +25,9 @@
                    rel="nofollow">
                     <span class="leave-reply">
                     {% if article.comment_set and article.comment_set.count %}
-                        {{ article.comment_set.count }}个评论
+                        {{ article.comment_set.count }} {% trans 'comments' %}
                     {% else %}
-                        发表评论
+                        {% trans 'comment' %}
                     {% endif %}
                     </span>
                 </a>
@@ -54,14 +55,14 @@
 
             {% if article.show_toc %}
                 {% get_markdown_toc article.body as toc %}
-                <b>目录:</b>
+                <b>{% trans 'toc' %}:</b>
                 {{ toc|safe }}
 
                 <hr class="break_line"/>
             {% endif %}
             <div class="article">
 
-                    {{ article.body|custom_markdown|escape }}
+                {{ article.body|custom_markdown|escape }}
 
             </div>
         {% endif %}

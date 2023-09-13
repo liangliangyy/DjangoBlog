@@ -9,54 +9,54 @@ from django.utils.translation import gettext_lazy as _
 class OAuthUser(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        verbose_name='用户',
+        verbose_name=_('author'),
         blank=True,
         null=True,
         on_delete=models.CASCADE)
     openid = models.CharField(max_length=50)
-    nickname = models.CharField(max_length=50, verbose_name='昵称')
+    nickname = models.CharField(max_length=50, verbose_name=_('nick name'))
     token = models.CharField(max_length=150, null=True, blank=True)
     picture = models.CharField(max_length=350, blank=True, null=True)
     type = models.CharField(blank=False, null=False, max_length=50)
     email = models.CharField(max_length=50, null=True, blank=True)
     metadata = models.TextField(null=True, blank=True)
-    created_time = models.DateTimeField('创建时间', default=now)
-    last_mod_time = models.DateTimeField('修改时间', default=now)
+    creation_time = models.DateTimeField(_('creation time'), default=now)
+    last_modify_time = models.DateTimeField(_('last modify time'), default=now)
 
     def __str__(self):
         return self.nickname
 
     class Meta:
-        verbose_name = 'oauth用户'
+        verbose_name = _('oauth user')
         verbose_name_plural = verbose_name
-        ordering = ['-created_time']
+        ordering = ['-creation_time']
 
 
 class OAuthConfig(models.Model):
     TYPE = (
-        ('weibo', '微博'),
-        ('google', '谷歌'),
+        ('weibo', _('weibo')),
+        ('google', _('google')),
         ('github', 'GitHub'),
         ('facebook', 'FaceBook'),
         ('qq', 'QQ'),
     )
-    type = models.CharField('类型', max_length=10, choices=TYPE, default='a')
+    type = models.CharField(_('type'), max_length=10, choices=TYPE, default='a')
     appkey = models.CharField(max_length=200, verbose_name='AppKey')
     appsecret = models.CharField(max_length=200, verbose_name='AppSecret')
     callback_url = models.CharField(
         max_length=200,
-        verbose_name='回调地址',
+        verbose_name=_('callback url'),
         blank=False,
-        default='http://www.baidu.com')
+        default='')
     is_enable = models.BooleanField(
-        '是否显示', default=True, blank=False, null=False)
-    created_time = models.DateTimeField('创建时间', default=now)
-    last_mod_time = models.DateTimeField('修改时间', default=now)
+        _('is enable'), default=True, blank=False, null=False)
+    creation_time = models.DateTimeField(_('creation time'), default=now)
+    last_modify_time = models.DateTimeField(_('last modify time'), default=now)
 
     def clean(self):
         if OAuthConfig.objects.filter(
                 type=self.type).exclude(id=self.id).count():
-            raise ValidationError(_(self.type + '已经存在'))
+            raise ValidationError(_(self.type + _('already exists')))
 
     def __str__(self):
         return self.type
@@ -64,4 +64,4 @@ class OAuthConfig(models.Model):
     class Meta:
         verbose_name = 'oauth配置'
         verbose_name_plural = verbose_name
-        ordering = ['-created_time']
+        ordering = ['-creation_time']

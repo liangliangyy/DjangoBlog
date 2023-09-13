@@ -1,6 +1,5 @@
-from django.test import Client, RequestFactory, TestCase
+from django.test import Client, RequestFactory, TransactionTestCase
 from django.urls import reverse
-from django.utils import timezone
 
 from accounts.models import BlogUser
 from blog.models import Category, Article
@@ -11,7 +10,7 @@ from djangoblog.utils import get_max_articleid_commentid
 
 # Create your tests here.
 
-class CommentsTest(TestCase):
+class CommentsTest(TransactionTestCase):
     def setUp(self):
         self.client = Client()
         self.factory = RequestFactory()
@@ -20,6 +19,11 @@ class CommentsTest(TestCase):
         value.comment_need_review = True
         value.save()
 
+        self.user = BlogUser.objects.create_superuser(
+            email="liangliangyy1@gmail.com",
+            username="liangliangyy1",
+            password="liangliangyy1")
+
     def update_article_comment_status(self, article):
         comments = article.comment_set.all()
         for comment in comments:
@@ -27,23 +31,16 @@ class CommentsTest(TestCase):
             comment.save()
 
     def test_validate_comment(self):
-        user = BlogUser.objects.create_superuser(
-            email="liangliangyy1@gmail.com",
-            username="liangliangyy1",
-            password="liangliangyy1")
-
         self.client.login(username='liangliangyy1', password='liangliangyy1')
 
         category = Category()
         category.name = "categoryccc"
-        category.created_time = timezone.now()
-        category.last_mod_time = timezone.now()
         category.save()
 
         article = Article()
         article.title = "nicetitleccc"
         article.body = "nicecontentccc"
-        article.author = user
+        article.author = self.user
         article.category = category
         article.type = 'a'
         article.status = 'p'

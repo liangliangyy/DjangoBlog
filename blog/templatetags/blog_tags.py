@@ -146,7 +146,7 @@ def load_sidebar(user, linktype):
             is_enable=True).order_by('sequence')
         most_read_articles = Article.objects.filter(status='p').order_by(
             '-views')[:blogsetting.sidebar_article_count]
-        dates = Article.objects.datetimes('created_time', 'month', order='DESC')
+        dates = Article.objects.datetimes('creation_time', 'month', order='DESC')
         links = Links.objects.filter(is_enable=True).filter(
             Q(show_type=str(linktype)) | Q(show_type=LinkShowType.A))
         commment_list = Comment.objects.filter(is_enable=True).order_by(

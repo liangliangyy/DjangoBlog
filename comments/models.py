@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.utils.timezone import now
+from django.utils.translation import gettext_lazy as _
 
 from blog.models import Article
 
@@ -9,28 +10,28 @@ from blog.models import Article
 
 class Comment(models.Model):
     body = models.TextField('正文', max_length=300)
-    created_time = models.DateTimeField('创建时间', default=now)
-    last_mod_time = models.DateTimeField('修改时间', default=now)
+    creation_time = models.DateTimeField(_('creation time'), default=now)
+    last_modify_time = models.DateTimeField(_('last modify time'), default=now)
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        verbose_name='作者',
+        verbose_name=_('author'),
         on_delete=models.CASCADE)
     article = models.ForeignKey(
         Article,
-        verbose_name='文章',
+        verbose_name=_('article'),
         on_delete=models.CASCADE)
     parent_comment = models.ForeignKey(
         'self',
-        verbose_name="上级评论",
+        verbose_name=_('parent comment'),
         blank=True,
         null=True,
         on_delete=models.CASCADE)
-    is_enable = models.BooleanField(
-        '是否显示', default=False, blank=False, null=False)
+    is_enable = models.BooleanField(_('enable'),
+                                    default=False, blank=False, null=False)
 
     class Meta:
         ordering = ['-id']
-        verbose_name = "评论"
+        verbose_name = _('comment')
         verbose_name_plural = verbose_name
         get_latest_by = 'id'
 

@@ -1,4 +1,4 @@
-coverage==7.3.0
+coverage==7.3.1
 bleach==6.0.0
 Django==4.2.5
 django-compressor==4.4
@@ -8,7 +8,7 @@ django-mdeditor==0.1.20
 django-uuslug==2.0.0
 elasticsearch==7.16.1
 elasticsearch-dsl==7.4.0
-gevent==23.9.0.post1
+gevent==23.9.1
 jieba==0.42.1
 jsonpickle==3.0.2
 Markdown==3.4.4
@@ -17,7 +17,7 @@ Pillow==10.0.0
 Pygments==2.16.1
 python-logstash==0.4.8
 python-slugify==8.0.1
-pytz==2023.3
+pytz==2023.3.post1
 requests==2.31.0
 WeRoBot==1.13.1
 Whoosh==2.7.4

@@ -1,36 +1,34 @@
+{% load i18n %}
 {% load blog_tags %}
-{% load cache %}
-{% with article.id|add:user.is_authenticated as cachekey %}
-    {% cache 36000 metainfo cachekey %}
-        <footer class="entry-meta">
-            本条目发布于<a href="{{ article.get_absolute_url }}" title="{% datetimeformat article.pub_time %}"
-                     itemprop="datePublished" content="{% datetimeformat article.pub_time %}"
-                     rel="bookmark">
 
-            <time class="entry-date updated"
-                  datetime="{{ article.pub_time }}">
-                {% datetimeformat article.pub_time %}</time>
-        </a>
-            {% if article.type == 'a' %}
-                。属于<a href="{{ article.category.get_absolute_url }}" rel="category tag">{{ article.category.name }}</a>
-                分类，
-                {% if article.tags.all %}
-                    被贴了
 
-                    {% for t in article.tags.all %}
-                        <a href="{{ t.get_absolute_url }}" rel="tag">{{ t.name }}</a>
-                        {% if t != article.tags.all.last %}
-                            ，
-                        {% endif %}
-                    {% endfor %}
+<footer class="entry-meta">
+    {% trans 'posted in' %}
+    <a href="{{ article.category.get_absolute_url }}" rel="category tag">{{ article.category.name }}</a>
 
-                    标签。
+
+    </a>
+    {% if article.type == 'a' %}
+        {% if article.tags.all %}
+
+            {% trans 'and tagged' %}
+            {% for t in article.tags.all %}
+                <a href="{{ t.get_absolute_url }}" rel="tag">{{ t.name }}</a>
+                {% if t != article.tags.all.last %}
+                    ,
                 {% endif %}
-            {% endif %}
-            <span class="by-author">作者是
+            {% endfor %}
+
+
+        {% endif %}
+    {% endif %}
+    .{% trans 'by ' %}
+    <span class="by-author">
         <span class="author vcard">
             <a class="url fn n" href="{{ article.author.get_absolute_url }}"
-               title="查看所有由{{ article.author.username }}发布的文章"
+                    {% blocktranslate %}
+               title="View all articles published by {{ article.author.username }}"
+                    {% endblocktranslate %}
                rel="author">
             <span itemprop="author" itemscope itemtype="http://schema.org/Person">
 
@@ -40,12 +38,22 @@
         </span>
             </span>
     </a>
-        </span>。
-                {% if user.is_superuser %}
-                    <a href="{{ article.get_admin_url }}">编辑</a>
-                {% endif %}
-    </span>
-        </footer><!-- .entry-meta -->
 
-    {% endcache %}
-{% endwith %}
+
+        </span>
+{% trans 'on' %}
+     <a href="{{ article.get_absolute_url }}"
+        title="{% datetimeformat article.pub_time %}"
+        itemprop="datePublished" content="{% datetimeformat article.pub_time %}"
+        rel="bookmark">
+
+    <time class="entry-date updated"
+          datetime="{{ article.pub_time }}">
+        {% datetimeformat article.pub_time %}</time>
+         {% if user.is_superuser %}
+             <a href="{{ article.get_admin_url }}">{% trans 'edit' %}</a>
+         {% endif %}
+    </span>
+</footer><!-- .entry-meta -->
+
+

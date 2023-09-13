@@ -30,8 +30,6 @@ class ServerManagerTest(TestCase):
 
         c = Category()
         c.name = "categoryccc"
-        c.created_time = timezone.now()
-        c.last_mod_time = timezone.now()
         c.save()
 
         article = Article()

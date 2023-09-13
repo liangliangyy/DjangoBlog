@@ -5,12 +5,14 @@ import json
 import logging
 from itertools import groupby
 
+import django.utils.timezone
 import requests
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.utils import timezone
+from django.utils.timezone import utc
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import OwnTrackLog
@@ -59,7 +61,7 @@ def show_maps(request):
 
 @login_required
 def show_log_dates(request):
-    dates = OwnTrackLog.objects.values_list('created_time', flat=True)
+    dates = OwnTrackLog.objects.values_list('creation_time', flat=True)
     results = list(sorted(set(map(lambda x: x.strftime('%Y-%m-%d'), dates))))
 
     context = {
@@ -95,9 +97,6 @@ def convert_to_amap(locations):
 
 @login_required
 def get_datas(request):
-    import django.utils.timezone
-    from django.utils.timezone import utc
-
     now = django.utils.timezone.now().replace(tzinfo=utc)
     querydate = django.utils.timezone.datetime(
         now.year, now.month, now.day, 0, 0, 0)
@@ -108,7 +107,7 @@ def get_datas(request):
     querydate = django.utils.timezone.make_aware(querydate)
     nextdate = querydate + datetime.timedelta(days=1)
     models = OwnTrackLog.objects.filter(
-        created_time__range=(querydate, nextdate))
+        creation_time__range=(querydate, nextdate))
     result = list()
     if models and len(models):
         for tid, item in groupby(
@@ -118,7 +117,7 @@ def get_datas(request):
             d["name"] = tid
             paths = list()
             locations = convert_to_amap(
-                sorted(item, key=lambda x: x.created_time))
+                sorted(item, key=lambda x: x.creation_time))
             for i in locations.split(';'):
                 paths.append(i.split(','))
             d["path"] = paths

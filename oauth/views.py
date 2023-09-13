@@ -13,6 +13,7 @@ from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView
 
 from djangoblog.blog_signals import oauth_user_login_signal
@@ -149,19 +150,19 @@ def emailconfirm(request, id, sign):
         id=oauthuser.id)
     login(request, author)
 
-    site = get_current_site().domain
-    content = '''
-     <p>恭喜您，您已经成功绑定您的邮箱，您可以使用{type}来直接免密码登录本网站.欢迎您继续关注本站，地址是</p>
+    site = 'http://' + get_current_site().domain
+    content = _('''
+     <p>Congratulations, you have successfully bound your email address. You can use
+      %(oauthuser_type)s to directly log in to this website without a password.</p>
+       You are welcome to continue to follow this site, the address is
+        <a href="%(site)s" rel="bookmark">%(site)s</a>
+            Thank you again!
+            <br />
+        If the link above cannot be opened, please copy this link to your browser.
+        %(site)s
+    ''') % {'oauthuser_type': oauthuser.type, 'site': site}
 
-                <a href="{url}" rel="bookmark">{url}</a>
-
-                再次感谢您！
-                <br />
-                如果上面链接无法打开，请将此链接复制至浏览器。
-                {url}
-    '''.format(type=oauthuser.type, url='http://' + site)
-
-    send_email(emailto=[oauthuser.email, ], title='恭喜您绑定成功!', content=content)
+    send_email(emailto=[oauthuser.email, ], title=_('Congratulations on your successful binding!'), content=content)
     url = reverse('oauth:bindsuccess', kwargs={
         'oauthid': id
     })
@@ -213,17 +214,18 @@ class RequireEmailView(FormView):
         })
         url = "http://{site}{path}".format(site=site, path=path)
 
-        content = """
-                <p>请点击下面链接绑定您的邮箱</p>
+        content = _("""
+               <p>Please click the link below to bind your email</p>
 
-                <a href="{url}" rel="bookmark">{url}</a>
+                 <a href="%(url)s" rel="bookmark">%(url)s</a>
 
-                再次感谢您！
-                <br />
-                如果上面链接无法打开，请将此链接复制至浏览器。
-                {url}
-                """.format(url=url)
-        send_email(emailto=[email, ], title='绑定您的电子邮箱', content=content)
+                 Thank you again!
+                 <br />
+                 If the link above cannot be opened, please copy this link to your browser.
+                  <br />
+                 %(url)s
+                """) % {'url': url}
+        send_email(emailto=[email, ], title=_('Bind your email'), content=content)
         url = reverse('oauth:bindsuccess', kwargs={
             'oauthid': oauthid
         })
@@ -235,12 +237,16 @@ def bindsuccess(request, oauthid):
     type = request.GET.get('type', None)
     oauthuser = get_object_or_404(OAuthUser, pk=oauthid)
     if type == 'email':
-        title = '绑定成功'
-        content = "恭喜您，还差一步就绑定成功了，请登录您的邮箱查看邮件完成绑定，谢谢。"
+        title = _('Bind your email')
+        content = _(
+            'Congratulations, the binding is just one step away. '
+            'Please log in to your email to check the email to complete the binding. Thank you.')
     else:
-        title = '绑定成功'
-        content = "恭喜您绑定成功，您以后可以使用{type}来直接免密码登录本站啦，感谢您对本站对关注。".format(
-            type=oauthuser.type)
+        title = _('Binding successful')
+        content = _(
+            "Congratulations, you have successfully bound your email address. You can use %(oauthuser_type)s"
+            " to directly log in to this website without a password. You are welcome to continue to follow this site." % {
+                'oauthuser_type': oauthuser.type})
     return render(request, 'oauth/bindsuccess.html', {
         'title': title,
         'content': content

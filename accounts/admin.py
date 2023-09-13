@@ -1,6 +1,5 @@
 from django import forms
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.forms import UsernameField
 from django.utils.translation import gettext_lazy as _
@@ -10,8 +9,8 @@ from .models import BlogUser
 
 
 class BlogUserCreationForm(forms.ModelForm):
-    password1 = forms.CharField(label='密码', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='再次输入密码', widget=forms.PasswordInput)
+    password1 = forms.CharField(label=_('password'), widget=forms.PasswordInput)
+    password2 = forms.CharField(label=_('Enter password again'), widget=forms.PasswordInput)
 
     class Meta:
         model = BlogUser
@@ -22,7 +21,7 @@ class BlogUserCreationForm(forms.ModelForm):
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
         if password1 and password2 and password1 != password2:
-            raise forms.ValidationError("两次密码不一致")
+            raise forms.ValidationError(_("passwords do not match"))
         return password2
 
     def save(self, commit=True):
@@ -36,16 +35,6 @@ class BlogUserCreationForm(forms.ModelForm):
 
 
 class BlogUserChangeForm(UserChangeForm):
-    password = ReadOnlyPasswordHashField(
-        label=_("Password"),
-        help_text=_(
-            "Raw passwords are not stored, so there is no way to see this "
-            "user's password, but you can change the password using "
-            "<a href=\"{}\">this form</a>."
-        ),
-    )
-    email = forms.EmailField(label="Email", widget=forms.EmailInput)
-
     class Meta:
         model = BlogUser
         fields = '__all__'
