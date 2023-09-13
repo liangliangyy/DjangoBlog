@@ -568,7 +568,7 @@ msgstr "發布於"
 
 #: .\templates\blog\tags\article_meta_info.html:14
 msgid "and tagged"
-msgstr "標簽"
+msgstr "並標記為"
 
 #: .\templates\blog\tags\article_meta_info.html:25
 msgid "by "
