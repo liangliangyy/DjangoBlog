@@ -55,4 +55,8 @@ urlpatterns = [
         r'upload',
         views.fileupload,
         name='upload'),
+    path(
+        r'clean',
+        views.clean_cache_view,
+        name='clean'),
 ]

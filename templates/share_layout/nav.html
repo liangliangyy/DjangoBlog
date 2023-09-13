@@ -1,11 +1,11 @@
+{% load i18n %}
+
 <nav id="site-navigation" class="main-navigation" role="navigation">
-    <button class="menu-toggle">菜单</button>
-    <a class="assistive-text" href="#content" title="跳至正文">跳至正文</a>
     <div class="menu-%e8%8f%9c%e5%8d%95-container">
         <ul id="menu-%e8%8f%9c%e5%8d%95" class="nav-menu">
             <li id="menu-item-3498"
                 class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item menu-item-home menu-item-3498">
-                <a href="/">首页</a></li>
+                <a href="/">{% trans 'index' %}</a></li>
 
             {% load blog_tags %}
             {% query nav_category_list parent_category=None as root_categorys %}
@@ -23,7 +23,7 @@
             {% endif %}
             <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children">
 
-                <a href="{% url "blog:archives" %}">文章归档</a>
+                <a href="{% url "blog:archives" %}">{% trans 'Article archive' %}</a>
             </li>
         </ul>
     </div>

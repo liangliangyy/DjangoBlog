@@ -1,4 +1,5 @@
 {% extends 'share_layout/base.html' %}
+{% load i18n %}
 {% block header %}
     <title> {{ title }}</title>
 {% endblock %}
@@ -13,9 +14,13 @@
             <br/>
             <header class="archive-header" style="text-align: center">
 
-                <a href="{% url "account:login" %}">登录</a>
+                <a href="{% url "account:login" %}">
+                    {% trans 'login' %}
+                </a>
                 |
-                <a href="/">回到首页</a>
+                <a href="/">
+                    {% trans 'back to the homepage' %}
+                </a>
             </header><!-- .archive-header -->
         </div>
     </div>

@@ -21,7 +21,7 @@
         </div>
 
         <div class="comment-meta commentmetadata">
-            <div>{{ comment_item.created_time }}</div>
+            <div>{{ comment_item.creation_time }}</div>
             <div>回复给:@{{ comment_item.author.parent_comment.username }}</div>
         </div>
         <p>{{ comment_item.body|escape|comment_markdown }}</p>

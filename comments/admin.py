@@ -1,7 +1,7 @@
 from django.contrib import admin
-# Register your models here.
 from django.urls import reverse
 from django.utils.html import format_html
+from django.utils.translation import gettext_lazy as _
 
 
 def disable_commentstatus(modeladmin, request, queryset):
@@ -12,8 +12,8 @@ def enable_commentstatus(modeladmin, request, queryset):
     queryset.update(is_enable=True)
 
 
-disable_commentstatus.short_description = '禁用评论'
-enable_commentstatus.short_description = '启用评论'
+disable_commentstatus.short_description = _('Disable comments')
+enable_commentstatus.short_description = _('Enable comments')
 
 
 class CommentAdmin(admin.ModelAdmin):
@@ -24,10 +24,10 @@ class CommentAdmin(admin.ModelAdmin):
         'link_to_userinfo',
         'link_to_article',
         'is_enable',
-        'created_time')
+        'creation_time')
     list_display_links = ('id', 'body', 'is_enable')
     list_filter = ('is_enable', 'author', 'article',)
-    exclude = ('created_time', 'last_mod_time')
+    exclude = ('creation_time', 'last_modify_time')
     actions = [disable_commentstatus, enable_commentstatus]
 
     def link_to_userinfo(self, obj):
@@ -43,5 +43,5 @@ class CommentAdmin(admin.ModelAdmin):
         return format_html(
             u'<a href="%s">%s</a>' % (link, obj.article.title))
 
-    link_to_userinfo.short_description = '用户'
-    link_to_article.short_description = '文章'
+    link_to_userinfo.short_description = _('User')
+    link_to_article.short_description = _('Article')

@@ -1,12 +1,15 @@
+{% load i18n %}
 <nav id="nav-below" class="navigation" role="navigation">
-    <h3 class="assistive-text">文章导航</h3>
+    <h3 class="assistive-text">
+        {% trans 'article navigation' %}
+    </h3>
     {% if page_obj.has_next  and next_url%}
         <div class="nav-previous"><a
                 href="{{ next_url }}"><span
-                class="meta-nav">&larr;</span> 早期文章</a></div>
+                class="meta-nav">&larr;</span> {% trans 'earlier articles' %}</a></div>
     {% endif %}
     {% if page_obj.has_previous and previous_url %}
-        <div class="nav-next"><a href="{{ previous_url }}">较新文章
+        <div class="nav-next"><a href="{{ previous_url }}">{% trans 'newer articles' %}
             <span
                     class="meta-nav">→</span></a>
         </div>

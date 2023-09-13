@@ -23,7 +23,7 @@ class ArticleSiteMap(Sitemap):
         return Article.objects.filter(status='p')
 
     def lastmod(self, obj):
-        return obj.last_mod_time
+        return obj.last_modify_time
 
 
 class CategorySiteMap(Sitemap):
@@ -34,7 +34,7 @@ class CategorySiteMap(Sitemap):
         return Category.objects.all()
 
     def lastmod(self, obj):
-        return obj.last_mod_time
+        return obj.last_modify_time
 
 
 class TagSiteMap(Sitemap):
@@ -45,7 +45,7 @@ class TagSiteMap(Sitemap):
         return Tag.objects.all()
 
     def lastmod(self, obj):
-        return obj.last_mod_time
+        return obj.last_modify_time
 
 
 class UserSiteMap(Sitemap):
