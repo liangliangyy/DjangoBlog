@@ -71,6 +71,17 @@ $(document).on('webkitAnimationEnd', function () {
     }, 400);
 });
 
+
+window.onload = function () {
+  var replyLinks = document.querySelectorAll(".comment-reply-link");
+  for (var i = 0; i < replyLinks.length; i++) {
+    replyLinks[i].onclick = function () {
+      var pk = this.getAttribute("data-pk");
+      do_reply(pk);
+    };
+  }
+};
+
 // $(document).ready(function () {
 //     var form = $('#i18n-form');
 //     var selector = $('.i18n-select');

@@ -35,8 +35,7 @@
         <p>{{ comment_item.body|escape|comment_markdown }}</p>
 
         <div class="reply"><a rel="nofollow" class="comment-reply-link"
-                              href="javascript:void(0)"
-                              onclick="do_reply({{ comment_item.pk }})"
+                              href="javascript:void(0)" data-pk="{{ comment_item.pk }}"
                               aria-label="回复给{{ comment_item.author.username }}">回复</a></div>
     </div>
 
