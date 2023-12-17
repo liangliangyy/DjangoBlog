@@ -1,4 +1,4 @@
-# DjangoBlog
+# DjangoBlog edited for test
 
 🌍
 *[English](/docs/README-en.md) ∙ [简体中文](README.md)*
