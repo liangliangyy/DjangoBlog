@@ -1,6 +1,6 @@
 coverage==7.3.2
 bleach==6.1.0
-Django==4.2.10
+Django==4.2.11
 django-compressor==4.4
 django-haystack==3.2.1
 django-ipware==5.0.1
