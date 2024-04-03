@@ -13,7 +13,7 @@ jieba==0.42.1
 jsonpickle==3.0.2
 Markdown==3.5
 mysqlclient==2.2.0
-Pillow==10.2.0
+Pillow==10.3.0
 Pygments==2.16.1
 python-logstash==0.4.8
 python-slugify==8.0.1
