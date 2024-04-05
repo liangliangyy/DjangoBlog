@@ -116,10 +116,14 @@ def get_datas(request):
             d = dict()
             d["name"] = tid
             paths = list()
-            locations = convert_to_amap(
-                sorted(item, key=lambda x: x.creation_time))
-            for i in locations.split(';'):
-                paths.append(i.split(','))
+            # 使用高德转换后的经纬度
+            # locations = convert_to_amap(
+            #     sorted(item, key=lambda x: x.creation_time))
+            # for i in locations.split(';'):
+            #     paths.append(i.split(','))
+            # 使用GPS原始经纬度
+            for location in sorted(item, key=lambda x: x.created_time):
+                paths.append([str(location.lon), str(location.lat)])
             d["path"] = paths
             result.append(d)
     return JsonResponse(result, safe=False)
