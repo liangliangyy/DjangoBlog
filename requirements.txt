@@ -18,7 +18,7 @@ Pygments==2.16.1
 python-logstash==0.4.8
 python-slugify==8.0.1
 pytz==2023.3.post1
-requests==2.31.0
+requests==2.32.0
 WeRoBot==1.13.1
 Whoosh==2.7.4
 user-agents==2.2.0
