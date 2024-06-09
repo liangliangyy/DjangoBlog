@@ -135,3 +135,9 @@ python manage.py compress --force
 <div>    
 <a href="https://www.jetbrains.com/?from=DjangoBlog"><img src="https://resource.lylinux.net/image/2020/07/01/logo.png" width="150" height="150"></a>
 </div>
+
+### Infrastructure model
+![Infrastructure main model](.infragenie/infrastructure_main_model.svg)
+- [djangoblog component model](.infragenie/djangoblog_component_model.svg)
+
+---
