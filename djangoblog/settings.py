@@ -14,6 +14,9 @@ import sys
 
 from django.utils.translation import gettext_lazy as _
 
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def env_to_bool(env, default):
     str_val = os.environ.get(env)
