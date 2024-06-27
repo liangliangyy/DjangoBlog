@@ -41,7 +41,7 @@ mysql客户端从`pymysql`修改成了`mysqlclient`，具体请参考 [pypi](htt
 
 ## 运行
 
- 修改`djangoblog/setting.py` 修改数据库配置，如下所示：
+修改`djangoblog/setting.py` 修改数据库配置，如下所示：
 
 ```python
 DATABASES = {
@@ -54,6 +54,16 @@ DATABASES = {
         'PORT': 3306,
     }
 }
+```
+
+或者在项目根目录，创建`.env`文件，将对应的数据库配置信息填入即可，如下所示：
+
+```python
+DJANGO_MYSQL_DATABASE=djangoblog
+DJANGO_MYSQL_USER=root
+DJANGO_MYSQL_PASSWORD=password
+DJANGO_MYSQL_HOST=127.0.0.1
+DJANGO_MYSQL_PORT=3306
 ```
 
 ### 创建数据库

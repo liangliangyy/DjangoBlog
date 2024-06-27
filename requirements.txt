@@ -24,3 +24,4 @@ Whoosh==2.7.4
 user-agents==2.2.0
 redis==5.0.1
 openai==0.28.1
+python-dotenv==1.0.1
