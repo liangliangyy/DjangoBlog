@@ -1,6 +1,6 @@
 coverage==7.3.2
 bleach==6.1.0
-Django==4.2.7
+Django==4.2.14
 django-compressor==4.4
 django-haystack==3.2.1
 django-ipware==5.0.1
@@ -13,12 +13,12 @@ jieba==0.42.1
 jsonpickle==3.0.2
 Markdown==3.5
 mysqlclient==2.2.0
-Pillow==10.0.1
+Pillow==10.3.0
 Pygments==2.16.1
 python-logstash==0.4.8
 python-slugify==8.0.1
 pytz==2023.3.post1
-requests==2.31.0
+requests==2.32.0
 WeRoBot==1.13.1
 Whoosh==2.7.4
 user-agents==2.2.0
