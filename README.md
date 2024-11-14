@@ -9,7 +9,7 @@ liangliangyy)的博客，并添加了部分功能，如:
 
 基于`python3.10`和`Django4.0`的博客。   
 
-[![Django CI](https://github.com/xxxx/DjangoBlog/actions/workflows/django.yml/badge.svg)](https://github.com/xxxx/DjangoBlog/actions/workflows/django.yml) [![CodeQL](https://github.com/xxxx/DjangoBlog/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/xxxx/DjangoBlog/actions/workflows/codeql-analysis.yml) [![codecov](https://codecov.io/gh/xxxx/DjangoBlog/branch/master/graph/badge.svg)](https://codecov.io/gh/xxxx/DjangoBlog)  [![license](https://img.shields.io/github/license/xxxx/djangoblog.svg)]()  
+[![Django CI](https://github.com/liangliangyy/DjangoBlog/actions/workflows/django.yml/badge.svg)](https://github.com/liangliangyy/DjangoBlog/actions/workflows/django.yml) [![CodeQL](https://github.com/liangliangyy/DjangoBlog/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/liangliangyy/DjangoBlog/actions/workflows/codeql-analysis.yml) [![codecov](https://codecov.io/gh/liangliangyy/DjangoBlog/branch/master/graph/badge.svg)](https://codecov.io/gh/liangliangyy/DjangoBlog)  [![license](https://img.shields.io/github/license/liangliangyy/djangoblog.svg)]()
 
 ## 主要功能：
 - 文章，页面，分类目录，标签的添加，删除，编辑等。文章、评论及页面支持`Markdown`，支持代码高亮。
