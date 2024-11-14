@@ -1,5 +1,6 @@
 # DjangoBlog
-作者fork了[lylinux](https://github.com/lylinux)的博客，并添加了部分功能，如:
+作者fork了[liangliangyy](https://github.com/
+liangliangyy)的博客，并添加了部分功能，如:
 
     1、获取访问者ip并记录
     2、希望以后增加更多功能，这个项目是用来学习用的
