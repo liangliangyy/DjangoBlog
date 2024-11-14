@@ -1,7 +1,8 @@
 # DjangoBlog
-作者fork了[lylinux](https://github.com/lylinux)的博客，并添加了部分功能，如：
-1、获取访问者ip并记录
-2、希望以后增加更多功能，这个项目是用来学习用的
+作者fork了[lylinux](https://github.com/lylinux)的博客，并添加了部分功能，如:
+
+    1、获取访问者ip并记录
+    2、希望以后增加更多功能，这个项目是用来学习用的
 🌍
 *[English](/docs/README-en.md) ∙ [简体中文](README.md)*
 
@@ -96,10 +97,7 @@ python manage.py compress --force
 
 浏览器打开: http://127.0.0.1:8000/  就可以看到效果了。  
 
-## 服务器部署
-
-本地安装部署请参考 [DjangoBlog部署教程](https://www.lylinux.net/article/2019/8/5/58.html)
-有详细的部署介绍.    
+## 服务器部署   
 
 本项目已经支持使用docker来部署，如果你有docker环境那么可以使用docker来部署，具体请参考:[docker部署](/docs/docker.md)
 
