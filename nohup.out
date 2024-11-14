@@ -1,0 +1,76 @@
+Watching for file changes with StatReloader
+[2024-09-11 17:13:45,191] INFO [django.utils.autoreload.run_with_reloader:668 autoreload] Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+[2024-09-11 17:14:21,298] INFO [django.utils.autoreload.run_with_reloader:668 autoreload] Watching for file changes with StatReloader
+Error: That port is already in use.
+[2024-09-11 17:18:45,401] INFO [blog.views.get_queryset_from_cache:73 views] set view cache.key:index_1
+[2024-09-11 17:18:45,418] INFO [blog.context_processors.seo_processor:17 context_processors] set processor cache.
+[2024-09-11 17:18:45,446] INFO [djangoblog.utils.get_blog_setting:171 utils] set cache get_blog_setting
+[2024-09-11 17:18:45,446] INFO [djangoblog.utils.get_blog_setting:171 utils] set cache get_blog_setting
+[2024-09-11 17:18:45,799] INFO [blog.templatetags.blog_tags.load_sidebar:139 blog_tags] load sidebar
+[2024-09-11 17:18:45,834] INFO [blog.templatetags.blog_tags.load_sidebar:183 blog_tags] set sidebar cache.key:sidebari
+[11/Sep/2024 17:18:46] "GET / HTTP/1.1" 200 43309
+[2024-09-11 17:18:51,089] INFO [blog.views.get_queryset_from_cache:68 views] get view cache.key:index_1
+[11/Sep/2024 17:18:52] "GET / HTTP/1.1" 200 43309
+[11/Sep/2024 17:18:53] "GET /favicon.ico HTTP/1.1" 404 10501
+[11/Sep/2024 17:18:54] "GET /static/blog/js/html5.js HTTP/1.1" 200 2428
+[11/Sep/2024 17:18:58] code 400, message Bad request version ('À\x13À')
+[11/Sep/2024 17:18:58] You're accessing the development server over HTTPS, but it only supports HTTP.
+[11/Sep/2024 17:18:59] code 400, message Bad request syntax ('\x16\x03\x01\x00ò\x01\x00\x00î\x03\x03ñØ\x07')
+[11/Sep/2024 17:18:59] You're accessing the development server over HTTPS, but it only supports HTTP.
+[11/Sep/2024 17:19:01] code 400, message Bad request version ('À\x13À')
+[11/Sep/2024 17:19:01] You're accessing the development server over HTTPS, but it only supports HTTP.
+[11/Sep/2024 17:19:31] "GET http://74.63.247.151:9994/proxys HTTP/1.1" 404 949
+Watching for file changes with StatReloader
+[2024-09-11 17:19:52,393] INFO [django.utils.autoreload.run_with_reloader:668 autoreload] Watching for file changes with StatReloader
+Error: That port is already in use.
+Watching for file changes with StatReloader
+[2024-09-11 17:20:27,621] INFO [django.utils.autoreload.run_with_reloader:668 autoreload] Watching for file changes with StatReloader
+Error: That port is already in use.
+Watching for file changes with StatReloader
+[2024-09-11 17:21:35,132] INFO [django.utils.autoreload.run_with_reloader:668 autoreload] Watching for file changes with StatReloader
+[2024-09-11 17:22:33,870] INFO [blog.views.get_queryset_from_cache:73 views] set view cache.key:index_1
+[2024-09-11 17:22:33,877] INFO [blog.context_processors.seo_processor:17 context_processors] set processor cache.
+[2024-09-11 17:22:33,884] INFO [blog.views.get_queryset_from_cache:68 views] get view cache.key:index_1
+[2024-09-11 17:22:33,885] INFO [blog.context_processors.seo_processor:17 context_processors] set processor cache.
+[2024-09-11 17:22:33,925] INFO [djangoblog.utils.get_blog_setting:171 utils] set cache get_blog_setting
+[2024-09-11 17:22:33,925] INFO [djangoblog.utils.get_blog_setting:171 utils] set cache get_blog_setting
+[2024-09-11 17:22:33,939] INFO [djangoblog.utils.get_blog_setting:171 utils] set cache get_blog_setting
+[2024-09-11 17:22:33,939] INFO [djangoblog.utils.get_blog_setting:171 utils] set cache get_blog_setting
+[2024-09-11 17:22:34,494] INFO [blog.templatetags.blog_tags.load_sidebar:139 blog_tags] load sidebar
+[2024-09-11 17:22:34,497] INFO [blog.templatetags.blog_tags.load_sidebar:139 blog_tags] load sidebar
+[2024-09-11 17:22:34,571] INFO [blog.templatetags.blog_tags.load_sidebar:183 blog_tags] set sidebar cache.key:sidebari
+[2024-09-11 17:22:34,572] INFO [blog.templatetags.blog_tags.load_sidebar:183 blog_tags] set sidebar cache.key:sidebari
+[11/Sep/2024 17:22:34] "GET / HTTP/1.1" 200 4895
+[11/Sep/2024 17:22:34] "GET / HTTP/1.1" 200 4977
+[11/Sep/2024 17:22:34] "GET /static/blog/fonts/fonts.css HTTP/1.1" 200 11839
+[11/Sep/2024 17:22:34] "GET /static/CACHE/css/output.758e876fbda7.css HTTP/1.1" 200 40434
+[11/Sep/2024 17:22:34] "GET /static/CACHE/css/output.bdd96b6d5fb9.css HTTP/1.1" 200 6803
+[11/Sep/2024 17:22:34] "GET /static/blog/fonts/mem8YaGs126MiZpBA-UFVZ0b.woff2 HTTP/1.1" 200 26166
+[11/Sep/2024 17:22:34] "GET /static/blog/fonts/mem5YaGs126MiZpBA-UNirkOUuhp.woff2 HTTP/1.1" 200 27159
+[11/Sep/2024 17:22:34] "GET /static/CACHE/js/output.bc55ccd28723.js HTTP/1.1" 200 98889
+[11/Sep/2024 17:22:35] "GET /favicon.ico HTTP/1.1" 404 1594
+[11/Sep/2024 17:22:38] "GET /login/ HTTP/1.1" 200 1487
+[11/Sep/2024 17:22:38] "GET /static/CACHE/js/output.b8b0e63f5d49.js HTTP/1.1" 200 1630
+[11/Sep/2024 17:22:38] "GET /static/blog/img/avatar.png HTTP/1.1" 200 1493
+[11/Sep/2024 17:22:38] "GET /static/account/css/account.css HTTP/1.1" 200 172
+[11/Sep/2024 17:22:38] "GET /static/account/js/account.js HTTP/1.1" 200 1242
+[11/Sep/2024 17:22:38] "GET /static/CACHE/css/output.e3a8f975b83f.css HTTP/1.1" 200 232666
+[11/Sep/2024 17:22:38] "GET /static/blog/js/jquery-3.6.0.min.js HTTP/1.1" 200 89501
+[11/Sep/2024 17:22:39] "GET /static/blog/img/icon-sn.svg HTTP/1.1" 200 25197
+[11/Sep/2024 17:22:40] "GET /oauth/oauthlogin?type=github&next_url=/login/ HTTP/1.1" 302 0
+[11/Sep/2024 17:31:03,672] - Broken pipe from ('167.94.145.106', 32860)
+[2024-09-11 17:31:07,410] INFO [blog.views.get_queryset_from_cache:68 views] get view cache.key:index_1
+[11/Sep/2024 17:31:07] "GET / HTTP/1.1" 200 43309
+[11/Sep/2024 17:31:07,835] - Broken pipe from ('167.94.145.106', 39042)
+[2024-09-11 17:31:11,291] INFO [blog.views.get_queryset_from_cache:68 views] get view cache.key:index_1
+[11/Sep/2024 17:31:11] "GET / HTTP/1.1" 200 4902
+[11/Sep/2024 17:31:13] "GET /favicon.ico HTTP/1.1" 404 1654
+[11/Sep/2024 17:31:13] code 505, message Invalid HTTP version (2.0)
+[11/Sep/2024 17:31:13] "PRI * HTTP/2.0" 505 -
+[2024-09-11 17:49:56,459] INFO [blog.views.get_queryset_from_cache:68 views] get view cache.key:index_1
+[11/Sep/2024 17:49:56] "GET / HTTP/1.1" 200 4950
+[11/Sep/2024 17:50:20] code 400, message Bad request version ('À\x14À')
+[11/Sep/2024 17:50:20] You're accessing the development server over HTTPS, but it only supports HTTP.
+[11/Sep/2024 17:50:36] code 400, message Bad HTTP/0.9 request type ('\x16\x03\x01\x00{\x01\x00\x00w\x03\x03\x18Ç¯\x92\x93\x03')
+[11/Sep/2024 17:50:36] You're accessing the development server over HTTPS, but it only supports HTTP.

@@ -30,6 +30,10 @@ def get_redirecturl(request):
     nexturl = request.GET.get('next_url', None)
     if not nexturl or nexturl == '/login/' or nexturl == '/login':
         nexturl = '/'
+<<<<<<< HEAD
+=======
+        print("nexturl",nexturl)
+>>>>>>> 342276f (记录访问ip地址代码的添加，后期需要优化)
         return nexturl
     p = urlparse(nexturl)
     if p.netloc:

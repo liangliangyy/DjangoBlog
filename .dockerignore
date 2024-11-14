@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 bin/data/
 # virtualenv
 venv/
@@ -8,4 +9,16 @@ settings_production.py
 *.md
 docs/
 logs/
+=======
+bin/data/
+# virtualenv
+venv/
+collectedstatic/
+djangoblog/whoosh_index/
+uploads/
+settings_production.py
+*.md
+docs/
+logs/
+>>>>>>> 342276f (记录访问ip地址代码的添加，后期需要优化)
 static/

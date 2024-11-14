@@ -121,17 +121,29 @@ python manage.py compress --force
 如果您觉得本项目对您有所帮助，欢迎您请我喝杯咖啡，您的支持是我最大的动力，您可以扫描下方二维码为我付款，谢谢。
 ### 支付宝：
 <div>    
+<<<<<<< HEAD
 <img src="https://resource.lylinux.net/image/2017/12/16/IMG_0207.jpg" width="150" height="150" />
+=======
+<img src="/docs/imgs/alipay.jpg" width="150" height="150" />
+>>>>>>> 342276f (记录访问ip地址代码的添加，后期需要优化)
 </div>  
 
 ### 微信：
 <div>    
+<<<<<<< HEAD
 <img src="https://resource.lylinux.net/image/2017/12/16/IMG_0206.jpg" width="150" height="150" />
+=======
+<img src="/docs/imgs/wechat.jpg" width="150" height="150" />
+>>>>>>> 342276f (记录访问ip地址代码的添加，后期需要优化)
 </div>
 
 ---
 
 感谢jetbrains
 <div>    
+<<<<<<< HEAD
 <a href="https://www.jetbrains.com/?from=DjangoBlog"><img src="https://resource.lylinux.net/image/2020/07/01/logo.png" width="150" height="150"></a>
+=======
+<a href="https://www.jetbrains.com/?from=DjangoBlog"><img src="/docs/imgs/pycharm_logo.png" width="150" height="150"></a>
+>>>>>>> 342276f (记录访问ip地址代码的添加，后期需要优化)
 </div>

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 coverage==7.3.2
 bleach==6.1.0
 Django==4.2.11
@@ -24,3 +25,31 @@ Whoosh==2.7.4
 user-agents==2.2.0
 redis==5.0.1
 openai==0.28.1
+=======
+coverage==7.3.2
+bleach==6.1.0
+Django==4.2.15
+django-compressor==4.4
+django-haystack==3.2.1
+django-ipware==5.0.1
+django-mdeditor==0.1.20
+django-uuslug==2.0.0
+elasticsearch==7.16.1
+elasticsearch-dsl==7.4.0
+gevent==23.9.1
+jieba==0.42.1
+jsonpickle==3.0.2
+Markdown==3.5
+mysqlclient==2.2.0
+Pillow==10.3.0
+Pygments==2.16.1
+python-logstash==0.4.8
+python-slugify==8.0.1
+pytz==2023.3.post1
+requests==2.32.0
+WeRoBot==1.13.1
+Whoosh==2.7.4
+user-agents==2.2.0
+redis==5.0.1
+openai==0.28.1
+>>>>>>> 342276f (记录访问ip地址代码的添加，后期需要优化)

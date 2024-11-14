@@ -77,6 +77,10 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.http.ConditionalGetMiddleware',
+<<<<<<< HEAD
+=======
+    'djangoblog.LogIPMiddleware.LogIPMiddleware',
+>>>>>>> 342276f (记录访问ip地址代码的添加，后期需要优化)
     'blog.middleware.OnlineMiddleware'
 ]
 
@@ -110,7 +114,11 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': os.environ.get('DJANGO_MYSQL_DATABASE') or 'djangoblog',
         'USER': os.environ.get('DJANGO_MYSQL_USER') or 'root',
+<<<<<<< HEAD
         'PASSWORD': os.environ.get('DJANGO_MYSQL_PASSWORD') or 'root',
+=======
+        'PASSWORD': os.environ.get('DJANGO_MYSQL_PASSWORD') ,
+>>>>>>> 342276f (记录访问ip地址代码的添加，后期需要优化)
         'HOST': os.environ.get('DJANGO_MYSQL_HOST') or '127.0.0.1',
         'PORT': int(
             os.environ.get('DJANGO_MYSQL_PORT') or 3306),
@@ -153,7 +161,11 @@ USE_I18N = True
 
 USE_L10N = True
 
+<<<<<<< HEAD
 USE_TZ = True
+=======
+USE_TZ = False
+>>>>>>> 342276f (记录访问ip地址代码的添加，后期需要优化)
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
@@ -216,6 +228,7 @@ BAIDU_NOTIFY_URL = os.environ.get('DJANGO_BAIDU_NOTIFY_URL') \
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = env_to_bool('DJANGO_EMAIL_TLS', False)
 EMAIL_USE_SSL = env_to_bool('DJANGO_EMAIL_SSL', True)
+<<<<<<< HEAD
 EMAIL_HOST = os.environ.get('DJANGO_EMAIL_HOST') or 'smtp.mxhichina.com'
 EMAIL_PORT = int(os.environ.get('DJANGO_EMAIL_PORT') or 465)
 EMAIL_HOST_USER = os.environ.get('DJANGO_EMAIL_USER')
@@ -227,6 +240,25 @@ ADMINS = [('admin', os.environ.get('DJANGO_ADMIN_EMAIL') or 'admin@admin.com')]
 # WX ADMIN password(Two times md5)
 WXADMIN = os.environ.get(
     'DJANGO_WXADMIN_PASSWORD') or '995F03AC401D6CABABAEF756FC4D43C7'
+=======
+EMAIL_HOST = os.environ.get('EMAIL_HOST') or 'smtp.mxhichina.com'
+EMAIL_PORT = int(os.environ.get('EMAIL_PORT') or 465)
+EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+SERVER_EMAIL = EMAIL_HOST_USER
+# Setting debug=false did NOT handle except email notifications
+#ADMINS = [('admin', os.environ.get('DJANGO_ADMIN_EMAIL') or 'admin@admin.com')]
+ADMINS = [
+    ['Hunter', '939210269@qq.com'],
+]  
+
+# WX ADMIN password(Two times md5)
+"""
+WXADMIN = os.environ.get(
+    'DJANGO_WXADMIN_PASSWORD') or ''
+"""
+>>>>>>> 342276f (记录访问ip地址代码的添加，后期需要优化)
 
 LOG_PATH = os.path.join(BASE_DIR, 'logs')
 if not os.path.exists(LOG_PATH):
@@ -330,3 +362,8 @@ if os.environ.get('DJANGO_ELASTICSEARCH_HOST'):
             'ENGINE': 'djangoblog.elasticsearch_backend.ElasticSearchEngine',
         },
     }
+<<<<<<< HEAD
+=======
+GEOIP_DATABASE = 'GeoLite2-Country.mmdb' #地图ip路径  国家
+GEOIP_DATABASE2 ='GeoLite2-City.mmdb'#城市
+>>>>>>> 342276f (记录访问ip地址代码的添加，后期需要优化)

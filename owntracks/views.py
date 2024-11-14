@@ -116,10 +116,21 @@ def get_datas(request):
             d = dict()
             d["name"] = tid
             paths = list()
+<<<<<<< HEAD
             locations = convert_to_amap(
                 sorted(item, key=lambda x: x.creation_time))
             for i in locations.split(';'):
                 paths.append(i.split(','))
+=======
+            # 使用高德转换后的经纬度
+            # locations = convert_to_amap(
+            #     sorted(item, key=lambda x: x.creation_time))
+            # for i in locations.split(';'):
+            #     paths.append(i.split(','))
+            # 使用GPS原始经纬度
+            for location in sorted(item, key=lambda x: x.creation_time):
+                paths.append([str(location.lon), str(location.lat)])
+>>>>>>> 342276f (记录访问ip地址代码的添加，后期需要优化)
             d["path"] = paths
             result.append(d)
     return JsonResponse(result, safe=False)
