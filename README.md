@@ -7,7 +7,7 @@
 
 基于`python3.10`和`Django4.0`的博客。   
 
-[![Django CI](https://github.com/liangliangyy/DjangoBlog/actions/workflows/django.yml/badge.svg)](https://github.com/liangliangyy/DjangoBlog/actions/workflows/django.yml) [![CodeQL](https://github.com/liangliangyy/DjangoBlog/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/liangliangyy/DjangoBlog/actions/workflows/codeql-analysis.yml) [![codecov](https://codecov.io/gh/liangliangyy/DjangoBlog/branch/master/graph/badge.svg)](https://codecov.io/gh/liangliangyy/DjangoBlog)  [![license](https://img.shields.io/github/license/liangliangyy/djangoblog.svg)]()  
+[![Django CI](https://github.com/xxxx/DjangoBlog/actions/workflows/django.yml/badge.svg)](https://github.com/xxxx/DjangoBlog/actions/workflows/django.yml) [![CodeQL](https://github.com/xxxx/DjangoBlog/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/xxxx/DjangoBlog/actions/workflows/codeql-analysis.yml) [![codecov](https://codecov.io/gh/xxxx/DjangoBlog/branch/master/graph/badge.svg)](https://codecov.io/gh/xxxx/DjangoBlog)  [![license](https://img.shields.io/github/license/xxxx/djangoblog.svg)]()  
 
 ## 主要功能：
 - 文章，页面，分类目录，标签的添加，删除，编辑等。文章、评论及页面支持`Markdown`，支持代码高亮。
@@ -111,11 +111,11 @@ python manage.py compress --force
 
 ## 问题相关
 
-有任何问题欢迎提Issue,或者将问题描述发送至我邮箱 `liangliangyy#gmail.com`.我会尽快解答.推荐提交Issue方式.  
+有任何问题欢迎提Issue,或者将问题描述发送至我邮箱 `xxxx#gmail.com`.我会尽快解答.推荐提交Issue方式.  
 
 ---
  ## 致大家🙋‍♀️🙋‍♂️
- 如果本项目帮助到了你，请在[这里](https://github.com/liangliangyy/DjangoBlog/issues/214)留下你的网址，让更多的人看到。
+ 如果本项目帮助到了你，请在[这里](https://github.com/xxxx/DjangoBlog/issues/214)留下你的网址，让更多的人看到。
 您的回复将会是我继续更新维护下去的动力。 
 
 
