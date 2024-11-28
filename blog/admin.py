@@ -3,27 +3,10 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.utils.html import format_html
-from django.utils.translation import gettext_lazy  as _
+from django.utils.translation import gettext_lazy as _
 
 # Register your models here.
 from .models import Article
-
-
-class ArticleListFilter(admin.SimpleListFilter):
-    title = _("author")
-    parameter_name = 'author'
-
-    def lookups(self, request, model_admin):
-        authors = list(set(map(lambda x: x.author, Article.objects.all())))
-        for author in authors:
-            yield (author.id, _(author.username))
-
-    def queryset(self, request, queryset):
-        id = self.value()
-        if id:
-            return queryset.filter(author__id__exact=id)
-        else:
-            return queryset
 
 
 class ArticleForm(forms.ModelForm):
@@ -71,7 +54,7 @@ class ArticlelAdmin(admin.ModelAdmin):
         'type',
         'article_order')
     list_display_links = ('id', 'title')
-    list_filter = (ArticleListFilter, 'status', 'type', 'category', 'tags')
+    list_filter = ('status', 'type', 'category')
     filter_horizontal = ('tags',)
     exclude = ('creation_time', 'last_modify_time')
     view_on_site = True

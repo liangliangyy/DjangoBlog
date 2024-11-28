@@ -26,7 +26,7 @@ class CommentAdmin(admin.ModelAdmin):
         'is_enable',
         'creation_time')
     list_display_links = ('id', 'body', 'is_enable')
-    list_filter = ('is_enable', 'author', 'article',)
+    list_filter = ('is_enable',)
     exclude = ('creation_time', 'last_modify_time')
     actions = [disable_commentstatus, enable_commentstatus]
 
