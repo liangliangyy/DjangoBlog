@@ -9,7 +9,6 @@ on:
       - '**/*.md'
       - '**/*.css'
       - '**/*.js'
-      - '**/*.yml'
   pull_request:
     branches:
       - master
@@ -18,7 +17,6 @@ on:
       - '**/*.md'
       - '**/*.css'
       - '**/*.js'
-      - '**/*.yml'
 
 jobs:
   build-normal:
@@ -90,9 +88,11 @@ jobs:
           sudo sysctl -w vm.max_map_count=262144
 
       - uses: miyataka/elasticsearch-github-actions@1
+
         with:
           stack-version: '7.12.1'
-          plugins: 'https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v7.12.1/elasticsearch-analysis-ik-7.12.1.zip'
+          plugins: 'https://release.infinilabs.com/analysis-ik/stable/elasticsearch-analysis-ik-7.12.1.zip'
+
 
       - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
