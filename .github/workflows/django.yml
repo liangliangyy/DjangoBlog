@@ -93,7 +93,7 @@ jobs:
         uses: elastic/elastic-github-actions/elasticsearch@master
         with:
           stack-version: '7.12.1'
-          plugins: 'https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v7.12.1/elasticsearch-analysis-ik-7.12.1.zip'
+          plugins: analysis-ik
           security-enabled: false
 
       - uses: actions/checkout@v3
