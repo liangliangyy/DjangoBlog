@@ -93,7 +93,7 @@ jobs:
         uses: elastic/elastic-github-actions/elasticsearch@master
         with:
           stack-version: '7.12.1'
-          plugins: analysis-ik
+          plugins: 'https://release.infinilabs.com/analysis-ik/stable/elasticsearch-analysis-ik-7.12.1.zip'
           security-enabled: false
 
       - uses: actions/checkout@v3
