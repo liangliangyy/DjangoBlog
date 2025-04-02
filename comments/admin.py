@@ -38,7 +38,7 @@ class CommentAdmin(admin.ModelAdmin):
             (link, obj.author.nickname if obj.author.nickname else obj.author.email))
 
     def link_to_article(self, obj):
-        info = (obj.author._meta.app_label, obj.author._meta.model_name)
+        info = (obj.article._meta.app_label, obj.article._meta.model_name)
         link = reverse('admin:%s_%s_change' % info, args=(obj.article.id,))
         return format_html(
             u'<a href="%s">%s</a>' % (link, obj.article.title))
