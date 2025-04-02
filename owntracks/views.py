@@ -3,16 +3,15 @@ import datetime
 import itertools
 import json
 import logging
+from datetime import timezone
 from itertools import groupby
 
-import django.utils.timezone
+import django
 import requests
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.shortcuts import render
-from django.utils import timezone
-from django.utils.timezone import utc
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import OwnTrackLog
@@ -48,7 +47,7 @@ def manage_owntrack_log(request):
 @login_required
 def show_maps(request):
     if request.user.is_superuser:
-        defaultdate = str(timezone.now().date())
+        defaultdate = str(datetime.datetime.now(timezone.utc).date())
         date = request.GET.get('date', defaultdate)
         context = {
             'date': date
@@ -97,7 +96,7 @@ def convert_to_amap(locations):
 
 @login_required
 def get_datas(request):
-    now = django.utils.timezone.now().replace(tzinfo=utc)
+    now = django.utils.timezone.now().replace(tzinfo=timezone.utc)
     querydate = django.utils.timezone.datetime(
         now.year, now.month, now.day, 0, 0, 0)
     if request.GET.get('date', None):
