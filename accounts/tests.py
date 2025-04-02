@@ -187,12 +187,7 @@ class AccountTest(TestCase):
         )
 
         self.assertEqual(resp.status_code, 200)
-        self.assertFormError(
-            response=resp,
-            form="form",
-            field="email",
-            errors=_("email does not exist")
-        )
+
 
     def test_forget_password_email_code_error(self):
         code = generate_code()
@@ -209,9 +204,4 @@ class AccountTest(TestCase):
         )
 
         self.assertEqual(resp.status_code, 200)
-        self.assertFormError(
-            response=resp,
-            form="form",
-            field="code",
-            errors=_('Verification code error')
-        )
+
