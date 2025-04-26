@@ -6,10 +6,10 @@ RUN  apt-get update && \
       rm -rf /var/lib/apt/lists/*
 ADD requirements.txt requirements.txt
 RUN pip install --upgrade pip  && \
-        pip install --no-cache-dir -r requirements.txt  && \
+        pip install --no-cache-dir -r requirements.txt -i  https://mirrors.aliyun.com/pypi/simple  && \
         pip install --no-cache-dir gunicorn[gevent] && \
         pip cache purge
         
 ADD . .
-RUN chmod +x /code/djangoblog/bin/docker_start.sh
-ENTRYPOINT ["/code/djangoblog/bin/docker_start.sh"]
+RUN chmod +x /code/djangoblog/deploy/entrypoint.sh
+ENTRYPOINT ["/code/djangoblog/deploy/entrypoint.sh"]
