@@ -31,6 +31,7 @@
           href='{% static 'blog/fonts/fonts.css' %}'
           type='text/css' media='all'/>
     <link rel="dns-prefetch" href="//cdn.mathjax.org"/>
+    <link rel="shortcut icon" href="favorite.ico" type="image/x-icon"/>
     {% compress css %}
 
         <link rel='stylesheet' id='twentytwelve-style-css' href='{% static 'blog/css/style.css' %}' type='text/css'
@@ -61,22 +62,22 @@
         {% load i18n %}
 
 
-{#        <div class="i18n-selector">#}
-{#            <form action="{% url 'set_language' %}" method="post" id="i18n-form">{% csrf_token %}#}
-{#                <input name="next" type="hidden" value="{{ redirect_to }}">#}
-{#                <select name="language" class="i18n-select" >#}
-{#                    {% get_current_language as LANGUAGE_CODE %}#}
-{#                    {% get_available_languages as LANGUAGES %}#}
-{#                    {% get_language_info_list for LANGUAGES as languages %}#}
-{#                    {% for language in languages %}#}
-{#                        <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>#}
-{#                            {{ language.name_local }} ({{ language.code }})#}
-{#                        </option>#}
-{#                    {% endfor %}#}
-{#                </select>#}
-{#                                <input type="submit" value="Go">#}
-{#            </form>#}
-{#        </div>#}
+        {#        <div class="i18n-selector">#}
+        {#            <form action="{% url 'set_language' %}" method="post" id="i18n-form">{% csrf_token %}#}
+        {#                <input name="next" type="hidden" value="{{ redirect_to }}">#}
+        {#                <select name="language" class="i18n-select" >#}
+        {#                    {% get_current_language as LANGUAGE_CODE %}#}
+        {#                    {% get_available_languages as LANGUAGES %}#}
+        {#                    {% get_language_info_list for LANGUAGES as languages %}#}
+        {#                    {% for language in languages %}#}
+        {#                        <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>#}
+        {#                            {{ language.name_local }} ({{ language.code }})#}
+        {#                        </option>#}
+        {#                    {% endfor %}#}
+        {#                </select>#}
+        {#                                <input type="submit" value="Go">#}
+        {#            </form>#}
+        {#        </div>#}
 
 
         {% include 'share_layout/nav.html' %}
