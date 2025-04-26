@@ -16,7 +16,8 @@ services:
     container_name: db
 
   djangoblog:
-    build: .
+    build:
+      context: ../../
     restart: always
     command: bash -c 'sh /code/djangoblog/bin/docker_start.sh'
     ports:

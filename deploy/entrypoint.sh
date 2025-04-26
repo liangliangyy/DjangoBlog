@@ -18,7 +18,7 @@ python manage.py makemigrations && \
   python manage.py collectstatic --noinput  && \
   python manage.py compress --force && \
   python manage.py build_index && \
-  python manage.py compilemessages
+  python manage.py compilemessages  || exit 1
 
 exec gunicorn ${DJANGO_WSGI_MODULE}:application \
 --name $NAME \
