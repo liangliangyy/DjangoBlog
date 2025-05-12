@@ -1,4 +1,4 @@
-FROM python:3.12
+FROM python:3.11
 ENV PYTHONUNBUFFERED 1
 WORKDIR /code/djangoblog/
 RUN  apt-get update && \
