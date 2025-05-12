@@ -1,0 +1,80 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: djangoblog
+  namespace: djangoblog
+  labels:
+    app: djangoblog
+spec:
+  selector:
+    app: djangoblog
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  namespace: djangoblog
+  labels:
+    app: nginx
+spec:
+  selector:
+    app: nginx
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: ClusterIP 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  namespace: djangoblog
+  labels:
+    app: redis
+spec:
+  selector:
+    app: redis
+  ports:
+    - protocol: TCP
+      port: 6379
+      targetPort: 6379
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+  namespace: djangoblog
+  labels:
+    app: db
+spec:
+  selector:
+    app: db
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: elasticsearch
+  namespace: djangoblog
+  labels:
+    app: elasticsearch
+spec:
+  selector:
+    app: elasticsearch
+  ports:
+    - protocol: TCP
+      port: 9200
+      targetPort: 9200
+  type: ClusterIP
+

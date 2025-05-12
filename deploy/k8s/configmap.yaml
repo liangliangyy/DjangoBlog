@@ -1,0 +1,119 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: web-nginx-config
+  namespace: djangoblog
+data:
+  nginx.conf: |
+    user  nginx;
+    worker_processes  auto;
+    error_log  /var/log/nginx/error.log notice;
+    pid        /var/run/nginx.pid;
+
+    events {
+        worker_connections  1024;
+        multi_accept on;
+        use epoll;
+    }
+
+    http {
+        include /etc/nginx/mime.types;
+        default_type  application/octet-stream;
+
+        log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                          '$status $body_bytes_sent "$http_referer" '
+                          '"$http_user_agent" "$http_x_forwarded_for"';
+
+        access_log  /var/log/nginx/access.log  main;
+
+        sendfile        on;
+        keepalive_timeout  65;
+        gzip on;
+        gzip_disable "msie6";
+
+        gzip_vary on;
+        gzip_proxied any;
+        gzip_comp_level 8;
+        gzip_buffers 16 8k;
+        gzip_http_version 1.1;
+        gzip_types text/plain application/javascript application/x-javascript text/css application/xml text/javascript application/x-httpd-php image/jpeg image/gif image/png;
+
+        # Include server configurations
+        include /etc/nginx/conf.d/*.conf;
+    }
+  djangoblog.conf: |
+    server {
+        server_name lylinux.net;
+        root /code/djangoblog/collectedstatic/;
+        listen 80;
+        keepalive_timeout 70;
+        location /static/ {
+            expires max;
+            alias /code/djangoblog/collectedstatic/;
+        }
+
+        location ~* (robots\.txt|ads\.txt|favicon\.ico|favion\.ico|crossdomain\.xml|google93fd32dbd906620a\.html|BingSiteAuth\.xml|baidu_verify_Ijeny6KrmS\.html)$ {
+        root             /resource/djangopub;
+        expires          1d;
+        access_log off;
+        error_log off;
+        }
+
+        location / {
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header Host $http_host;
+            proxy_set_header X-NginX-Proxy true;
+            proxy_redirect off;
+            if (!-f $request_filename) {
+                proxy_pass http://djangoblog:8000;
+                break;
+            }
+        }
+    }
+    server {
+      server_name www.lylinux.net;
+      listen 80;
+      return 301 https://lylinux.net$request_uri;
+    }
+  resource.lylinux.net.conf: |
+    server {
+        index index.html index.htm;
+        server_name resource.lylinux.net;
+        root /resource/;
+
+        location /djangoblog/ {
+            alias /code/djangoblog/collectedstatic/;
+        }
+
+        access_log off;
+        error_log off;
+        include lylinux/resource.conf;
+    }
+  lylinux.resource.conf: |
+    expires max;
+    access_log        off;
+    log_not_found     off;
+    add_header Pragma public;
+    add_header Cache-Control "public";
+    add_header "Access-Control-Allow-Origin" "*";
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: djangoblog-env
+  namespace: djangoblog
+data:
+  DJANGO_MYSQL_DATABASE: djangoblog
+  DJANGO_MYSQL_USER: db_user
+  DJANGO_MYSQL_PASSWORD: db_password
+  DJANGO_MYSQL_HOST: db_host
+  DJANGO_MYSQL_PORT: db_port
+  DJANGO_REDIS_URL: "redis:6379"
+  DJANGO_DEBUG: "False"
+  MYSQL_ROOT_PASSWORD: DjAnGoBlOg!2!Q@W#E
+  MYSQL_DATABASE: djangoblog
+  MYSQL_PASSWORD: DjAnGoBlOg!2!Q@W#E
+  DJANGO_SECRET_KEY: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
