@@ -363,3 +363,26 @@ class BlogSettings(models.Model):
         super().save(*args, **kwargs)
         from djangoblog.utils import cache
         cache.clear()
+
+
+class Favorite(BaseModel):
+    """文章收藏"""
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        verbose_name=_('user'),
+        on_delete=models.CASCADE)
+    article = models.ForeignKey(
+        'Article',
+        verbose_name=_('article'),
+        on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = _('favorite')
+        verbose_name_plural = verbose_name
+        unique_together = ('user', 'article')  # 防止重复收藏
+
+    def __str__(self):
+        return f'{self.user.username} - {self.article.title}'
+
+    def get_absolute_url(self):
+        return self.article.get_absolute_url()

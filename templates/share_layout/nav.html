@@ -7,6 +7,12 @@
                 class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item menu-item-home menu-item-3498">
                 <a href="/">{% trans 'index' %}</a></li>
 
+            <li class="menu-item">
+                <a href="{% url 'blog:favorite_list' %}">
+                    <i class="fa fa-star"></i> 我的收藏
+                </a>
+            </li>
+
             {% load blog_tags %}
             {% query nav_category_list parent_category=None as root_categorys %}
             {% for node in root_categorys %}

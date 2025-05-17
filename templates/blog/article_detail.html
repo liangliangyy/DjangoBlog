@@ -32,6 +32,15 @@
         <div id="content" role="main">
             {% load_article_detail article False user %}
 
+            {% if user.is_authenticated %}
+                <div class="favorite-container" style="margin: 20px 0;">
+                    <button id="favoriteBtn" class="btn btn-primary" data-article-id="{{ article.id }}">
+                        <i class="fa fa-star"></i> 
+                        <span id="favoriteText">收藏文章</span>
+                    </button>
+                </div>
+            {% endif %}
+
             {% if article.type == 'a' %}
                 <nav class="nav-single">
                     <h3 class="assistive-text">文章导航</h3>
@@ -69,6 +78,68 @@
         {% endif %}
     </div><!-- #primary -->
 
+    {% if user.is_authenticated %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const favoriteBtn = document.getElementById('favoriteBtn');
+            const favoriteText = document.getElementById('favoriteText');
+            const articleId = favoriteBtn.dataset.articleId;
+
+            // 检查是否已收藏
+            fetch(`/favorite/check/${articleId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.is_favorite) {
+                        favoriteBtn.classList.remove('btn-primary');
+                        favoriteBtn.classList.add('btn-danger');
+                        favoriteText.textContent = '取消收藏';
+                    }
+                });
+
+            favoriteBtn.addEventListener('click', function() {
+                const isFavorite = favoriteBtn.classList.contains('btn-danger');
+                const url = isFavorite ? `/favorite/remove/${articleId}/` : `/favorite/add/${articleId}/`;
+
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken')
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        if (isFavorite) {
+                            favoriteBtn.classList.remove('btn-danger');
+                            favoriteBtn.classList.add('btn-primary');
+                            favoriteText.textContent = '收藏文章';
+                        } else {
+                            favoriteBtn.classList.remove('btn-primary');
+                            favoriteBtn.classList.add('btn-danger');
+                            favoriteText.textContent = '取消收藏';
+                        }
+                    }
+                });
+            });
+
+            // 获取CSRF Token的函数
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+        });
+    </script>
+    {% endif %}
 {% endblock %}
 
 {% block sidebar %}

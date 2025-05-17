@@ -59,4 +59,8 @@ urlpatterns = [
         r'clean',
         views.clean_cache_view,
         name='clean'),
+    path('favorite/add/<int:article_id>/', views.add_favorite, name='add_favorite'),
+    path('favorite/remove/<int:article_id>/', views.remove_favorite, name='remove_favorite'),
+    path('favorite/check/<int:article_id>/', views.check_favorite, name='check_favorite'),
+    path('favorites/', views.favorite_list, name='favorite_list'),
 ]
