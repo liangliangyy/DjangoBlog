@@ -1,6 +1,7 @@
 {% extends 'share_layout/base.html' %}
 {% load blog_tags %}
 {% load i18n %}
+{% load static %}
 
 {% block title %}
     我的收藏 - {{ SITE_NAME }}
@@ -47,45 +48,10 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
+{% endblock %}
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.remove-favorite').forEach(button => {
-                button.addEventListener('click', function() {
-                    const articleId = this.dataset.articleId;
-                    fetch(`/favorite/remove/${articleId}/`, {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRFToken': getCookie('csrftoken')
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.status === 'success') {
-                            this.closest('.article-item').remove();
-                        }
-                    });
-                });
-            });
-
-            // 获取CSRF Token的函数
-            function getCookie(name) {
-                let cookieValue = null;
-                if (document.cookie && document.cookie !== '') {
-                    const cookies = document.cookie.split(';');
-                    for (let i = 0; i < cookies.length; i++) {
-                        const cookie = cookies[i].trim();
-                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                            break;
-                        }
-                    }
-                }
-                return cookieValue;
-            }
-        });
-    </script>
+{% block extra_js %}
+    <script src="{% static 'blog/js/blog.js' %}"></script>
 {% endblock %} 
