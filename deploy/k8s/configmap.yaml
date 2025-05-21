@@ -112,8 +112,8 @@ data:
   DJANGO_MYSQL_PORT: db_port
   DJANGO_REDIS_URL: "redis:6379"
   DJANGO_DEBUG: "False"
-  MYSQL_ROOT_PASSWORD: DjAnGoBlOg!2!Q@W#E
+  MYSQL_ROOT_PASSWORD: db_password
   MYSQL_DATABASE: djangoblog
-  MYSQL_PASSWORD: DjAnGoBlOg!2!Q@W#E
+  MYSQL_PASSWORD: db_password
   DJANGO_SECRET_KEY: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
