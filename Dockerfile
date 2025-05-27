@@ -1,4 +1,4 @@
-FROM python:3.11
+FROM registry.cn-shenzhen.aliyuncs.com/liangliangyy/python:3.11
 ENV PYTHONUNBUFFERED 1
 WORKDIR /code/djangoblog/
 RUN  apt-get update && \
