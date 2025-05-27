@@ -4,9 +4,8 @@ import uuid
 
 from django.conf import settings
 from django.core.paginator import Paginator
-from django.http import HttpResponse, HttpResponseForbidden
-from django.shortcuts import get_object_or_404
-from django.shortcuts import render
+from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
+from django.shortcuts import get_object_or_404, render
 from django.templatetags.static import static
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -14,8 +13,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from haystack.views import SearchView
+from django.contrib.auth.decorators import login_required
 
-from blog.models import Article, Category, LinkShowType, Links, Tag
+from blog.models import Article, Category, LinkShowType, Links, Tag, Favorite
 from comments.forms import CommentForm
 from djangoblog.utils import cache, get_blog_setting, get_sha256
 
@@ -373,3 +373,46 @@ def permission_denied_view(
 def clean_cache_view(request):
     cache.clear()
     return HttpResponse('ok')
+
+
+@login_required
+def add_favorite(request, article_id):
+    article = get_object_or_404(Article, id=article_id)
+    favorite, created = Favorite.objects.get_or_create(
+        user=request.user,
+        article=article
+    )
+    return JsonResponse({
+        'status': 'success',
+        'message': '收藏成功' if created else '已经收藏过了'
+    })
+
+@login_required
+def remove_favorite(request, article_id):
+    article = get_object_or_404(Article, id=article_id)
+    Favorite.objects.filter(
+        user=request.user,
+        article=article
+    ).delete()
+    return JsonResponse({
+        'status': 'success',
+        'message': '取消收藏成功'
+    })
+
+@login_required
+def favorite_list(request):
+    favorites = Favorite.objects.filter(user=request.user).select_related('article')
+    return render(request, 'blog/favorite_list.html', {
+        'favorites': favorites
+    })
+
+@login_required
+def check_favorite(request, article_id):
+    article = get_object_or_404(Article, id=article_id)
+    is_favorite = Favorite.objects.filter(
+        user=request.user,
+        article=article
+    ).exists()
+    return JsonResponse({
+        'is_favorite': is_favorite
+    })

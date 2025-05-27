@@ -89,3 +89,92 @@ window.onload = function () {
 //         form.submit();
 //     });
 // });
+
+// 获取CSRF Token的函数
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// 文章详情页收藏功能
+function initArticleFavorite() {
+    const favoriteBtn = document.getElementById('favoriteBtn');
+    if (!favoriteBtn) return;
+
+    const favoriteText = document.getElementById('favoriteText');
+    const articleId = favoriteBtn.dataset.articleId;
+
+    // 检查是否已收藏
+    fetch(`/favorite/check/${articleId}/`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.is_favorite) {
+                favoriteBtn.classList.remove('btn-primary');
+                favoriteBtn.classList.add('btn-danger');
+                favoriteText.textContent = '取消收藏';
+            }
+        });
+
+    favoriteBtn.addEventListener('click', function() {
+        const isFavorite = favoriteBtn.classList.contains('btn-danger');
+        const url = isFavorite ? `/favorite/remove/${articleId}/` : `/favorite/add/${articleId}/`;
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                if (isFavorite) {
+                    favoriteBtn.classList.remove('btn-danger');
+                    favoriteBtn.classList.add('btn-primary');
+                    favoriteText.textContent = '收藏文章';
+                } else {
+                    favoriteBtn.classList.remove('btn-primary');
+                    favoriteBtn.classList.add('btn-danger');
+                    favoriteText.textContent = '取消收藏';
+                }
+            }
+        });
+    });
+}
+
+// 收藏列表页功能
+function initFavoriteList() {
+    document.querySelectorAll('.remove-favorite').forEach(button => {
+        button.addEventListener('click', function() {
+            const articleId = this.dataset.articleId;
+            fetch(`/favorite/remove/${articleId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    this.closest('.article-item').remove();
+                }
+            });
+        });
+    });
+}
+
+// 初始化所有功能
+document.addEventListener('DOMContentLoaded', function() {
+    initArticleFavorite();
+    initFavoriteList();
+});

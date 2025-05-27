@@ -1,0 +1,57 @@
+{% extends 'share_layout/base.html' %}
+{% load blog_tags %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}
+    我的收藏 - {{ SITE_NAME }}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">我的收藏</h3>
+                    </div>
+                    <div class="card-body">
+                        {% if favorites %}
+                            <div class="article-list">
+                                {% for favorite in favorites %}
+                                    <div class="article-item">
+                                        <h2 class="article-title">
+                                            <a href="{{ favorite.article.get_absolute_url }}">
+                                                {{ favorite.article.title }}
+                                            </a>
+                                        </h2>
+                                        <div class="article-meta">
+                                            <span class="article-date">
+                                                收藏于: {{ favorite.creation_time|date:"Y-m-d H:i" }}
+                                            </span>
+                                            <span class="article-category">
+                                                分类: <a href="{{ favorite.article.category.get_absolute_url }}">
+                                                    {{ favorite.article.category.name }}
+                                                </a>
+                                            </span>
+                                            <button class="btn btn-sm btn-danger remove-favorite" 
+                                                    data-article-id="{{ favorite.article.id }}">
+                                                取消收藏
+                                            </button>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p class="text-center">还没有收藏任何文章</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'blog/js/blog.js' %}"></script>
+{% endblock %} 
