@@ -40,7 +40,7 @@ python-logstash==0.4.8
 python-slugify==8.0.4
 pytz==2025.2
 redis==6.0.0
-requests==2.32.3
+requests==2.32.4
 setuptools==78.1.1
 six==1.17.0
 sqlparse==0.5.3
