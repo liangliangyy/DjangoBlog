@@ -1,6 +1,8 @@
+import math
 import re
 from djangoblog.plugin_manage.base_plugin import BasePlugin
 from djangoblog.plugin_manage import hooks
+from djangoblog.plugin_manage.hook_constants import ARTICLE_CONTENT_HOOK_NAME
 
 
 class ReadingTimePlugin(BasePlugin):
@@ -10,7 +12,7 @@ class ReadingTimePlugin(BasePlugin):
     PLUGIN_AUTHOR = 'liangliangyy'
 
     def register_hooks(self):
-        hooks.register('the_content', self.add_reading_time)
+        hooks.register(ARTICLE_CONTENT_HOOK_NAME, self.add_reading_time)
 
     def add_reading_time(self, content, *args, **kwargs):
         """
@@ -26,8 +28,8 @@ class ReadingTimePlugin(BasePlugin):
         word_count = len(words)
         
         # 按平均每分钟200字的速度计算
-        reading_speed = 200 
-        reading_minutes = round(word_count / reading_speed)
+        reading_speed = 200
+        reading_minutes = math.ceil(word_count / reading_speed)
 
         # 如果阅读时间少于1分钟，则显示为1分钟
         if reading_minutes < 1:

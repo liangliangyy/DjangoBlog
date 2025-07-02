@@ -19,6 +19,7 @@ from haystack.views import SearchView
 from blog.models import Article, Category, LinkShowType, Links, Tag
 from comments.forms import CommentForm
 from djangoblog.plugin_manage import hooks
+from djangoblog.plugin_manage.hook_constants import ARTICLE_CONTENT_HOOK_NAME
 from djangoblog.utils import cache, get_blog_setting, get_sha256
 
 logger = logging.getLogger(__name__)
@@ -160,13 +161,13 @@ class ArticleDetailView(DetailView):
         article = self.object
         # Action Hook, 通知插件"文章详情已获取"
         hooks.run_action('after_article_body_get', article=article, request=self.request)
-        # Filter Hook, 允许插件修改文章正文
-        article.body = hooks.apply_filters('the_content', article.body, article=article, request=self.request)
-        # toc = markdown.toc
-        md = markdown.Markdown(extensions=[
-            'markdown.extensions.extra',
-        ])
-        article.body = md.convert(article.body)
+        # # Filter Hook, 允许插件修改文章正文
+        article.body = hooks.apply_filters(ARTICLE_CONTENT_HOOK_NAME, article.body, article=article, request=self.request)
+        # # toc = markdown.toc
+        # md = markdown.Markdown(extensions=[
+        #     'markdown.extensions.extra',
+        # ])
+        # article.body = md.convert(article.body)
 
         return context
 

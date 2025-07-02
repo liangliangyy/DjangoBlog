@@ -1,5 +1,6 @@
 from djangoblog.plugin_manage.base_plugin import BasePlugin
 from djangoblog.plugin_manage import hooks
+from djangoblog.plugin_manage.hook_constants import ARTICLE_CONTENT_HOOK_NAME
 
 
 class ArticleCopyrightPlugin(BasePlugin):
@@ -11,7 +12,7 @@ class ArticleCopyrightPlugin(BasePlugin):
     # 2. 实现 register_hooks 方法，专门用于注册钩子
     def register_hooks(self):
         # 在这里将插件的方法注册到指定的钩子上
-        hooks.register('the_content', self.add_copyright_to_content)
+        hooks.register(ARTICLE_CONTENT_HOOK_NAME, self.add_copyright_to_content)
 
     def add_copyright_to_content(self, content, *args, **kwargs):
         """
@@ -22,7 +23,7 @@ class ArticleCopyrightPlugin(BasePlugin):
         if not article:
             return content
 
-        copyright_info = f"\n<hr><p>本文由 {article.author.nickname} 原创，转载请注明出处。</p>"
+        copyright_info = f"\n<hr><p>本文由 {article.author.username} 原创，转载请注明出处。</p>"
         return content + copyright_info
 
 

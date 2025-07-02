@@ -2,6 +2,7 @@ import re
 from urllib.parse import urlparse
 from djangoblog.plugin_manage.base_plugin import BasePlugin
 from djangoblog.plugin_manage import hooks
+from djangoblog.plugin_manage.hook_constants import ARTICLE_CONTENT_HOOK_NAME
 
 
 class ExternalLinksPlugin(BasePlugin):
@@ -11,7 +12,7 @@ class ExternalLinksPlugin(BasePlugin):
     PLUGIN_AUTHOR = 'liangliangyy'
 
     def register_hooks(self):
-        hooks.register('the_content', self.process_external_links)
+        hooks.register(ARTICLE_CONTENT_HOOK_NAME, self.process_external_links)
 
     def process_external_links(self, content, *args, **kwargs):
         from djangoblog.utils import get_current_site
