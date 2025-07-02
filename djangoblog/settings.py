@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 import os
 import sys
+from pathlib import Path
 
 from django.utils.translation import gettext_lazy as _
 
@@ -20,9 +21,8 @@ def env_to_bool(env, default):
     return default if str_val is None else str_val == 'True'
 
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
@@ -330,3 +330,18 @@ if os.environ.get('DJANGO_ELASTICSEARCH_HOST'):
             'ENGINE': 'djangoblog.elasticsearch_backend.ElasticSearchEngine',
         },
     }
+
+# Plugin System
+PLUGINS_DIR = BASE_DIR / 'plugins'
+ACTIVE_PLUGINS = [
+    'article_plugin_test',
+]
+
+# 加载插件
+for plugin_dir in os.listdir(PLUGINS_DIR):
+    plugin_path = os.path.join(PLUGINS_DIR, plugin_dir)
+    if os.path.isdir(plugin_path) and os.path.exists(os.path.join(plugin_path, '__init__.py')):
+        try:
+            __import__(f'plugins.{plugin_dir}.plugin')
+        except ImportError:
+            pass
