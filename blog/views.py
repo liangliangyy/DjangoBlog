@@ -2,7 +2,6 @@ import logging
 import os
 import uuid
 
-import markdown
 from django.conf import settings
 from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseForbidden
