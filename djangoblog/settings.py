@@ -334,7 +334,9 @@ if os.environ.get('DJANGO_ELASTICSEARCH_HOST'):
 # Plugin System
 PLUGINS_DIR = BASE_DIR / 'plugins'
 ACTIVE_PLUGINS = [
-    'article_plugin_test',
+    'article_copyright',
+    'reading_time',
+    'external_links',
 ]
 
 # 加载插件

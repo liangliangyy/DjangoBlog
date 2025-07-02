@@ -3,11 +3,9 @@ from djangoblog.plugin_manage import hooks
 
 
 class ArticleCopyrightPlugin(BasePlugin):
-    # 1. 将插件元数据定义为类属性，以匹配 BasePlugin 的要求
     PLUGIN_NAME = '文章结尾版权声明'
-    PLUGIN_DESCRIPTION = '一个在文章正文末尾添加版权声明的测试插件。'
+    PLUGIN_DESCRIPTION = '一个在文章正文末尾添加版权声明的插件。'
     PLUGIN_VERSION = '0.2.0'
-    # 也可以添加作者等其他自定义元数据
     PLUGIN_AUTHOR = 'liangliangyy'
 
     # 2. 实现 register_hooks 方法，专门用于注册钩子
@@ -24,7 +22,7 @@ class ArticleCopyrightPlugin(BasePlugin):
         if not article:
             return content
 
-        copyright_info = f"\n<hr><p>本文由 {article.author.username} 原创，转载请注明出处。</p>"
+        copyright_info = f"\n<hr><p>本文由 {article.author.nickname} 原创，转载请注明出处。</p>"
         return content + copyright_info
 
 
