@@ -30,7 +30,7 @@ multidict==6.2.0
 mysqlclient==2.2.7
 openai==0.28.1
 packaging==24.2
-pillow==11.2.1
+pillow==11.3.0
 propcache==0.3.1
 pycparser==2.22
 Pygments==2.19.1
