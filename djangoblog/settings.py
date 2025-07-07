@@ -337,6 +337,7 @@ ACTIVE_PLUGINS = [
     'article_copyright',
     'reading_time',
     'external_links',
+    'view_count'
 ]
 
 # 加载插件
