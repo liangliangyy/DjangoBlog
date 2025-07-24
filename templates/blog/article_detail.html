@@ -2,30 +2,6 @@
 {% load blog_tags %}
 
 {% block header %}
-    <title>{{ article.title }} | {{ SITE_DESCRIPTION }}</title>
-    <meta property="og:type" content="article"/>
-    <meta property="og:title" content="{{ article.title }}"/>
-
-
-    <meta property="og:description" content="{{ article.body|custom_markdown|striptags|truncatewords:1 }}"/>
-    <meta property="og:url"
-          content="{{ article.get_full_url }}"/>
-    <meta property="article:published_time" content="{% datetimeformat article.pub_time %}"/>
-    <meta property="article:modified_time" content="{% datetimeformat article.pub_time %}"/>
-    <meta property="article:author" content="{{ article.author.get_full_url }}"/>
-    <meta property="article:section" content="{{ article.category.name }}"/>
-    {% for t in article.tags.all %}
-        <meta property="article:tag" content="{{ t.name }}"/>
-    {% endfor %}
-    <meta property="og:site_name" content="{{ SITE_NAME }}"/>
-
-    <meta name="description" content="{{ article.body|custom_markdown|striptags|truncatewords:1 }}"/>
-    {% if article.tags %}
-        <meta name="keywords" content="{{ article.tags.all|join:"," }}"/>
-    {% else %}
-        <meta name="keywords" content="{{ SITE_KEYWORDS }}"/>
-    {% endif %}
-
 {% endblock %}
 {% block content %}
     <div id="primary" class="site-content">
