@@ -11,7 +11,7 @@ class SeoOptimizerPlugin(BasePlugin):
     PLUGIN_NAME = 'SEO 优化器'
     PLUGIN_DESCRIPTION = '为文章、页面等提供 SEO 优化，动态生成 meta 标签和 JSON-LD 结构化数据。'
     PLUGIN_VERSION = '0.2.0'
-    PLUGIN_AUTHOR = 'Gemini'
+    PLUGIN_AUTHOR = 'liuangliangyy'
 
     def register_hooks(self):
         hooks.register('head_meta', self.dispatch_seo_generation)
