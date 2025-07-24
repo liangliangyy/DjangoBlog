@@ -1,4 +1,5 @@
 import logging
+import re
 from abc import abstractmethod
 
 from django.conf import settings
@@ -164,6 +165,16 @@ class Article(BaseModel):
     def prev_article(self):
         # 前一篇
         return Article.objects.filter(id__lt=self.id, status='p').first()
+
+    def get_first_image_url(self):
+        """
+        Get the first image url from article.body.
+        :return:
+        """
+        match = re.search(r'!\[.*?\]\((.+?)\)', self.body)
+        if match:
+            return match.group(1)
+        return ""
 
 
 class Category(BaseModel):

@@ -60,7 +60,8 @@ INSTALLED_APPS = [
     'oauth',
     'servermanager',
     'owntracks',
-    'compressor'
+    'compressor',
+    'djangoblog'
 ]
 
 MIDDLEWARE = [
@@ -337,14 +338,6 @@ ACTIVE_PLUGINS = [
     'article_copyright',
     'reading_time',
     'external_links',
-    'view_count'
+    'view_count',
+    'seo_optimizer'
 ]
-
-# 加载插件
-for plugin_dir in os.listdir(PLUGINS_DIR):
-    plugin_path = os.path.join(PLUGINS_DIR, plugin_dir)
-    if os.path.isdir(plugin_path) and os.path.exists(os.path.join(plugin_path, '__init__.py')):
-        try:
-            __import__(f'plugins.{plugin_dir}.plugin')
-        except ImportError as e:
-            print("Failed to import plugin:", plugin_dir, e)

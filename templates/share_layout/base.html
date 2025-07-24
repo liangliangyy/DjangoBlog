@@ -18,7 +18,12 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width"/>
     {% block header %}
+        <title>{% block title %}{{ SITE_NAME }}{% endblock %}</title>
+        <meta name="description" content="{{ SITE_DESCRIPTION }}">
+        <meta name="keywords" content="{{ SITE_KEYWORDS }}">
     {% endblock %}
+    {% load blog_tags %}
+    {% head_meta %}
     <link rel="profile" href="http://gmpg.org/xfn/11"/>
 
     <!--[if lt IE 9]>

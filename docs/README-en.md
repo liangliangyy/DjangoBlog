@@ -1,122 +1,158 @@
 # DjangoBlog
 
-🌍
-*[English](README-en.md) ∙ [简体中文](README.md)*
+<p align="center">
+  <a href="https://github.com/liangliangyy/DjangoBlog/actions/workflows/django.yml"><img src="https://github.com/liangliangyy/DjangoBlog/actions/workflows/django.yml/badge.svg" alt="Django CI"></a>
+  <a href="https://github.com/liangliangyy/DjangoBlog/actions/workflows/codeql-analysis.yml"><img src="https://github.com/liangliangyy/DjangoBlog/actions/workflows/codeql-analysis.yml/badge.svg" alt="CodeQL"></a>
+  <a href="https://codecov.io/gh/liangliangyy/DjangoBlog"><img src="https://codecov.io/gh/liangliangyy/DjangoBlog/branch/master/graph/badge.svg" alt="codecov"></a>
+  <a href="https://github.com/liangliangyy/DjangoBlog/blob/master/LICENSE"><img src="https://img.shields.io/github/license/liangliangyy/djangoblog.svg" alt="license"></a>
+</p>
 
-A blog system based on `python3.8` and `Django4.0`.
+<p align="center">
+  <b>A powerful, elegant, and modern blog system.</b>
+  <br>
+  <b>English</b> • <a href="/README.md">简体中文</a>
+</p>
 
+---
 
-[![Django CI](https://github.com/liangliangyy/DjangoBlog/actions/workflows/django.yml/badge.svg)](https://github.com/liangliangyy/DjangoBlog/actions/workflows/django.yml) [![CodeQL](https://github.com/liangliangyy/DjangoBlog/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/liangliangyy/DjangoBlog/actions/workflows/codeql-analysis.yml) [![codecov](https://codecov.io/gh/liangliangyy/DjangoBlog/branch/master/graph/badge.svg)](https://codecov.io/gh/liangliangyy/DjangoBlog) [![license](https://img.shields.io/github/license/liangliangyy/djangoblog.svg)]()  
+DjangoBlog is a high-performance blog platform built with Python 3.10 and Django 4.0. It not only provides all the core functionalities of a traditional blog but also features a flexible plugin system, allowing you to easily extend and customize your website. Whether you are a personal blogger, a tech enthusiast, or a content creator, DjangoBlog aims to provide a stable, efficient, and easy-to-maintain environment for writing and publishing.
 
+## ✨ Features
 
-## Main Features:
-- Articles, Pages, Categories, Tags(Add, Delete, Edit), edc. Articles and pages support `Markdown` and highlighting.
-- Articles support full-text search.
-- Complete comment feature, include posting reply comment and email notification. `Markdown` supporting.
-- Sidebar feature: new articles, most readings, tags, etc.
-- OAuth Login supported, including Google, GitHub, Facebook, Weibo, QQ.
-- `Memcache` supported, with cache auto refresh.
-- Simple SEO Features, notify Google and Baidu when there was a new article or other things.
-- Simple picture bed feature integrated.
-- `django-compressor` integrated, auto-compressed `css`, `js`.
-- Website exception email notification. When there is an unhandle exception, system will send an email notification.
-- Wechat official account feature integrated. Now, you can use wechat official account to manage your VPS.
+- **Powerful Content Management**: Full support for managing articles, standalone pages, categories, and tags. Comes with a powerful built-in Markdown editor with syntax highlighting.
+- **Full-Text Search**: Integrated search engine for fast and accurate content searching.
+- **Interactive Comment System**: Supports replies, email notifications, and Markdown formatting in comments.
+- **Flexible Sidebar**: Customizable modules for displaying recent articles, most viewed posts, tag cloud, and more.
+- **Social Login**: Built-in OAuth support, with integrations for Google, GitHub, Facebook, Weibo, QQ, and other major platforms.
+- **High-Performance Caching**: Native support for Redis caching with an automatic refresh mechanism to ensure high-speed website responses.
+- **SEO Friendly**: Basic SEO features are included, with automatic notifications to Google and Baidu upon new content publication.
+- **Extensible Plugin System**: Extend blog functionalities by creating standalone plugins, ensuring decoupled and maintainable code. We have already implemented features like view counting and SEO optimization through plugins!
+- **Integrated Image Hosting**: A simple, built-in image hosting feature for easy uploads and management.
+- **Automated Frontend**: Integrated with `django-compressor` to automatically compress and optimize CSS and JavaScript files.
+- **Robust Operations**: Built-in email notifications for website exceptions and management capabilities through a WeChat Official Account.
 
-## Installation:
-Change MySQL client from `pymysql` to `mysqlclient`, more details please reference [pypi](https://pypi.org/project/mysqlclient/) , checkout preperation before installation.
+## 🛠️ Tech Stack
 
-Install via pip: `pip install -Ur requirements.txt`
+- **Backend**: Python 3.10, Django 4.0
+- **Database**: MySQL, SQLite (configurable)
+- **Cache**: Redis
+- **Frontend**: HTML5, CSS3, JavaScript
+- **Search**: Whoosh, Elasticsearch (configurable)
+- **Editor**: Markdown (mdeditor)
 
-If you do NOT have `pip`, please use the following methods to install:
-- OS X / Linux, run the following commands: 
+## 🚀 Getting Started
 
-    ```
-    curl http://peak.telecommunity.com/dist/ez_setup.py | python
-    curl https://raw.github.com/pypa/pip/master/contrib/get-pip.py | python
-    ```
+### 1. Prerequisites
 
-- Windows：
+Ensure you have Python 3.10+ and MySQL/MariaDB installed on your system.
 
-    Download http://peak.telecommunity.com/dist/ez_setup.py and https://raw.github.com/pypa/pip/master/contrib/get-pip.py, and run with python. 
+### 2. Clone & Installation
 
-### Configuration
-Most configurations are in `setting.py`, others are in backend configurations.
+```bash
+# Clone the project to your local machine
+git clone https://github.com/liangliangyy/DjangoBlog.git
+cd DjangoBlog
 
-I set many `setting` configuration with my environment variables (such as: `SECRET_KEY`, `OAUTH`, `mysql` and some email configuration parts.) and they did NOT been submitted to the `GitHub`. You can change these in the code with your own configuration or just add them into your environment variables.
-
-Files in `test` directory are for `travis` with automatic testing. You do not need to care about this. Or just use it, in this way to integrate `travis` for automatic testing.
-
-In `bin` directory, we have scripts to deploy with `Nginx`+`Gunicorn`+`virtualenv`+`supervisor` on `linux` and `Nginx` configuration file. You can reference with my article
-
->[DjangoBlog部署教程](https://www.lylinux.net/article/2019/8/5/58.html)
-
-More deploy detail in this article.
-
-## Run
-
-Modify `DjangoBlog/setting.py` with database settings, as following:
-
-```python
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'djangoblog',
-        'USER': 'root',
-        'PASSWORD': 'password',
-        'HOST': 'host',
-        'PORT': 3306,
-    }
-}
+# Install dependencies
+pip install -r requirements.txt
 ```
 
-### Create database
-Run the following command in MySQL shell:
-```sql
-CREATE DATABASE `djangoblog` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */;
-```
+### 3. Project Configuration
 
-Run the following commands in Terminal:
+- **Database**:
+  Open `djangoblog/settings.py`, locate the `DATABASES` section, and update it with your MySQL connection details.
+
+  ```python
+  DATABASES = {
+      'default': {
+          'ENGINE': 'django.db.backends.mysql',
+          'NAME': 'djangoblog',
+          'USER': 'root',
+          'PASSWORD': 'your_password',
+          'HOST': '127.0.0.1',
+          'PORT': 3306,
+      }
+  }
+  ```
+  Create the database in MySQL:
+  ```sql
+  CREATE DATABASE `djangoblog` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+  ```
+
+- **More Configurations**:
+  For advanced settings such as email, OAuth, caching, and more, please refer to our [Detailed Configuration Guide](/docs/config-en.md).
+
+### 4. Database Initialization
+
 ```bash
 python manage.py makemigrations
 python manage.py migrate
-```  
 
-### Create super user
-
-Run command in terminal:
-```bash
+# Create a superuser account
 python manage.py createsuperuser
 ```
 
-### Create testing data
-Run command in terminal:
-```bash
-python manage.py create_testdata
-```
+### 5. Running the Project
 
-### Collect static files
-Run command in terminal:
 ```bash
+# (Optional) Generate some test data
+python manage.py create_testdata
+
+# (Optional) Collect and compress static files
 python manage.py collectstatic --noinput
 python manage.py compress --force
+
+# Start the development server
+python manage.py runserver
 ```
 
-### Getting start to run server
-Execute: `python manage.py runserver`
+Now, open your browser and navigate to `http://127.0.0.1:8000/`. You should see the DjangoBlog homepage!
 
-Open up a browser and visit: http://127.0.0.1:8000/ , the you will see the blog.
+## Deployment
 
-## More configurations
-[More configurations details](/docs/config-en.md)
+- **Traditional Deployment**: A detailed guide for server deployment is available here: [Deployment Tutorial](https://www.lylinux.net/article/2019/8/5/58.html) (in Chinese).
+- **Docker Deployment**: This project fully supports Docker. If you are familiar with containerization, please refer to the [Docker Deployment Guide](/docs/docker-en.md) for a quick start.
+- **Kubernetes Deployment**: We also provide a complete [Kubernetes Deployment Guide](/docs/k8s-en.md) to help you go cloud-native easily.
 
-## About the issues
+## 🧩 Plugin System
 
-If you have any *question*, please use Issue or send problem descriptions to my email `liangliangyy#gmail.com`. I will reponse you as soon as possible. And, we recommend you to use Issue.
+The plugin system is a core feature of DjangoBlog. It allows you to add new functionalities to your blog without modifying the core codebase by writing standalone plugins.
+
+- **How it Works**: Plugins operate by registering callback functions to predefined "hooks". For instance, when an article is rendered, the `after_article_body_get` hook is triggered, and all functions registered to this hook are executed.
+- **Existing Plugins**: Features like `view_count` and `seo_optimizer` are implemented through this plugin system.
+- **Develop Your Own Plugin**: Simply create a new folder under the `plugins` directory and write your `plugin.py`. We welcome you to explore and contribute your creative ideas to the DjangoBlog community!
+
+## 🤝 Contributing
+
+We warmly welcome contributions of any kind! If you have great ideas or have found a bug, please feel free to open an issue or submit a pull request.
+
+## 📄 License
+
+This project is open-sourced under the [MIT License](LICENSE).
 
 ---
-## To Everyone 🙋‍♀️🙋‍♂️
-If this project helps you, please submit your site address [here](https://github.com/liangliangyy/DjangoBlog/issues/214) to let more people see it.
 
-Your reply will be the driving force for me to continue to update and maintain this project.
+## ❤️ Support & Sponsorship
 
-🙏🙏🙏
+If you find this project helpful and wish to support its continued maintenance and development, please consider buying me a coffee! Your support is my greatest motivation.
+
+<p align="center">
+  <img src="/docs/imgs/alipay.jpg" width="150" alt="Alipay Sponsorship">
+  <img src="/docs/imgs/wechat.jpg" width="150" alt="WeChat Sponsorship">
+</p>
+<p align="center">
+  <i>(Left) Alipay / (Right) WeChat</i>
+</p>
+
+## 🙏 Acknowledgements
+
+A special thanks to **JetBrains** for providing a free open-source license for this project.
+
+<p align="center">
+  <a href="https://www.jetbrains.com/?from=DjangoBlog">
+    <img src="/docs/imgs/pycharm_logo.png" width="150" alt="JetBrains Logo">
+  </a>
+</p>
+
+---
+> If this project has helped you, please leave your website URL [here](https://github.com/liangliangyy/DjangoBlog/issues/214) to let more people see it. Your feedback is the driving force for my continued updates and maintenance.

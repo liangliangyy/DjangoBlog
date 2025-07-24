@@ -18,10 +18,16 @@ from djangoblog.utils import CommonMarkdown, sanitize_html
 from djangoblog.utils import cache
 from djangoblog.utils import get_current_site
 from oauth.models import OAuthUser
+from djangoblog.plugin_manage import hooks
 
 logger = logging.getLogger(__name__)
 
 register = template.Library()
+
+
+@register.simple_tag(takes_context=True)
+def head_meta(context):
+    return mark_safe(hooks.apply_filters('head_meta', '', context))
 
 
 @register.simple_tag
