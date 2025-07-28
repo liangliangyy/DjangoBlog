@@ -57,3 +57,4 @@ class BlogUserAdmin(UserAdmin):
         'source')
     list_display_links = ('id', 'username')
     ordering = ('-id',)
+    search_fields = ('username', 'nickname', 'email')
