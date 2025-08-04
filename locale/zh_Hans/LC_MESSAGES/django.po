@@ -633,10 +633,6 @@ msgstr "书签"
 msgid "Tag Cloud"
 msgstr "标签云"
 
-#: .\templates\blog\tags\sidebar.html:107
-msgid "Welcome to star or fork the source code of this site"
-msgstr "欢迎您STAR或者FORK本站源代码"
-
 #: .\templates\blog\tags\sidebar.html:118
 msgid "Function"
 msgstr "功能"

@@ -651,10 +651,6 @@ msgstr "bookmark"
 msgid "Tag Cloud"
 msgstr "Tag Cloud"
 
-#: .\templates\blog\tags\sidebar.html:107
-msgid "Welcome to star or fork the source code of this site"
-msgstr "Welcome to star or fork the source code of this site"
-
 #: .\templates\blog\tags\sidebar.html:118
 msgid "Function"
 msgstr "Function"
