@@ -8,7 +8,7 @@ import random
 import string
 import uuid
 from hashlib import sha256
-
+import hmac
 import bleach
 import markdown
 import requests
@@ -26,8 +26,11 @@ def get_max_articleid_commentid():
     return (Article.objects.latest().pk, Comment.objects.latest().pk)
 
 
-def get_sha256(str):
-    m = sha256(str.encode('utf-8'))
+def get_sha256(message):
+    # Use HMAC-SHA256 with the Django SECRET_KEY for integrity protection
+    key = settings.SECRET_KEY.encode('utf-8')
+    msg = message.encode('utf-8')
+    m = hmac.new(key, msg, sha256)
     return m.hexdigest()
 
 
