@@ -22,6 +22,11 @@ class ArticleCopyrightPlugin(BasePlugin):
         article = kwargs.get('article')
         if not article:
             return content
+        
+        # 如果是摘要模式（首页），不添加版权声明
+        is_summary = kwargs.get('is_summary', False)
+        if is_summary:
+            return content
 
         copyright_info = f"\n<hr><p>本文由 {article.author.username} 原创，转载请注明出处。</p>"
         return content + copyright_info
