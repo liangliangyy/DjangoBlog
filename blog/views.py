@@ -154,10 +154,6 @@ class ArticleDetailView(DetailView):
         article = self.object
         # Action Hook, 通知插件"文章详情已获取"
         hooks.run_action('after_article_body_get', article=article, request=self.request)
-        # # Filter Hook, 允许插件修改文章正文
-        article.body = hooks.apply_filters(ARTICLE_CONTENT_HOOK_NAME, article.body, article=article,
-                                           request=self.request)
-
         return context
 
 

@@ -97,6 +97,8 @@ class SeoOptimizerPlugin(BasePlugin):
         structured_data = {
             "@context": "https://schema.org",
             "@type": "WebSite",
+            "name": blog_setting.site_name,
+            "description": blog_setting.site_description,
             "url": request.build_absolute_uri('/'),
             "potentialAction": {
                 "@type": "SearchAction",
@@ -131,12 +133,15 @@ class SeoOptimizerPlugin(BasePlugin):
 
         json_ld_script = f'<script type="application/ld+json">{json.dumps(seo_data.get("json_ld", {}), ensure_ascii=False, indent=4)}</script>'
 
-        return f"""
+        seo_html = f"""
         <title>{seo_data.get("title", "")}</title>
         <meta name="description" content="{seo_data.get("description", "")}">
         <meta name="keywords" content="{seo_data.get("keywords", "")}">
         {seo_data.get("meta_tags", "")}
         {json_ld_script}
         """
+        
+        # 将SEO内容追加到现有的metas内容上
+        return metas + seo_html
 
 plugin = SeoOptimizerPlugin()

@@ -51,7 +51,14 @@ def datetimeformat(data):
 @register.filter()
 @stringfilter
 def custom_markdown(content):
-    return mark_safe(CommonMarkdown.get_markdown(content))
+    html_content = CommonMarkdown.get_markdown(content)
+    
+    # 然后应用插件过滤器优化HTML
+    from djangoblog.plugin_manage import hooks
+    from djangoblog.plugin_manage.hook_constants import ARTICLE_CONTENT_HOOK_NAME
+    optimized_html = hooks.apply_filters(ARTICLE_CONTENT_HOOK_NAME, html_content)
+    
+    return mark_safe(optimized_html)
 
 
 @register.simple_tag

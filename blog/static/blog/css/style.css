@@ -2502,3 +2502,205 @@ li #reply-title {
     border: none;
     /*border-top: 1px dashed #f5d6d6;*/
 }
+
+/* =============================================================================
+   评论内容溢出修复样式
+   解决代码块和长文本撑开页面布局的问题
+   ============================================================================= */
+
+/* 评论容器基础样式 */
+.comment-body {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* 修复评论中的代码块溢出 */
+.comment-content pre,
+.comment-body pre {
+    white-space: pre-wrap !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    max-width: 100% !important;
+    overflow-x: auto;
+    padding: 10px;
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 12px;
+    line-height: 1.4;
+    margin: 10px 0;
+}
+
+/* 修复评论中的行内代码 */
+.comment-content code,
+.comment-body code {
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    white-space: pre-wrap;
+    max-width: 100%;
+    display: inline-block;
+    vertical-align: top;
+}
+
+/* 修复评论中的长链接 */
+.comment-content a,
+.comment-body a {
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    word-break: break-all;
+    max-width: 100%;
+}
+
+/* 修复评论段落 */
+.comment-content p,
+.comment-body p {
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    max-width: 100%;
+    margin: 10px 0;
+}
+
+/* 特殊处理代码高亮块 - 关键修复！ */
+.comment-content .codehilite,
+.comment-body .codehilite {
+    max-width: 100% !important;
+    overflow-x: auto;
+    margin: 10px 0;
+    background: #f8f8f8 !important;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 12px;
+    line-height: 1.4;
+    /* 关键：防止内容撑开容器 */
+    width: 100%;
+    box-sizing: border-box;
+    display: block;
+}
+
+.comment-content .codehilite pre,
+.comment-body .codehilite pre {
+    white-space: pre-wrap !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    font-size: inherit;
+    line-height: inherit;
+    /* 确保pre标签不会超出父容器 */
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* 修复代码高亮中的span标签 */
+.comment-content .codehilite span,
+.comment-body .codehilite span {
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    /* 防止行内元素导致的溢出 */
+    display: inline;
+    max-width: 100%;
+}
+
+/* 针对特定的代码高亮类 */
+.comment-content .codehilite .kt,
+.comment-content .codehilite .nf,
+.comment-content .codehilite .n,
+.comment-content .codehilite .p,
+.comment-content .codehilite .w,
+.comment-content .codehilite .o,
+.comment-body .codehilite .kt,
+.comment-body .codehilite .nf,
+.comment-body .codehilite .n,
+.comment-body .codehilite .p,
+.comment-body .codehilite .w,
+.comment-body .codehilite .o {
+    word-break: break-all;
+    overflow-wrap: break-word;
+}
+
+/* 修复评论列表项 */
+.commentlist li {
+    max-width: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+/* 确保评论内容不超出容器 */
+.commentlist .comment-body {
+    max-width: calc(100% - 20px); /* 留出一些边距 */
+    margin-left: 10px;
+    margin-right: 10px;
+    overflow: hidden; /* 防止内容溢出 */
+    word-wrap: break-word;
+}
+
+/* 重要：限制评论列表项的最大宽度 */
+.commentlist li[style*="margin-left"] {
+    max-width: calc(100% - 2rem) !important;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+/* 特别处理深层嵌套的评论 */
+.commentlist li[style*="margin-left: 3rem"],
+.commentlist li[style*="margin-left: 6rem"],
+.commentlist li[style*="margin-left: 9rem"] {
+    max-width: calc(100% - 1rem) !important;
+}
+
+/* 移动端优化 */
+@media (max-width: 768px) {
+    .comment-content pre,
+    .comment-body pre {
+        font-size: 11px;
+        padding: 8px;
+        margin: 8px 0;
+    }
+    
+    .commentlist .comment-body {
+        max-width: calc(100% - 10px);
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+    
+    /* 移动端评论缩进调整 */
+    .commentlist li[style*="margin-left"] {
+        margin-left: 1rem !important;
+        max-margin-left: 2rem !important;
+    }
+}
+
+/* 防止表格溢出 */
+.comment-content table,
+.comment-body table {
+    max-width: 100%;
+    overflow-x: auto;
+    display: block;
+    white-space: nowrap;
+}
+
+/* 修复图片溢出 */
+.comment-content img,
+.comment-body img {
+    max-width: 100% !important;
+    height: auto !important;
+}
+
+/* 修复引用块 */
+.comment-content blockquote,
+.comment-body blockquote {
+    max-width: 100%;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    padding: 10px 15px;
+    margin: 10px 0;
+    border-left: 4px solid #ddd;
+    background-color: #f9f9f9;
+}
