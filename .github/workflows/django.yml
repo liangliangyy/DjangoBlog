@@ -122,7 +122,20 @@ jobs:
           file: ./coverage.xml
           flags: unittests
           name: codecov-umbrella
+          slug: liangliangyy/DjangoBlog
           fail_ci_if_error: false
+          verbose: true
+          
+      - name: Upload coverage to Codecov (fallback)
+        if: failure()
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./coverage.xml
+          flags: unittests
+          name: codecov-umbrella-fallback
+          slug: liangliangyy/DjangoBlog
+          fail_ci_if_error: false
+          verbose: true
 
   docker:
     runs-on: ubuntu-latest
