@@ -32,12 +32,56 @@ comment:
   require_changes: no
 
 ignore:
+  # Django 相关
   - "*/migrations/*"
-  - "*/venv/*"
-  - "*/tests/*"
   - "manage.py"
-  - "*/settings/*"
+  - "*/settings.py"
+  - "*/wsgi.py"
+  - "*/asgi.py"
+  
+  # 测试相关
+  - "*/tests/*"
+  - "*/test_*.py"
+  - "*/*test*.py"
+  
+  # 静态文件和模板
   - "*/static/*"
   - "*/templates/*"
+  - "*/collectedstatic/*"
+  
+  # 国际化文件
   - "*/locale/*"
+  - "**/*.po"
+  - "**/*.mo"
+  
+  # 文档和部署
   - "*/docs/*"
+  - "*/deploy/*"
+  - "README*.md"
+  - "LICENSE"
+  - "Dockerfile"
+  - "docker-compose*.yml"
+  - "*.yaml"
+  - "*.yml"
+  
+  # 开发环境
+  - "*/venv/*"
+  - "*/__pycache__/*"
+  - "*.pyc"
+  - ".coverage"
+  - "coverage.xml"
+  
+  # 日志文件
+  - "*/logs/*"
+  - "*.log"
+  
+  # 特定文件
+  - "*/whoosh_cn_backend.py"  # 搜索后端
+  - "*/elasticsearch_backend.py"  # 搜索后端
+  - "*/MemcacheStorage.py"  # 缓存存储
+  - "*/robot.py"  # 机器人相关
+  
+  # 配置文件
+  - "codecov.yml"
+  - ".coveragerc"
+  - "requirements*.txt"

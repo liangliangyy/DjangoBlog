@@ -122,7 +122,6 @@ jobs:
           file: ./coverage.xml
           flags: unittests
           name: codecov-umbrella
-          slug: liangliangyy/DjangoBlog
           fail_ci_if_error: false
           verbose: true
           
@@ -133,7 +132,6 @@ jobs:
           file: ./coverage.xml
           flags: unittests
           name: codecov-umbrella-fallback
-          slug: liangliangyy/DjangoBlog
           fail_ci_if_error: false
           verbose: true
 
