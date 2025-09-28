@@ -6,7 +6,7 @@ from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
 # Register your models here.
-from .models import Article
+from .models import Article, Category, Tag, Links, SideBar, BlogSettings
 
 
 class ArticleForm(forms.ModelForm):
@@ -55,6 +55,7 @@ class ArticlelAdmin(admin.ModelAdmin):
         'article_order')
     list_display_links = ('id', 'title')
     list_filter = ('status', 'type', 'category')
+    date_hierarchy = 'creation_time'
     filter_horizontal = ('tags',)
     exclude = ('creation_time', 'last_modify_time')
     view_on_site = True
@@ -63,6 +64,7 @@ class ArticlelAdmin(admin.ModelAdmin):
         draft_article,
         close_article_commentstatus,
         open_article_commentstatus]
+    raw_id_fields = ('author', 'category',)
 
     def link_to_category(self, obj):
         info = (obj.category._meta.app_label, obj.category._meta.model_name)

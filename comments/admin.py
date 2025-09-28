@@ -29,6 +29,8 @@ class CommentAdmin(admin.ModelAdmin):
     list_filter = ('is_enable',)
     exclude = ('creation_time', 'last_modify_time')
     actions = [disable_commentstatus, enable_commentstatus]
+    raw_id_fields = ('author', 'article')
+    search_fields = ('body',)
 
     def link_to_userinfo(self, obj):
         info = (obj.author._meta.app_label, obj.author._meta.model_name)
