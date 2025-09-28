@@ -51,7 +51,64 @@ def datetimeformat(data):
 @register.filter()
 @stringfilter
 def custom_markdown(content):
-    return mark_safe(CommonMarkdown.get_markdown(content))
+    html_content = CommonMarkdown.get_markdown(content)
+    
+    # 然后应用插件过滤器优化HTML
+    from djangoblog.plugin_manage import hooks
+    from djangoblog.plugin_manage.hook_constants import ARTICLE_CONTENT_HOOK_NAME
+    optimized_html = hooks.apply_filters(ARTICLE_CONTENT_HOOK_NAME, html_content)
+    
+    return mark_safe(optimized_html)
+
+
+@register.simple_tag(takes_context=True)
+def render_article_content(context, article, is_summary=False):
+    """
+    渲染文章内容，包含完整的上下文信息供插件使用
+    
+    Args:
+        context: 模板上下文
+        article: 文章对象
+        is_summary: 是否为摘要模式（首页使用）
+    """
+    if not article or not hasattr(article, 'body'):
+        return ''
+    
+    # 先转换Markdown为HTML
+    html_content = CommonMarkdown.get_markdown(article.body)
+    
+    # 如果是摘要模式，先截断内容再应用插件
+    if is_summary:
+        # 截断HTML内容到合适的长度（约300字符）
+        from django.utils.html import strip_tags
+        from django.template.defaultfilters import truncatechars
+        
+        # 先去除HTML标签，截断纯文本，然后重新转换为HTML
+        plain_text = strip_tags(html_content)
+        truncated_text = truncatechars(plain_text, 300)
+        
+        # 重新转换截断后的文本为HTML（简化版，避免复杂的插件处理）
+        html_content = CommonMarkdown.get_markdown(truncated_text)
+    
+    # 然后应用插件过滤器，传递完整的上下文
+    from djangoblog.plugin_manage import hooks
+    from djangoblog.plugin_manage.hook_constants import ARTICLE_CONTENT_HOOK_NAME
+    
+    # 获取request对象
+    request = context.get('request')
+    
+    # 应用所有文章内容相关的插件
+    # 注意：摘要模式下某些插件（如版权声明）可能不适用
+    optimized_html = hooks.apply_filters(
+        ARTICLE_CONTENT_HOOK_NAME, 
+        html_content, 
+        article=article, 
+        request=request,
+        context=context,
+        is_summary=is_summary  # 传递摘要标志，插件可以据此调整行为
+    )
+    
+    return mark_safe(optimized_html)
 
 
 @register.simple_tag

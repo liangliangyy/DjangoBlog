@@ -224,9 +224,49 @@ def get_resource_url():
 
 
 ALLOWED_TAGS = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code', 'em', 'i', 'li', 'ol', 'pre', 'strong', 'ul', 'h1',
-                'h2', 'p']
-ALLOWED_ATTRIBUTES = {'a': ['href', 'title'], 'abbr': ['title'], 'acronym': ['title']}
+                'h2', 'p', 'span', 'div']
 
+# 安全的class值白名单 - 只允许代码高亮相关的class
+ALLOWED_CLASSES = [
+    'codehilite', 'highlight', 'hll', 'c', 'err', 'k', 'l', 'n', 'o', 'p', 'cm', 'cp', 'c1', 'cs',
+    'gd', 'ge', 'gr', 'gh', 'gi', 'go', 'gp', 'gs', 'gu', 'gt', 'kc', 'kd', 'kn', 'kp', 'kr', 'kt',
+    'ld', 'm', 'mf', 'mh', 'mi', 'mo', 'na', 'nb', 'nc', 'no', 'nd', 'ni', 'ne', 'nf', 'nl', 'nn',
+    'nt', 'nv', 'ow', 'w', 'mb', 'mh', 'mi', 'mo', 'sb', 'sc', 'sd', 'se', 'sh', 'si', 'sx', 's2',
+    's1', 'ss', 'bp', 'vc', 'vg', 'vi', 'il'
+]
+
+def class_filter(tag, name, value):
+    """自定义class属性过滤器"""
+    if name == 'class':
+        # 只允许预定义的安全class值
+        allowed_classes = [cls for cls in value.split() if cls in ALLOWED_CLASSES]
+        return ' '.join(allowed_classes) if allowed_classes else False
+    return value
+
+# 安全的属性白名单
+ALLOWED_ATTRIBUTES = {
+    'a': ['href', 'title'], 
+    'abbr': ['title'], 
+    'acronym': ['title'],
+    'span': class_filter,
+    'div': class_filter,
+    'pre': class_filter,
+    'code': class_filter
+}
+
+# 安全的协议白名单 - 防止javascript:等危险协议
+ALLOWED_PROTOCOLS = ['http', 'https', 'mailto']
 
 def sanitize_html(html):
-    return bleach.clean(html, tags=ALLOWED_TAGS, attributes=ALLOWED_ATTRIBUTES)
+    """
+    安全的HTML清理函数
+    使用bleach库进行白名单过滤，防止XSS攻击
+    """
+    return bleach.clean(
+        html, 
+        tags=ALLOWED_TAGS, 
+        attributes=ALLOWED_ATTRIBUTES,
+        protocols=ALLOWED_PROTOCOLS,  # 限制允许的协议
+        strip=True,  # 移除不允许的标签而不是转义
+        strip_comments=True  # 移除HTML注释
+    )

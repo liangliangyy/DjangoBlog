@@ -16,29 +16,37 @@
 <!--<![endif]-->
 <head>
     <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width"/>
-    {% block header %}
-        <title>{% block title %}{{ SITE_NAME }}{% endblock %}</title>
-        <meta name="description" content="{{ SITE_DESCRIPTION }}">
-        <meta name="keywords" content="{{ SITE_KEYWORDS }}">
-    {% endblock %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="theme-color" content="#21759b"/>
     {% load blog_tags %}
     {% head_meta %}
+    {% block header %}
+        <!-- SEO插件会自动生成title、description、keywords等标签 -->
+    {% endblock %}
     <link rel="profile" href="http://gmpg.org/xfn/11"/>
+    
+    <!-- 预加载关键资源 -->
+    <link rel="preload" href="{% static 'blog/css/style.css' %}" as="style"/>
+    <link rel="preload" href="{% static 'blog/js/jquery-3.6.0.min.js' %}" as="script"/>
+    
+    <!-- DNS预解析 -->
+    <link rel="dns-prefetch" href="//cdn.mathjax.org"/>
+    <link rel="dns-prefetch" href="//cdn.bootcss.com"/>
 
     <!--[if lt IE 9]>
     <script src="{% static 'blog/js/html5.js' %}" type="text/javascript"></script>
     <![endif]-->
 
-    <link rel="alternate" type="application/rss+xml" title="{{ SITE_NAME }} &raquo; Feed"
-          href="/feed"/>
-    <link rel='stylesheet preload' as="font" id='twentytwelve-fonts-css'
-          href='{% static 'blog/fonts/fonts.css' %}'
-          type='text/css' media='all'/>
-    <link rel="dns-prefetch" href="//cdn.mathjax.org"/>
+    <!-- RSS和图标 -->
+    <link rel="alternate" type="application/rss+xml" title="{{ SITE_NAME }} &raquo; Feed" href="/feed"/>
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
     <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
     <link rel="apple-touch-icon" href="/favicon.ico"/>
+    
+    <!-- 字体预加载 -->
+    <link rel="preload" href="{% static 'blog/fonts/fonts.css' %}" as="style" onload="this.onload=null;this.rel='stylesheet'"/>
+    <noscript><link rel="stylesheet" href="{% static 'blog/fonts/fonts.css' %}"/></noscript>
     {% compress css %}
 
         <link rel='stylesheet' id='twentytwelve-style-css' href='{% static 'blog/css/style.css' %}' type='text/css'
@@ -53,6 +61,7 @@
         {% block compress_css %}
         {% endblock %}
     {% endcompress %}
+    
     {% if GLOBAL_HEADER %}
         {{ GLOBAL_HEADER|safe }}
     {% endif %}
@@ -67,26 +76,6 @@
             <h2 class="site-description">{{ SITE_DESCRIPTION }}</h2>
         </hgroup>
         {% load i18n %}
-
-
-        {#        <div class="i18n-selector">#}
-        {#            <form action="{% url 'set_language' %}" method="post" id="i18n-form">{% csrf_token %}#}
-        {#                <input name="next" type="hidden" value="{{ redirect_to }}">#}
-        {#                <select name="language" class="i18n-select" >#}
-        {#                    {% get_current_language as LANGUAGE_CODE %}#}
-        {#                    {% get_available_languages as LANGUAGES %}#}
-        {#                    {% get_language_info_list for LANGUAGES as languages %}#}
-        {#                    {% for language in languages %}#}
-        {#                        <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>#}
-        {#                            {{ language.name_local }} ({{ language.code }})#}
-        {#                        </option>#}
-        {#                    {% endfor %}#}
-        {#                </select>#}
-        {#                                <input type="submit" value="Go">#}
-        {#            </form>#}
-        {#        </div>#}
-
-
         {% include 'share_layout/nav.html' %}
 
 
@@ -105,19 +94,20 @@
     {% include 'share_layout/footer.html' %}
 </div><!-- #page -->
 
-</body>
-<footer>
-    <script src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- JavaScript资源 -->
     {% compress js %}
-        <script type="text/javascript" src="{% static 'blog/js/jquery-3.6.0.min.js' %}"></script>
-        <script type="text/javascript" src="{% static 'blog/js/nprogress.js' %}"></script>
-        <script src="{% static 'blog/js/blog.js' %}" type="application/javascript"></script>
-        <script src="{% static 'blog/js/navigation.js' %}" type="application/javascript"></script>
-        <script src="{% static 'mathjax/js/mathjax-config.js' %}" type="application/javascript"></script>
+        <script src="{% static 'blog/js/jquery-3.6.0.min.js' %}"></script>
+        <script src="{% static 'blog/js/nprogress.js' %}"></script>
+        <script src="{% static 'blog/js/blog.js' %}"></script>
+        <script src="{% static 'blog/js/navigation.js' %}"></script>
         {% block compress_js %}
         {% endblock %}
     {% endcompress %}
+    
+    <!-- MathJax智能加载器 -->
+    <script src="{% static 'blog/js/mathjax-loader.js' %}" async defer></script>
+    
     {% block footer %}
     {% endblock %}
-</footer>
+</body>
 </html>
