@@ -1,0 +1,144 @@
+name: 自动部署到生产环境
+
+on:
+  workflow_run:
+    workflows: ["Django CI"]
+    types:
+      - completed
+    branches:
+      - master
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: '部署环境'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+        - production
+        - staging
+      image_tag:
+        description: '镜像标签 (默认: latest)'
+        required: false
+        default: 'latest'
+        type: string
+      skip_tests:
+        description: '跳过测试直接部署'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  REGISTRY: registry.cn-shenzhen.aliyuncs.com
+  IMAGE_NAME: liangliangyy/djangoblog
+  NAMESPACE: djangoblog
+
+jobs:
+  deploy:
+    name: 构建镜像并部署到生产环境
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+      
+    - name: 设置部署参数
+      id: deploy-params
+      run: |
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          echo "trigger_type=手动触发" >> $GITHUB_OUTPUT
+          echo "environment=${{ github.event.inputs.environment }}" >> $GITHUB_OUTPUT
+          echo "image_tag=${{ github.event.inputs.image_tag }}" >> $GITHUB_OUTPUT
+          echo "skip_tests=${{ github.event.inputs.skip_tests }}" >> $GITHUB_OUTPUT
+        else
+          echo "trigger_type=CI自动触发" >> $GITHUB_OUTPUT
+          echo "environment=production" >> $GITHUB_OUTPUT
+          echo "image_tag=latest" >> $GITHUB_OUTPUT
+          echo "skip_tests=false" >> $GITHUB_OUTPUT
+        fi
+        
+    - name: 显示部署信息
+      run: |
+        echo "🚀 部署信息："
+        echo "   触发方式: ${{ steps.deploy-params.outputs.trigger_type }}"
+        echo "   部署环境: ${{ steps.deploy-params.outputs.environment }}"
+        echo "   镜像标签: ${{ steps.deploy-params.outputs.image_tag }}"
+        echo "   跳过测试: ${{ steps.deploy-params.outputs.skip_tests }}"
+      
+    - name: 设置Docker Buildx
+      uses: docker/setup-buildx-action@v3
+      
+    - name: 登录私有镜像仓库
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+        
+    - name: 提取镜像元数据
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        tags: |
+          type=ref,event=branch
+          type=sha,prefix={{branch}}-
+          type=raw,value=${{ steps.deploy-params.outputs.image_tag }}
+          
+    - name: 构建并推送Docker镜像
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./Dockerfile
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        platforms: linux/amd64
+        
+    - name: 部署到生产服务器
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.PRODUCTION_HOST }}
+        username: ${{ secrets.PRODUCTION_USER }}
+        key: ${{ secrets.PRODUCTION_SSH_KEY }}
+        port: ${{ secrets.PRODUCTION_PORT || 22 }}
+        script: |
+          echo "🚀 开始部署 DjangoBlog..."
+          
+          # 检查kubectl是否可用
+          if ! command -v kubectl &> /dev/null; then
+            echo "❌ 错误: kubectl 未安装或不在PATH中"
+            exit 1
+          fi
+          
+          # 检查命名空间是否存在
+          if ! kubectl get namespace ${{ env.NAMESPACE }} &> /dev/null; then
+            echo "❌ 错误: 命名空间 ${{ env.NAMESPACE }} 不存在"
+            exit 1
+          fi
+          
+          # 更新deployment镜像
+          echo "📦 更新deployment镜像为: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.deploy-params.outputs.image_tag }}"
+          kubectl set image deployment/djangoblog \
+            djangoblog=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.deploy-params.outputs.image_tag }} \
+            -n ${{ env.NAMESPACE }}
+          
+          # 重启deployment
+          echo "🔄 重启deployment..."
+          kubectl -n ${{ env.NAMESPACE }} rollout restart deployment djangoblog
+          
+          # 等待deployment完成
+          echo "⏳ 等待deployment完成..."
+          kubectl rollout status deployment/djangoblog -n ${{ env.NAMESPACE }} --timeout=300s
+          
+          # 检查deployment状态
+          echo "✅ 检查deployment状态..."
+          kubectl get deployment djangoblog -n ${{ env.NAMESPACE }}
+          kubectl get pods -l app=djangoblog -n ${{ env.NAMESPACE }}
+          
+          echo "🎉 部署完成！"
+          
+ 
