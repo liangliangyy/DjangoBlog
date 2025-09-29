@@ -349,38 +349,49 @@ def load_article_detail(article, isindex, user):
     }
 
 
-# return only the URL of the gravatar
-# TEMPLATE USE:  {{ email|gravatar_url:150 }}
+# 返回用户头像URL
+# 模板使用方法:  {{ email|gravatar_url:150 }}
 @register.filter
 def gravatar_url(email, size=40):
-    """获得gravatar头像"""
-    cachekey = 'gravatat/' + email
+    """获得用户头像 - 优先使用OAuth头像，否则使用默认头像"""
+    cachekey = 'avatar/' + email
     url = cache.get(cachekey)
     if url:
         return url
-    else:
-        usermodels = OAuthUser.objects.filter(email=email)
-        if usermodels:
-            o = list(filter(lambda x: x.picture is not None, usermodels))
-            if o:
-                return o[0].picture
-        email = email.encode('utf-8')
-
-        default = static('blog/img/avatar.png')
-
-        url = "https://www.gravatar.com/avatar/%s?%s" % (hashlib.md5(
-            email.lower()).hexdigest(), urllib.parse.urlencode({'d': default, 's': str(size)}))
-        cache.set(cachekey, url, 60 * 60 * 10)
-        logger.info('set gravatar cache.key:{key}'.format(key=cachekey))
-        return url
+    
+    # 检查OAuth用户是否有自定义头像
+    usermodels = OAuthUser.objects.filter(email=email)
+    if usermodels:
+        # 过滤出有头像的用户
+        users_with_picture = list(filter(lambda x: x.picture is not None, usermodels))
+        if users_with_picture:
+            # 获取默认头像路径用于比较
+            default_avatar_path = static('blog/img/avatar.png')
+            
+            # 优先选择非默认头像的用户，否则选择第一个
+            non_default_users = [u for u in users_with_picture if u.picture != default_avatar_path and not u.picture.endswith('/avatar.png')]
+            selected_user = non_default_users[0] if non_default_users else users_with_picture[0]
+            
+            url = selected_user.picture
+            cache.set(cachekey, url, 60 * 60 * 24)  # 缓存24小时
+            
+            avatar_type = 'non-default' if non_default_users else 'default'
+            logger.info('Using {} OAuth avatar for {} from {}'.format(avatar_type, email, selected_user.type))
+            return url
+    
+    # 使用默认头像
+    url = static('blog/img/avatar.png')
+    cache.set(cachekey, url, 60 * 60 * 24)  # 缓存24小时
+    logger.info('Using default avatar for {}'.format(email))
+    return url
 
 
 @register.filter
 def gravatar(email, size=40):
-    """获得gravatar头像"""
+    """获得用户头像HTML标签"""
     url = gravatar_url(email, size)
     return mark_safe(
-        '<img src="%s" height="%d" width="%d">' %
+        '<img src="%s" height="%d" width="%d" class="avatar" alt="用户头像">' %
         (url, size, size))
 
 

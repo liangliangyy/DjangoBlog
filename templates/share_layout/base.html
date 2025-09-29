@@ -26,13 +26,10 @@
     {% endblock %}
     <link rel="profile" href="http://gmpg.org/xfn/11"/>
     
-    <!-- 预加载关键资源 -->
-    <link rel="preload" href="{% static 'blog/css/style.css' %}" as="style"/>
-    <link rel="preload" href="{% static 'blog/js/jquery-3.6.0.min.js' %}" as="script"/>
-    
     <!-- DNS预解析 -->
     <link rel="dns-prefetch" href="//cdn.mathjax.org"/>
-    <link rel="dns-prefetch" href="//cdn.bootcss.com"/>
+    <link rel="dns-prefetch" href="//cdn.jsdelivr.net"/>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
 
     <!--[if lt IE 9]>
     <script src="{% static 'blog/js/html5.js' %}" type="text/javascript"></script>
@@ -44,9 +41,8 @@
     <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
     <link rel="apple-touch-icon" href="/favicon.ico"/>
     
-    <!-- 字体预加载 -->
-    <link rel="preload" href="{% static 'blog/fonts/fonts.css' %}" as="style" onload="this.onload=null;this.rel='stylesheet'"/>
-    <noscript><link rel="stylesheet" href="{% static 'blog/fonts/fonts.css' %}"/></noscript>
+        <!-- 本地字体加载 -->
+        <link rel="stylesheet" href="{% static 'blog/fonts/open-sans.css' %}">
     {% compress css %}
 
         <link rel='stylesheet' id='twentytwelve-style-css' href='{% static 'blog/css/style.css' %}' type='text/css'
