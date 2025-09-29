@@ -19,15 +19,59 @@ on:
       - '**/*.js'
 
 jobs:
-  build-normal:
+  test:
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 4
+      fail-fast: false
       matrix:
-        python-version: ["3.10","3.11" ]
+        include:
+          # 标准测试 - Python 3.10
+          - python-version: "3.10"
+            test-type: "standard"
+            database: "mysql"
+            elasticsearch: false
+            coverage: false
+            
+          # 标准测试 - Python 3.11  
+          - python-version: "3.11"
+            test-type: "standard" 
+            database: "mysql"
+            elasticsearch: false
+            coverage: false
+            
+          # 完整测试 - 包含ES和覆盖率
+          - python-version: "3.11"
+            test-type: "full"
+            database: "mysql"
+            elasticsearch: true
+            coverage: true
+            
+          # Docker构建测试
+          - python-version: "3.11"
+            test-type: "docker"
+            database: "none"
+            elasticsearch: false
+            coverage: false
 
+    name: Test (${{ matrix.test-type }}, Python ${{ matrix.python-version }})
+    
     steps:
-      - name: Start MySQL
+      - name: Checkout代码
+        uses: actions/checkout@v4
+        
+      - name: 设置测试信息
+        id: test-info
+        run: |
+          echo "test_name=${{ matrix.test-type }}-py${{ matrix.python-version }}" >> $GITHUB_OUTPUT
+          if [ "${{ matrix.test-type }}" = "docker" ]; then
+            echo "skip_python_setup=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip_python_setup=false" >> $GITHUB_OUTPUT
+          fi
+          
+      # MySQL数据库设置 (只有需要数据库的测试才执行)
+      - name: 启动MySQL数据库
+        if: matrix.database == 'mysql'
         uses: samin/mysql-action@v1.3
         with:
           host port: 3306
@@ -39,115 +83,289 @@ jobs:
           mysql database: djangoblog
           mysql user: root
           mysql password: root
-
-      - uses: actions/checkout@v4
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-          cache: 'pip'
-      - name: Install Dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-      - name: Run Tests
-        env:
-          DJANGO_MYSQL_PASSWORD: root
-          DJANGO_MYSQL_HOST: 127.0.0.1
-        run: |
-          python manage.py makemigrations
-          python manage.py migrate
-          python manage.py test
-
-  build-with-es:
-    runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 4
-      matrix:
-        python-version: ["3.10","3.11" ]
-
-    steps:
-      - name: Start MySQL
-        uses: samin/mysql-action@v1.3
-        with:
-          host port: 3306
-          container port: 3306
-          character set server: utf8mb4
-          collation server: utf8mb4_general_ci
-          mysql version: latest
-          mysql root password: root
-          mysql database: djangoblog
-          mysql user: root
-          mysql password: root
-
-      - name: Configure sysctl limits
+          
+      # Elasticsearch设置 (只有完整测试才执行)
+      - name: 配置系统参数 (ES)
+        if: matrix.elasticsearch == true
         run: |
           sudo swapoff -a
           sudo sysctl -w vm.swappiness=1
           sudo sysctl -w fs.file-max=262144
           sudo sysctl -w vm.max_map_count=262144
-
-      - uses: miyataka/elasticsearch-github-actions@1
-
+          
+      - name: 启动Elasticsearch
+        if: matrix.elasticsearch == true
+        uses: miyataka/elasticsearch-github-actions@1
         with:
           stack-version: '7.12.1'
           plugins: 'https://release.infinilabs.com/analysis-ik/stable/elasticsearch-analysis-ik-7.12.1.zip'
-
-
-      - uses: actions/checkout@v4
-      - name: Set up Python ${{ matrix.python-version }}
+          
+      # Python环境设置 (Docker测试跳过)
+      - name: 设置Python ${{ matrix.python-version }}
+        if: steps.test-info.outputs.skip_python_setup == 'false'
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
           cache: 'pip'
-      - name: Install Dependencies
+          cache-dependency-path: 'requirements.txt'
+          
+      # 多层缓存策略优化
+      - name: 缓存Python依赖
+        if: steps.test-info.outputs.skip_python_setup == 'false'
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/pip
+            .pytest_cache
+          key: ${{ runner.os }}-python-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}-${{ hashFiles('**/pyproject.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-python-${{ matrix.python-version }}-${{ hashFiles('requirements.txt') }}-
+            ${{ runner.os }}-python-${{ matrix.python-version }}-
+            ${{ runner.os }}-python-
+            
+      # Django缓存优化 (测试数据库等)
+      - name: 缓存Django资源
+        if: matrix.test-type != 'docker'
+        uses: actions/cache@v4
+        with:
+          path: |
+            .coverage*
+            htmlcov/
+            .django_cache/
+          key: ${{ runner.os }}-django-${{ matrix.test-type }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-django-${{ matrix.test-type }}-
+            ${{ runner.os }}-django-
+            
+      - name: 安装Python依赖
+        if: steps.test-info.outputs.skip_python_setup == 'false'
         run: |
-          python -m pip install --upgrade pip
+          echo "📦 安装Python依赖 (Python ${{ matrix.python-version }})"
+          python -m pip install --upgrade pip setuptools wheel
+          
+          # 安装基础依赖
           pip install -r requirements.txt
-      - name: Run Tests
+          
+          # 根据测试类型安装额外依赖
+          if [ "${{ matrix.coverage }}" = "true" ]; then
+            echo "📊 安装覆盖率工具"
+            pip install coverage[toml]
+          fi
+          
+          # 验证关键依赖
+          echo "🔍 验证关键依赖安装"
+          python -c "import django; print(f'Django version: {django.get_version()}')"
+          python -c "import MySQLdb; print('MySQL client: OK')" || python -c "import pymysql; print('PyMySQL client: OK')"
+          
+          if [ "${{ matrix.elasticsearch }}" = "true" ]; then
+            python -c "import elasticsearch; print('Elasticsearch client: OK')"
+          fi
+          
+      # Django环境准备
+      - name: 准备Django环境
+        if: matrix.test-type != 'docker'
         env:
           DJANGO_MYSQL_PASSWORD: root
           DJANGO_MYSQL_HOST: 127.0.0.1
-          DJANGO_ELASTICSEARCH_HOST: 127.0.0.1:9200
+          DJANGO_ELASTICSEARCH_HOST: ${{ matrix.elasticsearch && '127.0.0.1:9200' || '' }}
         run: |
-          python manage.py makemigrations
-          python manage.py migrate
-          coverage run manage.py test
-          coverage xml
-
-      - name: Upload coverage to Codecov
+          echo "🔧 准备Django测试环境"
+          
+          # 等待数据库就绪
+          echo "⏳ 等待MySQL数据库启动..."
+          for i in {1..30}; do
+            if python -c "import MySQLdb; MySQLdb.connect(host='127.0.0.1', user='root', passwd='root', db='djangoblog')" 2>/dev/null; then
+              echo "✅ MySQL数据库连接成功"
+              break
+            fi
+            echo "🔄 等待数据库启动... ($i/30)"
+            sleep 2
+          done
+          
+          # 等待Elasticsearch就绪 (如果启用)
+          if [ "${{ matrix.elasticsearch }}" = "true" ]; then
+            echo "⏳ 等待Elasticsearch启动..."
+            for i in {1..30}; do
+              if curl -s http://127.0.0.1:9200/_cluster/health | grep -q '"status":"green"\|"status":"yellow"'; then
+                echo "✅ Elasticsearch连接成功"
+                break
+              fi
+              echo "🔄 等待Elasticsearch启动... ($i/30)"
+              sleep 2
+            done
+          fi
+          
+      # Django测试执行
+      - name: 执行数据库迁移
+        if: matrix.test-type != 'docker'
+        env:
+          DJANGO_MYSQL_PASSWORD: root
+          DJANGO_MYSQL_HOST: 127.0.0.1
+          DJANGO_ELASTICSEARCH_HOST: ${{ matrix.elasticsearch && '127.0.0.1:9200' || '' }}
+        run: |
+          echo "🗄️ 执行数据库迁移"
+          
+          # 检查迁移文件
+          echo "📋 检查待应用的迁移..."
+          python manage.py showmigrations
+          
+          # 检查是否有未创建的迁移
+          python manage.py makemigrations --check --verbosity 2
+          
+          # 执行迁移
+          python manage.py migrate --verbosity 2
+          
+          echo "✅ 数据库迁移完成"
+          
+      - name: 运行Django测试
+        if: matrix.test-type != 'docker'
+        env:
+          DJANGO_MYSQL_PASSWORD: root
+          DJANGO_MYSQL_HOST: 127.0.0.1
+          DJANGO_ELASTICSEARCH_HOST: ${{ matrix.elasticsearch && '127.0.0.1:9200' || '' }}
+        run: |
+          echo "🧪 开始执行 ${{ matrix.test-type }} 测试 (Python ${{ matrix.python-version }})"
+          
+          # 显示Django配置信息
+          python manage.py diffsettings | head -20
+          
+          # 运行测试
+          if [ "${{ matrix.coverage }}" = "true" ]; then
+            echo "📊 运行测试并生成覆盖率报告"
+            coverage run --source='.' --omit='*/venv/*,*/migrations/*,*/tests/*,manage.py' manage.py test --verbosity=2
+            
+            echo "📈 生成覆盖率报告"
+            coverage xml
+            coverage report --show-missing
+            coverage html
+            
+            echo "📋 覆盖率统计:"
+            coverage report | tail -1
+          else
+            echo "🧪 运行标准测试"
+            python manage.py test --verbosity=2 --failfast
+          fi
+          
+          echo "✅ 测试执行完成"
+          
+      # 覆盖率报告上传 (只有完整测试才执行)
+      - name: 上传覆盖率到Codecov
+        if: matrix.coverage == true && success()
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./coverage.xml
           flags: unittests
-          name: codecov-umbrella
+          name: codecov-${{ steps.test-info.outputs.test_name }}
           fail_ci_if_error: false
           verbose: true
           
-      - name: Upload coverage to Codecov (fallback)
-        if: failure()
+      - name: 上传覆盖率到Codecov (备用)
+        if: matrix.coverage == true && failure()
         uses: codecov/codecov-action@v4
         with:
           file: ./coverage.xml
           flags: unittests
-          name: codecov-umbrella-fallback
+          name: codecov-${{ steps.test-info.outputs.test_name }}-fallback
           fail_ci_if_error: false
           verbose: true
-
-  docker:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Set up QEMU
+          
+      # Docker构建测试
+      - name: 设置QEMU
+        if: matrix.test-type == 'docker'
         uses: docker/setup-qemu-action@v3
-      - name: Set up Docker Buildx
+        
+      - name: 设置Docker Buildx
+        if: matrix.test-type == 'docker'
         uses: docker/setup-buildx-action@v3
-
-      - name: Build and push
+        
+      - name: Docker构建测试
+        if: matrix.test-type == 'docker'
         uses: docker/build-push-action@v5
         with:
           context: .
           push: false
-          tags: djangoblog/djangoblog:dev
+          tags: djangoblog/djangoblog:test-${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          
+      # 收集测试工件 (失败时收集调试信息)
+      - name: 收集测试工件
+        if: failure() && matrix.test-type != 'docker'
+        run: |
+          echo "🔍 收集测试失败的调试信息"
+          
+          # 收集Django日志
+          if [ -d "logs" ]; then
+            echo "📄 Django日志文件:"
+            ls -la logs/
+            if [ -f "logs/djangoblog.log" ]; then
+              echo "🔍 最新日志内容:"
+              tail -100 logs/djangoblog.log
+            fi
+          fi
+          
+          # 显示数据库状态
+          echo "🗄️ 数据库连接状态:"
+          python -c "
+          try:
+              from django.db import connection
+              cursor = connection.cursor()
+              cursor.execute('SELECT VERSION()')
+              print(f'MySQL版本: {cursor.fetchone()[0]}')
+              cursor.execute('SHOW TABLES')
+              tables = cursor.fetchall()
+              print(f'数据库表数量: {len(tables)}')
+          except Exception as e:
+              print(f'数据库连接错误: {e}')
+          " || true
+          
+          # Elasticsearch状态 (如果启用)
+          if [ "${{ matrix.elasticsearch }}" = "true" ]; then
+            echo "🔍 Elasticsearch状态:"
+            curl -s http://127.0.0.1:9200/_cluster/health?pretty || true
+          fi
+          
+      # 上传测试工件
+      - name: 上传覆盖率HTML报告
+        if: matrix.coverage == true && always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report-${{ steps.test-info.outputs.test_name }}
+          path: htmlcov/
+          retention-days: 30
+          
+      # 性能统计
+      - name: 测试性能统计
+        if: always() && matrix.test-type != 'docker'
+        run: |
+          echo "⚡ 测试性能统计:"
+          echo "   开始时间: $(date -d '@${{ job.started_at }}' '+%Y-%m-%d %H:%M:%S' 2>/dev/null || echo '未知')"
+          echo "   当前时间: $(date '+%Y-%m-%d %H:%M:%S')"
+          
+          # 系统资源使用情况
+          echo "💻 系统资源:"
+          echo "   CPU使用: $(top -bn1 | grep "Cpu(s)" | awk '{print $2}' | cut -d'%' -f1)%"
+          echo "   内存使用: $(free -h | awk '/^Mem:/ {printf "%.1f%%", $3/$2 * 100}')"
+          echo "   磁盘使用: $(df -h / | awk 'NR==2{printf "%s", $5}')"
+          
+      # 测试结果汇总
+      - name: 测试完成总结
+        if: always()
+        run: |
+          echo "📋 ============ 测试执行总结 ============"
+          echo "   🏷️  测试类型: ${{ matrix.test-type }}"
+          echo "   🐍 Python版本: ${{ matrix.python-version }}"
+          echo "   🗄️  数据库: ${{ matrix.database }}"
+          echo "   🔍 Elasticsearch: ${{ matrix.elasticsearch }}"
+          echo "   📊 覆盖率: ${{ matrix.coverage }}"
+          echo "   ⚡ 状态: ${{ job.status }}"
+          echo "   📅 完成时间: $(date '+%Y-%m-%d %H:%M:%S')"
+          echo "============================================"
+          
+          # 根据测试结果显示不同消息
+          if [ "${{ job.status }}" = "success" ]; then
+            echo "🎉 测试执行成功！"
+          else
+            echo "❌ 测试执行失败，请检查上面的日志"
+          fi
