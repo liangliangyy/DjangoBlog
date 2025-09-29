@@ -1,11 +1,3 @@
-'''
-Author: liangliangyy liangliangyy@gmail.com
-Date: 2025-07-07 19:29:12
-LastEditors: liangliangyy liangliangyy@gmail.com
-LastEditTime: 2025-09-29 13:34:49
-FilePath: \DjangoBlog\plugins\reading_time\plugin.py
-Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
-'''
 import math
 import re
 from djangoblog.plugin_manage.base_plugin import BasePlugin
