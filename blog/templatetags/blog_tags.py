@@ -51,6 +51,10 @@ def datetimeformat(data):
 @register.filter()
 @stringfilter
 def custom_markdown(content):
+    """
+    通用markdown过滤器，应用文章内容插件
+    主要用于文章内容处理
+    """
     html_content = CommonMarkdown.get_markdown(content)
     
     # 然后应用插件过滤器优化HTML
@@ -59,6 +63,13 @@ def custom_markdown(content):
     optimized_html = hooks.apply_filters(ARTICLE_CONTENT_HOOK_NAME, html_content)
     
     return mark_safe(optimized_html)
+
+
+@register.filter()
+@stringfilter
+def sidebar_markdown(content):
+    html_content = CommonMarkdown.get_markdown(content)
+    return mark_safe(html_content)
 
 
 @register.simple_tag(takes_context=True)
