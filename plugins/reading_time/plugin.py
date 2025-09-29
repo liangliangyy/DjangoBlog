@@ -17,7 +17,15 @@ class ReadingTimePlugin(BasePlugin):
     def add_reading_time(self, content, *args, **kwargs):
         """
         计算阅读时间并添加到内容开头。
+        只在文章详情页显示，首页（文章列表页）不显示。
         """
+        # 检查是否为摘要模式（首页/文章列表页）
+        # 通过kwargs中的is_summary参数判断
+        is_summary = kwargs.get('is_summary', False)
+        if is_summary:
+            # 如果是摘要模式（首页），直接返回原内容，不添加阅读时间
+            return content
+        
         # 移除HTML标签和空白字符，以获得纯文本
         clean_content = re.sub(r'<[^>]*>', '', content)
         clean_content = clean_content.strip()

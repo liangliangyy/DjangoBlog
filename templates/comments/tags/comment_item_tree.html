@@ -3,10 +3,13 @@
     style="margin-left: {% widthratio depth 1 3 %}rem">
     <div id="div-comment-{{ comment_item.pk }}" class="comment-body">
         <div class="comment-author vcard">
-            <img alt=""
+            <img alt="{{ comment_item.author.username }}的头像"
                  src="{{ comment_item.author.email|gravatar_url:150 }}"
                  srcset="{{ comment_item.author.email|gravatar_url:150 }}"
-                 class="avatar avatar-96 photo">
+                 class="avatar avatar-96 photo"
+                 loading="lazy"
+                 decoding="async"
+                 style="max-width:100%;height:auto;">
             <cite class="fn">
                 <a rel="nofollow"
                         {% if comment_item.author.is_superuser %}
