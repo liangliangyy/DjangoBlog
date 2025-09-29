@@ -26,13 +26,13 @@ spec:
             name: djangoblog-env
         readinessProbe:
           httpGet:
-            path: /
+            path: /health/
             port: 8000
           initialDelaySeconds: 10
           periodSeconds: 30
         livenessProbe:
           httpGet:
-            path: /
+            path: /health/
             port: 8000
           initialDelaySeconds: 10
           periodSeconds: 30

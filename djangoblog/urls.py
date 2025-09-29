@@ -20,6 +20,8 @@ from django.contrib.sitemaps.views import sitemap
 from django.urls import path, include
 from django.urls import re_path
 from haystack.views import search_view_factory
+from django.http import JsonResponse
+import time
 
 from blog.views import EsSearchView
 from djangoblog.admin_site import admin_site
@@ -40,8 +42,20 @@ handler404 = 'blog.views.page_not_found_view'
 handler500 = 'blog.views.server_error_view'
 handle403 = 'blog.views.permission_denied_view'
 
+
+def health_check(request):
+    """
+    健康检查接口
+    简单返回服务健康状态
+    """
+    return JsonResponse({
+        'status': 'healthy',
+        'timestamp': time.time()
+    })
+
 urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')),
+    path('health/', health_check, name='health_check'),
 ]
 urlpatterns += i18n_patterns(
     re_path(r'^admin/', admin_site.urls),
