@@ -169,13 +169,39 @@ jobs:
         
         # 发送到Server酱
         if [ -n "${{ secrets.SERVERCHAN_KEY }}" ]; then
-          curl -X POST "https://sctapi.ftqq.com/${{ secrets.SERVERCHAN_KEY }}.send" \
-            -H "Content-Type: application/json" \
-            -d "{
-              \"title\": \"${TITLE}\",
-              \"desp\": \"${MESSAGE}\"
-            }"
-          echo "📱 Server酱通知已发送"
+          echo "📱 准备发送Server酱通知..."
+          
+          # 转义特殊字符以确保JSON格式正确
+          ESCAPED_TITLE=$(echo "${TITLE}" | sed 's/"/\\"/g' | sed 's/\\/\\\\/g')
+          ESCAPED_MESSAGE=$(echo "${MESSAGE}" | sed 's/"/\\"/g' | sed 's/\\/\\\\/g')
+          
+          # 创建JSON payload
+          JSON_PAYLOAD="{\"title\": \"${ESCAPED_TITLE}\", \"desp\": \"${ESCAPED_MESSAGE}\"}"
+          
+          echo "🔗 发送到: https://sctapi.ftqq.com/${{ secrets.SERVERCHAN_KEY }}.send"
+          echo "📝 标题: ${TITLE}"
+          
+          # 发送请求并捕获响应
+          RESPONSE=$(curl --location "https://sctapi.ftqq.com/${{ secrets.SERVERCHAN_KEY }}.send" \
+            --header "Content-Type: application/json" \
+            --data "${JSON_PAYLOAD}" \
+            --write-out "HTTPSTATUS:%{http_code}" \
+            --silent)
+          
+          # 分离HTTP状态码和响应体
+          HTTP_STATUS=$(echo $RESPONSE | tr -d '\n' | sed -e 's/.*HTTPSTATUS://')
+          RESPONSE_BODY=$(echo $RESPONSE | sed -e 's/HTTPSTATUS:.*//g')
+          
+          echo "📊 HTTP状态码: ${HTTP_STATUS}"
+          echo "📄 响应内容: ${RESPONSE_BODY}"
+          
+          if [ "${HTTP_STATUS}" -eq 200 ]; then
+            echo "✅ Server酱通知发送成功"
+          else
+            echo "❌ Server酱通知发送失败 (HTTP ${HTTP_STATUS})"
+            echo "🔍 错误详情: ${RESPONSE_BODY}"
+          fi
         else
           echo "⚠️ 未配置Server酱密钥，跳过通知"
+          echo "💡 提示: 请在GitHub Secrets中添加 SERVERCHAN_KEY"
         fi
