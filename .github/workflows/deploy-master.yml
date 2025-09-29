@@ -154,22 +154,17 @@ jobs:
         fi
         
         MESSAGE="部署状态: ${STATUS}
-触发方式: ${{ steps.deploy-params.outputs.trigger_type }}
-部署环境: ${{ steps.deploy-params.outputs.environment }}
-镜像标签: ${{ steps.deploy-params.outputs.image_tag }}
-提交者: ${{ github.actor }}
-时间: $(date '+%Y-%m-%d %H:%M:%S')
-
-查看详情: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        触发方式: ${{ steps.deploy-params.outputs.trigger_type }}
+        部署环境: ${{ steps.deploy-params.outputs.environment }}
+        镜像标签: ${{ steps.deploy-params.outputs.image_tag }}
+        提交者: ${{ github.actor }}
+        时间: $(date '+%Y-%m-%d %H:%M:%S')
+        
+        查看详情: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
         
         # 发送Server酱通知
         if [ -n "${{ secrets.SERVERCHAN_KEY }}" ]; then
-          cat > /tmp/serverchan.json << EOF
-{
-  "title": "${TITLE}",
-  "desp": "${MESSAGE}"
-}
-EOF
+          echo "{\"title\": \"${TITLE}\", \"desp\": \"${MESSAGE}\"}" > /tmp/serverchan.json
           
           curl --location "https://sctapi.ftqq.com/${{ secrets.SERVERCHAN_KEY }}.send" \
             --header "Content-Type: application/json" \
