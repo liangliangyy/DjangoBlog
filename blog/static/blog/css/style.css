@@ -2017,12 +2017,7 @@ img#wpstats {
         width: auto;
     }
 
-    .commentlist .avatar {
-        height: 39px;
-        left: 2.2em;
-        top: 2.2em;
-        width: 39px;
-    }
+
 
     .comments-area article header cite,
     .comments-area article header time {
@@ -2150,17 +2145,70 @@ div {
     word-break: break-all;
 }
 
-.commentlist .comment-author,
-.commentlist .comment-meta,
+/* 评论整体布局 - 使用相对定位实现头像左侧布局 */
+.commentlist .comment-body {
+    position: relative;
+    padding-left: 60px; /* 为48px头像 + 12px间距留出空间 */
+    min-height: 48px; /* 确保有足够高度容纳头像 */
+}
+
+/* 评论作者信息 - 用户名和时间在同一行 */
+.commentlist .comment-author {
+    display: inline-block;
+    margin: 0 10px 5px 0;
+    font-size: 13px;
+    position: relative;
+}
+
+.commentlist .comment-meta {
+    display: inline-block;
+    margin: 0 0 8px 0;
+    font-size: 12px;
+    color: #666;
+}
+
 .commentlist .comment-awaiting-moderation {
-    float: left;
     display: block;
     font-size: 13px;
     line-height: 22px;
 }
 
-.commentlist .comment-author {
-    margin-right: 6px;
+/* 头像样式 - 绝对定位到左侧 */
+.commentlist .comment-author .avatar {
+    position: absolute !important;
+    left: -60px; /* 定位到容器左侧 */
+    top: 0;
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 50%;
+    display: block;
+    object-fit: cover;
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+}
+
+/* 评论作者名称样式 */
+.commentlist .comment-author .fn {
+    display: inline;
+    margin: 0;
+    font-weight: 600;
+    color: #2e7bb8;
+    font-size: 13px;
+}
+
+.commentlist .comment-author .fn a {
+    color: #2e7bb8;
+    text-decoration: none;
+}
+
+.commentlist .comment-author .fn a:hover {
+    text-decoration: underline;
+}
+
+/* 评论内容样式 */
+.commentlist .comment-body p {
+    margin: 5px 0 10px 0;
+    line-height: 1.5;
 }
 
 .commentlist .fn, .pinglist .ping-link {
@@ -2174,13 +2222,15 @@ div {
     display: none;
 }
 
+/* 通用头像样式 */
 .commentlist .avatar {
-    position: absolute;
-    left: -60px;
-    top: 0;
-    width: 48px;
-    height: 48px;
-    border-radius: 100%;
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 50%;
+    display: block;
+    object-fit: cover;
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
 }
 
 .commentlist .comment-meta:before, .pinglist .ping-meta:before {
@@ -2290,15 +2340,87 @@ div {
     padding-left: 48px;
 }
 
-.commentlist li li .avatar {
-    top: 0;
-    left: -48px;
-    width: 36px;
-    height: 36px;
+/* 嵌套评论整体布局 */
+.commentlist li li .comment-body {
+    padding-left: 60px; /* 为48px头像 + 12px间距留出空间 */
+    min-height: 48px; /* 确保有足够高度容纳头像 */
+}
+
+/* 嵌套评论作者信息 */
+.commentlist li li .comment-author {
+    display: inline-block;
+    margin: 0 8px 5px 0;
+    font-size: 12px; /* 稍小一点 */
 }
 
 .commentlist li li .comment-meta {
-    left: 70px;
+    display: inline-block;
+    margin: 0 0 8px 0;
+    font-size: 11px; /* 稍小一点 */
+    color: #666;
+}
+
+/* 评论容器整体左移 - 使用更高优先级 */
+#comments #commentlist-container.comment-tab {
+    margin-left: -15px !important; /* 在小屏幕上向左移动15px */
+    padding-left: 0 !important; /* 移除左内边距 */
+    position: relative !important; /* 确保定位正确 */
+}
+
+/* 在较大屏幕上进一步左移 */
+@media screen and (min-width: 600px) {
+    #comments #commentlist-container.comment-tab {
+        margin-left: -30px !important; /* 在大屏幕上向左移动30px */
+    }
+    
+    /* 响应式设计下的评论布局 - 保持48px头像 */
+    .commentlist .comment-body {
+        padding-left: 60px !important; /* 为48px头像 + 12px间距留出空间 */
+        min-height: 48px !important;
+    }
+    
+    .commentlist .comment-author {
+        display: inline-block !important;
+        margin: 0 8px 5px 0 !important;
+    }
+    
+    .commentlist .comment-meta {
+        display: inline-block !important;
+        margin: 0 0 8px 0 !important;
+    }
+    
+    /* 响应式设计下头像保持48px */
+    .commentlist .comment-author .avatar {
+        left: -60px !important;
+        width: 48px !important;
+        height: 48px !important;
+    }
+    
+    /* 嵌套评论在响应式设计下也保持48px头像 */
+    .commentlist li li .comment-body {
+        padding-left: 60px !important;
+        min-height: 48px !important;
+    }
+    
+    .commentlist li li .comment-author .avatar {
+        left: -60px !important;
+        width: 48px !important;
+        height: 48px !important;
+    }
+}
+
+/* 嵌套评论头像 */
+.commentlist li li .comment-author .avatar {
+    position: absolute !important;
+    left: -60px; /* 定位到容器左侧 */
+    top: 0;
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 50%;
+    display: block;
+    object-fit: cover;
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
 }
 
 /*  comments : nav
