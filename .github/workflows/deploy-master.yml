@@ -141,4 +141,41 @@ jobs:
           
           echo "🎉 部署完成！"
           
- 
+    - name: 发送部署通知
+      if: always()
+      run: |
+        if [ "${{ job.status }}" = "success" ]; then
+          TITLE="✅ DjangoBlog部署成功"
+          STATUS="成功"
+          COLOR="🟢"
+        else
+          TITLE="❌ DjangoBlog部署失败"
+          STATUS="失败"
+          COLOR="🔴"
+        fi
+        
+        MESSAGE="${COLOR} **DjangoBlog部署通知**
+        
+        **部署状态**: ${STATUS}
+        **触发方式**: ${{ steps.deploy-params.outputs.trigger_type }}
+        **部署环境**: ${{ steps.deploy-params.outputs.environment }}
+        **镜像标签**: ${{ steps.deploy-params.outputs.image_tag }}
+        **提交信息**: ${{ github.event.head_commit.message || '手动触发部署' }}
+        **提交者**: ${{ github.actor }}
+        **分支**: ${{ github.ref_name }}
+        **时间**: $(date '+%Y-%m-%d %H:%M:%S')
+        
+        **查看详情**: [GitHub Actions](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})"
+        
+        # 发送到Server酱
+        if [ -n "${{ secrets.SERVERCHAN_KEY }}" ]; then
+          curl -X POST "https://sctapi.ftqq.com/${{ secrets.SERVERCHAN_KEY }}.send" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"title\": \"${TITLE}\",
+              \"desp\": \"${MESSAGE}\"
+            }"
+          echo "📱 Server酱通知已发送"
+        else
+          echo "⚠️ 未配置Server酱密钥，跳过通知"
+        fi
