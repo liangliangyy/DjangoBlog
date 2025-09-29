@@ -144,64 +144,38 @@ jobs:
     - name: 发送部署通知
       if: always()
       run: |
+        # 设置通知内容
         if [ "${{ job.status }}" = "success" ]; then
           TITLE="✅ DjangoBlog部署成功"
           STATUS="成功"
-          COLOR="🟢"
         else
           TITLE="❌ DjangoBlog部署失败"
           STATUS="失败"
-          COLOR="🔴"
         fi
         
-        MESSAGE="${COLOR} **DjangoBlog部署通知**
+        MESSAGE="部署状态: ${STATUS}
+触发方式: ${{ steps.deploy-params.outputs.trigger_type }}
+部署环境: ${{ steps.deploy-params.outputs.environment }}
+镜像标签: ${{ steps.deploy-params.outputs.image_tag }}
+提交者: ${{ github.actor }}
+时间: $(date '+%Y-%m-%d %H:%M:%S')
+
+查看详情: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
         
-        **部署状态**: ${STATUS}
-        **触发方式**: ${{ steps.deploy-params.outputs.trigger_type }}
-        **部署环境**: ${{ steps.deploy-params.outputs.environment }}
-        **镜像标签**: ${{ steps.deploy-params.outputs.image_tag }}
-        **提交信息**: ${{ github.event.head_commit.message || '手动触发部署' }}
-        **提交者**: ${{ github.actor }}
-        **分支**: ${{ github.ref_name }}
-        **时间**: $(date '+%Y-%m-%d %H:%M:%S')
-        
-        **查看详情**: [GitHub Actions](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})"
-        
-        # 发送到Server酱
+        # 发送Server酱通知
         if [ -n "${{ secrets.SERVERCHAN_KEY }}" ]; then
-          echo "📱 准备发送Server酱通知..."
+          cat > /tmp/serverchan.json << EOF
+{
+  "title": "${TITLE}",
+  "desp": "${MESSAGE}"
+}
+EOF
           
-          # 转义特殊字符以确保JSON格式正确
-          ESCAPED_TITLE=$(echo "${TITLE}" | sed 's/"/\\"/g' | sed 's/\\/\\\\/g')
-          ESCAPED_MESSAGE=$(echo "${MESSAGE}" | sed 's/"/\\"/g' | sed 's/\\/\\\\/g')
-          
-          # 创建JSON payload
-          JSON_PAYLOAD="{\"title\": \"${ESCAPED_TITLE}\", \"desp\": \"${ESCAPED_MESSAGE}\"}"
-          
-          echo "🔗 发送到: https://sctapi.ftqq.com/${{ secrets.SERVERCHAN_KEY }}.send"
-          echo "📝 标题: ${TITLE}"
-          
-          # 发送请求并捕获响应
-          RESPONSE=$(curl --location "https://sctapi.ftqq.com/${{ secrets.SERVERCHAN_KEY }}.send" \
+          curl --location "https://sctapi.ftqq.com/${{ secrets.SERVERCHAN_KEY }}.send" \
             --header "Content-Type: application/json" \
-            --data "${JSON_PAYLOAD}" \
-            --write-out "HTTPSTATUS:%{http_code}" \
-            --silent)
+            --data @/tmp/serverchan.json \
+            --silent > /dev/null
           
-          # 分离HTTP状态码和响应体
-          HTTP_STATUS=$(echo $RESPONSE | tr -d '\n' | sed -e 's/.*HTTPSTATUS://')
-          RESPONSE_BODY=$(echo $RESPONSE | sed -e 's/HTTPSTATUS:.*//g')
-          
-          echo "📊 HTTP状态码: ${HTTP_STATUS}"
-          echo "📄 响应内容: ${RESPONSE_BODY}"
-          
-          if [ "${HTTP_STATUS}" -eq 200 ]; then
-            echo "✅ Server酱通知发送成功"
-          else
-            echo "❌ Server酱通知发送失败 (HTTP ${HTTP_STATUS})"
-            echo "🔍 错误详情: ${RESPONSE_BODY}"
-          fi
-        else
-          echo "⚠️ 未配置Server酱密钥，跳过通知"
-          echo "💡 提示: 请在GitHub Secrets中添加 SERVERCHAN_KEY"
+          rm -f /tmp/serverchan.json
+          echo "📱 部署通知已发送"
         fi
