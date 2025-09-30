@@ -5,9 +5,6 @@
 <footer class="entry-meta">
     {% trans 'posted in' %}
     <a href="{{ article.category.get_absolute_url }}" rel="category tag">{{ article.category.name }}</a>
-
-
-    </a>
     {% if article.type == 'a' %}
         {% if article.tags.all %}
 
@@ -46,13 +43,14 @@
         title="{% datetimeformat article.pub_time %}"
         itemprop="datePublished" content="{% datetimeformat article.pub_time %}"
         rel="bookmark">
-
-    <time class="entry-date updated"
-          datetime="{{ article.pub_time }}">
-        {% datetimeformat article.pub_time %}</time>
-         {% if user.is_superuser %}
-             <a href="{{ article.get_admin_url }}">{% trans 'edit' %}</a>
-         {% endif %}
+        <time class="entry-date updated"
+              datetime="{{ article.pub_time }}">
+            {% datetimeformat article.pub_time %}
+        </time>
+    </a>
+    {% if user.is_superuser %}
+        <a href="{{ article.get_admin_url }}">{% trans 'edit' %}</a>
+    {% endif %}
     </span>
 </footer><!-- .entry-meta -->
 

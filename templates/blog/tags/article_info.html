@@ -72,3 +72,8 @@
     {% load_article_metas article user %}
 
 </article><!-- #post -->
+
+<!-- 文章底部插件 -->
+{% if not isindex %}
+    {% render_plugin_widgets 'article_bottom' article=article %}
+{% endif %}

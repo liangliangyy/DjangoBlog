@@ -2735,6 +2735,76 @@ li #reply-title {
 .comment-content .codehilite .nf,
 .comment-content .codehilite .n,
 .comment-content .codehilite .p,
+.comment-body .codehilite .kt,
+.comment-body .codehilite .nf,
+.comment-body .codehilite .n,
+.comment-body .codehilite .p {
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+}
+
+/* 搜索结果高亮样式 */
+.search-result {
+    margin-bottom: 30px;
+    padding: 20px;
+    border: 1px solid #e1e1e1;
+    border-radius: 5px;
+    background: #fff;
+}
+
+.search-result .entry-title {
+    margin: 0 0 10px 0;
+    font-size: 1.5em;
+}
+
+.search-result .entry-title a {
+    color: #2c3e50;
+    text-decoration: none;
+}
+
+.search-result .entry-title a:hover {
+    color: #3498db;
+}
+
+.search-result .entry-meta {
+    color: #7f8c8d;
+    font-size: 0.9em;
+    margin-bottom: 15px;
+}
+
+.search-result .entry-meta span {
+    margin-right: 15px;
+}
+
+.search-excerpt {
+    line-height: 1.6;
+    color: #555;
+}
+
+.search-excerpt p {
+    margin: 10px 0;
+}
+
+/* 搜索关键词高亮 */
+.search-excerpt em,
+.search-result .entry-title em {
+    background-color: #fff3cd;
+    color: #856404;
+    font-style: normal;
+    font-weight: bold;
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+
+.more-link {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.more-link:hover {
+    text-decoration: underline;
+}
 .comment-content .codehilite .w,
 .comment-content .codehilite .o,
 .comment-body .codehilite .kt,

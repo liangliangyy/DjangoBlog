@@ -25,11 +25,12 @@
         <!-- SEO插件会自动生成title、description、keywords等标签 -->
     {% endblock %}
     <link rel="profile" href="http://gmpg.org/xfn/11"/>
-    
-    <!-- DNS预解析 -->
+
+    <!-- 资源提示和预加载优化 -->
     <link rel="dns-prefetch" href="//cdn.mathjax.org"/>
     <link rel="dns-prefetch" href="//cdn.jsdelivr.net"/>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
+
 
     <!--[if lt IE 9]>
     <script src="{% static 'blog/js/html5.js' %}" type="text/javascript"></script>
@@ -40,11 +41,10 @@
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
     <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
     <link rel="apple-touch-icon" href="/favicon.ico"/>
-    
-        <!-- 本地字体加载 -->
-        <link rel="stylesheet" href="{% static 'blog/fonts/open-sans.css' %}">
-    {% compress css %}
 
+    <!-- 本地字体加载 -->
+    <link rel="stylesheet" href="{% static 'blog/fonts/open-sans.css' %}">
+    {% compress css %}
         <link rel='stylesheet' id='twentytwelve-style-css' href='{% static 'blog/css/style.css' %}' type='text/css'
               media='all'/>
         <link href="{% static 'blog/css/oauth_style.css' %}" rel="stylesheet">
@@ -56,11 +56,16 @@
         <link rel="stylesheet" href="{% static 'blog/css/nprogress.css' %}">
         {% block compress_css %}
         {% endblock %}
+        <!-- 插件CSS文件 - 集成到压缩系统 -->
+        {% plugin_compressed_css %}
     {% endcompress %}
-    
+
     {% if GLOBAL_HEADER %}
         {{ GLOBAL_HEADER|safe }}
     {% endif %}
+
+    <!-- 插件head资源 -->
+    {% plugin_head_resources %}
 </head>
 
 <body class="home blog custom-font-enabled">
@@ -90,20 +95,25 @@
     {% include 'share_layout/footer.html' %}
 </div><!-- #page -->
 
-    <!-- JavaScript资源 -->
-    {% compress js %}
-        <script src="{% static 'blog/js/jquery-3.6.0.min.js' %}"></script>
-        <script src="{% static 'blog/js/nprogress.js' %}"></script>
-        <script src="{% static 'blog/js/blog.js' %}"></script>
-        <script src="{% static 'blog/js/navigation.js' %}"></script>
-        {% block compress_js %}
-        {% endblock %}
-    {% endcompress %}
-    
-    <!-- MathJax智能加载器 -->
-    <script src="{% static 'blog/js/mathjax-loader.js' %}" async defer></script>
-    
-    {% block footer %}
+<!-- JavaScript资源 -->
+{% compress js %}
+    <script src="{% static 'blog/js/jquery-3.6.0.min.js' %}"></script>
+    <script src="{% static 'blog/js/nprogress.js' %}"></script>
+    <script src="{% static 'blog/js/blog.js' %}"></script>
+    <script src="{% static 'blog/js/navigation.js' %}"></script>
+    {% block compress_js %}
     {% endblock %}
+    <!-- 插件JS文件 - 集成到压缩系统 -->
+    {% plugin_compressed_js %}
+{% endcompress %}
+
+<!-- MathJax智能加载器 -->
+<script src="{% static 'blog/js/mathjax-loader.js' %}" async defer></script>
+
+{% block footer %}
+{% endblock %}
+
+<!-- 插件body资源 -->
+{% plugin_body_resources %}
 </body>
 </html>
