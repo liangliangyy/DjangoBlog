@@ -421,3 +421,134 @@ def query(qs, **kwargs):
 def addstr(arg1, arg2):
     """concatenate arg1 & arg2"""
     return str(arg1) + str(arg2)
+
+
+# === 插件系统模板标签 ===
+
+@register.simple_tag(takes_context=True)
+def render_plugin_widgets(context, position, **kwargs):
+    """
+    渲染指定位置的所有插件组件
+    
+    Args:
+        context: 模板上下文
+        position: 位置标识
+        **kwargs: 传递给插件的额外参数
+    
+    Returns:
+        按优先级排序的所有插件HTML内容
+    """
+    from djangoblog.plugin_manage.loader import get_loaded_plugins
+    
+    widgets = []
+    
+    for plugin in get_loaded_plugins():
+        try:
+            widget_data = plugin.render_position_widget(
+                position=position,
+                context=context,
+                **kwargs
+            )
+            if widget_data:
+                widgets.append(widget_data)
+        except Exception as e:
+            logger.error(f"Error rendering widget from plugin {plugin.PLUGIN_NAME}: {e}")
+    
+    # 按优先级排序（数字越小优先级越高）
+    widgets.sort(key=lambda x: x['priority'])
+    
+    # 合并HTML内容
+    html_parts = [widget['html'] for widget in widgets]
+    return mark_safe(''.join(html_parts))
+
+
+@register.simple_tag(takes_context=True)
+def plugin_head_resources(context):
+    """渲染所有插件的head资源（仅自定义HTML，CSS已集成到压缩系统）"""
+    from djangoblog.plugin_manage.loader import get_loaded_plugins
+    
+    resources = []
+    
+    for plugin in get_loaded_plugins():
+        try:
+            # 只处理自定义head HTML（CSS文件已通过压缩系统处理）
+            head_html = plugin.get_head_html(context)
+            if head_html:
+                resources.append(head_html)
+                
+        except Exception as e:
+            logger.error(f"Error loading head resources from plugin {plugin.PLUGIN_NAME}: {e}")
+    
+    return mark_safe('\n'.join(resources))
+
+
+@register.simple_tag(takes_context=True)
+def plugin_body_resources(context):
+    """渲染所有插件的body资源（仅自定义HTML，JS已集成到压缩系统）"""
+    from djangoblog.plugin_manage.loader import get_loaded_plugins
+    
+    resources = []
+    
+    for plugin in get_loaded_plugins():
+        try:
+            # 只处理自定义body HTML（JS文件已通过压缩系统处理）
+            body_html = plugin.get_body_html(context)
+            if body_html:
+                resources.append(body_html)
+                
+        except Exception as e:
+            logger.error(f"Error loading body resources from plugin {plugin.PLUGIN_NAME}: {e}")
+    
+    return mark_safe('\n'.join(resources))
+
+
+@register.inclusion_tag('plugins/css_includes.html')
+def plugin_compressed_css():
+    """插件CSS压缩包含模板"""
+    from djangoblog.plugin_manage.loader import get_loaded_plugins
+    
+    css_files = []
+    for plugin in get_loaded_plugins():
+        for css_file in plugin.get_css_files():
+            css_url = plugin.get_static_url(css_file)
+            css_files.append(css_url)
+    
+    return {'css_files': css_files}
+
+
+@register.inclusion_tag('plugins/js_includes.html')
+def plugin_compressed_js():
+    """插件JS压缩包含模板"""
+    from djangoblog.plugin_manage.loader import get_loaded_plugins
+    
+    js_files = []
+    for plugin in get_loaded_plugins():
+        for js_file in plugin.get_js_files():
+            js_url = plugin.get_static_url(js_file)
+            js_files.append(js_url)
+    
+    return {'js_files': js_files}
+
+
+
+
+@register.simple_tag(takes_context=True)
+def plugin_widget(context, plugin_name, widget_type='default', **kwargs):
+    """
+    渲染指定插件的组件
+    
+    使用方式：
+    {% plugin_widget 'article_recommendation' 'bottom' article=article count=5 %}
+    """
+    from djangoblog.plugin_manage.loader import get_plugin_by_slug
+    
+    plugin = get_plugin_by_slug(plugin_name)
+    if plugin and hasattr(plugin, 'render_template'):
+        try:
+            widget_context = {**context.flatten(), **kwargs}
+            template_name = f"{widget_type}.html"
+            return mark_safe(plugin.render_template(template_name, widget_context))
+        except Exception as e:
+            logger.error(f"Error rendering plugin widget {plugin_name}.{widget_type}: {e}")
+    
+    return ""

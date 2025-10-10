@@ -177,6 +177,11 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'collectedstatic')
 STATIC_URL = '/static/'
 STATICFILES = os.path.join(BASE_DIR, 'static')
 
+# 添加插件静态文件目录
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'plugins'),  # 让Django能找到插件的静态文件
+]
+
 AUTH_USER_MODEL = 'accounts.BlogUser'
 LOGIN_URL = '/login/'
 
@@ -301,18 +306,56 @@ STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
 )
 COMPRESS_ENABLED = True
-# COMPRESS_OFFLINE = True
+# 根据环境变量决定是否启用离线压缩
+COMPRESS_OFFLINE = os.environ.get('COMPRESS_OFFLINE', 'False').lower() == 'true'
 
+# 压缩输出目录
+COMPRESS_OUTPUT_DIR = 'compressed'
 
+# 压缩文件名模板 - 包含哈希值用于缓存破坏
+COMPRESS_CSS_HASHING_METHOD = 'mtime'
+COMPRESS_JS_HASHING_METHOD = 'mtime'
+
+# 高级CSS压缩过滤器
 COMPRESS_CSS_FILTERS = [
-    # creates absolute urls from relative ones
+    # 创建绝对URL
     'compressor.filters.css_default.CssAbsoluteFilter',
-    # css minimizer
-    'compressor.filters.cssmin.CSSMinFilter'
+    # CSS压缩器 - 高压缩等级
+    'compressor.filters.cssmin.CSSCompressorFilter',
 ]
+
+# 高级JS压缩过滤器
 COMPRESS_JS_FILTERS = [
-    'compressor.filters.jsmin.JSMinFilter'
+    # JS压缩器 - 高压缩等级
+    'compressor.filters.jsmin.SlimItFilter',
 ]
+
+# 压缩缓存配置
+COMPRESS_CACHE_BACKEND = 'default'
+COMPRESS_CACHE_KEY_FUNCTION = 'compressor.cache.simple_cachekey'
+
+# 预压缩配置
+COMPRESS_PRECOMPILERS = (
+    # 支持SCSS/SASS
+    ('text/x-scss', 'django_libsass.SassCompiler'),
+    ('text/x-sass', 'django_libsass.SassCompiler'),
+)
+
+# 压缩性能优化
+COMPRESS_MINT_DELAY = 30  # 压缩延迟（秒）
+COMPRESS_MTIME_DELAY = 10  # 修改时间检查延迟
+COMPRESS_REBUILD_TIMEOUT = 2592000  # 重建超时（30天）
+
+# 压缩等级配置
+COMPRESS_CSS_COMPRESSOR = 'compressor.css.CssCompressor'
+COMPRESS_JS_COMPRESSOR = 'compressor.js.JsCompressor'
+
+# 静态文件缓存配置
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+
+# 浏览器缓存配置（通过中间件或服务器配置）
+COMPRESS_URL = STATIC_URL
+COMPRESS_ROOT = STATIC_ROOT
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 MEDIA_URL = '/media/'
@@ -356,5 +399,6 @@ ACTIVE_PLUGINS = [
     'view_count',
     'seo_optimizer',
     'image_lazy_loading',
+    'article_recommendation',
 ]
 

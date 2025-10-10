@@ -1,0 +1,166 @@
+/* 文章推荐插件样式 - 与网站风格保持一致 */
+
+/* 文章底部推荐样式 */
+.article-recommendations {
+    margin: 30px 0;
+    padding: 20px;
+    background: #fff;
+    border: 1px solid #e1e1e1;
+    border-radius: 3px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.recommendations-title {
+    margin: 0 0 15px 0;
+    font-size: 18px;
+    color: #444;
+    font-weight: bold;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #21759b;
+    display: inline-block;
+}
+
+.recommendations-icon {
+    margin-right: 5px;
+    font-size: 16px;
+}
+
+.recommendations-grid {
+    display: grid;
+    gap: 15px;
+    grid-template-columns: 1fr;
+    margin-top: 15px;
+}
+
+.recommendation-card {
+    background: #fff;
+    border: 1px solid #e1e1e1;
+    border-radius: 3px;
+    transition: all 0.2s ease;
+    overflow: hidden;
+}
+
+.recommendation-card:hover {
+    border-color: #21759b;
+    box-shadow: 0 2px 5px rgba(33, 117, 155, 0.1);
+}
+
+.recommendation-link {
+    display: block;
+    padding: 15px;
+    text-decoration: none;
+    color: inherit;
+}
+
+.recommendation-title {
+    margin: 0 0 8px 0;
+    font-size: 15px;
+    font-weight: normal;
+    color: #444;
+    line-height: 1.4;
+    transition: color 0.2s ease;
+}
+
+.recommendation-card:hover .recommendation-title {
+    color: #21759b;
+}
+
+.recommendation-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: #757575;
+}
+
+.recommendation-category {
+    background: #ebebeb;
+    color: #5e5e5e;
+    padding: 2px 6px;
+    border-radius: 2px;
+    font-size: 11px;
+    font-weight: normal;
+}
+
+.recommendation-date {
+    font-weight: normal;
+    color: #757575;
+}
+
+/* 侧边栏推荐样式 */
+.widget_recommendations {
+    margin-bottom: 20px;
+}
+
+.widget_recommendations .widget-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #333;
+    border-bottom: 2px solid #007cba;
+    padding-bottom: 5px;
+}
+
+.recommendations-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.recommendations-list .recommendation-item {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+    background: none;
+    border: none;
+    border-radius: 0;
+}
+
+.recommendations-list .recommendation-item:last-child {
+    border-bottom: none;
+}
+
+.recommendations-list .recommendation-item a {
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+    line-height: 1.4;
+    display: block;
+    margin-bottom: 4px;
+    transition: color 0.3s ease;
+}
+
+.recommendations-list .recommendation-item a:hover {
+    color: #007cba;
+}
+
+.recommendations-list .recommendation-meta {
+    font-size: 11px;
+    color: #999;
+    margin: 0;
+}
+
+.recommendations-list .recommendation-meta span {
+    margin-right: 10px;
+}
+
+/* 响应式设计 - 分栏显示 */
+@media (min-width: 768px) {
+    .recommendations-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .recommendations-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .recommendations-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+    }
+}

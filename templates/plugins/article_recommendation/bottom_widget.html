@@ -1,0 +1,23 @@
+{% load i18n %}
+<div class="article-recommendations">
+    <h3 class="recommendations-title">
+        <span class="recommendations-icon">📖</span>{{ title }}
+    </h3>
+    <div class="recommendations-grid">
+        {% for article in recommendations %}
+            {% if article.title and article.title|length > 0 %}
+                <div class="recommendation-card">
+                    <a href="{{ article.get_absolute_url }}" class="recommendation-link" title="{{ article.title }}">
+                        <div class="recommendation-title">{{ article.title|truncatechars:45 }}</div>
+                        <div class="recommendation-meta">
+                            {% if article.category %}
+                                <span class="recommendation-category">{{ article.category.name }}</span>
+                            {% endif %}
+                            <span class="recommendation-date">{{ article.pub_time|date:"m-d" }}</span>
+                        </div>
+                    </a>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>

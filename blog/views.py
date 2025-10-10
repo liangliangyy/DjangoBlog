@@ -152,6 +152,11 @@ class ArticleDetailView(DetailView):
 
         context = super(ArticleDetailView, self).get_context_data(**kwargs)
         article = self.object
+        
+        # 触发文章详情加载钩子，让插件可以添加额外的上下文数据
+        from djangoblog.plugin_manage.hook_constants import ARTICLE_DETAIL_LOAD
+        hooks.run_action(ARTICLE_DETAIL_LOAD, article=article, context=context, request=self.request)
+        
         # Action Hook, 通知插件"文章详情已获取"
         hooks.run_action('after_article_body_get', article=article, request=self.request)
         return context

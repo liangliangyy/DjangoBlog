@@ -1,0 +1,17 @@
+{% load i18n %}
+<aside class="widget widget_recommendations">
+    <p class="widget-title">{{ title }}</p>
+    <ul class="recommendations-list">
+        {% for article in recommendations %}
+            <li class="recommendation-item">
+                <a href="{{ article.get_absolute_url }}" title="{{ article.title }}">
+                    {{ article.title|truncatechars:35 }}
+                </a>
+                <div class="recommendation-meta">
+                    <span class="recommendation-views">{{ article.views }} {% trans 'views' %}</span>
+                    <span class="recommendation-date">{{ article.pub_time|date:"m-d" }}</span>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+</aside>
