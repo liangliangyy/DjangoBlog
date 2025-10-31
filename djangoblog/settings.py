@@ -290,11 +290,6 @@ LOGGING = {
             'handlers': ['log_file', 'console'],
             'level': 'INFO',
             'propagate': True,
-        },
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': False,
         }
     }
 }
@@ -361,20 +356,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 MEDIA_URL = '/media/'
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
-# 安全头部配置 - 防XSS和其他攻击
-SECURE_BROWSER_XSS_FILTER = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
-SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
 
-# 内容安全策略 (CSP) - 防XSS攻击
-CSP_DEFAULT_SRC = ["'self'"]
-CSP_SCRIPT_SRC = ["'self'", "'unsafe-inline'", "cdn.mathjax.org", "*.googleapis.com"]
-CSP_STYLE_SRC = ["'self'", "'unsafe-inline'", "*.googleapis.com", "*.gstatic.com"]
-CSP_IMG_SRC = ["'self'", "data:", "*.lylinux.net", "*.gravatar.com", "*.githubusercontent.com"]
-CSP_FONT_SRC = ["'self'", "*.googleapis.com", "*.gstatic.com"]
-CSP_CONNECT_SRC = ["'self'"]
-CSP_FRAME_SRC = ["'none'"]
-CSP_OBJECT_SRC = ["'none'"]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
