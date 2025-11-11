@@ -1,0 +1,37 @@
+# config.yaml
+
+django:
+  secret_key: "n9ceqv38)#&mwuat@(mjb_p%em$e8$qyr#fw9ot!=ba6lijx-6"
+  debug: true
+  allowed_hosts:
+    - "*"
+    - "127.0.0.1"
+    - "example.com"
+  csrf_trusted_origins:
+    - "http://example.com"
+
+mysql:
+  database: "djangoblog"
+  user: "root"
+  password: 'yTo*XingDun.456'
+  host: 10.130.18.74
+  port: 3306
+
+redis_url: ":123456@10.130.18.74:6379/4"  # 留空表示不启用 Redis
+
+email:
+  tls: false
+  ssl: true
+  host: "smtp.mxhichina.com"
+  port: 465
+  user: ""
+  password: ""
+  admin_email: "admin@admin.com"
+
+baidu_notify_url: "http://data.zz.baidu.com/urls?site=https://www.lylinux.net&token=1uAOGrMsUm5syDGn"
+
+wxadmin_password: "995F03AC401D6CABABAEF756FC4D43C7"
+
+elasticsearch_host: ""
+
+compress_offline: false

@@ -12,8 +12,48 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 import os
 import sys
 from pathlib import Path
+import yaml
 
 from django.utils.translation import gettext_lazy as _
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# --- Load YAML config ---
+CONFIG_FILE = os.environ.get('DJANGO_CONFIG_FILE', BASE_DIR / 'config.yaml')
+with open(CONFIG_FILE, 'r', encoding='utf-8') as f:
+    yaml_config = yaml.safe_load(f)
+
+
+def get_config(path, default=None):
+    """
+    从 yaml_config 中按路径获取值，例如 'django.debug'
+    """
+    keys = path.split('.')
+    val = yaml_config
+    try:
+        for key in keys:
+            val = val[key]
+        return val
+    except (KeyError, TypeError):
+        return default
+
+
+def env_or_config(env_key, config_path, default=None, cast=None):
+    """
+    优先使用环境变量，其次使用 YAML 配置，最后使用默认值。
+    可选类型转换（如 int, bool）
+    """
+    env_val = os.environ.get(env_key)
+    if env_val is not None:
+        if cast == bool:
+            return env_val.lower() in ('true', '1', 'yes', 'on')
+        elif cast == int:
+            return int(env_val)
+        else:
+            return env_val
+    config_val = get_config(config_path, default)
+    return config_val
 
 
 def env_to_bool(env, default):
@@ -21,24 +61,16 @@ def env_to_bool(env, default):
     return default if str_val is None else str_val == 'True'
 
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get(
-    'DJANGO_SECRET_KEY') or 'n9ceqv38)#&mwuat@(mjb_p%em$e8$qyr#fw9ot!=ba6lijx-6'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY') or get_config('django.secret_key')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env_to_bool('DJANGO_DEBUG', True)
+DEBUG = env_or_config('DJANGO_DEBUG', 'django.debug', True, cast=bool)
 # DEBUG = False
 TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 
 # ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['*', '127.0.0.1', 'example.com']
-# django 4.0新增配置
-CSRF_TRUSTED_ORIGINS = ['http://example.com']
+ALLOWED_HOSTS = get_config('django.allowed_hosts', ['127.0.0.1'])
+CSRF_TRUSTED_ORIGINS = get_config('django.csrf_trusted_origins', [])
 # Application definition
 
 
@@ -109,15 +141,14 @@ WSGI_APPLICATION = 'djangoblog.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('DJANGO_MYSQL_DATABASE') or 'djangoblog',
-        'USER': os.environ.get('DJANGO_MYSQL_USER') or 'root',
-        'PASSWORD': os.environ.get('DJANGO_MYSQL_PASSWORD') or 'root',
-        'HOST': os.environ.get('DJANGO_MYSQL_HOST') or '127.0.0.1',
-        'PORT': int(
-            os.environ.get('DJANGO_MYSQL_PORT') or 3306),
-        'OPTIONS': {
-            'charset': 'utf8mb4'},
-    }}
+        'NAME': os.environ.get('DJANGO_MYSQL_DATABASE') or get_config('mysql.database'),
+        'USER': os.environ.get('DJANGO_MYSQL_USER') or get_config('mysql.user'),
+        'PASSWORD': os.environ.get('DJANGO_MYSQL_PASSWORD') or get_config('mysql.password'),
+        'HOST': os.environ.get('DJANGO_MYSQL_HOST') or get_config('mysql.host'),
+        'PORT': int(os.environ.get('DJANGO_MYSQL_PORT') or get_config('mysql.port', 3306)),
+        'OPTIONS': {'charset': 'utf8mb4'},
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
@@ -206,33 +237,50 @@ CACHES = {
     }
 }
 # 使用redis作为缓存
-if os.environ.get("DJANGO_REDIS_URL"):
+redis_url = os.environ.get("DJANGO_REDIS_URL") or get_config('redis_url')
+if redis_url:
     CACHES = {
         'default': {
             'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-            'LOCATION': f'redis://{os.environ.get("DJANGO_REDIS_URL")}',
+            'LOCATION': f'redis://{redis_url}',
+        }
+    }
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'TIMEOUT': 10800,
+            'LOCATION': 'unique-snowflake',
         }
     }
 
 SITE_ID = 1
-BAIDU_NOTIFY_URL = os.environ.get('DJANGO_BAIDU_NOTIFY_URL') \
-                   or 'http://data.zz.baidu.com/urls?site=https://www.lylinux.net&token=1uAOGrMsUm5syDGn'
+BAIDU_NOTIFY_URL = os.environ.get('DJANGO_BAIDU_NOTIFY_URL') or get_config('baidu_notify_url')
 
-# Email:
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_USE_TLS = env_to_bool('DJANGO_EMAIL_TLS', False)
-EMAIL_USE_SSL = env_to_bool('DJANGO_EMAIL_SSL', True)
-EMAIL_HOST = os.environ.get('DJANGO_EMAIL_HOST') or 'smtp.mxhichina.com'
-EMAIL_PORT = int(os.environ.get('DJANGO_EMAIL_PORT') or 465)
-EMAIL_HOST_USER = os.environ.get('DJANGO_EMAIL_USER')
-EMAIL_HOST_PASSWORD = os.environ.get('DJANGO_EMAIL_PASSWORD')
+EMAIL_USE_TLS = env_or_config('DJANGO_EMAIL_TLS', 'email.tls', False, cast=bool)
+EMAIL_USE_SSL = env_or_config('DJANGO_EMAIL_SSL', 'email.ssl', True, cast=bool)
+EMAIL_HOST = os.environ.get('DJANGO_EMAIL_HOST') or get_config('email.host')
+EMAIL_PORT = int(os.environ.get('DJANGO_EMAIL_PORT') or get_config('email.port', 465))
+EMAIL_HOST_USER = os.environ.get('DJANGO_EMAIL_USER') or get_config('email.user')
+EMAIL_HOST_PASSWORD = os.environ.get('DJANGO_EMAIL_PASSWORD') or get_config('email.password')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 SERVER_EMAIL = EMAIL_HOST_USER
-# Setting debug=false did NOT handle except email notifications
-ADMINS = [('admin', os.environ.get('DJANGO_ADMIN_EMAIL') or 'admin@admin.com')]
+
+ADMINS = [('admin', os.environ.get('DJANGO_ADMIN_EMAIL') or get_config('email.admin_email'))]
 # WX ADMIN password(Two times md5)
-WXADMIN = os.environ.get(
-    'DJANGO_WXADMIN_PASSWORD') or '995F03AC401D6CABABAEF756FC4D43C7'
+
+WXADMIN = os.environ.get('DJANGO_WXADMIN_PASSWORD') or get_config('wxadmin_password')
+
+COMPRESS_OFFLINE = (os.environ.get('COMPRESS_OFFLINE', str(get_config('compress_offline', False))).lower() == 'true')
+
+ELASTICSEARCH_HOST = os.environ.get('DJANGO_ELASTICSEARCH_HOST') or get_config('elasticsearch_host')
+if ELASTICSEARCH_HOST:
+    ELASTICSEARCH_DSL = {'default': {'hosts': ELASTICSEARCH_HOST}}
+    HAYSTACK_CONNECTIONS = {
+        'default': {
+            'ENGINE': 'djangoblog.elasticsearch_backend.ElasticSearchEngine',
+        },
+    }
 
 LOG_PATH = os.path.join(BASE_DIR, 'logs')
 if not os.path.exists(LOG_PATH):
@@ -355,7 +403,6 @@ COMPRESS_ROOT = STATIC_ROOT
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 MEDIA_URL = '/media/'
 X_FRAME_OPTIONS = 'SAMEORIGIN'
-
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
