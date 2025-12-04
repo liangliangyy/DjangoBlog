@@ -25,12 +25,58 @@
                             搜索：<span style="color: red">{{ query }} </span> &nbsp;&nbsp;
                         </h2>
                     {% endif %}
+                    
+                    <!-- 排序选项 -->
+                    <div class="search-sort">
+                        <span>排序方式：</span>
+                        <a href="/search/?q={{ query }}&sort=relevance" {% if sort_by == 'relevance' %}class="active"{% endif %}>相关性</a>
+                        <a href="/search/?q={{ query }}&sort=time" {% if sort_by == 'time' %}class="active"{% endif %}>最新发布</a>
+                        <a href="/search/?q={{ query }}&sort=views" {% if sort_by == 'views' %}class="active"{% endif %}>最多浏览</a>
+                    </div>
                 </header><!-- .archive-header -->
             {% endif %}
             {% if query and page.object_list %}
                 {% for article in page.object_list %}
                     {% load_article_detail article.object True user %}
                 {% endfor %}
+                
+                <!-- 关键词高亮样式 -->
+                <style>
+                    .highlight {
+                        background-color: #ffff00;
+                        color: #000;
+                        font-weight: bold;
+                        padding: 1px 3px;
+                        border-radius: 2px;
+                    }
+                    
+                    /* 排序选项样式 */
+                    .search-sort {
+                        margin-top: 15px;
+                        font-size: 14px;
+                    }
+                    
+                    .search-sort span {
+                        color: #666;
+                    }
+                    
+                    .search-sort a {
+                        color: #333;
+                        text-decoration: none;
+                        margin: 0 5px;
+                        padding: 2px 6px;
+                        border-radius: 4px;
+                    }
+                    
+                    .search-sort a:hover {
+                        background-color: #f0f0f0;
+                    }
+                    
+                    .search-sort a.active {
+                        background-color: #007bff;
+                        color: white;
+                    }
+                </style>
                 {% if page.has_previous or page.has_next %}
                     <nav id="nav-below" class="navigation" role="navigation">
                         <h3 class="assistive-text">文章导航</h3>

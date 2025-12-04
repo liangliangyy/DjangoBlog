@@ -5,11 +5,174 @@
         <form role="search" method="get" id="searchform" class="searchform" action="/search">
             <div>
                 <label class="screen-reader-text" for="s">{% trans 'search' %}：</label>
-                <input type="text" value="" name="q" id="q"/>
+                <input type="text" value="" name="q" id="search-input" placeholder="搜索文章..."/>
                 <input type="submit" id="searchsubmit" />
             </div>
         </form>
+        <!-- 搜索历史和提示框 -->
+        <div id="search-suggestions" class="search-suggestions" style="display: none;">
+            <div id="search-history" class="search-history">
+                <h4>搜索历史</h4>
+                <ul id="history-list"></ul>
+                <button id="clear-history" class="clear-history">清空历史</button>
+            </div>
+            <div id="search-tips" class="search-tips">
+                <h4>热门搜索</h4>
+                <ul id="tips-list">
+                    <li><a href="/search/?q=Django">Django</a></li>
+                    <li><a href="/search/?q=Python">Python</a></li>
+                    <li><a href="/search/?q=Web开发">Web开发</a></li>
+                </ul>
+            </div>
+        </div>
     </aside>
+    
+    <script>
+        // 搜索框动态提示和搜索历史功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('search-input');
+            const suggestionsDiv = document.getElementById('search-suggestions');
+            const historyList = document.getElementById('history-list');
+            const clearHistoryBtn = document.getElementById('clear-history');
+            
+            // 从localStorage获取搜索历史
+            function getSearchHistory() {
+                const history = localStorage.getItem('searchHistory');
+                return history ? JSON.parse(history) : [];
+            }
+            
+            // 保存搜索历史到localStorage
+            function saveSearchHistory(query) {
+                let history = getSearchHistory();
+                // 移除已存在的相同查询
+                history = history.filter(item => item !== query);
+                // 添加到历史记录开头
+                history.unshift(query);
+                // 最多保存10条历史记录
+                if (history.length > 10) {
+                    history = history.slice(0, 10);
+                }
+                localStorage.setItem('searchHistory', JSON.stringify(history));
+            }
+            
+            // 清空搜索历史
+            function clearSearchHistory() {
+                localStorage.removeItem('searchHistory');
+                renderSearchHistory();
+            }
+            
+            // 渲染搜索历史
+            function renderSearchHistory() {
+                const history = getSearchHistory();
+                historyList.innerHTML = '';
+                
+                if (history.length === 0) {
+                    historyList.innerHTML = '<li>暂无搜索历史</li>';
+                } else {
+                    history.forEach(query => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `<a href="/search/?q=${encodeURIComponent(query)}">${query}</a>`;
+                        historyList.appendChild(li);
+                    });
+                }
+            }
+            
+            // 显示搜索建议
+            function showSuggestions() {
+                renderSearchHistory();
+                suggestionsDiv.style.display = 'block';
+            }
+            
+            // 隐藏搜索建议
+            function hideSuggestions() {
+                setTimeout(() => {
+                    suggestionsDiv.style.display = 'none';
+                }, 200);
+            }
+            
+            // 搜索框事件
+            searchInput.addEventListener('focus', showSuggestions);
+            searchInput.addEventListener('input', showSuggestions);
+            
+            // 点击其他地方隐藏搜索建议
+            document.addEventListener('click', function(e) {
+                if (!searchInput.contains(e.target) && !suggestionsDiv.contains(e.target)) {
+                    hideSuggestions();
+                }
+            });
+            
+            // 清空历史按钮事件
+            clearHistoryBtn.addEventListener('click', clearSearchHistory);
+            
+            // 表单提交事件，保存搜索历史
+            const searchForm = document.getElementById('searchform');
+            searchForm.addEventListener('submit', function(e) {
+                const query = searchInput.value.trim();
+                if (query) {
+                    saveSearchHistory(query);
+                }
+            });
+        });
+    </script>
+    
+    <style>
+        /* 搜索建议样式 */
+        .search-suggestions {
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            width: 250px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+        
+        .search-history h4, .search-tips h4 {
+            margin: 0 0 10px 0;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .search-history ul, .search-tips ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        .search-history li, .search-tips li {
+            margin: 5px 0;
+        }
+        
+        .search-history a, .search-tips a {
+            color: #333;
+            text-decoration: none;
+            font-size: 13px;
+        }
+        
+        .search-history a:hover, .search-tips a:hover {
+            color: #007bff;
+        }
+        
+        .clear-history {
+            background: none;
+            border: none;
+            color: #999;
+            font-size: 12px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .clear-history:hover {
+            color: #666;
+        }
+        
+        .search-tips {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+    </style>
     {% if extra_sidebars %}
         {% for sidebar in extra_sidebars %}
 
@@ -40,7 +203,14 @@
         <aside id="su_siloed_terms-2" class="widget widget_su_siloed_terms"><p class="widget-title">{% trans 'category' %}</p>
             <ul>
                 {% for c in sidebar_categorys %}
-                    <li class="cat-item cat-item-184"><a href={{ c.get_absolute_url }}>{{ c.name }}</a>
+                    <li class="cat-item cat-item-184">
+                        <a href={{ c.get_absolute_url }} 
+                           {% if request.path == c.get_absolute_url or request.resolver_match.kwargs.category_name == c.slug %} 
+                               class="active"
+                           {% endif %}
+                        >
+                            {{ c.name }}
+                        </a>
                     </li>
                 {% endfor %}
             </ul>
@@ -97,13 +267,47 @@
             <div class="tagcloud">
                 {% for tag,count,size in sidebar_tags %}
                     <a href="{{ tag.get_absolute_url }}"
-                       class="tag-link-{{ tag.id }} tag-link-position-{{ tag.id }}"
-                       style="font-size: {{ size }}pt;" title="{{ count }}个话题"> {{ tag.name }}
+                       class="tag-link-{{ tag.id }} tag-link-position-{{ tag.id }}
+                       {% if request.path == tag.get_absolute_url or request.resolver_match.kwargs.tag_name == tag.slug %} 
+                           active
+                       {% endif %}"
+                       style="font-size: '{{ size }}pt;'" title="{{ count }}个话题"> {{ tag.name }}
                     </a>
                 {% endfor %}
             </div>
         </aside>
     {% endif %}
+    <!-- 分类/标签筛选器视觉反馈样式 -->
+    <style>
+        /* 分类列表的活动状态样式 */
+        .widget_su_siloed_terms ul li a.active {
+            background-color: #007bff;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        
+        .widget_su_siloed_terms ul li a:hover {
+            background-color: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        
+        /* 标签云的活动状态样式 */
+        .widget_tag_cloud .tagcloud a.active {
+            background-color: #007bff;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        
+        .widget_tag_cloud .tagcloud a:hover {
+            background-color: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+    </style>
+    
     <aside id="text-2" class="widget widget_text"><p class="widget-title">{% trans 'Welcome to star or fork the source code of this site' %}</p>
         <div class="textwidget">
 

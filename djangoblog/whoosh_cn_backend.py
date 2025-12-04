@@ -22,7 +22,21 @@ from haystack.models import SearchResult
 from haystack.utils import get_identifier, get_model_ct
 from haystack.utils import log as logging
 from haystack.utils.app_loading import haystack_get_model
-from jieba.analyse import ChineseAnalyzer
+import jieba
+from whoosh.analysis import Tokenizer, Token
+
+class ChineseTokenizer(Tokenizer):
+    def __call__(self, text, **kwargs):
+        # 使用jieba分词
+        words = jieba.cut(text)
+        for word in words:
+            token = Token()
+            token.text = word
+            yield token
+
+# 创建中文分词器实例
+ChineseAnalyzer = ChineseTokenizer()
+
 from whoosh import index
 from whoosh.analysis import StemmingAnalyzer
 from whoosh.fields import BOOLEAN, DATETIME, IDLIST, KEYWORD, NGRAM, NGRAMWORDS, NUMERIC, Schema, TEXT
@@ -186,7 +200,7 @@ class WhooshSearchBackend(BaseSearchBackend):
             else:
                 # schema_fields[field_class.index_fieldname] = TEXT(stored=True, analyzer=StemmingAnalyzer(), field_boost=field_class.boost, sortable=True)
                 schema_fields[field_class.index_fieldname] = TEXT(
-                    stored=True, analyzer=ChineseAnalyzer(), field_boost=field_class.boost, sortable=True)
+                    stored=True, analyzer=ChineseAnalyzer, field_boost=field_class.boost, sortable=True)
             if field_class.document is True:
                 content_field_name = field_class.index_fieldname
                 schema_fields[field_class.index_fieldname].spelling = True
