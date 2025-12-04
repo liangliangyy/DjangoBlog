@@ -285,14 +285,68 @@ class LinkListView(ListView):
 
 
 class EsSearchView(SearchView):
+    def get_queryset(self):
+        queryset = super(EsSearchView, self).get_queryset()
+        
+        # 获取排序参数
+        sort_by = self.request.GET.get('sort', 'relevance')
+        
+        # 根据排序参数对结果进行排序
+        if sort_by == 'time':
+            # 按时间排序（最新在前）
+            queryset = queryset.order_by('-pub_date')
+        elif sort_by == 'views':
+            # 按浏览量排序（最多在前）
+            queryset = queryset.order_by('-views')
+        # 默认按相关性排序
+        
+        return queryset
+    
     def get_context(self):
         paginator, page = self.build_page()
+        
+        # 获取当前排序参数
+        sort_by = self.request.GET.get('sort', 'relevance')
+        
+        # 关键词高亮处理
+        query = self.query
+        if query:
+            # 替换HTML特殊字符以避免XSS攻击
+            query = query.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+            
+            # 创建正则表达式，不区分大小写
+            import re
+            regex = re.compile(r'(' + re.escape(query) + r')', re.IGNORECASE)
+            
+            # 对搜索结果中的标题和摘要进行关键词高亮
+            for result in page.object_list:
+                article = result.object
+                
+                # 高亮标题中的关键词
+                if article.title:
+                    article.title = regex.sub(r'<em class="highlight">\1</em>', article.title)
+                
+                # 高亮摘要中的关键词
+                if hasattr(article, 'excerpt') and article.excerpt:
+                    article.excerpt = regex.sub(r'<em class="highlight">\1</em>', article.excerpt)
+                
+                # 如果没有摘要，从正文中提取部分内容并高亮
+                elif article.body:
+                    # 提取前200个字符作为摘要
+                    excerpt = article.body[:200]
+                    if len(article.body) > 200:
+                        excerpt += '...'
+                    
+                    # 高亮摘要中的关键词
+                    article.excerpt = regex.sub(r'<em class="highlight">\1</em>', excerpt)
+        
         context = {
             "query": self.query,
             "form": self.form,
             "page": page,
             "paginator": paginator,
             "suggestion": None,
+            "sort_by": sort_by,  # 将当前排序参数传递到模板
         }
         if hasattr(self.results, "query") and self.results.query.backend.include_spelling:
             context["suggestion"] = self.results.query.get_spelling_suggestion()
