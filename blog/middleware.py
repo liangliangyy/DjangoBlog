@@ -1,12 +1,31 @@
 import logging
 import time
+import threading
 
 from ipware import get_client_ip
 from user_agents import parse
 
+# 创建threading.local对象用于存储request
+local = threading.local()
+
 from blog.documents import ELASTICSEARCH_ENABLED, ElaspedTimeDocumentManager
 
 logger = logging.getLogger(__name__)
+
+
+class RequestLocalMiddleware(object):
+    def __init__(self, get_response=None):
+        self.get_response = get_response
+        super().__init__()
+
+    def __call__(self, request):
+        # 将request存储到threading.local
+        local.request = request
+        response = self.get_response(request)
+        # 清理request
+        if hasattr(local, 'request'):
+            del local.request
+        return response
 
 
 class OnlineMiddleware(object):

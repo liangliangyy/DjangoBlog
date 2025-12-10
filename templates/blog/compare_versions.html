@@ -1,0 +1,70 @@
+{% extends 'share_layout/base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans 'Compare Versions' %} - {{ version1.article.title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header">
+                <h1>{% trans 'Compare Versions' %}: {{ version1.article.title }}</h1>
+                <p class="lead">
+                    {% trans 'Comparing version' %} {{ version1.version_number }} ({{ version1.creation_time }}) {% trans 'with' %} {{ version2.version_number }} ({{ version2.creation_time }})
+                </p>
+            </div>
+
+            <!-- Title Comparison -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{% trans 'Title Comparison' %}</h3>
+                </div>
+                <div class="panel-body">
+                    {% if title_diff %}
+                        {{ title_diff|safe }}
+                    {% else %}
+                        <p class="text-success">{% trans 'Titles are identical' %}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Body Comparison -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{% trans 'Content Comparison' %}</h3>
+                </div>
+                <div class="panel-body">
+                    {% if body_diff %}
+                        {{ body_diff|safe }}
+                    {% else %}
+                        <p class="text-success">{% trans 'Contents are identical' %}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="well">
+                <a href="{% url 'admin:blog_articleversion_changelist' %}?article__id__exact={{ version1.article.id }}" class="btn btn-default">
+                    {% trans 'Back to Versions List' %}
+                </a>
+                <a href="{% url 'admin:blog_article_change' version1.article.id %}" class="btn btn-primary">
+                    {% trans 'Edit Article' %}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_style %}
+<style>
+    .diff {font-family: monospace;}
+    .diff table {width: 100%; margin-bottom: 20px;}
+    .diff_header {background-color: #e0e0e0; padding: 5px;}
+    .diff_next {background-color: #c0c0c0; padding: 5px;}
+    .diff_add {background-color: #aaffaa;}
+    .diff_chg {background-color: #ffff77;}
+    .diff_sub {background-color: #ffaaaa;}
+    .diff td {padding: 3px 10px;}
+</style>
+{% endblock %}

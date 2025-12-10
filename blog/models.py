@@ -133,6 +133,36 @@ class Article(BaseModel):
         return names
 
     def save(self, *args, **kwargs):
+        # 在保存前创建版本记录（除了只更新浏览量的情况）
+        is_update_views = 'update_fields' in kwargs and kwargs['update_fields'] == ['views']
+        if not is_update_views and self.pk is not None:
+            # 获取当前用户
+            from django.contrib.auth import get_user_model
+            User = get_user_model()
+            from django.contrib.auth.models import AnonymousUser
+            from blog.middleware import local
+            request = local.request if hasattr(local, 'request') else None
+            
+            editor = None
+            if request and hasattr(request, 'user') and not isinstance(request.user, AnonymousUser):
+                editor = request.user
+            else:
+                # 如果无法获取当前用户，则使用文章作者
+                editor = self.author
+            
+            # 获取最新版本号
+            latest_version = self.versions.order_by('-version_number').first()
+            new_version_number = latest_version.version_number + 1 if latest_version else 1
+            
+            # 创建新版本
+            ArticleVersion.objects.create(
+                article=self,
+                version_number=new_version_number,
+                title=self.title,
+                body=self.body,
+                editor=editor
+            )
+        
         super().save(*args, **kwargs)
 
     def viewed(self):
@@ -175,6 +205,34 @@ class Article(BaseModel):
         if match:
             return match.group(1)
         return ""
+
+
+class ArticleVersion(BaseModel):
+    """文章版本"""
+    article = models.ForeignKey(
+        Article,
+        verbose_name=_('article'),
+        on_delete=models.CASCADE,
+        related_name='versions'
+    )
+    version_number = models.PositiveIntegerField(_('version number'))
+    title = models.CharField(_('title'), max_length=200)
+    body = MDTextField(_('body'))
+    editor = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        verbose_name=_('editor'),
+        on_delete=models.CASCADE
+    )
+    comment = models.CharField(_('version comment'), max_length=200, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.article.title} - Version {self.version_number}"
+
+    class Meta:
+        ordering = ['-version_number']
+        verbose_name = _('article version')
+        verbose_name_plural = _('article versions')
+        unique_together = ('article', 'version_number')
 
 
 class Category(BaseModel):

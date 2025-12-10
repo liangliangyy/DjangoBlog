@@ -1,19 +1,21 @@
 import logging
 import os
 import uuid
-
+import difflib
 from django.conf import settings
 from django.core.paginator import Paginator
-from django.http import HttpResponse, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseForbidden, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.templatetags.static import static
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_GET
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from haystack.views import SearchView
+from django.contrib.admin.views.decorators import staff_member_required
 
 from blog.models import Article, Category, LinkShowType, Links, Tag
 from comments.forms import CommentForm
@@ -375,6 +377,66 @@ def permission_denied_view(
             'statuscode': '403'}, status=403)
 
 
+@csrf_exempt
 def clean_cache_view(request):
-    cache.clear()
-    return HttpResponse('ok')
+    if request.method == 'POST':
+        key = request.POST.get('cache_key')
+        if not key:
+            cache.clear()
+            return HttpResponse('success')
+        else:
+            cache.delete(key)
+            return HttpResponse('success')
+    return HttpResponseForbidden()
+
+
+@staff_member_required
+@require_GET
+def compare_versions(request):
+    """
+    对比两个文章版本的差异
+    """
+    version1_id = request.GET.get('v1')
+    version2_id = request.GET.get('v2')
+    
+    if not version1_id or not version2_id:
+        return HttpResponseBadRequest("请提供两个版本ID进行对比")
+    
+    from blog.models import ArticleVersion
+    version1 = get_object_or_404(ArticleVersion, id=version1_id)
+    version2 = get_object_or_404(ArticleVersion, id=version2_id)
+    
+    # 确保两个版本属于同一篇文章
+    if version1.article.id != version2.article.id:
+        return HttpResponseBadRequest("只能对比同一篇文章的版本")
+    
+    # 处理标题差异
+    title_diff = []
+    if version1.title != version2.title:
+        d = difflib.HtmlDiff(wrapcolumn=80)
+        title_diff = d.make_file(
+            version1.title.splitlines(), 
+            version2.title.splitlines(),
+            f'Version {version1.version_number}',
+            f'Version {version2.version_number}',
+            context=True
+        )
+    
+    # 处理正文差异
+    body_diff = []
+    if version1.body != version2.body:
+        d = difflib.HtmlDiff(wrapcolumn=80)
+        body_diff = d.make_file(
+            version1.body.splitlines(),
+            version2.body.splitlines(),
+            f'Version {version1.version_number}',
+            f'Version {version2.version_number}',
+            context=True
+        )
+    
+    return render(request, 'blog/compare_versions.html', {
+        'version1': version1,
+        'version2': version2,
+        'title_diff': title_diff,
+        'body_diff': body_diff
+    })
