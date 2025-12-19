@@ -27,6 +27,12 @@ var interval = setInterval(function () {
 $(document).ready(function () {
     NProgress.done();
     clearInterval(interval);
+    
+    // 初始化代码块功能
+    initCodeBlocks();
+    
+    // 初始化目录导航
+    initTocNavigation();
 });
 
 
@@ -81,6 +87,98 @@ window.onload = function () {
     };
   }
 };
+
+// 初始化代码块功能
+function initCodeBlocks() {
+    var preElements = document.querySelectorAll('pre');
+    
+    preElements.forEach(function(pre) {
+        // 创建控制按钮容器
+        var controls = document.createElement('div');
+        controls.className = 'code-controls';
+        
+        // 创建复制按钮
+        var copyBtn = document.createElement('button');
+        copyBtn.className = 'code-btn';
+        copyBtn.innerHTML = '复制';
+        copyBtn.onclick = function() {
+            copyCode(pre, copyBtn);
+        };
+        
+        // 创建主题切换按钮
+        var themeBtn = document.createElement('button');
+        themeBtn.className = 'code-btn';
+        themeBtn.innerHTML = '主题';
+        themeBtn.onclick = function() {
+            toggleCodeTheme(pre);
+        };
+        
+        controls.appendChild(copyBtn);
+        controls.appendChild(themeBtn);
+        pre.appendChild(controls);
+    });
+}
+
+// 复制代码功能
+function copyCode(preElement, button) {
+    var code = preElement.querySelector('code').textContent;
+    
+    navigator.clipboard.writeText(code).then(function() {
+        var originalText = button.innerHTML;
+        button.innerHTML = '已复制';
+        button.style.background = 'rgba(40, 167, 69, 0.7)';
+        
+        setTimeout(function() {
+            button.innerHTML = originalText;
+            button.style.background = '';
+        }, 2000);
+    }).catch(function(error) {
+        console.error('复制失败:', error);
+        button.innerHTML = '复制失败';
+        
+        setTimeout(function() {
+            button.innerHTML = '复制';
+        }, 2000);
+    });
+}
+
+// 切换代码块主题
+function toggleCodeTheme(preElement) {
+    preElement.classList.toggle('dark-theme');
+    
+    // 如果是暗主题，添加相应样式
+    if (preElement.classList.contains('dark-theme')) {
+        preElement.style.background = '#1e1e1e';
+        preElement.style.color = '#d4d4d4';
+    } else {
+        preElement.style.background = '';
+        preElement.style.color = '';
+    }
+}
+
+// 初始化目录导航
+function initTocNavigation() {
+    var tocContainer = document.getElementById('toc-container');
+    if (!tocContainer) return;
+    
+    // 为目录链接添加点击事件
+    var tocLinks = tocContainer.querySelectorAll('a');
+    tocLinks.forEach(function(link) {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            var targetId = this.getAttribute('href').substring(1);
+            var targetElement = document.getElementById(targetId);
+            
+            if (targetElement) {
+                var offsetTop = targetElement.offsetTop - 80; // 减去头部高度
+                window.scrollTo({
+                    top: offsetTop,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+}
 
 // $(document).ready(function () {
 //     var form = $('#i18n-form');

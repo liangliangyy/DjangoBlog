@@ -143,6 +143,156 @@ img {
 }
 
 
+/* =Article Reading Experience Optimization
+-------------------------------------------------------------- */
+
+/* 文章正文样式优化 */
+.article {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.8;
+    color: #333;
+}
+
+.article p {
+    margin-bottom: 1.5em;
+    text-align: justify;
+}
+
+.article h1,
+.article h2,
+.article h3,
+.article h4,
+.article h5,
+.article h6 {
+    margin-top: 1.5em;
+    margin-bottom: 0.8em;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.article h1 {
+    font-size: 2em;
+}
+
+.article h2 {
+    font-size: 1.75em;
+}
+
+.article h3 {
+    font-size: 1.5em;
+}
+
+.article h4 {
+    font-size: 1.25em;
+}
+
+.article ul,
+.article ol {
+    margin-bottom: 1.5em;
+    padding-left: 2em;
+}
+
+.article li {
+    margin-bottom: 0.5em;
+}
+
+/* 浮动目录导航 */
+.toc-container {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    width: 250px;
+    max-height: 70vh;
+    overflow-y: auto;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    padding: 15px;
+    z-index: 1000;
+}
+
+.toc-title {
+    font-size: 1.2em;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.toc-content {
+    font-size: 0.9em;
+}
+
+.toc-content ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.toc-content li {
+    margin-bottom: 8px;
+    padding-left: 15px;
+    position: relative;
+}
+
+.toc-content a {
+    color: #666;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.toc-content a:hover {
+    color: #007bff;
+}
+
+/* 代码块样式 */
+pre {
+    position: relative;
+    margin: 1.5em 0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+code {
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+}
+
+/* 代码块控制按钮容器 */
+.code-controls {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 5px;
+}
+
+/* 复制按钮和主题切换按钮 */
+.code-btn {
+    padding: 4px 8px;
+    font-size: 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background: rgba(0,0,0,0.5);
+    color: #fff;
+    transition: background 0.3s;
+}
+
+.code-btn:hover {
+    background: rgba(0,0,0,0.7);
+}
+
+.code-btn:active {
+    background: rgba(0,0,0,0.8);
+}
+
+/* 响应式设计 */
+@media (max-width: 1024px) {
+    .toc-container {
+        display: none;
+    }
+}
+
 /* =Repeatable patterns
 -------------------------------------------------------------- */
 

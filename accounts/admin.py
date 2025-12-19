@@ -58,3 +58,16 @@ class BlogUserAdmin(UserAdmin):
     list_display_links = ('id', 'username')
     ordering = ('-id',)
     search_fields = ('username', 'nickname', 'email')
+
+    # 新增：覆盖用户编辑页面的字段
+    fieldsets = (
+        (None, {'fields': ('username', 'email', 'password', 'nickname', 'source')}),
+        ('登录信息', {'fields': ('last_login', 'date_joined')}),
+    )
+    # 新增：覆盖用户添加页面的字段
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('username', 'email', 'password1', 'password2', 'nickname'),
+        }),
+    )

@@ -53,17 +53,19 @@
                     href=' {{ article.get_absolute_url }}'>Read more</a></p>
         {% else %}
 
-            {% if article.show_toc %}
-                {% get_markdown_toc article.body as toc %}
-                <b>{% trans 'toc' %}:</b>
-                {{ toc|safe }}
-
-                <hr class="break_line"/>
+            <!-- 浮动目录导航 -->
+            {% get_markdown_toc article.body as toc %}
+            {% if toc %}
+                <div id="toc-container" class="toc-container">
+                    <h3 class="toc-title">目录</h3>
+                    <div class="toc-content">
+                        {{ toc|safe }}
+                    </div>
+                </div>
             {% endif %}
+
             <div class="article">
-
                 {% render_article_content article False %}
-
             </div>
         {% endif %}
 
