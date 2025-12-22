@@ -56,7 +56,15 @@
     /**
      * 显示临时提示
      */
+    let currentToast = null;
+
     function showToast(message) {
+        // 如果已有 toast，先移除
+        if (currentToast && currentToast.parentNode === document.body) {
+            document.body.removeChild(currentToast);
+            currentToast = null;
+        }
+
         // 创建提示元素
         const toast = document.createElement('div');
         toast.className = 'dark-mode-toast';
@@ -76,6 +84,7 @@
         `;
 
         document.body.appendChild(toast);
+        currentToast = toast;
 
         // 渐显
         setTimeout(() => {
@@ -86,7 +95,12 @@
         setTimeout(() => {
             toast.style.opacity = '0';
             setTimeout(() => {
-                document.body.removeChild(toast);
+                if (toast.parentNode === document.body) {
+                    document.body.removeChild(toast);
+                }
+                if (currentToast === toast) {
+                    currentToast = null;
+                }
             }, 300);
         }, 2000);
     }
@@ -103,7 +117,14 @@
 
         // 检测是否支持黑夜模式
         window.DarkMode.isSupported = function() {
-            return CSS.supports && CSS.supports('color', 'var(--test)');
+            try {
+                if (typeof CSS === 'undefined' || typeof CSS.supports !== 'function') {
+                    return false;
+                }
+                return CSS.supports('color', 'var(--test)');
+            } catch (e) {
+                return false;
+            }
         };
 
         // 预加载图片（可选）

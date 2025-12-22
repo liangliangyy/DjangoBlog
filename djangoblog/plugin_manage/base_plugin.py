@@ -169,8 +169,20 @@ class BasePlugin:
         """获取插件JavaScript文件列表"""
         return []
 
+    def get_critical_head_html(self, context=None):
+        """
+        获取需要在<head>最早执行的关键HTML内容（阻塞式加载）
+
+        用于防闪烁脚本等必须在页面渲染前执行的关键代码。
+        此方法返回的内容会在所有CSS和其他资源之前加载。
+
+        注意：此方法应该只用于真正需要阻塞加载的关键资源，
+        普通资源请使用 get_head_html()
+        """
+        return ""
+
     def get_head_html(self, context=None):
-        """获取需要插入到<head>中的HTML内容"""
+        """获取需要插入到<head>中的HTML内容（在CSS之后）"""
         return ""
 
     def get_body_html(self, context=None):
