@@ -98,14 +98,14 @@ html[data-theme="dark"] .recommendation-meta {
 
 /* ==================== 回到顶部按钮 ==================== */
 
-html[data-theme="dark"] #rocket {
-    background-color: var(--dm-bg-tertiary);
-    border-color: var(--dm-border-color);
-}
+/*html[data-theme="dark"] #rocket {*/
+/*    background-color: var(--dm-bg-tertiary);*/
+/*    border-color: var(--dm-border-color);*/
+/*}*/
 
-html[data-theme="dark"] #rocket:hover {
-    background-color: var(--dm-link-color);
-}
+/*html[data-theme="dark"] #rocket:hover {*/
+/*    background-color: var(--dm-link-color);*/
+/*}*/
 
 /* ==================== 搜索框 ==================== */
 
