@@ -1,22 +1,27 @@
-# Introduction to main features settings
+# Introduction to Main Features Settings
 
-## Cache:
-Cache using `memcache` for default. If you don't have `memcache` environment, you can remove the `default` setting in `CACHES` and change `locmemcache` to `default`.
+## Cache Configuration
+
+The cache uses `localmem` (local memory cache) by default. If you have a Redis environment, you can automatically switch to Redis cache by setting the `DJANGO_REDIS_URL` environment variable.
+
+### Using Redis Cache
+
+Set the environment variable:
+```bash
+export DJANGO_REDIS_URL="127.0.0.1:6379/0"
+```
+
+Or directly modify the cache configuration in `settings.py`:
 ```python
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1:11211',
-        'KEY_PREFIX': 'django_test' if TESTING else 'djangoblog',
-        'TIMEOUT': 60 * 60 * 10
-    },
-    'locmemcache': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'TIMEOUT': 10800,
-        'LOCATION': 'unique-snowflake',
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/0',
     }
 }
 ```
+
+Reference code: https://github.com/liangliangyy/DjangoBlog/blob/master/djangoblog/settings.py#L201-L215
 
 ## OAuth Login:
 QQ, Weibo, Google, GitHub and Facebook are now supported for OAuth login. Fetch OAuth login permissions from the corresponding open platform, and save them with `appkey`, `appsecret` and callback address in **Backend->OAuth** configuration.
@@ -55,10 +60,39 @@ If the code block in your article didn't show hightlight, please write the code 
 
 That is, you should add the corresponding language name before the code block.
 
-## Update
-If you get errors as following while executing database migrations:
+## Update & Version Notes
+
+### Database Migration Errors
+If you encounter errors while executing database migrations:
 ```python
 django.db.migrations.exceptions.MigrationSchemaMissing: Unable to create the django_migrations table ((1064, "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(6) NOT NULL)' at line 1"))
 ```
-This problem may cause by the mysql version under 5.6, a new version( >= 5.6 ) mysql is needed.
+This problem may be caused by MySQL version < 5.6. Please upgrade to MySQL >= 5.6.
+
+### Django Version Configuration
+
+#### Django 4.0+ CSRF Configuration
+
+Django 4.0 and above require `CSRF_TRUSTED_ORIGINS` configuration, otherwise you may encounter CSRF errors during login.
+
+Configure your domain in `settings.py`:
+```python
+CSRF_TRUSTED_ORIGINS = [
+    'http://example.com',
+    'https://example.com',
+    'http://www.example.com',
+    'https://www.example.com',
+]
+```
+
+**Note**: Replace `example.com` with your actual domain, including the protocol (http/https).
+
+Reference code: https://github.com/liangliangyy/DjangoBlog/blob/master/djangoblog/settings.py#L41
+
+#### Django 5.2 Notes
+
+This project currently uses Django 5.2.9, which has been thoroughly tested and runs stably. If upgrading from an older version, please note:
+- Ensure Python version >= 3.10
+- Run database migrations: `python manage.py migrate`
+- Update dependencies: `pip install -r requirements.txt`
 
