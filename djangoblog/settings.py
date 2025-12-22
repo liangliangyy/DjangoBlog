@@ -375,6 +375,7 @@ if os.environ.get('DJANGO_ELASTICSEARCH_HOST'):
 # Plugin System
 PLUGINS_DIR = BASE_DIR / 'plugins'
 ACTIVE_PLUGINS = [
+    'dark_mode',  # 黑夜模式插件
     'article_copyright',
     'reading_time',
     'external_links',

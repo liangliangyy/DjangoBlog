@@ -1,0 +1,301 @@
+/**
+ * Bootstrap 3 黑夜模式适配
+ *
+ * 覆盖Bootstrap组件的样式以适配黑夜模式
+ */
+
+/* ==================== 导航栏 ==================== */
+
+html[data-theme="dark"] .navbar {
+    background-color: var(--dm-bg-secondary);
+    border-color: var(--dm-border-color);
+}
+
+html[data-theme="dark"] .navbar-default {
+    background-color: var(--dm-bg-secondary);
+    border-color: var(--dm-border-color);
+}
+
+html[data-theme="dark"] .navbar-default .navbar-nav > li > a {
+    color: var(--dm-text-primary);
+}
+
+html[data-theme="dark"] .navbar-default .navbar-nav > li > a:hover,
+html[data-theme="dark"] .navbar-default .navbar-nav > li > a:focus {
+    color: var(--dm-link-hover);
+    background-color: var(--dm-bg-tertiary);
+}
+
+html[data-theme="dark"] .navbar-default .navbar-nav > .active > a {
+    color: var(--dm-link-color);
+    background-color: var(--dm-bg-tertiary);
+}
+
+html[data-theme="dark"] .navbar-brand {
+    color: var(--dm-text-primary) !important;
+}
+
+/* ==================== 面板 ==================== */
+
+html[data-theme="dark"] .panel {
+    background-color: var(--dm-bg-secondary);
+    border-color: var(--dm-border-color);
+}
+
+html[data-theme="dark"] .panel-default > .panel-heading {
+    background-color: var(--dm-bg-tertiary);
+    border-color: var(--dm-border-color);
+    color: var(--dm-text-primary);
+}
+
+html[data-theme="dark"] .panel-body {
+    background-color: var(--dm-bg-secondary);
+    color: var(--dm-text-primary);
+}
+
+html[data-theme="dark"] .panel-footer {
+    background-color: var(--dm-bg-tertiary);
+    border-color: var(--dm-border-color);
+}
+
+/* ==================== 表单控件 ==================== */
+
+html[data-theme="dark"] .form-control {
+    background-color: var(--dm-bg-tertiary);
+    color: var(--dm-text-primary);
+    border-color: var(--dm-border-color);
+}
+
+html[data-theme="dark"] .form-control:focus {
+    border-color: var(--dm-link-color);
+    background-color: var(--dm-bg-tertiary);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(94, 179, 214, 0.6);
+}
+
+html[data-theme="dark"] .form-control[disabled],
+html[data-theme="dark"] .form-control[readonly] {
+    background-color: var(--dm-bg-secondary);
+    opacity: 0.7;
+}
+
+/* ==================== 按钮 ==================== */
+
+html[data-theme="dark"] .btn-default {
+    background-color: var(--dm-button-bg);
+    color: var(--dm-button-text);
+    border-color: var(--dm-border-color);
+}
+
+html[data-theme="dark"] .btn-default:hover {
+    background-color: var(--dm-button-hover-bg);
+    border-color: var(--dm-border-light);
+}
+
+html[data-theme="dark"] .btn-primary {
+    background-color: var(--dm-link-color);
+    border-color: var(--dm-link-color);
+}
+
+html[data-theme="dark"] .btn-primary:hover {
+    background-color: var(--dm-link-hover);
+    border-color: var(--dm-link-hover);
+}
+
+/* ==================== 模态框 ==================== */
+
+html[data-theme="dark"] .modal-content {
+    background-color: var(--dm-bg-secondary);
+    color: var(--dm-text-primary);
+    border-color: var(--dm-border-color);
+}
+
+html[data-theme="dark"] .modal-header {
+    border-bottom-color: var(--dm-border-color);
+}
+
+html[data-theme="dark"] .modal-footer {
+    border-top-color: var(--dm-border-color);
+}
+
+html[data-theme="dark"] .close {
+    color: var(--dm-text-primary);
+    opacity: 0.7;
+}
+
+html[data-theme="dark"] .close:hover {
+    color: var(--dm-text-primary);
+    opacity: 1;
+}
+
+/* ==================== 警告框 ==================== */
+
+html[data-theme="dark"] .alert {
+    background-color: var(--dm-bg-tertiary);
+    color: var(--dm-text-primary);
+    border-color: var(--dm-border-color);
+}
+
+html[data-theme="dark"] .alert-success {
+    background-color: #1e4620;
+    border-color: #2d6930;
+    color: #7fce7f;
+}
+
+html[data-theme="dark"] .alert-info {
+    background-color: #1a3d4d;
+    border-color: #2a5d73;
+    color: #7dd3ff;
+}
+
+html[data-theme="dark"] .alert-warning {
+    background-color: #4d3e1a;
+    border-color: #735e2a;
+    color: #ffdb7d;
+}
+
+html[data-theme="dark"] .alert-danger {
+    background-color: #4d1a1a;
+    border-color: #732a2a;
+    color: #ff7d7d;
+}
+
+/* ==================== 下拉菜单 ==================== */
+
+html[data-theme="dark"] .dropdown-menu {
+    background-color: var(--dm-bg-secondary);
+    border-color: var(--dm-border-color);
+}
+
+html[data-theme="dark"] .dropdown-menu > li > a {
+    color: var(--dm-text-primary);
+}
+
+html[data-theme="dark"] .dropdown-menu > li > a:hover,
+html[data-theme="dark"] .dropdown-menu > li > a:focus {
+    background-color: var(--dm-bg-tertiary);
+    color: var(--dm-link-color);
+}
+
+html[data-theme="dark"] .dropdown-menu > .active > a {
+    background-color: var(--dm-link-color);
+    color: #fff;
+}
+
+html[data-theme="dark"] .dropdown-menu .divider {
+    background-color: var(--dm-border-color);
+}
+
+/* ==================== 表格 ==================== */
+
+html[data-theme="dark"] .table {
+    color: var(--dm-text-primary);
+}
+
+html[data-theme="dark"] .table > thead > tr > th,
+html[data-theme="dark"] .table > tbody > tr > th,
+html[data-theme="dark"] .table > tfoot > tr > th {
+    border-color: var(--dm-border-color);
+    color: var(--dm-text-primary);
+}
+
+html[data-theme="dark"] .table > thead > tr > td,
+html[data-theme="dark"] .table > tbody > tr > td,
+html[data-theme="dark"] .table > tfoot > tr > td {
+    border-color: var(--dm-border-color);
+}
+
+html[data-theme="dark"] .table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: var(--dm-bg-secondary);
+}
+
+html[data-theme="dark"] .table-hover > tbody > tr:hover {
+    background-color: var(--dm-bg-tertiary);
+}
+
+/* ==================== 井 (Wells) ==================== */
+
+html[data-theme="dark"] .well {
+    background-color: var(--dm-bg-secondary);
+    border-color: var(--dm-border-color);
+    box-shadow: inset 0 1px 1px var(--dm-shadow);
+}
+
+/* ==================== 徽章 ==================== */
+
+html[data-theme="dark"] .badge {
+    background-color: var(--dm-text-secondary);
+    color: var(--dm-bg-primary);
+}
+
+html[data-theme="dark"] .btn .badge {
+    color: var(--dm-button-bg);
+    background-color: var(--dm-button-text);
+}
+
+/* ==================== 分页 ==================== */
+
+html[data-theme="dark"] .pagination > li > a,
+html[data-theme="dark"] .pagination > li > span {
+    background-color: var(--dm-bg-secondary);
+    color: var(--dm-text-primary);
+    border-color: var(--dm-border-color);
+}
+
+html[data-theme="dark"] .pagination > li > a:hover,
+html[data-theme="dark"] .pagination > li > span:hover {
+    background-color: var(--dm-bg-tertiary);
+    border-color: var(--dm-border-light);
+}
+
+html[data-theme="dark"] .pagination > .active > a,
+html[data-theme="dark"] .pagination > .active > span {
+    background-color: var(--dm-link-color);
+    border-color: var(--dm-link-color);
+}
+
+html[data-theme="dark"] .pagination > .disabled > a,
+html[data-theme="dark"] .pagination > .disabled > span {
+    background-color: var(--dm-bg-secondary);
+    color: var(--dm-text-tertiary);
+}
+
+/* ==================== 标签 ==================== */
+
+html[data-theme="dark"] .label-default {
+    background-color: var(--dm-text-secondary);
+}
+
+html[data-theme="dark"] .label-primary {
+    background-color: var(--dm-link-color);
+}
+
+/* ==================== 进度条 ==================== */
+
+html[data-theme="dark"] .progress {
+    background-color: var(--dm-bg-tertiary);
+}
+
+/* ==================== 列表组 ==================== */
+
+html[data-theme="dark"] .list-group-item {
+    background-color: var(--dm-bg-secondary);
+    color: var(--dm-text-primary);
+    border-color: var(--dm-border-color);
+}
+
+html[data-theme="dark"] .list-group-item:hover {
+    background-color: var(--dm-bg-tertiary);
+}
+
+html[data-theme="dark"] a.list-group-item {
+    color: var(--dm-text-primary);
+}
+
+html[data-theme="dark"] a.list-group-item:hover {
+    color: var(--dm-link-color);
+}
+
+html[data-theme="dark"] .list-group-item.active {
+    background-color: var(--dm-link-color);
+    border-color: var(--dm-link-color);
+}
