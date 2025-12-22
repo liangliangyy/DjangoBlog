@@ -107,17 +107,7 @@ html[data-theme="dark"] .recommendation-meta {
 /*    background-color: var(--dm-link-color);*/
 /*}*/
 
-/* ==================== 搜索框 ==================== */
-
-html[data-theme="dark"] #s {
-    background-color: var(--dm-bg-tertiary);
-    color: var(--dm-text-primary);
-    border-color: var(--dm-border-color);
-}
-
-html[data-theme="dark"] #s:focus {
-    border-color: var(--dm-link-color);
-}
+/* ==================== 搜索框样式已在 dark-mode.css 中统一维护 ==================== */
 
 /* ==================== NProgress (进度条) ==================== */
 

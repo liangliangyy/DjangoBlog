@@ -463,22 +463,46 @@ def render_plugin_widgets(context, position, **kwargs):
 
 
 @register.simple_tag(takes_context=True)
+def plugin_critical_head_resources(context):
+    """
+    渲染所有插件的关键head资源（阻塞式加载）
+
+    用于防闪烁脚本等必须在页面渲染前执行的关键代码。
+    这些资源会在<head>标签的最开始位置加载，在所有CSS之前。
+    """
+    from djangoblog.plugin_manage.loader import get_loaded_plugins
+
+    resources = []
+
+    for plugin in get_loaded_plugins():
+        try:
+            critical_html = plugin.get_critical_head_html(context)
+            if critical_html:
+                resources.append(critical_html)
+
+        except Exception as e:
+            logger.error(f"Error loading critical head resources from plugin {plugin.PLUGIN_NAME}: {e}")
+
+    return mark_safe('\n'.join(resources))
+
+
+@register.simple_tag(takes_context=True)
 def plugin_head_resources(context):
     """渲染所有插件的head资源（仅自定义HTML，CSS已集成到压缩系统）"""
     from djangoblog.plugin_manage.loader import get_loaded_plugins
-    
+
     resources = []
-    
+
     for plugin in get_loaded_plugins():
         try:
             # 只处理自定义head HTML（CSS文件已通过压缩系统处理）
             head_html = plugin.get_head_html(context)
             if head_html:
                 resources.append(head_html)
-                
+
         except Exception as e:
             logger.error(f"Error loading head resources from plugin {plugin.PLUGIN_NAME}: {e}")
-    
+
     return mark_safe('\n'.join(resources))
 
 

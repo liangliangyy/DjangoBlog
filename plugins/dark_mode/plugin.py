@@ -12,7 +12,9 @@
 from djangoblog.plugin_manage.base_plugin import BasePlugin
 from djangoblog.plugin_manage import hooks
 from django.utils.safestring import mark_safe
+from django.utils.html import escape
 import logging
+import re
 
 logger = logging.getLogger(__name__)
 
@@ -52,19 +54,39 @@ class DarkModePlugin(BasePlugin):
     def init_plugin(self):
         """插件初始化"""
         logger.info(f"Initializing {self.PLUGIN_NAME} v{self.PLUGIN_VERSION}")
+        # 验证配置值的安全性
+        self._validate_config()
 
     def register_hooks(self):
         """注册钩子"""
         # 不注册任何钩子，完全通过资源注入实现
         pass
 
+    def _validate_config(self):
+        """验证配置值，防止 XSS 攻击"""
+        # 验证 storage_key：只允许字母、数字、连字符、下划线
+        if not re.match(r'^[a-zA-Z0-9_-]+$', self.CONFIG['storage_key']):
+            raise ValueError(f"Invalid storage_key: {self.CONFIG['storage_key']}")
+
+        # 验证 theme_attribute：只允许 data- 开头的属性
+        if not re.match(r'^data-[a-zA-Z0-9_-]+$', self.CONFIG['theme_attribute']):
+            raise ValueError(f"Invalid theme_attribute: {self.CONFIG['theme_attribute']}")
+
+        # 验证 default_theme：只允许特定值
+        if self.CONFIG['default_theme'] not in ['light', 'dark', 'auto']:
+            raise ValueError(f"Invalid default_theme: {self.CONFIG['default_theme']}")
+
+        # 验证 transition_duration：只允许合法的 CSS 时间值
+        if not re.match(r'^\d+(\.\d+)?(ms|s)$', self.CONFIG['transition_duration']):
+            raise ValueError(f"Invalid transition_duration: {self.CONFIG['transition_duration']}")
+
     # ==================== 资源注入 ====================
 
-    def get_head_html(self, context=None):
+    def get_critical_head_html(self, context=None):
         """
-        注入到 <head> 的HTML内容
+        注入到 <head> 开头的关键HTML内容（阻塞式加载）
 
-        关键：防闪烁脚本必须在 <head> 中同步执行
+        关键：防闪烁脚本必须在所有CSS之前同步执行，避免页面闪烁
         """
         # 1. CSS变量定义（内联以确保最早加载）
         css_variables = '''

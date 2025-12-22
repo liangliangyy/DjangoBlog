@@ -15,11 +15,14 @@
 <html lang="zh-CN" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
 <!--<![endif]-->
 <head>
+    <!-- 插件关键head资源 - 必须在所有资源之前加载（防闪烁等关键脚本） -->
+    {% load blog_tags %}
+    {% plugin_critical_head_resources %}
+
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="format-detection" content="telephone=no"/>
     <meta name="theme-color" content="#21759b"/>
-    {% load blog_tags %}
     {% head_meta %}
     {% block header %}
         <!-- SEO插件会自动生成title、description、keywords等标签 -->
