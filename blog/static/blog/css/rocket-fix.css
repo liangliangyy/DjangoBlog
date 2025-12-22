@@ -1,0 +1,25 @@
+/* 修复小火箭图标 - 使用 emoji 替代原始图片 */
+#rocket {
+    background-image: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 50px !important;
+    height: 50px !important;
+    font-size: 32px !important;
+    transition: all 0.3s ease !important;
+}
+
+#rocket::before {
+    content: "🚀";
+}
+
+#rocket:hover {
+    transform: translateY(-3px);
+}
+
+#rocket.move {
+    animation: toTop .8s ease-in !important;
+    animation-fill-mode: forwards !important;
+    -webkit-animation-fill-mode: forwards !important;
+}

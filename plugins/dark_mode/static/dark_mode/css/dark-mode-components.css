@@ -1,0 +1,261 @@
+/**
+ * 自定义组件黑夜模式适配
+ *
+ * 针对项目特有组件的样式适配
+ */
+
+/* ==================== MDEditor (Markdown编辑器) ==================== */
+
+html[data-theme="dark"] .mdeditor {
+    background-color: var(--dm-bg-secondary);
+    color: var(--dm-text-primary);
+    border-color: var(--dm-border-color);
+}
+
+html[data-theme="dark"] .mdeditor-toolbar {
+    background-color: var(--dm-bg-tertiary);
+    border-color: var(--dm-border-color);
+}
+
+html[data-theme="dark"] .mdeditor-preview {
+    background-color: var(--dm-bg-secondary);
+    color: var(--dm-text-primary);
+    border-color: var(--dm-border-color);
+}
+
+html[data-theme="dark"] .mdeditor-textarea {
+    background-color: var(--dm-bg-secondary);
+    color: var(--dm-text-primary);
+}
+
+/* ==================== 面包屑导航 ==================== */
+
+html[data-theme="dark"] .breadcrumb {
+    background-color: var(--dm-bg-secondary);
+    color: var(--dm-text-secondary);
+}
+
+html[data-theme="dark"] .breadcrumb > li + li:before {
+    color: var(--dm-text-tertiary);
+}
+
+html[data-theme="dark"] .breadcrumb > li > a {
+    color: var(--dm-link-color);
+}
+
+/* ==================== 文章标签列表 ==================== */
+
+html[data-theme="dark"] .article-tags a {
+    background-color: var(--dm-bg-tertiary);
+    color: var(--dm-text-primary);
+    border-color: var(--dm-border-color);
+}
+
+html[data-theme="dark"] .article-tags a:hover {
+    background-color: var(--dm-link-color);
+    color: #fff;
+}
+
+/* ==================== 作者信息卡片 ==================== */
+
+html[data-theme="dark"] .author-info {
+    background-color: var(--dm-bg-secondary);
+    border-color: var(--dm-border-color);
+}
+
+html[data-theme="dark"] .author-info .author-name {
+    color: var(--dm-text-primary);
+}
+
+html[data-theme="dark"] .author-info .author-bio {
+    color: var(--dm-text-secondary);
+}
+
+/* ==================== 相关文章推荐 ==================== */
+
+html[data-theme="dark"] .article-recommendations {
+    background-color: var(--dm-bg-secondary);
+    border-color: var(--dm-border-color);
+}
+
+html[data-theme="dark"] .recommendation-card {
+    background-color: var(--dm-bg-tertiary);
+    border-color: var(--dm-border-color);
+}
+
+html[data-theme="dark"] .recommendation-card:hover {
+    background-color: var(--dm-bg-primary);
+    border-color: var(--dm-link-color);
+}
+
+html[data-theme="dark"] .recommendation-title {
+    color: var(--dm-text-primary);
+}
+
+html[data-theme="dark"] .recommendation-meta {
+    color: var(--dm-text-secondary);
+}
+
+/* ==================== 回到顶部按钮 ==================== */
+
+html[data-theme="dark"] #rocket {
+    background-color: var(--dm-bg-tertiary);
+    border-color: var(--dm-border-color);
+}
+
+html[data-theme="dark"] #rocket:hover {
+    background-color: var(--dm-link-color);
+}
+
+/* ==================== 搜索框 ==================== */
+
+html[data-theme="dark"] #s {
+    background-color: var(--dm-bg-tertiary);
+    color: var(--dm-text-primary);
+    border-color: var(--dm-border-color);
+}
+
+html[data-theme="dark"] #s:focus {
+    border-color: var(--dm-link-color);
+}
+
+/* ==================== NProgress (进度条) ==================== */
+
+html[data-theme="dark"] #nprogress .bar {
+    background: var(--dm-link-color);
+}
+
+html[data-theme="dark"] #nprogress .peg {
+    box-shadow: 0 0 10px var(--dm-link-color), 0 0 5px var(--dm-link-color);
+}
+
+html[data-theme="dark"] #nprogress .spinner-icon {
+    border-top-color: var(--dm-link-color);
+    border-left-color: var(--dm-link-color);
+}
+
+/* ==================== 代码高亮 (Pygments - 高对比度VS Code Dark+主题) ==================== */
+
+/* 代码块容器 - 修正为 .codehilite (Python-Markdown codehilite 扩展) */
+html[data-theme="dark"] .codehilite {
+    background: #1e1e1e !important; /* VS Code深色背景 */
+    color: #d4d4d4 !important;
+}
+
+html[data-theme="dark"] .codehilite pre {
+    background: transparent !important;
+    border: none !important;
+    color: #d4d4d4 !important;
+    margin: 0 !important;
+}
+
+/* 关键字 - 亮蓝色 */
+html[data-theme="dark"] .codehilite .k { color: #569cd6 !important; }
+html[data-theme="dark"] .codehilite .kc { color: #569cd6 !important; }
+html[data-theme="dark"] .codehilite .kd { color: #569cd6 !important; }
+html[data-theme="dark"] .codehilite .kn { color: #c586c0 !important; }
+html[data-theme="dark"] .codehilite .kp { color: #569cd6 !important; }
+html[data-theme="dark"] .codehilite .kr { color: #569cd6 !important; }
+html[data-theme="dark"] .codehilite .kt { color: #4ec9b0 !important; }
+
+/* 注释 - 亮绿色 */
+html[data-theme="dark"] .codehilite .c { color: #6a9955 !important; }
+html[data-theme="dark"] .codehilite .cm { color: #6a9955 !important; }
+html[data-theme="dark"] .codehilite .cp { color: #6a9955 !important; }
+html[data-theme="dark"] .codehilite .c1 { color: #6a9955 !important; }
+html[data-theme="dark"] .codehilite .cs { color: #6a9955 !important; }
+
+/* 字符串 - 亮橙色 */
+html[data-theme="dark"] .codehilite .s { color: #ce9178 !important; }
+html[data-theme="dark"] .codehilite .sb { color: #ce9178 !important; }
+html[data-theme="dark"] .codehilite .sc { color: #ce9178 !important; }
+html[data-theme="dark"] .codehilite .sd { color: #ce9178 !important; }
+html[data-theme="dark"] .codehilite .s2 { color: #ce9178 !important; }
+html[data-theme="dark"] .codehilite .sh { color: #ce9178 !important; }
+html[data-theme="dark"] .codehilite .si { color: #ce9178 !important; }
+html[data-theme="dark"] .codehilite .sx { color: #ce9178 !important; }
+html[data-theme="dark"] .codehilite .sr { color: #d16969 !important; }
+html[data-theme="dark"] .codehilite .s1 { color: #ce9178 !important; }
+html[data-theme="dark"] .codehilite .ss { color: #ce9178 !important; }
+
+/* 运算符 - 白色 */
+html[data-theme="dark"] .codehilite .o { color: #d4d4d4 !important; }
+html[data-theme="dark"] .codehilite .ow { color: #569cd6 !important; }
+
+/* 标点 - 白色 */
+html[data-theme="dark"] .codehilite .p { color: #d4d4d4 !important; }
+
+/* 数字 - 亮绿色 */
+html[data-theme="dark"] .codehilite .l { color: #b5cea8 !important; }
+html[data-theme="dark"] .codehilite .m { color: #b5cea8 !important; }
+html[data-theme="dark"] .codehilite .mf { color: #b5cea8 !important; }
+html[data-theme="dark"] .codehilite .mh { color: #b5cea8 !important; }
+html[data-theme="dark"] .codehilite .mi { color: #b5cea8 !important; }
+html[data-theme="dark"] .codehilite .mo { color: #b5cea8 !important; }
+html[data-theme="dark"] .codehilite .il { color: #b5cea8 !important; }
+
+/* 函数和类名 - 亮黄色 */
+html[data-theme="dark"] .codehilite .nf { color: #dcdcaa !important; }
+html[data-theme="dark"] .codehilite .nc { color: #4ec9b0 !important; }
+
+/* 变量和名称 - 亮蓝色 */
+html[data-theme="dark"] .codehilite .n { color: #9cdcfe !important; }
+html[data-theme="dark"] .codehilite .na { color: #9cdcfe !important; }
+html[data-theme="dark"] .codehilite .nb { color: #dcdcaa !important; }
+html[data-theme="dark"] .codehilite .no { color: #4fc1ff !important; }
+html[data-theme="dark"] .codehilite .nd { color: #dcdcaa !important; }
+html[data-theme="dark"] .codehilite .ni { color: #d4d4d4 !important; }
+html[data-theme="dark"] .codehilite .ne { color: #4ec9b0 !important; }
+html[data-theme="dark"] .codehilite .nl { color: #d4d4d4 !important; }
+html[data-theme="dark"] .codehilite .nn { color: #4ec9b0 !important; }
+html[data-theme="dark"] .codehilite .nx { color: #9cdcfe !important; }
+html[data-theme="dark"] .codehilite .py { color: #9cdcfe !important; }
+html[data-theme="dark"] .codehilite .nt { color: #569cd6 !important; }
+html[data-theme="dark"] .codehilite .nv { color: #9cdcfe !important; }
+html[data-theme="dark"] .codehilite .bp { color: #d4d4d4 !important; }
+html[data-theme="dark"] .codehilite .vc { color: #9cdcfe !important; }
+html[data-theme="dark"] .codehilite .vg { color: #9cdcfe !important; }
+html[data-theme="dark"] .codehilite .vi { color: #9cdcfe !important; }
+
+/* 转义序列 */
+html[data-theme="dark"] .codehilite .se { color: #d7ba7d !important; }
+html[data-theme="dark"] .codehilite .ld { color: #ce9178 !important; }
+
+/* 错误 */
+html[data-theme="dark"] .codehilite .err {
+    color: #f48771 !important;
+    background-color: rgba(244, 135, 113, 0.15) !important;
+    border-radius: 2px;
+}
+
+/* 特殊样式 */
+html[data-theme="dark"] .codehilite .ge { font-style: italic; }
+html[data-theme="dark"] .codehilite .gs { font-weight: bold; }
+html[data-theme="dark"] .codehilite .w { color: #d4d4d4 !important; }
+
+/* ==================== OAuth登录按钮 ==================== */
+
+html[data-theme="dark"] .oauth-button {
+    background-color: var(--dm-bg-tertiary);
+    color: var(--dm-text-primary);
+    border-color: var(--dm-border-color);
+}
+
+html[data-theme="dark"] .oauth-button:hover {
+    background-color: var(--dm-button-hover-bg);
+}
+
+/* ==================== 文章归档 ==================== */
+
+html[data-theme="dark"] .archive-list {
+    background-color: var(--dm-bg-secondary);
+    border-color: var(--dm-border-color);
+}
+
+html[data-theme="dark"] .archive-year {
+    color: var(--dm-text-primary);
+}
+
+html[data-theme="dark"] .archive-month {
+    color: var(--dm-text-secondary);
+}
