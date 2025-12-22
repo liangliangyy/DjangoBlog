@@ -147,8 +147,8 @@ class DarkModePlugin(BasePlugin):
 
         # 2. 防闪烁初始化脚本（必须同步执行）
         init_script = f'''
-<script id="dark-mode-init">
-    // 黑夜模式防闪烁初始化
+<script id="dark-mode-init" data-cfasync="false">
+    // 黑夜模式防闪烁初始化 - 禁用Cloudflare延迟加载
     (function() {{
         'use strict';
 
