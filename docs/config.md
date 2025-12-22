@@ -1,8 +1,27 @@
-# 主要功能配置介绍:
+# 主要功能配置介绍
 
-## 缓存：
-缓存默认使用`localmem`缓存，如果你有`redis`环境，可以设置`DJANGO_REDIS_URL`环境变量，则会自动使用该redis来作为缓存，或者你也可以直接修改如下代码来使用。
-https://github.com/liangliangyy/DjangoBlog/blob/ffcb2c3711de805f2067dd3c1c57449cd24d84ee/djangoblog/settings.py#L185-L199
+## 缓存配置
+
+缓存默认使用 `localmem`（本地内存缓存）。如果你有 Redis 环境，可以通过设置 `DJANGO_REDIS_URL` 环境变量来自动切换到 Redis 缓存。
+
+### 使用 Redis 缓存
+
+设置环境变量：
+```bash
+export DJANGO_REDIS_URL="127.0.0.1:6379/0"
+```
+
+或者在 `settings.py` 中直接修改缓存配置：
+```python
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/0',
+    }
+}
+```
+
+参考代码：https://github.com/liangliangyy/DjangoBlog/blob/master/djangoblog/settings.py#L201-L215
 
 
 ## oauth登录:
@@ -52,7 +71,30 @@ django.db.migrations.exceptions.MigrationSchemaMissing: Unable to create the dja
 可能是因为你的mysql版本低于5.6，需要升级mysql版本>=5.6即可。
 
 
-django 4.0登录可能会报错CSRF，需要配置下`settings.py`中的`CSRF_TRUSTED_ORIGINS`
+## Django 版本配置说明
 
-https://github.com/liangliangyy/DjangoBlog/blob/master/djangoblog/settings.py#L39
+### Django 4.0+ CSRF 配置
+
+Django 4.0 及以上版本需要配置 `CSRF_TRUSTED_ORIGINS`，否则可能会在登录时报 CSRF 错误。
+
+在 `settings.py` 中配置您的域名：
+```python
+CSRF_TRUSTED_ORIGINS = [
+    'http://example.com',
+    'https://example.com',
+    'http://www.example.com',
+    'https://www.example.com',
+]
+```
+
+**注意**：请将 `example.com` 替换为您的实际域名，包括协议（http/https）。
+
+参考代码：https://github.com/liangliangyy/DjangoBlog/blob/master/djangoblog/settings.py#L41
+
+### Django 5.2 说明
+
+本项目目前使用 Django 5.2.9，已经过充分测试，运行稳定。如果从旧版本升级，请注意：
+- 确保 Python 版本 >= 3.10
+- 运行数据库迁移：`python manage.py migrate`
+- 更新依赖：`pip install -r requirements.txt`
 

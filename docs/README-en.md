@@ -15,7 +15,7 @@
 
 ---
 
-DjangoBlog is a high-performance blog platform built with Python 3.10 and Django 4.0. It not only provides all the core functionalities of a traditional blog but also features a flexible plugin system, allowing you to easily extend and customize your website. Whether you are a personal blogger, a tech enthusiast, or a content creator, DjangoBlog aims to provide a stable, efficient, and easy-to-maintain environment for writing and publishing.
+DjangoBlog is a high-performance blog platform built with Python 3.10+ and Django 5.2. It not only provides all the core functionalities of a traditional blog but also features a flexible plugin system, allowing you to easily extend and customize your website. Whether you are a personal blogger, a tech enthusiast, or a content creator, DjangoBlog aims to provide a stable, efficient, and easy-to-maintain environment for writing and publishing.
 
 ## ✨ Features
 
@@ -24,18 +24,19 @@ DjangoBlog is a high-performance blog platform built with Python 3.10 and Django
 - **Interactive Comment System**: Supports replies, email notifications, and Markdown formatting in comments.
 - **Flexible Sidebar**: Customizable modules for displaying recent articles, most viewed posts, tag cloud, and more.
 - **Social Login**: Built-in OAuth support, with integrations for Google, GitHub, Facebook, Weibo, QQ, and other major platforms.
+- **Dark Mode Support**: Toggle between light and dark themes with system preference support for comfortable reading experience.
 - **High-Performance Caching**: Native support for Redis caching with an automatic refresh mechanism to ensure high-speed website responses.
 - **SEO Friendly**: Basic SEO features are included, with automatic notifications to Google and Baidu upon new content publication.
-- **Extensible Plugin System**: Extend blog functionalities by creating standalone plugins, ensuring decoupled and maintainable code. We have already implemented features like view counting and SEO optimization through plugins!
+- **Extensible Plugin System**: Extend blog functionalities by creating standalone plugins, ensuring decoupled and maintainable code. 8 built-in plugins including view counting, SEO optimization, article recommendations, lazy image loading, and more!
 - **Integrated Image Hosting**: A simple, built-in image hosting feature for easy uploads and management.
 - **Automated Frontend**: Integrated with `django-compressor` to automatically compress and optimize CSS and JavaScript files.
 - **Robust Operations**: Built-in email notifications for website exceptions and management capabilities through a WeChat Official Account.
 
 ## 🛠️ Tech Stack
 
-- **Backend**: Python 3.10, Django 4.0
+- **Backend**: Python 3.10+, Django 5.2
 - **Database**: MySQL, SQLite (configurable)
-- **Cache**: Redis
+- **Cache**: Redis, LocalMem (configurable)
 - **Frontend**: HTML5, CSS3, JavaScript
 - **Search**: Whoosh, Elasticsearch (configurable)
 - **Editor**: Markdown (mdeditor)
@@ -119,7 +120,17 @@ Now, open your browser and navigate to `http://127.0.0.1:8000/`. You should see 
 The plugin system is a core feature of DjangoBlog. It allows you to add new functionalities to your blog without modifying the core codebase by writing standalone plugins.
 
 - **How it Works**: Plugins operate by registering callback functions to predefined "hooks". For instance, when an article is rendered, the `after_article_body_get` hook is triggered, and all functions registered to this hook are executed.
-- **Existing Plugins**: Features like `view_count` and `seo_optimizer` are implemented through this plugin system.
+
+- **Built-in Plugins**: The project includes the following useful plugins
+  - `view_count` - Article view counter
+  - `seo_optimizer` - SEO optimization enhancements
+  - `article_copyright` - Article copyright notices
+  - `article_recommendation` - Smart article recommendations
+  - `external_links` - External link handling
+  - `image_lazy_loading` - Image lazy loading optimization
+  - `reading_time` - Article reading time estimation
+  - `dark_mode` - Dark/light theme switcher
+
 - **Develop Your Own Plugin**: Simply create a new folder under the `plugins` directory and write your `plugin.py`. We welcome you to explore and contribute your creative ideas to the DjangoBlog community!
 
 ## 🤝 Contributing
