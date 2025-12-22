@@ -22,9 +22,9 @@ class DarkModePlugin(BasePlugin):
 
     # ==================== 插件元数据 ====================
     PLUGIN_NAME = '黑夜模式'
-    PLUGIN_DESCRIPTION = '为博客提供浅色/深色主题切换功能，支持用户偏好保存和系统主题跟随。'
+    PLUGIN_DESCRIPTION = '为博客提供浅色/深色主题切换功能'
     PLUGIN_VERSION = '1.0.0'
-    PLUGIN_AUTHOR = 'DjangoBlog Team'
+    PLUGIN_AUTHOR = 'liangliangyy'
 
     # ==================== 位置配置 ====================
     # 不使用位置widget，而是通过 head/body 资源注入
