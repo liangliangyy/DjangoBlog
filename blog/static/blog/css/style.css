@@ -2884,9 +2884,9 @@ li #reply-title {
     white-space: nowrap;
 }
 
-/* 修复图片溢出 */
+/* 修复图片溢出 - 但排除头像 */
 .comment-content img,
-.comment-body img {
+.comment-body img:not(.avatar) {
     max-width: 100% !important;
     height: auto !important;
 }

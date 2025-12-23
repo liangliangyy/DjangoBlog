@@ -383,5 +383,6 @@ ACTIVE_PLUGINS = [
     'seo_optimizer',
     'image_lazy_loading',
     'article_recommendation',
+    'cloudflare_cache',  # Cloudflare缓存管理插件
 ]
 
