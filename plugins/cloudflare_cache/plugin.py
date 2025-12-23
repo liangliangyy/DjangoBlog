@@ -48,6 +48,7 @@ class CloudflareCachePlugin(BasePlugin):
         'api_token': os.environ.get('CLOUDFLARE_API_TOKEN', ''),
 
         # === 清除策略 ===
+        'purge_on_startup': os.environ.get('CLOUDFLARE_PURGE_ON_STARTUP', 'false').lower() in ('true', '1', 'yes'),  # 应用启动时清除全站缓存
         'purge_on_article_save': True,   # 文章保存时清除缓存
         'purge_on_comment_save': True,   # 评论保存时清除缓存
 
@@ -60,8 +61,6 @@ class CloudflareCachePlugin(BasePlugin):
         'max_urls_per_request': 30,  # 单次请求最多清除的URL数（Cloudflare限制）
         'request_timeout': 10,        # API请求超时时间（秒）
 
-        # === 建议配置 ===
-        'recommended_cache_ttl': 7200,  # 建议的缓存TTL（2小时）
     }
 
     def init_plugin(self):
@@ -86,6 +85,10 @@ class CloudflareCachePlugin(BasePlugin):
         # 测试API连接（可选）
         if self.CONFIG.get('test_on_init', False):
             self._test_api_connection()
+
+        # 启动时清除全站缓存（可选）
+        if self.CONFIG.get('purge_on_startup', False):
+            self._purge_on_startup()
 
     def _validate_config(self) -> bool:
         """
@@ -134,6 +137,46 @@ class CloudflareCachePlugin(BasePlugin):
 
         except Exception as e:
             logger.error(f"[CF Plugin] Error testing API connection: {e}")
+
+    def _purge_on_startup(self):
+        """
+        应用启动时清除全站缓存
+
+        使用后台线程异步执行，不阻塞启动过程
+        """
+        import threading
+
+        def _do_purge():
+            """实际执行清除的函数"""
+            try:
+                import time
+                # 延迟几秒，确保应用完全启动
+                time.sleep(3)
+
+                logger.info("[CF Plugin] 🚀 Starting startup cache purge...")
+
+                from .api import CloudflareAPI
+                cf_api = CloudflareAPI(
+                    zone_id=self.CONFIG['zone_id'],
+                    api_token=self.CONFIG['api_token']
+                )
+
+                result = cf_api.purge_all()
+
+                if result.get('success'):
+                    logger.info("[CF Plugin] ✓ Successfully purged all cache on startup")
+                    logger.info("[CF Plugin] 🎉 All Cloudflare cache cleared! Fresh start guaranteed.")
+                else:
+                    errors = result.get('errors', [])
+                    logger.error(f"[CF Plugin] ✗ Failed to purge cache on startup: {errors}")
+
+            except Exception as e:
+                logger.error(f"[CF Plugin] Exception during startup cache purge: {e}", exc_info=True)
+
+        # 在后台线程中执行，不阻塞应用启动
+        thread = threading.Thread(target=_do_purge, daemon=True, name="CloudflareCachePurgeOnStartup")
+        thread.start()
+        logger.info("[CF Plugin] Scheduled startup cache purge (will execute in background)")
 
     def register_hooks(self):
         """注册Django信号钩子"""

@@ -8,8 +8,7 @@
                  srcset="{{ comment_item.author.email|gravatar_url:150 }}"
                  class="avatar avatar-96 photo"
                  loading="lazy"
-                 decoding="async"
-                 style="max-width:100%;height:auto;">
+                 decoding="async">
             <cite class="fn">
                 <a rel="nofollow"
                         {% if comment_item.author.is_superuser %}
