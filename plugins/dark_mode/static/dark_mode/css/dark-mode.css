@@ -117,6 +117,32 @@ html[data-theme="dark"] .main-navigation .current_page_ancestor > a {
     color: var(--dm-link-color);
 }
 
+/* 下拉子菜单 */
+html[data-theme="dark"] .main-navigation .sub-menu {
+    background-color: var(--dm-bg-secondary) !important;
+    border-color: var(--dm-border-color) !important;
+}
+
+html[data-theme="dark"] .main-navigation .sub-menu li {
+    background-color: var(--dm-bg-secondary) !important;
+}
+
+html[data-theme="dark"] .main-navigation .sub-menu a {
+    color: var(--dm-text-primary) !important;
+    background-color: transparent !important;
+}
+
+html[data-theme="dark"] .main-navigation .sub-menu li:hover,
+html[data-theme="dark"] .main-navigation .sub-menu li:focus {
+    background-color: var(--dm-bg-tertiary) !important;
+}
+
+html[data-theme="dark"] .main-navigation .sub-menu a:hover,
+html[data-theme="dark"] .main-navigation .sub-menu a:focus {
+    color: var(--dm-link-color) !important;
+    background-color: transparent !important;
+}
+
 /* ==================== 文章内容 ==================== */
 
 html[data-theme="dark"] .entry-content,
@@ -334,6 +360,56 @@ html[data-theme="dark"] .comment-reply-link:hover {
 }
 
 /* 评论嵌套缩进 - 保持原有样式 */
+
+/* 评论表单 */
+html[data-theme="dark"] #respond,
+html[data-theme="dark"] .comment-respond {
+    background-color: var(--dm-bg-secondary) !important;
+    border-color: var(--dm-border-color);
+}
+
+html[data-theme="dark"] .comment-reply-title {
+    color: var(--dm-text-primary);
+    font-weight: bold;
+}
+
+html[data-theme="dark"] .comment-reply-title,
+html[data-theme="dark"] #reply-title {
+    color: var(--dm-link-color) !important;
+    font-weight: bold;
+}
+
+html[data-theme="dark"] .comment-form,
+html[data-theme="dark"] #commentform {
+    background-color: var(--dm-bg-secondary) !important;
+}
+
+html[data-theme="dark"] .comment-form label {
+    color: var(--dm-text-primary);
+}
+
+html[data-theme="dark"] .comment-form-comment {
+    color: var(--dm-text-primary);
+}
+
+html[data-theme="dark"] .comment-form-comment textarea,
+html[data-theme="dark"] #commentform textarea,
+html[data-theme="dark"] #id_body {
+    background-color: var(--dm-bg-tertiary) !important;
+    color: var(--dm-text-primary) !important;
+    border-color: var(--dm-border-color) !important;
+}
+
+html[data-theme="dark"] .comment-form-comment textarea:focus,
+html[data-theme="dark"] #commentform textarea:focus,
+html[data-theme="dark"] #id_body:focus {
+    border-color: var(--dm-link-color) !important;
+    background-color: var(--dm-bg-tertiary) !important;
+}
+
+html[data-theme="dark"] .comment-markdown {
+    color: var(--dm-text-secondary);
+}
 
 /* ==================== 页脚 ==================== */
 
