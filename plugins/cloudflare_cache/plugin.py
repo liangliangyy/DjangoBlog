@@ -48,7 +48,7 @@ class CloudflareCachePlugin(BasePlugin):
         'api_token': os.environ.get('CLOUDFLARE_API_TOKEN', ''),
 
         # === 清除策略 ===
-        'purge_on_startup': True,        # 应用启动时清除全站缓存
+        'purge_on_startup': os.environ.get('CLOUDFLARE_PURGE_ON_STARTUP', 'false').lower() in ('true', '1', 'yes'),  # 应用启动时清除全站缓存
         'purge_on_article_save': True,   # 文章保存时清除缓存
         'purge_on_comment_save': True,   # 评论保存时清除缓存
 
