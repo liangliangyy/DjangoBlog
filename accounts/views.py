@@ -90,7 +90,10 @@ class LogoutView(RedirectView):
     def get(self, request, *args, **kwargs):
         logout(request)
         delete_sidebar_cache()
-        return super(LogoutView, self).get(request, *args, **kwargs)
+        # 获取响应对象并删除登录标记 cookie
+        response = super(LogoutView, self).get(request, *args, **kwargs)
+        response.delete_cookie('logged_user')
+        return response
 
 
 class LoginView(FormView):
@@ -125,7 +128,18 @@ class LoginView(FormView):
             auth.login(self.request, form.get_user())
             if self.request.POST.get("remember"):
                 self.request.session.set_expiry(self.login_ttl)
-            return super(LoginView, self).form_valid(form)
+
+            # 获取响应对象并设置登录标记 cookie
+            response = super(LoginView, self).form_valid(form)
+            max_age = self.login_ttl if self.request.POST.get("remember") else None
+            response.set_cookie(
+                'logged_user',
+                'true',
+                max_age=max_age,
+                httponly=False,  # 允许 JavaScript 访问
+                samesite='Lax'
+            )
+            return response
             # return HttpResponseRedirect('/')
         else:
             return self.render_to_response({
