@@ -45,7 +45,7 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/djangoblog:${{env.DOCKER_TAG}}
-            ghcr.io/${{ github.repository_owner }}/djangoblog:${{env.DOCKER_TAG}}
+            ${{ secrets.DOCKERHUB_USERNAME }}/djangoblog:${{ env.DOCKER_TAG }}
+            ghcr.io/${{ github.repository_owner }}/djangoblog:${{ env.DOCKER_TAG }}
           
     
