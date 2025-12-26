@@ -546,3 +546,17 @@ html[data-theme="dark"] #s:focus {
         animation-duration: 0s !important;
     }
 }
+
+/* ==================== 搜索高亮（夜间模式） ==================== */
+html[data-theme="dark"] .search-highlight mark,
+html[data-theme="dark"] .search-highlight em {
+    background-color: #ff6b35;
+    color: #fff;
+    font-weight: 600;
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+
+html[data-theme="dark"] .search-snippet {
+    color: var(--dm-text-secondary, #aaa);
+}

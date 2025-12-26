@@ -10,27 +10,51 @@ from blog.models import Article
 ELASTICSEARCH_ENABLED = hasattr(settings, 'ELASTICSEARCH_DSL')
 
 if ELASTICSEARCH_ENABLED:
-    connections.create_connection(
-        hosts=[settings.ELASTICSEARCH_DSL['default']['hosts']])
     from elasticsearch import Elasticsearch
 
-    es = Elasticsearch(settings.ELASTICSEARCH_DSL['default']['hosts'])
-    from elasticsearch.client import IngestClient
+    es_config = settings.ELASTICSEARCH_DSL['default']
 
-    c = IngestClient(es)
+    # ES 连接配置（动态适配认证方式）
+    es_params = {
+        'hosts': [es_config['hosts']],
+        'verify_certs': es_config.get('verify_certs', False),
+    }
+
+    # 支持用户名密码认证（ES 8.x 默认启用安全特性）
+    if 'username' in es_config and 'password' in es_config:
+        es_params['basic_auth'] = (es_config['username'], es_config['password'])
+
+    # 支持 API Key 认证
+    if 'api_key' in es_config:
+        es_params['api_key'] = es_config['api_key']
+
+    # 支持证书认证
+    if 'ca_certs' in es_config:
+        es_params['ca_certs'] = es_config['ca_certs']
+
+    # 支持客户端证书
+    if 'client_cert' in es_config and 'client_key' in es_config:
+        es_params['client_cert'] = es_config['client_cert']
+        es_params['client_key'] = es_config['client_key']
+
+    # 创建连接
+    es = Elasticsearch(**es_params)
+    connections.create_connection(**es_params)
+
+    # 设置 GeoIP pipeline
     try:
-        c.get_pipeline('geoip')
+        es.ingest.get_pipeline(id='geoip')
     except elasticsearch.exceptions.NotFoundError:
-        c.put_pipeline('geoip', body='''{
-              "description" : "Add geoip info",
-              "processors" : [
+        es.ingest.put_pipeline(id='geoip', body={
+            "description": "Add geoip info",
+            "processors": [
                 {
-                  "geoip" : {
-                    "field" : "ip"
-                  }
+                    "geoip": {
+                        "field": "ip"
+                    }
                 }
-              ]
-            }''')
+            ]
+        })
 
 
 class GeoIp(InnerDoc):
@@ -78,15 +102,13 @@ class ElapsedTimeDocument(Document):
             "number_of_replicas": 0
         }
 
-    class Meta:
-        doc_type = 'ElapsedTime'
-
 
 class ElaspedTimeDocumentManager:
     @staticmethod
     def build_index():
         from elasticsearch import Elasticsearch
-        client = Elasticsearch(settings.ELASTICSEARCH_DSL['default']['hosts'])
+        # 使用已配置好的连接参数
+        client = Elasticsearch(**es_params)
         res = client.indices.exists(index="performance")
         if not res:
             ElapsedTimeDocument.init()
@@ -94,8 +116,11 @@ class ElaspedTimeDocumentManager:
     @staticmethod
     def delete_index():
         from elasticsearch import Elasticsearch
-        es = Elasticsearch(settings.ELASTICSEARCH_DSL['default']['hosts'])
-        es.indices.delete(index='performance', ignore=[400, 404])
+        es = Elasticsearch(**es_params)
+        try:
+            es.indices.delete(index='performance')
+        except elasticsearch.exceptions.NotFoundError:
+            pass
 
     @staticmethod
     def create(url, time_taken, log_datetime, useragent, ip):
@@ -160,9 +185,6 @@ class ArticleDocument(Document):
             "number_of_replicas": 0
         }
 
-    class Meta:
-        doc_type = 'Article'
-
 
 class ArticleDocumentManager():
 
@@ -174,8 +196,11 @@ class ArticleDocumentManager():
 
     def delete_index(self):
         from elasticsearch import Elasticsearch
-        es = Elasticsearch(settings.ELASTICSEARCH_DSL['default']['hosts'])
-        es.indices.delete(index='blog', ignore=[400, 404])
+        es = Elasticsearch(**es_params)
+        try:
+            es.indices.delete(index='blog')
+        except elasticsearch.exceptions.NotFoundError:
+            pass
 
     def convert_to_doc(self, articles):
         return [

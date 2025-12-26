@@ -1,0 +1,98 @@
+{% load blog_tags %}
+{% load cache %}
+{% load i18n %}
+
+<article id="post-{{ article.pk }}"
+         class="post-{{ article.pk }} post type-post status-publish format-standard hentry search-highlight">
+    <header class="entry-header">
+        <h1 class="entry-title">
+            {% if isindex %}
+                {% if article.article_order > 0 %}
+                    <a href="{{ article.get_absolute_url }}" rel="bookmark">
+                        【{% trans 'pin to top' %}】
+                        {% if highlighted.title %}
+                            {{ highlighted.title.0|safe }}
+                        {% else %}
+                            {{ article.title }}
+                        {% endif %}
+                    </a>
+                {% else %}
+                    <a href="{{ article.get_absolute_url }}" rel="bookmark">
+                        {% if highlighted.title %}
+                            {{ highlighted.title.0|safe }}
+                        {% else %}
+                            {{ article.title }}
+                        {% endif %}
+                    </a>
+                {% endif %}
+            {% else %}
+                {% if highlighted.title %}
+                    {{ highlighted.title.0|safe }}
+                {% else %}
+                    {{ article.title }}
+                {% endif %}
+            {% endif %}
+        </h1>
+        <div class="comments-link">
+            {% if article.comment_status == "o" and open_site_comment %}
+                <a href="{{ article.get_absolute_url }}#comments" class="ds-thread-count"
+                   data-thread-key="{{ article.pk }}" rel="nofollow">
+                    <span class="leave-reply">
+                    {% if article.comment_set and article.comment_set.count %}
+                        {{ article.comment_set.count }} {% trans 'comments' %}
+                    {% else %}
+                        {% trans 'comment' %}
+                    {% endif %}
+                    </span>
+                </a>
+            {% endif %}
+            <div style="float:right">
+                {{ article.views }} views
+            </div>
+        </div>
+        <br/>
+        {% if article.type == 'a' %}
+            {% if not isindex %}
+                {% cache 36000 breadcrumb article.pk %}
+                    {% load_breadcrumb article %}
+                {% endcache %}
+            {% endif %}
+        {% endif %}
+    </header>
+
+    <div class="entry-content" itemprop="articleBody">
+        {% if isindex %}
+            {# 列表页显示搜索摘要 #}
+            {% if highlighted.body %}
+                <div class="search-snippet">
+                    {% for snippet in highlighted.body %}
+                        <p>...{{ snippet|safe }}...</p>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {% render_article_content article True %}
+            {% endif %}
+            <p class='read-more'>
+                <a href='{{ article.get_absolute_url }}'>Read more</a>
+            </p>
+        {% else %}
+            {# 详情页显示完整内容（不高亮，因为高亮只在搜索结果列表有意义） #}
+            {% if article.show_toc %}
+                {% get_markdown_toc article.body as toc %}
+                <b>{% trans 'toc' %}:</b>
+                {{ toc|safe }}
+                <hr class="break_line"/>
+            {% endif %}
+            <div class="article">
+                {% render_article_content article False %}
+            </div>
+        {% endif %}
+    </div>
+
+    {% load_article_metas article user %}
+</article>
+
+<!-- 文章底部插件 -->
+{% if not isindex %}
+    {% render_plugin_widgets 'article_bottom' article=article %}
+{% endif %}

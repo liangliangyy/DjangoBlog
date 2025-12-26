@@ -97,7 +97,14 @@ class IndexView(ArticleListView):
     link_type = LinkShowType.I
 
     def get_queryset_data(self):
-        article_list = Article.objects.filter(type='a', status='p')
+        article_list = Article.objects.filter(
+            type='a', status='p'
+        ).select_related(
+            'author',      # 预加载作者
+            'category'     # 预加载分类
+        ).prefetch_related(
+            'tags'         # 预加载标签
+        )
         return article_list
 
     def get_queryset_cache_key(self):
@@ -117,8 +124,19 @@ class ArticleDetailView(DetailView):
     def get_context_data(self, **kwargs):
         comment_form = CommentForm()
 
+        # 优化：直接查询父评论，减少数据库查询
+        from comments.models import Comment
+        parent_comments = Comment.objects.filter(
+            article=self.object,
+            parent_comment=None,
+            is_enable=True
+        ).select_related('author').prefetch_related(
+            'comment_set__author'  # 预加载子评论及其作者
+        ).order_by('-id')
+
+        # 获取所有评论用于总数显示
         article_comments = self.object.comment_list()
-        parent_comments = article_comments.filter(parent_comment=None)
+
         blog_setting = get_blog_setting()
         paginator = Paginator(parent_comments, blog_setting.article_comment_count)
         page = self.request.GET.get('comment_page', '1')
@@ -177,7 +195,13 @@ class CategoryDetailView(ArticleListView):
         categorynames = list(
             map(lambda c: c.name, category.get_sub_categorys()))
         article_list = Article.objects.filter(
-            category__name__in=categorynames, status='p')
+            category__name__in=categorynames, status='p'
+        ).select_related(
+            'author',
+            'category'
+        ).prefetch_related(
+            'tags'
+        )
         return article_list
 
     def get_queryset_cache_key(self):
@@ -217,7 +241,13 @@ class AuthorDetailView(ArticleListView):
     def get_queryset_data(self):
         author_name = self.kwargs['author_name']
         article_list = Article.objects.filter(
-            author__username=author_name, type='a', status='p')
+            author__username=author_name, type='a', status='p'
+        ).select_related(
+            'author',
+            'category'
+        ).prefetch_related(
+            'tags'
+        )
         return article_list
 
     def get_context_data(self, **kwargs):
@@ -239,7 +269,13 @@ class TagDetailView(ArticleListView):
         tag_name = tag.name
         self.name = tag_name
         article_list = Article.objects.filter(
-            tags__name=tag_name, type='a', status='p')
+            tags__name=tag_name, type='a', status='p'
+        ).select_related(
+            'author',
+            'category'
+        ).prefetch_related(
+            'tags'
+        )
         return article_list
 
     def get_queryset_cache_key(self):
@@ -269,7 +305,12 @@ class ArchivesView(ArticleListView):
     template_name = 'blog/article_archives.html'
 
     def get_queryset_data(self):
-        return Article.objects.filter(status='p').all()
+        return Article.objects.filter(status='p').select_related(
+            'author',
+            'category'
+        ).prefetch_related(
+            'tags'
+        ).all()
 
     def get_queryset_cache_key(self):
         cache_key = 'archives'
@@ -285,6 +326,21 @@ class LinkListView(ListView):
 
 
 class EsSearchView(SearchView):
+    def build_form(self, form_kwargs=None):
+        """Override to enable highlighting"""
+        if form_kwargs is None:
+            form_kwargs = {}
+
+        # Enable highlighting for search results
+        from haystack.query import SearchQuerySet
+        if self.searchqueryset is None:
+            sqs = SearchQuerySet().highlight()
+        else:
+            sqs = self.searchqueryset.highlight()
+
+        form_kwargs['searchqueryset'] = sqs
+        return super().build_form(form_kwargs=form_kwargs)
+
     def get_context(self):
         paginator, page = self.build_page()
         context = {

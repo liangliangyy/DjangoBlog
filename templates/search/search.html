@@ -1,5 +1,6 @@
 {% extends 'share_layout/base.html' %}
 {% load blog_tags %}
+{% load i18n %}
 {% block header %}
     <title>{{ SITE_NAME }} | {{ SITE_DESCRIPTION }}</title>
     <meta name="description" content="{{ SITE_SEO_DESCRIPTION }}"/>
@@ -28,8 +29,8 @@
                 </header><!-- .archive-header -->
             {% endif %}
             {% if query and page.object_list %}
-                {% for article in page.object_list %}
-                    {% load_article_detail article.object True user %}
+                {% for result in page.object_list %}
+                    {% load_article_detail result.object True user query %}
                 {% endfor %}
                 {% if page.has_previous or page.has_next %}
                     <nav id="nav-below" class="navigation" role="navigation">

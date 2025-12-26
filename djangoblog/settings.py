@@ -160,12 +160,92 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 
-HAYSTACK_CONNECTIONS = {
-    'default': {
-        'ENGINE': 'djangoblog.whoosh_cn_backend.WhooshEngine',
-        'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
-    },
-}
+# ==================== 搜索引擎配置 ====================
+# 支持 Whoosh 和 Elasticsearch 两种搜索引擎
+# 优先级：环境变量 > 手动配置 > 默认 Whoosh
+
+# === Elasticsearch 配置 ===
+# 1. 生产环境：通过环境变量配置（见下方）
+# 2. 开发环境：手动配置（取消下面注释）
+
+# ELASTICSEARCH_DSL = {
+#     'default': {
+#         'hosts': 'http://127.0.0.1:9200',
+#         'verify_certs': False,  # 是否验证SSL证书
+#
+#         # === 认证方式（根据实际情况选择一种） ===
+#
+#         # 方式1: 无认证（安全功能已禁用的开发环境）
+#         # 不需要额外配置
+#
+#         # 方式2: 用户名密码认证（ES 8.x 默认方式，推荐）
+#         # 'username': 'elastic',
+#         # 'password': 'your_password',
+#
+#         # 方式3: API Key 认证
+#         # 'api_key': 'your_api_key_here',
+#
+#         # 方式4: 证书认证
+#         # 'ca_certs': '/path/to/ca.crt',
+#         # 'client_cert': '/path/to/client.crt',
+#         # 'client_key': '/path/to/client.key',
+#     },
+# }
+
+# === 环境变量配置 (生产环境，优先级最高) ===
+# 如果设置了 DJANGO_ELASTICSEARCH_HOST 环境变量，将覆盖上面的手动配置
+# 支持的环境变量：
+#   - DJANGO_ELASTICSEARCH_HOST: ES主机地址（必需）
+#   - ELASTICSEARCH_VERIFY_CERTS: 是否验证证书 (True/False)
+#   - ELASTICSEARCH_USERNAME: 用户名
+#   - ELASTICSEARCH_PASSWORD: 密码
+#   - ELASTICSEARCH_API_KEY: API Key
+#   - ELASTICSEARCH_CA_CERTS: CA证书路径
+#   - ELASTICSEARCH_CLIENT_CERT: 客户端证书路径
+#   - ELASTICSEARCH_CLIENT_KEY: 客户端私钥路径
+
+if os.environ.get('DJANGO_ELASTICSEARCH_HOST'):
+    # 通过环境变量配置 Elasticsearch（生产环境）
+    _es_config = {
+        'hosts': os.environ.get('DJANGO_ELASTICSEARCH_HOST'),
+        'verify_certs': os.environ.get('ELASTICSEARCH_VERIFY_CERTS', 'False').lower() == 'true',
+    }
+
+    # 用户名密码认证
+    if os.environ.get('ELASTICSEARCH_USERNAME') and os.environ.get('ELASTICSEARCH_PASSWORD'):
+        _es_config['username'] = os.environ.get('ELASTICSEARCH_USERNAME')
+        _es_config['password'] = os.environ.get('ELASTICSEARCH_PASSWORD')
+
+    # API Key 认证
+    if os.environ.get('ELASTICSEARCH_API_KEY'):
+        _es_config['api_key'] = os.environ.get('ELASTICSEARCH_API_KEY')
+
+    # 证书认证
+    if os.environ.get('ELASTICSEARCH_CA_CERTS'):
+        _es_config['ca_certs'] = os.environ.get('ELASTICSEARCH_CA_CERTS')
+    if os.environ.get('ELASTICSEARCH_CLIENT_CERT') and os.environ.get('ELASTICSEARCH_CLIENT_KEY'):
+        _es_config['client_cert'] = os.environ.get('ELASTICSEARCH_CLIENT_CERT')
+        _es_config['client_key'] = os.environ.get('ELASTICSEARCH_CLIENT_KEY')
+
+    ELASTICSEARCH_DSL = {'default': _es_config}
+
+# === Haystack 配置 ===
+if 'ELASTICSEARCH_DSL' in locals():
+    # 使用 Elasticsearch
+    HAYSTACK_CONNECTIONS = {
+        'default': {
+            'ENGINE': 'djangoblog.elasticsearch_backend.ElasticSearchEngine',
+        }
+    }
+else:
+    # 默认使用 Whoosh
+    HAYSTACK_CONNECTIONS = {
+        'default': {
+            'ENGINE': 'djangoblog.whoosh_cn_backend.WhooshEngine',
+            'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
+        },
+    }
+
 # Automatically update searching index
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 # Allow user login with username and password
@@ -359,18 +439,6 @@ X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-if os.environ.get('DJANGO_ELASTICSEARCH_HOST'):
-    ELASTICSEARCH_DSL = {
-        'default': {
-            'hosts': os.environ.get('DJANGO_ELASTICSEARCH_HOST')
-        },
-    }
-    HAYSTACK_CONNECTIONS = {
-        'default': {
-            'ENGINE': 'djangoblog.elasticsearch_backend.ElasticSearchEngine',
-        },
-    }
 
 # Plugin System
 PLUGINS_DIR = BASE_DIR / 'plugins'

@@ -213,18 +213,33 @@ def load_sidebar(user, linktype):
         logger.info('load sidebar')
         from djangoblog.utils import get_blog_setting
         blogsetting = get_blog_setting()
+
+        # 优化：添加select_related/prefetch_related减少查询
         recent_articles = Article.objects.filter(
-            status='p')[:blogsetting.sidebar_article_count]
+            status='p'
+        ).select_related('author', 'category')[:blogsetting.sidebar_article_count]
+
         sidebar_categorys = Category.objects.all()
+
         extra_sidebars = SideBar.objects.filter(
-            is_enable=True).order_by('sequence')
-        most_read_articles = Article.objects.filter(status='p').order_by(
-            '-views')[:blogsetting.sidebar_article_count]
+            is_enable=True
+        ).order_by('sequence')
+
+        most_read_articles = Article.objects.filter(
+            status='p'
+        ).select_related('author', 'category').order_by(
+            '-views'
+        )[:blogsetting.sidebar_article_count]
+
         dates = Article.objects.datetimes('creation_time', 'month', order='DESC')
+
         links = Links.objects.filter(is_enable=True).filter(
-            Q(show_type=str(linktype)) | Q(show_type=LinkShowType.A))
-        commment_list = Comment.objects.filter(is_enable=True).order_by(
-            '-id')[:blogsetting.sidebar_comment_count]
+            Q(show_type=str(linktype)) | Q(show_type=LinkShowType.A)
+        )
+
+        commment_list = Comment.objects.filter(
+            is_enable=True
+        ).select_related('author').order_by('-id')[:blogsetting.sidebar_comment_count]
         # 标签云 计算字体大小
         # 根据总数计算出平均值 大小为 (数目/平均值)*步长
         increment = 5
@@ -342,11 +357,12 @@ def load_pagination_info(page_obj, page_type, tag_name):
 
 
 @register.inclusion_tag('blog/tags/article_info.html')
-def load_article_detail(article, isindex, user):
+def load_article_detail(article, isindex, user, query=None):
     """
     加载文章详情
     :param article:
     :param isindex:是否列表页，若是列表页只显示摘要
+    :param query: 搜索查询词（用于高亮）
     :return:
     """
     from djangoblog.utils import get_blog_setting
@@ -356,8 +372,79 @@ def load_article_detail(article, isindex, user):
         'article': article,
         'isindex': isindex,
         'user': user,
+        'query': query,  # 传递查询词
         'open_site_comment': blogsetting.open_site_comment,
     }
+
+
+@register.inclusion_tag('blog/tags/article_info_highlight.html')
+def load_article_detail_with_highlight(article, highlighted, isindex, user):
+    """
+    加载文章详情（带搜索高亮）
+    :param article: 文章对象
+    :param highlighted: 高亮数据字典 {'title': [...], 'body': [...]}
+    :param isindex: 是否列表页，若是列表页只显示摘要
+    :param user: 当前用户
+    :return:
+    """
+    from djangoblog.utils import get_blog_setting
+    blogsetting = get_blog_setting()
+
+    return {
+        'article': article,
+        'highlighted': highlighted,
+        'isindex': isindex,
+        'user': user,
+        'open_site_comment': blogsetting.open_site_comment,
+    }
+
+
+@register.filter
+def highlight_search_term(text, query):
+    """
+    在文本中高亮搜索关键词
+    :param text: 原始文本
+    :param query: 搜索查询词
+    :return: 高亮后的HTML
+    """
+    if not query or not text:
+        return text
+
+    import re
+    # 分词处理（支持空格分隔的多个词）
+    terms = query.split()
+
+    for term in terms:
+        if len(term) < 2:  # 忽略单字符
+            continue
+        # 使用正则替换，不区分大小写，但保留原文本的大小写
+        pattern = re.compile(r'(' + re.escape(term) + r')', re.IGNORECASE)
+        text = pattern.sub(r'<mark>\1</mark>', text)
+
+    return mark_safe(text)
+
+
+@register.filter
+def highlight_content(html_content, query):
+    """
+    对HTML内容进行搜索高亮，返回包含关键词的摘要片段
+    使用Haystack的Highlighter类
+    :param html_content: HTML内容
+    :param query: 搜索查询词
+    :return: 高亮后的文本片段
+    """
+    if not query or not html_content:
+        return html_content
+
+    from haystack.utils.highlighting import Highlighter
+
+    # 创建高亮器，使用mark标签
+    highlighter = Highlighter(query, max_length=500, html_tag='mark', css_class='')
+
+    # 对HTML内容进行高亮，会自动去除HTML标签并提取摘要
+    highlighted = highlighter.highlight(html_content)
+
+    return mark_safe(highlighted)
 
 
 # 返回用户头像URL

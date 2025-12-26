@@ -116,6 +116,16 @@ class Article(BaseModel):
         verbose_name = _('article')
         verbose_name_plural = verbose_name
         get_latest_by = 'id'
+        indexes = [
+            # 优化列表查询：type + status + pub_time组合索引
+            models.Index(fields=['type', 'status', '-pub_time'], name='idx_type_status_pub'),
+            # 优化热门文章查询：status + views组合索引
+            models.Index(fields=['status', '-views'], name='idx_status_views'),
+            # 优化作者文章查询：author + status + type组合索引
+            models.Index(fields=['author', 'status', 'type'], name='idx_author_status_type'),
+            # 优化分类查询：category + status组合索引
+            models.Index(fields=['category', 'status'], name='idx_category_status'),
+        ]
 
     def get_absolute_url(self):
         return reverse('blog:detailbyid', kwargs={

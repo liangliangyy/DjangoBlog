@@ -2902,3 +2902,22 @@ li #reply-title {
     border-left: 4px solid #ddd;
     background-color: #f9f9f9;
 }
+/* ==================== 搜索高亮样式 ==================== */
+/* 白天模式：黄色高亮 */
+.search-highlight mark,
+.search-highlight em {
+    background-color: #ffff00;
+    color: #000;
+    font-style: normal;
+    font-weight: 600;
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+
+.search-snippet {
+    color: #666;
+    margin: 10px 0;
+    line-height: 1.6;
+}
+
+/* 夜间模式高亮样式在 dark-mode.css 中定义 */

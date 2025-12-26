@@ -20,7 +20,7 @@ DjangoBlog is a high-performance blog platform built with Python 3.10+ and Djang
 ## ✨ Features
 
 - **Powerful Content Management**: Full support for managing articles, standalone pages, categories, and tags. Comes with a powerful built-in Markdown editor with syntax highlighting.
-- **Full-Text Search**: Integrated search engine for fast and accurate content searching.
+- **Full-Text Search**: Integrated Elasticsearch/Whoosh search engine for fast and accurate content searching, with keyword highlighting support.
 - **Interactive Comment System**: Supports replies, email notifications, and Markdown formatting in comments.
 - **Flexible Sidebar**: Customizable modules for displaying recent articles, most viewed posts, tag cloud, and more.
 - **Social Login**: Built-in OAuth support, with integrations for Google, GitHub, Facebook, Weibo, QQ, and other major platforms.

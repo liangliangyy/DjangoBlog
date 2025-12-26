@@ -67,6 +67,7 @@ venv/
 
 collectedstatic/
 djangoblog/whoosh_index/
+whoosh_index/
 google93fd32dbd906620a.html
 baidu_verify_FlHL7cUyC9.html
 BingSiteAuth.xml
@@ -78,3 +79,4 @@ settings_production.py
 werobot_session.db
 bin/datas/
 .claude/
+nul

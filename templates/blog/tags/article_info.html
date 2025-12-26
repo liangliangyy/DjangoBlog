@@ -9,14 +9,14 @@
             {% if  isindex %}
                 {% if article.article_order > 0 %}
                     <a href="{{ article.get_absolute_url }}"
-                       rel="bookmark">【{% trans 'pin to top' %}】{{ article.title }}</a>
+                       rel="bookmark">【{% trans 'pin to top' %}】{% if query %}{{ article.title|highlight_search_term:query }}{% else %}{{ article.title }}{% endif %}</a>
                 {% else %}
                     <a href="{{ article.get_absolute_url }}"
-                       rel="bookmark">{{ article.title }}</a>
+                       rel="bookmark">{% if query %}{{ article.title|highlight_search_term:query }}{% else %}{{ article.title }}{% endif %}</a>
                 {% endif %}
 
             {% else %}
-                {{ article.title }}
+                {% if query %}{{ article.title|highlight_search_term:query }}{% else %}{{ article.title }}{% endif %}
             {% endif %}
         </h1>
         <div class="comments-link">
@@ -48,7 +48,13 @@
 
     <div class="entry-content" itemprop="articleBody">
         {% if  isindex %}
-            {% render_article_content article True %}
+            {% if query %}
+                {# 搜索结果页：显示高亮的摘要片段 #}
+                {{ article.body|custom_markdown|highlight_content:query }}
+            {% else %}
+                {# 普通列表页：显示正常摘要 #}
+                {% render_article_content article True %}
+            {% endif %}
             <p class='read-more'><a
                     href=' {{ article.get_absolute_url }}'>Read more</a></p>
         {% else %}
