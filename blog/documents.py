@@ -14,9 +14,25 @@ if ELASTICSEARCH_ENABLED:
 
     es_config = settings.ELASTICSEARCH_DSL['default']
 
+    # 处理 hosts 配置，确保有 scheme
+    hosts = es_config['hosts']
+    if isinstance(hosts, str):
+        # 如果没有 scheme，自动添加 http://
+        if not hosts.startswith(('http://', 'https://')):
+            hosts = f'http://{hosts}'
+        hosts = [hosts]
+    elif isinstance(hosts, list):
+        # 处理列表中的每个 host
+        processed_hosts = []
+        for host in hosts:
+            if not host.startswith(('http://', 'https://')):
+                host = f'http://{host}'
+            processed_hosts.append(host)
+        hosts = processed_hosts
+
     # ES 连接配置（动态适配认证方式）
     es_params = {
-        'hosts': [es_config['hosts']],
+        'hosts': hosts,
         'verify_certs': es_config.get('verify_certs', False),
     }
 
