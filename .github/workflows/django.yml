@@ -97,8 +97,8 @@ jobs:
         if: matrix.elasticsearch == true
         uses: miyataka/elasticsearch-github-actions@1
         with:
-          stack-version: '7.12.1'
-          plugins: 'https://release.infinilabs.com/analysis-ik/stable/elasticsearch-analysis-ik-7.12.1.zip'
+          stack-version: '8.6.1'
+          plugins: 'https://release.infinilabs.com/analysis-ik/stable/elasticsearch-analysis-ik-8.6.1.zip'
           
       # Python环境设置 (Docker测试跳过)
       - name: 设置Python ${{ matrix.python-version }}
@@ -167,7 +167,7 @@ jobs:
         env:
           DJANGO_MYSQL_PASSWORD: root
           DJANGO_MYSQL_HOST: 127.0.0.1
-          DJANGO_ELASTICSEARCH_HOST: ${{ matrix.elasticsearch && '127.0.0.1:9200' || '' }}
+          DJANGO_ELASTICSEARCH_HOST: ${{ matrix.elasticsearch && 'http://127.0.0.1:9200' || '' }}
         run: |
           echo "🔧 准备Django测试环境"
           
@@ -201,7 +201,7 @@ jobs:
         env:
           DJANGO_MYSQL_PASSWORD: root
           DJANGO_MYSQL_HOST: 127.0.0.1
-          DJANGO_ELASTICSEARCH_HOST: ${{ matrix.elasticsearch && '127.0.0.1:9200' || '' }}
+          DJANGO_ELASTICSEARCH_HOST: ${{ matrix.elasticsearch && 'http://127.0.0.1:9200' || '' }}
         run: |
           echo "🗄️ 执行数据库迁移"
           
@@ -222,7 +222,7 @@ jobs:
         env:
           DJANGO_MYSQL_PASSWORD: root
           DJANGO_MYSQL_HOST: 127.0.0.1
-          DJANGO_ELASTICSEARCH_HOST: ${{ matrix.elasticsearch && '127.0.0.1:9200' || '' }}
+          DJANGO_ELASTICSEARCH_HOST: ${{ matrix.elasticsearch && 'http://127.0.0.1:9200' || '' }}
         run: |
           echo "🧪 开始执行 ${{ matrix.test-type }} 测试 (Python ${{ matrix.python-version }})"
           
