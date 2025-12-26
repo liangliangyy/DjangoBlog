@@ -73,20 +73,24 @@ def model_post_save_callback(
         using,
         update_fields,
         **kwargs):
-    clearcache = False
     if isinstance(instance, LogEntry):
         return
+
+    # 检查是否只更新了浏览量
+    is_update_views = update_fields == {'views'}
+    if is_update_views:
+        return  # 浏览量更新不需要清理缓存
+
+    # 搜索引擎通知
     if 'get_full_url' in dir(instance):
-        is_update_views = update_fields == {'views'}
-        if not settings.TESTING and not is_update_views:
+        if not settings.TESTING:
             try:
                 notify_url = instance.get_full_url()
                 SpiderNotify.baidu_notify([notify_url])
             except Exception as ex:
                 logger.error("notify sipder", ex)
-        if not is_update_views:
-            clearcache = True
 
+    # 评论相关的缓存清理
     if isinstance(instance, Comment):
         if instance.is_enable:
             path = instance.article.get_absolute_url()
@@ -99,18 +103,70 @@ def model_post_save_callback(
                 servername=site,
                 serverport=80,
                 key_prefix='blogdetail')
-            if cache.get('seo_processor'):
-                cache.delete('seo_processor')
+
+            # 清理评论相关缓存
             comment_cache_key = 'article_comments_{id}'.format(
                 id=instance.article.id)
             cache.delete(comment_cache_key)
-            delete_sidebar_cache()
             delete_view_cache('article_comments', [str(instance.article.pk)])
+            delete_sidebar_cache()
+            cache.delete('seo_processor')
 
             _thread.start_new_thread(send_comment_email, (instance,))
 
-    if clearcache:
-        cache.clear()
+    # 文章相关的精细化缓存清理
+    elif 'get_full_url' in dir(instance):
+        from blog.models import Article, Category, Tag
+
+        if isinstance(instance, Article):
+            # 清理文章列表首页缓存
+            cache.delete('index_1')
+
+            # 清理文章详情缓存
+            article_cache_key = f'article_comments_{instance.id}'
+            cache.delete(article_cache_key)
+
+            # 清理分类相关缓存
+            if instance.category:
+                category_name = instance.category.name
+                cache.delete(f'category_list_{category_name}_1')
+
+            # 清理标签相关缓存
+            try:
+                for tag in instance.tags.all():
+                    cache.delete(f'tag_{tag.name}_1')
+            except Exception:
+                pass  # 可能在创建时tags还未关联
+
+            # 清理作者相关缓存
+            if instance.author:
+                from uuslug import slugify
+                author_slug = slugify(instance.author.username)
+                cache.delete(f'author_{author_slug}_1')
+
+            # 清理归档缓存
+            cache.delete('archives')
+
+            # 清理侧边栏和上下文处理器缓存
+            delete_sidebar_cache()
+            cache.delete('seo_processor')
+
+        elif isinstance(instance, Category):
+            # 清理分类相关缓存
+            cache.delete(f'category_list_{instance.name}_1')
+            delete_sidebar_cache()
+            cache.delete('seo_processor')
+
+        elif isinstance(instance, Tag):
+            # 清理标签相关缓存
+            cache.delete(f'tag_{instance.name}_1')
+            delete_sidebar_cache()
+
+        # 其他模型的缓存清理
+        else:
+            # 对于其他有get_full_url的模型，清理基础缓存
+            delete_sidebar_cache()
+            cache.delete('seo_processor')
 
 
 @receiver(user_logged_in)

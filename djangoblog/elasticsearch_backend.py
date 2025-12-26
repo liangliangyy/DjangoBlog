@@ -77,6 +77,7 @@ class ElasticSearchBackend(BaseSearchBackend):
 
         start_offset = kwargs.get('start_offset')
         end_offset = kwargs.get('end_offset')
+        highlight = kwargs.get('highlight', True)  # 默认启用高亮
 
         # 推荐词搜索
         if getattr(self, "is_suggest", None):
@@ -86,21 +87,43 @@ class ElasticSearchBackend(BaseSearchBackend):
 
         q = Q('bool',
               should=[Q('match', body=suggestion), Q('match', title=suggestion)],
-              minimum_should_match="70%")
+              minimum_should_match=1)  # 至少匹配1个should子句
 
         search = ArticleDocument.search() \
                      .query('bool', filter=[q]) \
                      .filter('term', status='p') \
-                     .filter('term', type='a') \
-                     .source(False)[start_offset: end_offset]
+                     .filter('term', type='a')
+
+        # 添加高亮配置
+        if highlight:
+            search = search.highlight('title', 'body',
+                                    fragment_size=150,  # 片段大小
+                                    number_of_fragments=3,  # 片段数量
+                                    pre_tags=['<mark>'],  # 高亮开始标签
+                                    post_tags=['</mark>'])  # 高亮结束标签
+
+        search = search.source(False)[start_offset: end_offset]
 
         results = search.execute()
-        hits = results['hits'].total
+        # ES 8.x: total 现在是对象 {'value': 123, 'relation': 'eq'}
+        hits_total = results['hits']['total']
+        hits = hits_total['value'] if isinstance(hits_total, dict) else hits_total
         raw_results = []
         for raw_result in results['hits']['hits']:
             app_label = 'blog'
             model_name = 'Article'
             additional_fields = {}
+
+            # 添加高亮内容
+            if highlight and 'highlight' in raw_result:
+                highlighted = {}
+                if 'title' in raw_result['highlight']:
+                    highlighted['title'] = raw_result['highlight']['title']
+                if 'body' in raw_result['highlight']:
+                    highlighted['body'] = raw_result['highlight']['body']
+
+                if highlighted:
+                    additional_fields['highlighted'] = highlighted
 
             result_class = SearchResult
 

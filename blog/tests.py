@@ -12,7 +12,7 @@ from django.utils import timezone
 from accounts.models import BlogUser
 from blog.forms import BlogSearchForm
 from blog.models import Article, Category, Tag, SideBar, Links
-from blog.templatetags.blog_tags import load_pagination_info, load_articletags
+from blog.templatetags.blog_tags import load_pagination_info, load_articletags, highlight_search_term, highlight_content
 from djangoblog.utils import get_current_site, get_sha256
 from oauth.models import OAuthUser, OAuthConfig
 
@@ -230,3 +230,76 @@ class ArticleTest(TestCase):
         call_command("clear_cache")
         call_command("sync_user_avatar")
         call_command("build_search_words")
+
+
+class SearchHighlightTest(TestCase):
+    """测试搜索高亮功能"""
+
+    def test_highlight_search_term_filter(self):
+        """测试标题高亮filter"""
+        # 测试基本高亮
+        text = "Django is a web framework"
+        result = highlight_search_term(text, "django")
+        self.assertIn("<mark>Django</mark>", result)
+        self.assertIn("web framework", result)
+
+        # 测试不区分大小写
+        text = "Python and python"
+        result = highlight_search_term(text, "PYTHON")
+        self.assertEqual(result.count("<mark>"), 2)
+
+        # 测试多个关键词
+        text = "Django web framework with Python"
+        result = highlight_search_term(text, "django python")
+        self.assertIn("<mark>Django</mark>", result)
+        self.assertIn("<mark>Python</mark>", result)
+
+        # 测试空查询
+        text = "Some text"
+        result = highlight_search_term(text, "")
+        self.assertEqual(result, text)
+
+        # 测试空文本
+        result = highlight_search_term("", "query")
+        self.assertEqual(result, "")
+
+    def test_highlight_content_filter(self):
+        """测试正文高亮filter"""
+        # 测试HTML内容高亮
+        html = "<p>Django is a great web framework. Django makes development easy.</p>"
+        result = highlight_content(html, "django")
+
+        # 应该包含高亮标记
+        self.assertIn("<mark>", result)
+        self.assertIn("</mark>", result)
+
+        # HTML标签应该被去除
+        self.assertNotIn("<p>", result)
+
+        # 应该包含Django关键词（不区分大小写）
+        self.assertIn("django", result.lower())
+
+        # 测试空查询
+        result = highlight_content(html, "")
+        self.assertEqual(result, html)
+
+    def test_search_page_access(self):
+        """测试搜索页面访问"""
+        # 测试搜索页面可以正常访问
+        response = self.client.get('/search', {'q': 'django'})
+        self.assertEqual(response.status_code, 200)
+
+        # 检查响应中是否有查询参数
+        self.assertIn('query', response.context)
+        self.assertEqual(response.context['query'], 'django')
+
+    def test_chinese_keyword_highlight(self):
+        """测试中文关键词高亮"""
+        text = "这是一个Django博客系统"
+        result = highlight_search_term(text, "Django")
+        self.assertIn("<mark>Django</mark>", result)
+
+        # 测试中文关键词
+        text = "欢迎使用DjangoBlog系统"
+        result = highlight_search_term(text, "Django")
+        self.assertIn("<mark>Django</mark>", result)

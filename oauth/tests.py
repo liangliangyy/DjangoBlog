@@ -16,6 +16,9 @@ class OAuthConfigTest(TestCase):
     def setUp(self):
         self.client = Client()
         self.factory = RequestFactory()
+        # 清除 OAuth apps 缓存，避免测试隔离问题
+        from django.core.cache import cache
+        cache.clear()
 
     def test_oauth_login_test(self):
         c = OAuthConfig()
@@ -37,6 +40,9 @@ class OauthLoginTest(TestCase):
     def setUp(self) -> None:
         self.client = Client()
         self.factory = RequestFactory()
+        # 清除 OAuth apps 缓存，避免测试隔离问题
+        from django.core.cache import cache
+        cache.clear()
         self.apps = self.init_apps()
 
     def init_apps(self):

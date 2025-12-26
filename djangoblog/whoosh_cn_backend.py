@@ -727,20 +727,69 @@ class WhooshSearchBackend(BaseSearchBackend):
                 del (additional_fields[DJANGO_ID])
 
                 if highlight:
-                    sa = StemmingAnalyzer()
-                    formatter = WhooshHtmlFormatter('em')
-                    terms = [token.text for token in sa(query_string)]
+                    # 使用中文分词器
+                    ca = ChineseAnalyzer()
 
-                    whoosh_result = whoosh_highlight(
-                        additional_fields.get(self.content_field_name),
-                        terms,
-                        sa,
-                        ContextFragmenter(),
-                        formatter
-                    )
-                    additional_fields['highlighted'] = {
-                        self.content_field_name: [whoosh_result],
-                    }
+                    highlighted = {}
+
+                    # 高亮标题（如果存在）
+                    if 'title' in additional_fields and additional_fields['title']:
+                        import re
+                        title_text = additional_fields['title']
+                        # 使用正则表达式高亮，不转义HTML
+                        for term in query_string.split():
+                            if len(term) >= 2:
+                                # 不区分大小写地替换
+                                title_text = re.sub(
+                                    r'(' + re.escape(term) + r')',
+                                    r'<mark>\1</mark>',
+                                    title_text,
+                                    flags=re.IGNORECASE
+                                )
+                        if '<mark>' in title_text:
+                            highlighted['title'] = [title_text]
+
+                    # 高亮正文 - 返回markdown片段，让模板处理
+                    if 'body' in additional_fields and additional_fields['body']:
+                        import re
+                        from djangoblog.utils import CommonMarkdown
+
+                        # 先转换为HTML，便于提取摘要
+                        html_content = CommonMarkdown.get_markdown(additional_fields['body'])
+
+                        # 提取纯文本用于搜索匹配的上下文
+                        from django.utils.html import strip_tags
+                        plain_text = strip_tags(html_content)
+
+                        # 找到关键词的位置，提取上下文
+                        match_pos = -1
+                        for term in query_string.split():
+                            if len(term) >= 2:
+                                pos = plain_text.lower().find(term.lower())
+                                if pos >= 0:
+                                    match_pos = pos
+                                    break
+
+                        if match_pos >= 0:
+                            # 提取匹配位置前后的内容
+                            start = max(0, match_pos - 150)
+                            end = min(len(plain_text), match_pos + 350)
+                            snippet = plain_text[start:end]
+
+                            # 对snippet进行高亮
+                            for term in query_string.split():
+                                if len(term) >= 2:
+                                    snippet = re.sub(
+                                        r'(' + re.escape(term) + r')',
+                                        r'<mark>\1</mark>',
+                                        snippet,
+                                        flags=re.IGNORECASE
+                                    )
+
+                            highlighted['body'] = [snippet]
+
+                    if highlighted:
+                        additional_fields['highlighted'] = highlighted
 
                 result = result_class(
                     app_label,
