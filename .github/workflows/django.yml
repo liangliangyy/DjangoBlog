@@ -95,10 +95,51 @@ jobs:
           
       - name: 启动Elasticsearch
         if: matrix.elasticsearch == true
-        uses: miyataka/elasticsearch-github-actions@1
-        with:
-          stack-version: '8.6.1'
-          plugins: 'https://release.infinilabs.com/analysis-ik/stable/elasticsearch-analysis-ik-8.6.1.zip'
+        run: |
+          echo "🚀 启动 Elasticsearch 8.6.1 容器"
+
+          # 启动 Elasticsearch 容器
+          docker run -d \
+            --name elasticsearch \
+            -p 9200:9200 \
+            -p 9300:9300 \
+            -e "discovery.type=single-node" \
+            -e "xpack.security.enabled=false" \
+            -e "ES_JAVA_OPTS=-Xms512m -Xmx512m" \
+            elasticsearch:8.6.1
+
+          # 等待 Elasticsearch 启动
+          echo "⏳ 等待 Elasticsearch 启动..."
+          for i in {1..60}; do
+            if curl -s http://localhost:9200 > /dev/null; then
+              echo "✅ Elasticsearch 启动成功"
+              curl -s http://localhost:9200
+
+              # 安装 IK 分词器
+              echo "📦 安装 IK 分词器插件..."
+              docker exec elasticsearch elasticsearch-plugin install --batch \
+                https://release.infinilabs.com/analysis-ik/stable/elasticsearch-analysis-ik-8.6.1.zip
+
+              # 重启 Elasticsearch
+              echo "🔄 重启 Elasticsearch 以加载插件..."
+              docker restart elasticsearch
+              sleep 10
+
+              # 等待重启完成
+              for j in {1..30}; do
+                if curl -s http://localhost:9200 > /dev/null; then
+                  echo "✅ Elasticsearch 重启成功"
+                  break
+                fi
+                echo "🔄 等待 Elasticsearch 重启... ($j/30)"
+                sleep 2
+              done
+
+              break
+            fi
+            echo "🔄 等待 Elasticsearch 启动... ($i/60)"
+            sleep 2
+          done
           
       # Python环境设置 (Docker测试跳过)
       - name: 设置Python ${{ matrix.python-version }}

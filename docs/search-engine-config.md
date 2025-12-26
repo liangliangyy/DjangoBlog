@@ -39,6 +39,7 @@ docker run -d -p 9200:9200 -e "discovery.type=single-node" elasticsearch:8.6.1
 ```python
 ELASTICSEARCH_DSL = {
     'default': {
+        # hosts 必须包含 http:// 或 https://（如果忘记会自动添加http://）
         'hosts': 'http://127.0.0.1:9200',
         'verify_certs': False,
 
@@ -48,6 +49,10 @@ ELASTICSEARCH_DSL = {
     },
 }
 ```
+
+**提示**：`hosts` 参数支持以下格式：
+- 单个主机：`'http://127.0.0.1:9200'` 或 `'127.0.0.1:9200'`（自动添加http://）
+- 多个主机：`['http://es1:9200', 'http://es2:9200']`（ES集群）
 
 3. **重建索引：**
 ```bash
