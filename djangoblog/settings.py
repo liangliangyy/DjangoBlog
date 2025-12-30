@@ -156,6 +156,10 @@ USE_L10N = True
 
 USE_TZ = False
 
+# Session settings
+SESSION_COOKIE_AGE = 1209600  # 2周（Django默认值）
+REMEMBER_ME_LOGIN_TTL = 2626560  # 30天（勾选"记住我"时使用）
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 

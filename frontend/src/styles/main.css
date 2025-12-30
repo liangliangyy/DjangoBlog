@@ -177,30 +177,118 @@
     @apply min-h-screen flex flex-col;
   }
 
-  /* 头部 */
+  /* 头部 - 带渐变背景和装饰 */
   .site-header {
-    @apply bg-white dark:bg-gray-800 shadow-md;
+    @apply shadow-md;
     @apply border-b border-gray-200 dark:border-gray-700;
+    @apply sticky top-0 z-40;
+    @apply relative;
+    /* 渐变背景 */
+    background: linear-gradient(135deg,
+      rgba(102, 126, 234, 0.05) 0%,
+      rgba(118, 75, 162, 0.05) 100%),
+      white;
+  }
+
+  /* 深色模式的渐变 */
+  [data-theme="dark"] .site-header {
+    background: linear-gradient(135deg,
+      rgba(102, 126, 234, 0.1) 0%,
+      rgba(118, 75, 162, 0.1) 100%),
+      #1f2937;
+  }
+
+  /* 顶部装饰线 */
+  .site-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  }
+
+  /* Header内容容器 */
+  .header-content {
+    @apply flex items-center justify-between px-4 py-6;
+    @apply max-w-7xl mx-auto;
   }
 
   .site-header hgroup {
-    @apply px-6 py-8;
-    @apply bg-white dark:bg-gray-800;
+    @apply text-left flex-1;
+    @apply px-0 py-0;
+    @apply bg-transparent;
   }
 
   .site-title {
-    @apply text-3xl font-bold text-gray-900 dark:text-gray-100;
-    @apply mb-2;
+    @apply text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100;
+    @apply mb-1;
   }
 
   .site-title a {
     @apply text-gray-900 dark:text-gray-100;
     @apply hover:text-primary-500 dark:hover:text-primary-400;
     @apply no-underline;
+    @apply flex items-center gap-2;
+    @apply transition-colors duration-200;
   }
 
   .site-description {
     @apply text-gray-600 dark:text-gray-400 text-sm;
+  }
+
+  /* 快捷入口图标组 */
+  .header-actions {
+    @apply flex items-center gap-2;
+    @apply relative;
+  }
+
+  .header-icon-btn {
+    @apply flex items-center justify-center;
+    @apply w-10 h-10 rounded-full;
+    @apply text-gray-700 dark:text-gray-300;
+    @apply bg-white dark:bg-gray-800;
+    @apply hover:bg-gray-100 dark:hover:bg-gray-700;
+    @apply hover:text-primary-600 dark:hover:text-primary-400;
+    @apply transition-all duration-200;
+    @apply shadow-sm hover:shadow-md;
+    @apply border border-gray-200 dark:border-gray-700;
+  }
+
+  /* 搜索框 - 下拉式（在搜索图标下方） */
+  .header-search {
+    @apply absolute right-0 z-50;
+    @apply bg-white dark:bg-gray-800;
+    @apply rounded-lg shadow-xl;
+    @apply border border-gray-200 dark:border-gray-700;
+    @apply mt-2;
+    @apply w-80;
+    /* 定位在header-actions下方 */
+    top: 100%;
+  }
+
+  .search-form {
+    @apply flex items-center gap-2 p-3;
+  }
+
+  .search-input {
+    @apply flex-1 px-4 py-2 rounded-lg;
+    @apply border border-gray-300 dark:border-gray-600;
+    @apply bg-gray-50 dark:bg-gray-900;
+    @apply text-gray-900 dark:text-gray-100;
+    @apply text-sm;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500;
+    @apply placeholder-gray-400 dark:placeholder-gray-500;
+  }
+
+  .search-submit {
+    @apply flex items-center justify-center;
+    @apply w-9 h-9 rounded-lg;
+    @apply bg-primary-600 text-white;
+    @apply hover:bg-primary-700;
+    @apply transition-colors duration-200;
+    @apply flex-shrink-0;
   }
 
   /* 导航菜单 */
@@ -253,14 +341,44 @@
     @apply list-none;
   }
 
+  /* 导航链接 - 增强样式 */
   .main-navigation a {
     @apply px-4 py-2 rounded-md text-gray-700 dark:text-gray-300;
-    @apply hover:bg-primary-500 hover:text-white transition-all duration-200;
+    @apply hover:bg-primary-500 hover:text-white;
+    @apply transition-all duration-200;
+    @apply flex items-center gap-2;
+    @apply font-medium;
+    @apply hover:shadow-md hover:scale-105;
+    @apply relative overflow-hidden;
   }
 
+  /* 导航图标 */
+  .nav-icon {
+    @apply w-4 h-4;
+    @apply transition-transform duration-200;
+  }
+
+  .main-navigation a:hover .nav-icon {
+    @apply scale-110;
+  }
+
+  /* 当前菜单项 */
   .main-navigation .current-menu-item a,
   .main-navigation .current_page_item a {
     @apply bg-primary-500 text-white;
+    @apply shadow-md;
+  }
+
+  /* 导航悬浮效果 - 下划线动画 */
+  .main-navigation a::before {
+    content: '';
+    @apply absolute bottom-0 left-0 right-0 h-0.5;
+    @apply bg-primary-400;
+    @apply transform scale-x-0 transition-transform duration-200;
+  }
+
+  .main-navigation a:hover::before {
+    @apply scale-x-100;
   }
 
   /* 子菜单样式 */

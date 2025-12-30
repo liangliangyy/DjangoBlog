@@ -1,13 +1,6 @@
 {% load blog_tags %}
 {% load i18n %}
 <div id="secondary" class="widget-area" role="complementary">
-    <aside id="search-2" class="widget widget_search">
-        <p class="widget-title">{% trans 'search' %}</p>
-        <form role="search" method="get" id="searchform" class="searchform" action="/search">
-            <input type="text" value="" name="q" id="q" placeholder="{% trans 'search' %}..."/>
-            <input type="submit" id="searchsubmit" value="{% trans 'search' %}" />
-        </form>
-    </aside>
     {% if extra_sidebars %}
         {% for sidebar in extra_sidebars %}
 

@@ -18,6 +18,7 @@ services:
   djangoblog:
     build:
       context: ../../
+      dockerfile: Dockerfile
     restart: always
     command: bash -c 'sh /code/djangoblog/bin/docker_start.sh'
     ports:
