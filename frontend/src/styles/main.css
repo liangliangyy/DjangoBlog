@@ -226,19 +226,22 @@
 
   /* Header内容容器 - 调整高度 */
   .header-content {
-    @apply flex items-center justify-between px-4 py-5;
+    @apply flex items-center justify-between px-3 md:px-4 py-4 md:py-5;
     @apply max-w-7xl mx-auto;
+    @apply gap-2 md:gap-3;
   }
 
   .site-header hgroup {
     @apply text-left flex-1;
     @apply px-0 py-0;
     @apply bg-transparent;
+    @apply min-w-0;
   }
 
   .site-title {
-    @apply text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100;
+    @apply text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-gray-100;
     @apply mb-1;
+    @apply truncate;
   }
 
   .site-title a {
@@ -267,7 +270,7 @@
   }
 
   .site-description {
-    @apply text-gray-600 dark:text-gray-400 text-xs;
+    @apply text-gray-600 dark:text-gray-400 text-lg md:text-xl;
     @apply opacity-80;
   }
 
@@ -275,11 +278,12 @@
   .header-actions {
     @apply flex items-center gap-1.5;
     @apply relative;
+    @apply flex-shrink-0;
   }
 
   .header-icon-btn {
     @apply flex items-center justify-center;
-    @apply w-9 h-9 rounded-full;
+    @apply w-11 h-11 rounded-full;
     @apply text-gray-700 dark:text-gray-300;
     @apply bg-white dark:bg-gray-800;
     @apply hover:bg-gradient-to-br hover:from-primary-500 hover:to-purple-600;
@@ -291,6 +295,10 @@
     @apply transform;
   }
 
+  .header-icon-btn svg {
+    @apply w-7 h-7;
+  }
+
   /* 搜索框 - 下拉式（在搜索图标下方） */
   .header-search {
     @apply absolute right-0 z-50;
@@ -298,7 +306,7 @@
     @apply rounded-lg shadow-xl;
     @apply border border-gray-200 dark:border-gray-700;
     @apply mt-2;
-    @apply w-80;
+    @apply w-[calc(100vw-2rem)] max-w-80;
     /* 定位在header-actions下方 */
     top: 100%;
   }
@@ -510,7 +518,12 @@
   }
 
   .site-content {
-    @apply flex-1;
+    @apply flex-1 min-w-0; /* 添加 min-w-0 防止flex子元素溢出 */
+  }
+
+  /* ========== 侧边栏 ========== */
+  .widget-area {
+    @apply w-full lg:w-80 flex-shrink-0 space-y-6;
   }
 
   /* 页脚 */
@@ -845,11 +858,6 @@
     .comment-depth-10 .comment-author img {
       @apply w-8 h-8;
     }
-  }
-
-  /* ========== 侧边栏 ========== */
-  .widget-area {
-    @apply lg:w-80 space-y-6;
   }
 
   .widget {
@@ -1360,11 +1368,6 @@ img[loading="lazy"][src] {
 
   .children {
     @apply ml-4;
-  }
-
-  /* 侧边栏在移动端全宽 */
-  .widget-area {
-    @apply w-full;
   }
 }
 
