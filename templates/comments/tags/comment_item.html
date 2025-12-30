@@ -26,7 +26,7 @@
             <div>{{ comment_item.creation_time }}</div>
             <div>回复给:@{{ comment_item.author.parent_comment.username }}</div>
         </div>
-        <p>{{ comment_item.body|escape|comment_markdown }}</p>
+        <div class="entry-content">{{ comment_item.body|comment_markdown }}</div>
         <div class="reply"><a rel="nofollow" class="comment-reply-link"
                               href="javascript:void(0)"
                               onclick="do_reply({{ comment_item.pk }})"

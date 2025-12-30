@@ -34,7 +34,7 @@
             {% endif %}
         </p>
 
-        <p>{{ comment_item.body|escape|comment_markdown }}</p>
+        <div class="entry-content">{{ comment_item.body|comment_markdown }}</div>
 
         <div class="reply"><a rel="nofollow" class="comment-reply-link"
                               href="javascript:void(0)" data-pk="{{ comment_item.pk }}"

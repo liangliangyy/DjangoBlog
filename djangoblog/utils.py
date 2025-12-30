@@ -223,8 +223,16 @@ def get_resource_url():
         return 'http://' + site.domain + '/static/'
 
 
-ALLOWED_TAGS = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code', 'em', 'i', 'li', 'ol', 'pre', 'strong', 'ul', 'h1',
-                'h2', 'p', 'span', 'div']
+# 允许的HTML标签白名单 - 支持markdown常用元素
+ALLOWED_TAGS = [
+    'a', 'abbr', 'acronym', 'b', 'blockquote', 'code', 'em', 'i', 'li', 'ol', 'ul', 'pre', 'strong',
+    'h1', 'h2', 'h3', 'h4', 'h5', 'h6',  # 标题
+    'p', 'span', 'div', 'br', 'hr',  # 段落和分隔
+    'table', 'thead', 'tbody', 'tr', 'th', 'td',  # 表格
+    'dl', 'dt', 'dd',  # 定义列表
+    'img',  # 图片（需配合ALLOWED_ATTRIBUTES限制src）
+    'del', 'ins', 'sub', 'sup',  # 文本修饰
+]
 
 # 安全的class值白名单 - 只允许代码高亮相关的class
 ALLOWED_CLASSES = [
@@ -245,9 +253,13 @@ def class_filter(tag, name, value):
 
 # 安全的属性白名单
 ALLOWED_ATTRIBUTES = {
-    'a': ['href', 'title'], 
+    'a': ['href', 'title', 'rel'],  # rel="nofollow" 用于外部链接
     'abbr': ['title'], 
     'acronym': ['title'],
+    'img': ['src', 'alt', 'title', 'width', 'height'],  # 图片属性
+    'table': ['border', 'cellpadding', 'cellspacing'],
+    'th': ['align', 'valign'],
+    'td': ['align', 'valign'],
     'span': class_filter,
     'div': class_filter,
     'pre': class_filter,
@@ -262,7 +274,7 @@ def sanitize_html(html):
     安全的HTML清理函数
     使用bleach库进行白名单过滤，防止XSS攻击
     """
-    return bleach.clean(
+    cleaned = bleach.clean(
         html, 
         tags=ALLOWED_TAGS, 
         attributes=ALLOWED_ATTRIBUTES,
@@ -270,3 +282,9 @@ def sanitize_html(html):
         strip=True,  # 移除不允许的标签而不是转义
         strip_comments=True  # 移除HTML注释
     )
+    
+    # 移除空的 style 属性（bleach 有时会保留 style=""）
+    import re
+    cleaned = re.sub(r'\s*style\s*=\s*["\'][\s]*["\']', '', cleaned)
+    
+    return cleaned

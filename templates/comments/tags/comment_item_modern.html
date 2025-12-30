@@ -61,8 +61,8 @@
                 {% endif %}
 
                 <!-- 评论正文 -->
-                <div class="prose dark:prose-invert max-w-none text-gray-700 dark:text-gray-300 mb-3">
-                    {{ comment_item.body|escape|comment_markdown }}
+                <div class="entry-content prose dark:prose-invert max-w-none text-gray-700 dark:text-gray-300 mb-3">
+                    {{ comment_item.body|comment_markdown }}
                 </div>
 
                 <!-- 操作按钮 -->
