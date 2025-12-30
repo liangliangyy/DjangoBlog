@@ -36,11 +36,18 @@ RUN pip install --upgrade pip && \
     pip install --no-cache-dir gunicorn[gevent] && \
     pip cache purge
 
-# Copy application code
+# Copy application code (excluding old build artifacts)
 COPY . .
+
+# Remove any old build artifacts that might have been copied
+RUN rm -rf /code/djangoblog/blog/static/blog/dist
 
 # Copy built frontend assets from frontend-builder stage
 COPY --from=frontend-builder /app/blog/static/blog/dist /code/djangoblog/blog/static/blog/dist
+
+# Verify the frontend assets were copied correctly
+RUN ls -la /code/djangoblog/blog/static/blog/dist/css/ && \
+    cat /code/djangoblog/blog/static/blog/dist/.vite/manifest.json
 
 # Set execute permission for entrypoint
 RUN chmod +x /code/djangoblog/deploy/entrypoint.sh

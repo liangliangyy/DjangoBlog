@@ -16,6 +16,9 @@ export PYTHONPATH=$DJANGODIR:$PYTHONPATH
 python manage.py makemigrations && \
   python manage.py migrate && \
   python manage.py collectstatic --noinput  && \
+  echo "Copying Vite manifest..." && \
+  mkdir -p collectedstatic/blog/dist/.vite && \
+  cp -f blog/static/blog/dist/.vite/manifest.json collectedstatic/blog/dist/.vite/ && \
   python manage.py compress --force && \
   python manage.py build_index && \
   python manage.py compilemessages  || exit 1
