@@ -10,7 +10,7 @@ services:
     ports:
       - 3306:3306
     volumes:
-      - ./bin/datas/mysql/:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
     depends_on:
       - redis
     container_name: db
@@ -20,7 +20,7 @@ services:
       context: ../../
       dockerfile: Dockerfile
     restart: always
-    command: bash -c 'sh /code/djangoblog/bin/docker_start.sh'
+    command: bash -c 'sh /code/djangoblog/deploy/entrypoint.sh'
     ports:
       - "8000:8000"
     volumes:
@@ -47,7 +47,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./bin/nginx.conf:/etc/nginx/nginx.conf
+      - ../nginx.conf:/etc/nginx/nginx.conf
       - ./collectedstatic:/code/djangoblog/collectedstatic
     links:
       - djangoblog:djangoblog
@@ -59,3 +59,6 @@ services:
     container_name: redis
     ports:
       - "6379:6379"
+
+volumes:
+  mysql_data:
