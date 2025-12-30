@@ -276,7 +276,11 @@ class DarkModePlugin(BasePlugin):
         function init() {{
             const toggleBtn = document.getElementById('dark-mode-toggle-btn');
             if (toggleBtn) {{
-                toggleBtn.addEventListener('click', function() {{
+                // 移除旧的事件监听器（如果有）
+                toggleBtn.replaceWith(toggleBtn.cloneNode(true));
+                const newBtn = document.getElementById('dark-mode-toggle-btn');
+                
+                newBtn.addEventListener('click', function() {{
                     window.DarkMode.toggle();
                 }});
             }}
@@ -306,6 +310,14 @@ class DarkModePlugin(BasePlugin):
             document.addEventListener('DOMContentLoaded', init);
         }} else {{
             init();
+        }}
+
+        // 监听HTMX事件，确保在页面导航后重新初始化
+        if (typeof window.htmx !== 'undefined') {{
+            document.body.addEventListener('htmx:afterSwap', function() {{
+                // 延迟执行，确保DOM已更新
+                setTimeout(init, 50);
+            }});
         }}
     }})();
 </script>

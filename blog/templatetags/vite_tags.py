@@ -128,14 +128,15 @@ def vite_js(entry_name='src/main.js'):
             css_url = static(f'blog/dist/{css_file}')
             css_html += f'    <link rel="stylesheet" href="{css_url}">\n'
 
-    # 收集所有预加载资源
+    # 收集所有预加载资源 - 添加正确的as属性
     preload_html = ''
     if 'imports' in entry_data:
         for import_file in entry_data['imports']:
             if import_file in manifest:
                 import_path = manifest[import_file]['file']
                 import_url = static(f'blog/dist/{import_path}')
-                preload_html += f'    <link rel="modulepreload" href="{import_url}">\n'
+                # 添加 as="script" 属性并设置较短的超时
+                preload_html += f'    <link rel="modulepreload" as="script" href="{import_url}" crossorigin>\n'
 
     return mark_safe(f'''
     <!-- Vite生产模式 -->
