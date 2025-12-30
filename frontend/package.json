@@ -1,0 +1,27 @@
+{
+  "name": "djangoblog-frontend",
+  "version": "1.0.0",
+  "description": "Modern frontend for DjangoBlog",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "watch": "vite build --watch",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@alpinejs/collapse": "^3.13.5",
+    "@alpinejs/focus": "^3.13.5",
+    "@alpinejs/intersect": "^3.13.5",
+    "alpinejs": "^3.13.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.19",
+    "autoprefixer": "^10.4.17",
+    "htmx.org": "^2.0.8",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1",
+    "terser": "^5.44.1",
+    "vite": "^5.1.0"
+  }
+}

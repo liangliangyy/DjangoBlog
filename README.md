@@ -21,15 +21,16 @@ DjangoBlog 是一款基于 Python 3.10+ 和 Django 5.2 构建的高性能博客�
 
 - **强大的内容管理**: 支持文章、独立页面、分类和标签的完整管理。内置强大的 Markdown 编辑器，支持代码语法高亮。
 - **全文搜索**: 集成 Elasticsearch/Whoosh 搜索引擎，提供快速、精准的文章内容搜索，支持关键词高亮显示。
-- **互动评论系统**: 支持回复、邮件提醒等功能，评论内容同样支持 Markdown。
+- **互动评论系统**: 支持回复、邮件提醒等功能，评论内容同样支持 Markdown。现代化评论界面，支持无限嵌套回复。
 - **灵活的侧边栏**: 可自定义展示最新文章、最多阅读、标签云等模块。
 - **社交化登录**: 内置 OAuth 支持，已集成 Google, GitHub, Facebook, 微博, QQ 等主流平台。
 - **黑夜模式**: 支持浅色/深色主题自动切换，可跟随系统设置，提供舒适的阅读体验。
+- **现代化前端**: 基于 Alpine.js + Tailwind CSS + HTMX 构建，提供 SPA 般的无刷新浏览体验，支持 HTML-over-the-wire 架构。
 - **高性能缓存**: 原生支持 Redis 缓存，并提供自动刷新机制，确保网站高速响应。
 - **SEO 友好**: 具备基础 SEO 功能，新内容发布后可自动通知 Google 和百度。
-- **便捷的插件系统**: 通过创建独立的插件来扩展博客功能，代码解耦，易于维护。已内置 8 个实用插件，包括浏览计数、SEO 优化、文章推荐、图片懒加载等功能！
+- **便捷的插件系统**: 通过创建独立的插件来扩展博客功能，代码解耦，易于维护。已内置 9 个实用插件，包括浏览计数、SEO 优化、文章推荐、图片懒加载等功能！
 - **集成图床**: 内置简单的图床功能，方便图片上传和管理。
-- **自动化前端**: 集成 `django-compressor`，自动压缩和优化 CSS 及 JavaScript 文件。
+- **自动化构建**: 使用 Vite 构建前端资源，支持热更新和自动压缩优化。
 - **健壮的运维**: 内置网站异常邮件提醒和微信公众号管理功能。
 
 ## 🛠️ 技术栈
@@ -37,7 +38,7 @@ DjangoBlog 是一款基于 Python 3.10+ 和 Django 5.2 构建的高性能博客�
 - **后端**: Python 3.10+, Django 5.2
 - **数据库**: MySQL, SQLite (可配置)
 - **缓存**: Redis, LocalMem (可配置)
-- **前端**: HTML5, CSS3, JavaScript
+- **前端**: Alpine.js 3.13, Tailwind CSS 3.4, HTMX 1.9, Vite 5.4
 - **搜索**: Whoosh, Elasticsearch (可配置)
 - **编辑器**: Markdown (mdeditor)
 
@@ -93,14 +94,32 @@ python manage.py migrate
 python manage.py createsuperuser
 ```
 
-### 5. 运行项目
+### 5. 构建前端资源
+
+```bash
+# 进入前端目录
+cd frontend
+
+# 安装依赖（首次运行需要）
+npm install
+
+# 构建生产环境资源
+npm run build
+
+# 返回项目根目录
+cd ..
+```
+
+### 6. 运行项目
 
 ```bash
 # (可选) 生成一些测试数据
 python manage.py create_testdata
 
-# (可选) 收集和压缩静态文件
+# 收集静态文件
 python manage.py collectstatic --noinput
+
+# (可选) 压缩静态文件
 python manage.py compress --force
 
 # 启动开发服务器
@@ -108,6 +127,18 @@ python manage.py runserver
 ```
 
 现在，在您的浏览器中访问 `http://127.0.0.1:8000/`，您应该能看到 DjangoBlog 的首页了！
+
+### 开发模式
+
+如果您需要开发前端代码，可以使用 Vite 的热更新功能：
+
+```bash
+# 在 frontend 目录下启动开发服务器
+cd frontend
+npm run dev
+```
+
+这将启动 Vite 开发服务器，修改前端代码后会自动重新构建。
 
 ## 部署
 
@@ -124,12 +155,13 @@ python manage.py runserver
 - **现有插件**: 项目已内置以下实用插件
   - `view_count` - 文章浏览计数统计
   - `seo_optimizer` - SEO 优化增强
-  - `article_copyright` - 文章版权声明
-  - `article_recommendation` - 智能文章推荐
-  - `external_links` - 外部链接处理
-  - `image_lazy_loading` - 图片懒加载优化
+  - `article_copyright` - 文章版权声明（现代化样式）
+  - `article_recommendation` - 智能文章推荐（响应式卡片布局）
+  - `external_links` - 外部链接处理（自动添加图标）
+  - `image_lazy_loading` - 图片懒加载优化（淡入动画）
   - `reading_time` - 文章阅读时间估算
-  - `dark_mode` - 黑夜模式主题切换
+  - `dark_mode` - 黑夜模式主题切换（与 Tailwind 完美集成）
+  - `cloudflare_cache` - Cloudflare 缓存管理
 
 - **开发您自己的插件**: 只需在 `plugins` 目录下创建一个新的文件夹，并编写您的 `plugin.py`。欢迎探索并为 DjangoBlog 社区贡献您的创意！
 

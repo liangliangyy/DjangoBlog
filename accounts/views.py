@@ -101,7 +101,6 @@ class LoginView(FormView):
     template_name = 'account/login.html'
     success_url = '/'
     redirect_field_name = REDIRECT_FIELD_NAME
-    login_ttl = 2626560  # 一个月的时间
 
     @method_decorator(sensitive_post_parameters('password'))
     @method_decorator(csrf_protect)
@@ -126,16 +125,21 @@ class LoginView(FormView):
             logger.info(self.redirect_field_name)
 
             auth.login(self.request, form.get_user())
+            # 设置登录有效期
             if self.request.POST.get("remember"):
-                self.request.session.set_expiry(self.login_ttl)
+                self.request.session.set_expiry(settings.REMEMBER_ME_LOGIN_TTL)
+                cookie_max_age = settings.REMEMBER_ME_LOGIN_TTL
+            else:
+                # 使用Django默认的2周
+                self.request.session.set_expiry(settings.SESSION_COOKIE_AGE)
+                cookie_max_age = settings.SESSION_COOKIE_AGE
 
             # 获取响应对象并设置登录标记 cookie
             response = super(LoginView, self).form_valid(form)
-            max_age = self.login_ttl if self.request.POST.get("remember") else None
             response.set_cookie(
                 'logged_user',
                 'true',
-                max_age=max_age,
+                max_age=cookie_max_age,
                 httponly=False,  # 允许 JavaScript 访问
                 samesite='Lax'
             )

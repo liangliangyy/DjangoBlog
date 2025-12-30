@@ -2,12 +2,10 @@
 {% load i18n %}
 <div id="secondary" class="widget-area" role="complementary">
     <aside id="search-2" class="widget widget_search">
+        <p class="widget-title">{% trans 'search' %}</p>
         <form role="search" method="get" id="searchform" class="searchform" action="/search">
-            <div>
-                <label class="screen-reader-text" for="s">{% trans 'search' %}：</label>
-                <input type="text" value="" name="q" id="q"/>
-                <input type="submit" id="searchsubmit" />
-            </div>
+            <input type="text" value="" name="q" id="q" placeholder="{% trans 'search' %}..."/>
+            <input type="submit" id="searchsubmit" value="{% trans 'search' %}" />
         </form>
     </aside>
     {% if extra_sidebars %}
@@ -106,31 +104,35 @@
     {% endif %}
     <aside id="text-2" class="widget widget_text"><p class="widget-title">{% trans 'Welcome to star or fork the source code of this site' %}</p>
         <div class="textwidget">
-
-            <p><a href="https://github.com/liangliangyy/DjangoBlog" rel="nofollow"><img
-                    src="https://resource.lylinux.net/img.shields.io/github/stars/liangliangyy/djangoblog.svg?style=social&amp;label=Star"
-                    alt="GitHub stars"></a> <a href="https://github.com/liangliangyy/DjangoBlog" rel="nofollow"><img
-                    src="https://resource.lylinux.net/img.shields.io/github/forks/liangliangyy/djangoblog.svg?style=social&amp;label=Fork"
-                    alt="GitHub forks"></a></p>
+            <div class="flex flex-wrap items-center gap-3">
+                <a href="https://github.com/liangliangyy/DjangoBlog" rel="nofollow" class="inline-block">
+                    <img src="https://resource.lylinux.net/img.shields.io/github/stars/liangliangyy/djangoblog.svg?style=social&amp;label=Star"
+                         alt="GitHub stars">
+                </a>
+                <a href="https://github.com/liangliangyy/DjangoBlog" rel="nofollow" class="inline-block">
+                    <img src="https://resource.lylinux.net/img.shields.io/github/forks/liangliangyy/djangoblog.svg?style=social&amp;label=Fork"
+                         alt="GitHub forks">
+                </a>
+            </div>
         </div>
     </aside>
 
     <aside id="meta-3" class="widget widget_meta"><p class="widget-title">{% trans 'Function' %}</p>
         <ul>
-            <li><a href="/admin/" rel="nofollow">{% trans 'management site' %}</a></li>
+            <li><a href="/admin/" rel="nofollow" hx-boost="false">{% trans 'management site' %}</a></li>
             {% if user.is_authenticated %}
-                <li><a href="{% url "account:logout" %}" rel="nofollow">{% trans 'logout' %}</a>
+                <li><a href="{% url "account:logout" %}" rel="nofollow" hx-boost="false">{% trans 'logout' %}</a>
                 </li>
 
             {% else %}
-                <li><a href="{% url "account:login" %}" rel="nofollow">{% trans 'login' %}</a></li>
+                <li><a href="{% url "account:login" %}" rel="nofollow" hx-boost="false">{% trans 'login' %}</a></li>
             {% endif %}
             {% if user.is_superuser %}
-                <li><a href="{% url 'owntracks:show_dates' %}" target="_blank">{% trans 'Track record' %}</a></li>
+                <li><a href="{% url 'owntracks:show_dates' %}" target="_blank" hx-boost="false">{% trans 'Track record' %}</a></li>
             {% endif %}
-            <li><a href="http://gitbook.lylinux.net" target="_blank" rel="nofollow">GitBook</a></li>
+            <li><a href="http://gitbook.lylinux.net" target="_blank" rel="nofollow" hx-boost="false">GitBook</a></li>
         </ul>
     </aside>
 
-    <div id="rocket" class="show" title="{% trans 'Click me to return to the top' %}"></div>
+    <!-- 旧的回到顶部按钮已移到 base.html 中，使用 Alpine.js 实现 -->
 </div><!-- #secondary -->

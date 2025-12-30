@@ -1,8 +1,27 @@
 {% load i18n %}
 
-<nav id="site-navigation" class="main-navigation" role="navigation">
+<nav id="site-navigation" class="main-navigation" role="navigation" x-data="navigation()" hx-boost="true" hx-target="#main" hx-select="#main" hx-swap="innerHTML" hx-push-url="true">
+    <!-- 移动端菜单切换按钮 -->
+    <button type="button"
+            class="menu-toggle"
+            @click="toggleMenu()"
+            :aria-expanded="menuOpen ? 'true' : 'false'"
+            aria-controls="menu-菜单">
+        <span class="screen-reader-text">{% trans 'Menu' %}</span>
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path x-show="!menuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+            <path x-show="menuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+    </button>
+
     <div class="menu-%e8%8f%9c%e5%8d%95-container">
-        <ul id="menu-%e8%8f%9c%e5%8d%95" class="nav-menu">
+        <ul id="menu-%e8%8f%9c%e5%8d%95"
+            class="nav-menu"
+            :class="{ 'toggled-on': menuOpen }"
+            x-show="menuOpen || windowWidth >= 768"
+            x-transition:enter="transition ease-out duration-200"
+            x-transition:enter-start="opacity-0 transform -translate-y-2"
+            x-transition:enter-end="opacity-100 transform translate-y-0">
             <li id="menu-item-3498"
                 class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item menu-item-home menu-item-3498">
                 <a href="/">{% trans 'index' %}</a></li>
