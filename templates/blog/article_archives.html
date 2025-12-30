@@ -24,19 +24,19 @@
                 <p class="archive-title">{% trans 'article archive' %}</p>
             </header><!-- .archive-header -->
 
-            <div class="entry-content">
+            <div class="entry-content archive-list">
 
                 {% regroup article_list by pub_time.year as year_post_group %}
-                <ul>
+                <ul class="archive-years">
                     {% for year in year_post_group %}
-                        <li>{{ year.grouper }} {% trans 'year' %}
+                        <li class="archive-year"><span class="year-label">{{ year.grouper }} {% trans 'year' %}</span>
                             {% regroup year.list by pub_time.month as month_post_group %}
-                            <ul>
+                            <ul class="archive-months">
                                 {% for month in month_post_group %}
-                                    <li>{{ month.grouper }} {% trans 'month' %}
-                                        <ul>
+                                    <li class="archive-month"><span class="month-label">{{ month.grouper }} {% trans 'month' %}</span>
+                                        <ul class="archive-articles">
                                             {% for article in month.list %}
-                                                <li><a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
+                                                <li class="archive-article"><a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
                                                 </li>
                                             {% endfor %}
                                         </ul>

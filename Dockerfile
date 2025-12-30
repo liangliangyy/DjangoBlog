@@ -11,11 +11,14 @@ RUN cd frontend && \
     npm config set registry https://registry.npmjs.org/ && \
     npm ci
 
-# Copy frontend source and blog directory structure
+# Copy frontend source files
 COPY frontend/ ./frontend/
-COPY blog/static/blog/ ./blog/static/blog/
 
-# Build frontend assets (output goes to blog/static/blog/dist)
+# Copy templates for Tailwind CSS content scanning
+COPY templates/ ./templates/
+
+# Build frontend assets (output goes to ../blog/static/blog/dist)
+# Vite will create the output directory structure automatically
 RUN cd frontend && npm run build
 
 # Stage 2: Build final image

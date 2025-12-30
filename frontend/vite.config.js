@@ -13,7 +13,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: path.resolve(__dirname, 'src/main.js'),
-        styles: path.resolve(__dirname, 'src/styles/main.css'),
+        // styles入口已移除，CSS通过main.js导入
       },
       output: {
         // 资源文件命名

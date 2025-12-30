@@ -3,6 +3,9 @@
  * 使用 Alpine.js + HTMX 实现现代化服务端渲染
  */
 
+// 导入样式文件（Vite开发模式必需）
+import './styles/main.css';
+
 import Alpine from 'alpinejs';
 import focus from '@alpinejs/focus';
 import intersect from '@alpinejs/intersect';

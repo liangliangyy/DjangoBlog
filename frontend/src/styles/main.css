@@ -183,35 +183,50 @@
     @apply border-b border-gray-200 dark:border-gray-700;
     @apply sticky top-0 z-40;
     @apply relative;
-    /* 渐变背景 */
+    @apply backdrop-blur-md bg-opacity-95;
+    /* 更明显的渐变背景 */
     background: linear-gradient(135deg,
-      rgba(102, 126, 234, 0.05) 0%,
-      rgba(118, 75, 162, 0.05) 100%),
+      rgba(102, 126, 234, 0.08) 0%,
+      rgba(118, 75, 162, 0.08) 50%,
+      rgba(240, 147, 251, 0.06) 100%),
       white;
   }
 
   /* 深色模式的渐变 */
   [data-theme="dark"] .site-header {
     background: linear-gradient(135deg,
-      rgba(102, 126, 234, 0.1) 0%,
-      rgba(118, 75, 162, 0.1) 100%),
+      rgba(102, 126, 234, 0.15) 0%,
+      rgba(118, 75, 162, 0.15) 50%,
+      rgba(240, 147, 251, 0.12) 100%),
       #1f2937;
   }
 
-  /* 顶部装饰线 */
+  /* 顶部装饰线 - 增加高度和动画 */
   .site-header::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    height: 4px;
+    background: linear-gradient(90deg, 
+      #667eea 0%, 
+      #764ba2 25%, 
+      #f093fb 50%, 
+      #667eea 75%, 
+      #764ba2 100%);
+    background-size: 200% 100%;
+    animation: gradientShift 8s ease infinite;
   }
 
-  /* Header内容容器 */
+  @keyframes gradientShift {
+    0%, 100% { background-position: 0% 0%; }
+    50% { background-position: 100% 0%; }
+  }
+
+  /* Header内容容器 - 调整高度 */
   .header-content {
-    @apply flex items-center justify-between px-4 py-6;
+    @apply flex items-center justify-between px-4 py-5;
     @apply max-w-7xl mx-auto;
   }
 
@@ -222,7 +237,7 @@
   }
 
   .site-title {
-    @apply text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100;
+    @apply text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100;
     @apply mb-1;
   }
 
@@ -231,29 +246,49 @@
     @apply hover:text-primary-500 dark:hover:text-primary-400;
     @apply no-underline;
     @apply flex items-center gap-2;
-    @apply transition-colors duration-200;
+    @apply transition-all duration-300;
+    @apply relative;
+  }
+
+  /* 添加标题hover效果 */
+  .site-title a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    transition: width 0.3s ease;
+  }
+
+  .site-title a:hover::after {
+    width: 100%;
   }
 
   .site-description {
-    @apply text-gray-600 dark:text-gray-400 text-sm;
+    @apply text-gray-600 dark:text-gray-400 text-xs;
+    @apply opacity-80;
   }
 
   /* 快捷入口图标组 */
   .header-actions {
-    @apply flex items-center gap-2;
+    @apply flex items-center gap-1.5;
     @apply relative;
   }
 
   .header-icon-btn {
     @apply flex items-center justify-center;
-    @apply w-10 h-10 rounded-full;
+    @apply w-9 h-9 rounded-full;
     @apply text-gray-700 dark:text-gray-300;
     @apply bg-white dark:bg-gray-800;
-    @apply hover:bg-gray-100 dark:hover:bg-gray-700;
-    @apply hover:text-primary-600 dark:hover:text-primary-400;
-    @apply transition-all duration-200;
-    @apply shadow-sm hover:shadow-md;
+    @apply hover:bg-gradient-to-br hover:from-primary-500 hover:to-purple-600;
+    @apply hover:text-white;
+    @apply transition-all duration-300;
+    @apply shadow-sm hover:shadow-lg hover:scale-110;
     @apply border border-gray-200 dark:border-gray-700;
+    @apply hover:border-transparent;
+    @apply transform;
   }
 
   /* 搜索框 - 下拉式（在搜索图标下方） */
@@ -291,7 +326,7 @@
     @apply flex-shrink-0;
   }
 
-  /* 导航菜单 */
+  /* 导航菜单 - 降低padding */
   .main-navigation {
     @apply bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700;
     @apply relative;
@@ -300,7 +335,7 @@
   /* 菜单切换按钮（仅移动端显示） */
   .menu-toggle {
     @apply md:hidden flex items-center justify-center;
-    @apply w-full px-4 py-3 bg-white dark:bg-gray-800;
+    @apply w-full px-4 py-2.5 bg-white dark:bg-gray-800;
     @apply border-b border-gray-200 dark:border-gray-700;
     @apply text-gray-700 dark:text-gray-300;
     @apply hover:bg-gray-50 dark:hover:bg-gray-700;
@@ -311,9 +346,9 @@
     @apply sr-only;
   }
 
-  /* 菜单容器 */
+  /* 菜单容器 - 降低padding */
   .main-navigation ul {
-    @apply flex flex-wrap gap-2 p-4;
+    @apply flex flex-wrap gap-1.5 px-4 py-2;
   }
 
   /* 移动端：菜单垂直排列 */
@@ -341,15 +376,39 @@
     @apply list-none;
   }
 
-  /* 导航链接 - 增强样式 */
+  /* 导航链接 - 增强样式和动画 */
   .main-navigation a {
-    @apply px-4 py-2 rounded-md text-gray-700 dark:text-gray-300;
-    @apply hover:bg-primary-500 hover:text-white;
-    @apply transition-all duration-200;
-    @apply flex items-center gap-2;
-    @apply font-medium;
-    @apply hover:shadow-md hover:scale-105;
+    @apply px-3 py-1.5 rounded-lg text-gray-700 dark:text-gray-300;
+    @apply hover:bg-gradient-to-r hover:from-primary-500 hover:to-purple-600 hover:text-white;
+    @apply transition-all duration-300;
+    @apply flex items-center gap-1.5;
+    @apply font-medium text-sm;
+    @apply shadow-sm hover:shadow-md;
+    @apply border border-transparent hover:border-primary-300;
+    @apply transform hover:scale-105;
     @apply relative overflow-hidden;
+  }
+
+  /* 导航链接背景动画 */
+  .main-navigation a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+  }
+
+  .main-navigation a:hover::before {
+    left: 100%;
+  }
+
+  .main-navigation a.current-menu-item,
+  .main-navigation a.current_page_item {
+    @apply bg-gradient-to-r from-primary-500 to-purple-600 text-white;
+    @apply shadow-md;
   }
 
   /* 导航图标 */
@@ -383,11 +442,26 @@
 
   /* 子菜单样式 */
   .main-navigation .sub-menu {
-    @apply absolute left-0 mt-2 py-2 w-48;
+    @apply absolute left-0 py-2 w-48;
     @apply bg-white shadow-lg rounded-md;
     @apply border border-gray-200;
     @apply hidden;
     z-index: 1000;
+    /* 减少顶部间距，让鼠标更容易移过去 */
+    margin-top: 0.25rem;
+    /* 增加顶部的透明区域，防止鼠标移动时菜单消失 */
+    padding-top: 0.75rem;
+  }
+
+  /* 在父菜单和子菜单之间添加不可见的桥接区域 */
+  .main-navigation .sub-menu::before {
+    content: '';
+    position: absolute;
+    top: -0.5rem;
+    left: 0;
+    right: 0;
+    height: 0.5rem;
+    background: transparent;
   }
 
   [data-theme="dark"] .main-navigation .sub-menu {
@@ -398,8 +472,22 @@
     @apply relative;
   }
 
-  .main-navigation .menu-item-has-children:hover > .sub-menu {
+  /* 增加hover延迟，让菜单不会立即消失 */
+  .main-navigation .menu-item-has-children:hover > .sub-menu,
+  .main-navigation .menu-item-has-children:focus-within > .sub-menu {
     @apply block;
+    animation: fadeIn 0.15s ease-in;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .main-navigation .sub-menu li {
@@ -454,13 +542,54 @@
 
   /* 文章内容 */
   .entry-content {
-    @apply prose prose-lg dark:prose-invert max-w-none;
+    @apply prose prose-base dark:prose-invert max-w-none;
     @apply prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-gray-100;
     @apply prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-p:leading-relaxed;
     @apply prose-a:text-primary-500 hover:prose-a:text-primary-600;
     @apply prose-a:no-underline hover:prose-a:underline;
     @apply prose-strong:text-gray-900 dark:prose-strong:text-gray-100;
     @apply prose-img:rounded-lg prose-img:shadow-md;
+    @apply prose-ul:text-sm prose-ol:text-sm;
+    @apply prose-li:text-sm;
+  }
+
+  /* 归档页面使用正常字体大小 - 覆盖prose样式 */
+  .entry-content.archive-list,
+  .entry-content.archive-list ul,
+  .entry-content.archive-list ol,
+  .entry-content.archive-list li,
+  .entry-content.archive-list a {
+    font-size: 1rem !important;
+    line-height: 1.75rem !important;
+  }
+
+  .entry-content.archive-list .archive-year {
+    @apply text-base font-semibold text-gray-900 dark:text-gray-100 mb-2 mt-4;
+    font-size: 1rem !important;
+  }
+
+  .entry-content.archive-list .archive-month {
+    @apply text-base text-gray-800 dark:text-gray-200 mb-2 ml-4;
+    font-size: 1rem !important;
+  }
+
+  .entry-content.archive-list .archive-article {
+    @apply ml-8 mb-1;
+  }
+
+  .entry-content.archive-list .archive-article a {
+    @apply text-base text-gray-700 dark:text-gray-300 hover:text-primary-500;
+    @apply hover:underline transition-colors duration-200;
+    font-size: 1rem !important;
+  }
+
+  /* 减少目录和正文之间的间距 */
+  .entry-content .break_line {
+    @apply my-4;
+  }
+
+  .entry-content > b {
+    @apply block mb-2;
   }
 
   /* 文章内容中的代码块覆盖 */
@@ -810,21 +939,36 @@
   .tagcloud {
     @apply flex flex-wrap gap-1.5;
     @apply leading-tight;
+    @apply items-start;
   }
 
   .tagcloud a {
     @apply inline-block px-2.5 py-0.5 rounded-full;
     @apply bg-gray-100 dark:bg-gray-700;
-    @apply text-sm hover:bg-primary-500 hover:text-white;
+    @apply text-gray-700 dark:text-gray-300;
+    @apply text-sm;
+    @apply hover:bg-primary-500 hover:text-white;
     @apply transition-all duration-200;
     @apply no-underline;
+    @apply whitespace-nowrap;
+    @apply shadow-sm hover:shadow-md;
+    @apply border border-gray-200 dark:border-gray-600;
+    @apply hover:border-transparent;
+    @apply transform hover:scale-105;
+    @apply leading-tight;
   }
 
   .tag-link {
     @apply inline-block px-2.5 py-0.5 rounded-full;
     @apply bg-gray-100 dark:bg-gray-700;
-    @apply text-sm hover:bg-primary-500 hover:text-white;
+    @apply text-gray-700 dark:text-gray-300;
+    @apply text-sm;
+    @apply hover:bg-primary-500 hover:text-white;
     @apply transition-all duration-200;
+    @apply whitespace-nowrap;
+    @apply shadow-sm hover:shadow-md;
+    @apply border border-gray-200 dark:border-gray-600;
+    @apply leading-tight;
   }
 
   /* ========== 表单元素 ========== */
