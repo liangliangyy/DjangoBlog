@@ -1,21 +1,22 @@
 # Stage 1: Build frontend assets
 FROM node:20-alpine AS frontend-builder
 
-WORKDIR /frontend
+WORKDIR /app
 
 # Copy frontend package files
-COPY frontend/package*.json ./
+COPY frontend/package*.json ./frontend/
 
 # Set npm registry to official registry and install dependencies (including devDependencies for build)
-RUN npm config set registry https://registry.npmjs.org/ && \
+RUN cd frontend && \
+    npm config set registry https://registry.npmjs.org/ && \
     npm ci
 
-# Copy frontend source
-COPY frontend/ ./
+# Copy frontend source and blog directory structure
+COPY frontend/ ./frontend/
+COPY blog/static/blog/ ./blog/static/blog/
 
-# Create output directory structure and build frontend assets
-RUN mkdir -p ../blog/static/blog/dist && \
-    npm run build
+# Build frontend assets (output goes to blog/static/blog/dist)
+RUN cd frontend && npm run build
 
 # Stage 2: Build final image
 FROM python:3.11
@@ -39,7 +40,7 @@ RUN pip install --upgrade pip && \
 COPY . .
 
 # Copy built frontend assets from frontend-builder stage
-COPY --from=frontend-builder /blog/static/blog/dist /code/djangoblog/blog/static/blog/dist
+COPY --from=frontend-builder /app/blog/static/blog/dist /code/djangoblog/blog/static/blog/dist
 
 # Set execute permission for entrypoint
 RUN chmod +x /code/djangoblog/deploy/entrypoint.sh
