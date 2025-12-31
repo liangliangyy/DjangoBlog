@@ -14,13 +14,29 @@
     {% endif %}
     {% if most_read_articles %}
 
-        <aside id="views-4" class="widget widget_views"><p class="widget-title">Views</p>
-            <ul>
+        <aside id="views-4" class="widget widget_views">
+            <p class="widget-title">
+                <svg class="w-5 h-5 inline-block mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                    <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+                </svg>
+                Views
+            </p>
+            <ul class="sidebar-hot-articles">
                 {% for a in most_read_articles %}
-                    <li>
-                        <a href="{{ a.get_absolute_url }}" title="{{ a.title }}">
-                            {{ a.title }}
-                        </a> - {{ a.views }} views
+                    <li class="hot-article-item group">
+                        <span class="hot-article-rank rank-{{ forloop.counter }}">{{ forloop.counter }}</span>
+                        <div class="hot-article-content">
+                            <a href="{{ a.get_absolute_url }}" title="{{ a.title }}" class="hot-article-title">
+                                {{ a.title }}
+                            </a>
+                            <div class="hot-article-meta">
+                                <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd"/>
+                                </svg>
+                                <span class="hot-article-views">{{ a.views }}</span>
+                            </div>
+                        </div>
                     </li>
                 {% endfor %}
             </ul>
@@ -28,25 +44,59 @@
         </aside>
     {% endif %}
     {% if sidebar_categorys %}
-        <aside id="su_siloed_terms-2" class="widget widget_su_siloed_terms"><p class="widget-title">{% trans 'category' %}</p>
-            <ul>
+        <aside id="su_siloed_terms-2" class="widget widget_su_siloed_terms">
+            <p class="widget-title">
+                <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                </svg>
+                {% trans 'category' %}
+            </p>
+            <ul class="sidebar-categories">
                 {% for c in sidebar_categorys %}
-                    <li class="cat-item cat-item-184"><a href={{ c.get_absolute_url }}>{{ c.name }}</a>
+                    <li class="category-item group">
+                        <a href="{{ c.get_absolute_url }}" class="category-link">
+                            <span class="category-icon">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"/>
+                                </svg>
+                            </span>
+                            <span class="category-name">{{ c.name }}</span>
+                            <span class="category-count">{{ c.article_set.count }}</span>
+                        </a>
                     </li>
                 {% endfor %}
             </ul>
         </aside>
     {% endif %}
     {% if sidebar_comments and  open_site_comment %}
-        <aside id="ds-recent-comments-4" class="widget ds-widget-recent-comments"><p class="widget-title">{% trans 'recent comments' %}</p>
+        <aside id="ds-recent-comments-4" class="widget ds-widget-recent-comments">
+            <p class="widget-title">
+                <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                </svg>
+                {% trans 'recent comments' %}
+            </p>
 
-            <ul id="recentcomments">
+            <ul id="recentcomments" class="sidebar-recent-comments">
                 {% for c in sidebar_comments %}
-                    <li class="recentcomments">
-                <span class="comment-author-link">
-                    {{ c.author.username }}</span>
-                        {% trans 'published on' %}《
-                        <a href="{{ c.article.get_absolute_url }}#comment-{{ c.pk }}">{{ c.article.title }}</a>》
+                    <li class="recent-comment-item group">
+                        <div class="comment-avatar">
+                            <img src="{{ c.author.email|gravatar_url:32 }}"
+                                 alt="{{ c.author.username }}"
+                                 class="w-8 h-8 rounded-full">
+                        </div>
+                        <div class="comment-content">
+                            <p class="comment-text">{{ c.body|striptags|truncatechars:80 }}</p>
+                            <div class="comment-meta">
+                                <span class="comment-author-name">{{ c.author.username }}</span>
+                                <span class="comment-separator">·</span>
+                                <span class="comment-time">{{ c.creation_time|timesince }}前</span>
+                                <span class="comment-separator">·</span>
+                                <a href="{{ c.article.get_absolute_url }}#comment-{{ c.pk }}" class="comment-article-link">
+                                    {{ c.article.title|truncatechars:20 }}
+                                </a>
+                            </div>
+                        </div>
                     </li>
                 {% endfor %}
             </ul>
@@ -84,12 +134,22 @@
         </aside>
     {% endif %}
     {% if sidebar_tags %}
-        <aside id="tag_cloud-2" class="widget widget_tag_cloud"><p class="widget-title">{% trans 'Tag Cloud' %}</p>
-            <div class="tagcloud">
+        <aside id="tag_cloud-2" class="widget widget_tag_cloud">
+            <p class="widget-title">
+                <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                </svg>
+                {% trans 'Tag Cloud' %}
+            </p>
+            <div class="tagcloud sidebar-tagcloud">
                 {% for tag,count,size in sidebar_tags %}
                     <a href="{{ tag.get_absolute_url }}"
-                       class="tag-link-{{ tag.id }} tag-link-position-{{ tag.id }}"
-                       style="font-size: {{ size }}pt;" title="{{ count }}个话题"> {{ tag.name }}
+                       class="sidebar-tag tag-size-{{ size|floatformat:0 }}"
+                       title="{{ count }}个话题">
+                        <svg class="w-3 h-3 inline-block" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
+                        </svg>
+                        {{ tag.name }}
                     </a>
                 {% endfor %}
             </div>

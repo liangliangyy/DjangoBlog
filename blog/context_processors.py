@@ -47,6 +47,7 @@ def seo_processor(requests):
             "GLOBAL_HEADER": setting.global_header,
             "GLOBAL_FOOTER": setting.global_footer,
             "COMMENT_NEED_REVIEW": setting.comment_need_review,
+            "COLOR_SCHEME": setting.color_scheme,
         }
         cache.set(key, value, 60 * 60 * 10)
         return value

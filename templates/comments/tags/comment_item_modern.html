@@ -67,6 +67,7 @@
 
                 <!-- 操作按钮 -->
                 <div class="flex items-center space-x-4">
+                    {% if user.is_authenticated %}
                     <button @click="startReply({{ comment_item.pk }})"
                             :disabled="isLoading"
                             class="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors inline-flex items-center space-x-1"
@@ -76,6 +77,17 @@
                         </svg>
                         <span>回复</span>
                     </button>
+                    {% else %}
+                    <a href="{% url 'account:login' %}?next={{ request.get_full_path }}"
+                       class="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors inline-flex items-center space-x-1"
+                       rel="nofollow"
+                       hx-boost="false">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/>
+                        </svg>
+                        <span>回复</span>
+                    </a>
+                    {% endif %}
                 </div>
 
                 <!-- 回复表单 - 条件渲染 -->

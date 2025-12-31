@@ -19,34 +19,81 @@
     <div id="primary" class="site-content">
         <div id="content" role="main">
 
-            <header class="archive-header">
+            <!-- 归档页面头部 -->
+            <header class="archive-header-modern">
+                <div class="archive-hero">
+                    <div class="archive-icon">
+                        <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                        </svg>
+                    </div>
+                    <h1 class="archive-title-modern">{% trans 'article archive' %}</h1>
+                    <p class="archive-subtitle">共 {{ article_list|length }} 篇文章</p>
+                </div>
+            </header>
 
-                <p class="archive-title">{% trans 'article archive' %}</p>
-            </header><!-- .archive-header -->
-
-            <div class="entry-content archive-list">
-
+            <!-- 归档时间线 -->
+            <div class="archive-timeline">
                 {% regroup article_list by pub_time.year as year_post_group %}
-                <ul class="archive-years">
-                    {% for year in year_post_group %}
-                        <li class="archive-year"><span class="year-label">{{ year.grouper }} {% trans 'year' %}</span>
-                            {% regroup year.list by pub_time.month as month_post_group %}
-                            <ul class="archive-months">
-                                {% for month in month_post_group %}
-                                    <li class="archive-month"><span class="month-label">{{ month.grouper }} {% trans 'month' %}</span>
-                                        <ul class="archive-articles">
-                                            {% for article in month.list %}
-                                                <li class="archive-article"><a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
-                                                </li>
-                                            {% endfor %}
-                                        </ul>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        </li>
-                    {% endfor %}
-                </ul>
+
+                {% for year in year_post_group %}
+                    <div class="timeline-year-block">
+                        <!-- 年份标签 -->
+                        <div class="timeline-year-badge">
+                            <span class="year-number">{{ year.grouper }}</span>
+                            <span class="year-count">{{ year.list|length }} 篇</span>
+                        </div>
+
+                        {% regroup year.list by pub_time.month as month_post_group %}
+
+                        {% for month in month_post_group %}
+                            <div class="timeline-month-block">
+                                <!-- 月份标签 -->
+                                <div class="timeline-month-header">
+                                    <div class="timeline-dot"></div>
+                                    <h3 class="month-title">{{ month.grouper }}月</h3>
+                                    <span class="month-count">{{ month.list|length }} 篇</span>
+                                </div>
+
+                                <!-- 文章列表 -->
+                                <ul class="timeline-articles">
+                                    {% for article in month.list %}
+                                        <li class="timeline-article-item">
+                                            <a href="{{ article.get_absolute_url }}" class="article-link group">
+                                                <div class="article-info">
+                                                    <span class="article-date">{{ article.pub_time|date:"m-d" }}</span>
+                                                    <h4 class="article-title">{{ article.title }}</h4>
+                                                </div>
+                                                <div class="article-meta">
+                                                    {% if article.category %}
+                                                        <span class="article-category">
+                                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                                                            </svg>
+                                                            {{ article.category.name }}
+                                                        </span>
+                                                    {% endif %}
+                                                    <span class="article-views">
+                                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                                        </svg>
+                                                        {{ article.views }}
+                                                    </span>
+                                                </div>
+                                                <svg class="article-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                                </svg>
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
             </div>
+
         </div><!-- #content -->
     </div><!-- #primary -->
 

@@ -70,7 +70,7 @@
     {% plugin_head_resources %}
 </head>
 
-<body class="home blog custom-font-enabled" x-data="{ searchOpen: false }">
+<body class="home blog custom-font-enabled" data-color-scheme="{{ COLOR_SCHEME|default:'purple' }}" x-data="{ searchOpen: false }">
 <div id="page" class="hfeed site">
     <header id="masthead" class="site-header" role="banner">
         <div class="header-content">
@@ -188,6 +188,54 @@
     <svg class="w-6 h-6 fill-current text-white" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
         <path fill-rule="evenodd" d="M3.293 9.707a1 1 0 010-1.414l6-6a1 1 0 011.414 0l6 6a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L4.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
     </svg>
+</div>
+
+<!-- 图片灯箱 - Alpine.js组件 -->
+<div x-data="imageLightbox()"
+     x-init="init()"
+     @keydown.escape.window="closeLightbox()"
+     x-cloak>
+    <!-- 遮罩层 -->
+    <div x-show="showLightbox"
+         @click="closeLightbox()"
+         class="fixed inset-0 z-50 bg-black bg-opacity-90 backdrop-blur-sm"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0">
+    </div>
+
+    <!-- 图片容器 -->
+    <div x-show="showLightbox"
+         class="fixed inset-0 z-50 flex items-center justify-center p-4"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100 scale-100"
+         x-transition:leave-end="opacity-0 scale-95">
+        <div class="relative max-w-7xl max-h-full" @click.stop>
+            <img :src="currentImage"
+                 :alt="currentAlt"
+                 class="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl">
+
+            <!-- 图片说明 -->
+            <div x-show="currentAlt"
+                 class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-75 text-white text-center py-3 px-4 rounded-b-lg">
+                <p class="text-sm" x-text="currentAlt"></p>
+            </div>
+
+            <!-- 关闭按钮 -->
+            <button @click="closeLightbox()"
+                    class="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+    </div>
 </div>
 
 </body>

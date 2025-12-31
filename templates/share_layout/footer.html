@@ -1,38 +1,71 @@
-<footer id="colophon" role="contentinfo">
-    <div class="site-info" style="text-align: center">
-        Copyright&copy;&nbsp;{{ CURRENT_YEAR }}&nbsp;
-        <a href="/" target="blank">{{ SITE_NAME }}</a>
-        &nbsp;|&nbsp;
+<footer id="colophon" class="site-footer" role="contentinfo">
+    <!-- 装饰性顶部分隔 -->
+    <div class="footer-divider"></div>
 
-        <a href="/sitemap.xml" title="SiteMap" target="_blank">
-            SiteMap
-        </a>
-        &nbsp;|&nbsp;
-        <a href="/feed" title="RSS Feed" target="_blank">
-            RSS Feed
-        </a>
-        &nbsp;|&nbsp;
-        <a href="/links.html" title="友情链接" rel="nofollow" target="_blank">
-            友情链接
-        </a>
-        |&nbsp; Hosting On&nbsp;
-        <a href="https://www.linode.com/?r=b0d38794d05ef8816b357a929106e89b7c6452f9" target="blank" rel="nofollow">Linode</a>
+    <div class="footer-content">
+        <!-- 第一行：版权和主要链接 -->
+        <div class="footer-section footer-main">
+            <div class="footer-copyright">
+                <span class="copyright-text">
+                    <svg class="inline-block w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
+                    </svg>
+                    {{ CURRENT_YEAR }} <a href="/" class="footer-link-brand">{{ SITE_NAME }}</a>
+                </span>
+            </div>
 
-        |&nbsp;
-        <a href="https://tongji.baidu.com/sc-web/3478620/home/ico?siteId=11261596" target="_blank"
-           rel="nofollow">百度统计</a>
+            <div class="footer-links">
+                <a href="/sitemap.xml" class="footer-link" title="SiteMap">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
+                    </svg>
+                    SiteMap
+                </a>
+                <a href="/feed" class="footer-link" title="RSS Feed">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 5c7.18 0 13 5.82 13 13M6 11a7 7 0 017 7m-6 0a1 1 0 11-2 0 1 1 0 012 0z"/>
+                    </svg>
+                    RSS
+                </a>
+                <a href="/links.html" class="footer-link" title="友情链接" rel="nofollow">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                    </svg>
+                    友情链接
+                </a>
+                <a href="https://www.linode.com/?r=b0d38794d05ef8816b357a929106e89b7c6452f9" class="footer-link" rel="nofollow">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"/>
+                    </svg>
+                    Linode
+                </a>
+                <a href="https://tongji.baidu.com/sc-web/3478620/home/ico?siteId=11261596" class="footer-link" rel="nofollow">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    </svg>
+                    统计
+                </a>
+            </div>
+        </div>
 
-    </div>
-    <div class="site-info" style="text-align: center">
-        Powered by
-        <a href="https://www.djangoproject.com/" rel="nofollow" target="blank">Django</a>
-        &nbsp;|&nbsp;
-        <a href="https://github.com/liangliangyy/DjangoBlog" rel="nofollow" target="blank">liangliangyy</a>
-        |
-        <a href="https://www.lylinux.net" target="blank">lylinux</a>
-        |
-        本页面加载耗时:<!!LOAD_TIMES!!>s
-    </div>
+        <!-- 第二行：技术栈和性能信息 -->
+        <div class="footer-section footer-meta">
+            <div class="footer-tech">
+                <span class="text-gray-500 dark:text-gray-400">Powered by</span>
+                <a href="https://www.djangoproject.com/" class="footer-link" rel="nofollow">Django</a>
+                <span class="text-gray-400 dark:text-gray-600">•</span>
+                <a href="https://github.com/liangliangyy/DjangoBlog" class="footer-link" rel="nofollow">liangliangyy</a>
+                <span class="text-gray-400 dark:text-gray-600">•</span>
+                <a href="https://www.lylinux.net" class="footer-link">lylinux</a>
+            </div>
+            <div class="footer-performance">
+                <svg class="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                </svg>
+                <span class="text-gray-500 dark:text-gray-400">加载耗时</span>
+                <span class="text-primary-500 font-medium"><!!LOAD_TIMES!!>s</span>
+            </div>
+        </div>
     {% if BEIAN_CODE %}
         <div class="site-info" style="text-align: center">
             <a href="https://beian.miit.gov.cn/" rel="nofollow" target="_blank">

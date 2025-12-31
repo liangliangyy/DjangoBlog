@@ -49,8 +49,8 @@
     <div class="entry-content" itemprop="articleBody">
         {% if  isindex %}
             {% if query %}
-                {# 搜索结果页：显示高亮的摘要片段 #}
-                {{ article.body|custom_markdown|highlight_content:query }}
+                {# 搜索结果页：先生成摘要HTML，然后高亮关键词 #}
+                {% render_article_content article True %}
             {% else %}
                 {# 普通列表页：显示正常摘要 #}
                 {% render_article_content article True %}

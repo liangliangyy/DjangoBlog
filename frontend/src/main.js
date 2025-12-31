@@ -21,11 +21,13 @@ Alpine.plugin(collapse);
 import commentSystem from './components/commentSystem.js';
 import backToTop from './components/backToTop.js';
 import navigation from './components/navigation.js';
+import imageLightbox from './components/imageLightbox.js';
 
 // 注册全局Alpine数据
 Alpine.data('commentSystem', commentSystem);
 Alpine.data('backToTop', backToTop);
 Alpine.data('navigation', navigation);
+Alpine.data('imageLightbox', imageLightbox);
 
 // 全局工具函数
 window.Alpine = Alpine;

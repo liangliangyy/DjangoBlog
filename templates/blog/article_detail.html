@@ -47,7 +47,8 @@
                                 您还没有登录，请先
                                 <a href="{% url "account:login" %}?next={{ request.get_full_path }}"
                                    class="text-primary-600 dark:text-primary-400 font-medium hover:underline"
-                                   rel="nofollow">登录</a>
+                                   rel="nofollow"
+                                   hx-boost="false">登录</a>
                                 后发表评论。
                             </p>
 

@@ -1,13 +1,22 @@
 {% load i18n %}
-<div class="widget-login">
+{% load static %}
+<div class="widget-login flex items-center gap-3 flex-wrap">
     {% if apps %}
-        <small>
+        <small class="text-sm text-gray-600 dark:text-gray-400">
             {% trans 'quick login' %}:
         </small>
-        {% for icon,url in apps %}
-            <a href="{{ url }}" rel="nofollow">
-                <span class="icon-sn-{{ icon }}"></span>
-            </a>
-        {% endfor %}
+        <div class="flex gap-2 flex-wrap">
+            {% for icon,url in apps %}
+                <a href="{{ url }}"
+                   rel="nofollow"
+                   hx-boost="false"
+                   class="inline-flex items-center justify-center w-10 h-10 rounded-lg border border-gray-300 dark:border-gray-600 hover:border-primary-500 dark:hover:border-primary-400 transition-colors bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700"
+                   title="使用 {{ icon }} 登录">
+                    <span class="icon-sn-{{ icon }}"></span>
+                </a>
+            {% endfor %}
+        </div>
     {% endif %}
 </div>
+
+<link rel="stylesheet" href="{% static 'blog/css/oauth_style.css' %}">
