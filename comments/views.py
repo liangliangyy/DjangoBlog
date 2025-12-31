@@ -1,4 +1,5 @@
 # Create your views here.
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -16,6 +17,7 @@ class CommentPostView(FormView):
     form_class = CommentForm
     template_name = 'blog/article_detail.html'
 
+    @method_decorator(login_required)
     @method_decorator(csrf_protect)
     def dispatch(self, *args, **kwargs):
         return super(CommentPostView, self).dispatch(*args, **kwargs)

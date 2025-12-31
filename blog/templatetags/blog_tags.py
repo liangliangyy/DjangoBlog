@@ -431,11 +431,12 @@ def highlight_search_term(text, query):
 @register.filter
 def highlight_content(html_content, query):
     """
-    对HTML内容进行搜索高亮，保留HTML结构但只高亮文本节点
-    避免高亮代码块、标签等内容
+    对HTML内容提取纯文本并进行搜索高亮
+    会去除HTML标签，只保留文本内容，并高亮搜索关键词
+    跳过代码块中的内容
     :param html_content: HTML内容
     :param query: 搜索查询词
-    :return: 高亮后的HTML内容
+    :return: 高亮后的纯文本（包含mark标签）
     """
     if not query or not html_content:
         return html_content
@@ -446,41 +447,26 @@ def highlight_content(html_content, query):
     # 使用BeautifulSoup解析HTML
     soup = BeautifulSoup(html_content, 'html.parser')
 
+    # 移除代码块、脚本等标签（不要它们的内容）
+    for tag in soup.find_all(['code', 'pre', 'script', 'style']):
+        tag.decompose()
+
+    # 提取纯文本
+    text = soup.get_text(separator=' ', strip=True)
+
     # 分词处理（支持空格分隔的多个词）
     terms = [term for term in query.split() if len(term) >= 2]
 
     if not terms:
-        return html_content
+        return text
 
-    # 定义要跳过的标签（代码块、脚本等）
-    skip_tags = {'code', 'pre', 'script', 'style'}
+    # 对纯文本进行高亮
+    for term in terms:
+        # 使用正则替换，不区分大小写
+        pattern = re.compile(r'(' + re.escape(term) + r')', re.IGNORECASE)
+        text = pattern.sub(r'<mark>\1</mark>', text)
 
-    def highlight_text_node(node):
-        """递归处理文本节点"""
-        if node.name in skip_tags:
-            # 跳过代码块等标签
-            return
-
-        if isinstance(node, str):
-            # 这是一个文本节点
-            text = str(node)
-            for term in terms:
-                # 使用正则替换，不区分大小写
-                pattern = re.compile(r'(' + re.escape(term) + r')', re.IGNORECASE)
-                text = pattern.sub(r'<mark>\1</mark>', text)
-            # 替换原节点
-            if '<mark>' in text:
-                new_soup = BeautifulSoup(text, 'html.parser')
-                node.replace_with(new_soup)
-        elif hasattr(node, 'children'):
-            # 递归处理子节点
-            for child in list(node.children):
-                highlight_text_node(child)
-
-    # 处理所有文本节点
-    highlight_text_node(soup)
-
-    return mark_safe(str(soup))
+    return mark_safe(text)
 
 
 # 返回用户头像URL

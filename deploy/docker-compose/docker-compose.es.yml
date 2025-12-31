@@ -34,7 +34,7 @@ services:
     environment:
       - DJANGO_MYSQL_DATABASE=djangoblog
       - DJANGO_MYSQL_USER=root
-      - DJANGO_MYSQL_PASSWORD=DjAnGoBlOg!2!Q@W#E
+      - DJANGO_MYSQL_PASSWORD=QQQQwww123!@#
       - DJANGO_MYSQL_HOST=db
       - DJANGO_MYSQL_PORT=3306
       - DJANGO_MEMCACHED_LOCATION=memcached:11211

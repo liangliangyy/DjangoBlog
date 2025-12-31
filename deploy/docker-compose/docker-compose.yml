@@ -6,7 +6,7 @@ services:
     restart: always
     environment:
       - MYSQL_DATABASE=djangoblog
-      - MYSQL_ROOT_PASSWORD=DjAnGoBlOg!2!Q@W#E
+      - MYSQL_ROOT_PASSWORD=QQQQwww123!@#
     ports:
       - 3306:3306
     volumes:
@@ -32,7 +32,7 @@ services:
       - DJANGO_DEBUG=False
       - DJANGO_MYSQL_DATABASE=djangoblog
       - DJANGO_MYSQL_USER=root
-      - DJANGO_MYSQL_PASSWORD=DjAnGoBlOg!2!Q@W#E
+      - DJANGO_MYSQL_PASSWORD=QQQQwww123!@#
       - DJANGO_MYSQL_HOST=db
       - DJANGO_MYSQL_PORT=3306
       - DJANGO_REDIS_URL=redis:6379
