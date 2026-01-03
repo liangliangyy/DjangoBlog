@@ -6,11 +6,11 @@ services:
     restart: always
     environment:
       - MYSQL_DATABASE=djangoblog
-      - MYSQL_ROOT_PASSWORD=DjAnGoBlOg!2!Q@W#E
+      - MYSQL_ROOT_PASSWORD=QQQQwww123!@#
     ports:
       - 3306:3306
     volumes:
-      - ./bin/datas/mysql/:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
     depends_on:
       - redis
     container_name: db
@@ -18,18 +18,21 @@ services:
   djangoblog:
     build:
       context: ../../
+      dockerfile: Dockerfile
     restart: always
-    command: bash -c 'sh /code/djangoblog/bin/docker_start.sh'
+    command: bash -c 'sh /code/djangoblog/deploy/entrypoint.sh'
     ports:
       - "8000:8000"
     volumes:
-      - ./collectedstatic:/code/djangoblog/collectedstatic
+      # 使用named volume共享静态文件给nginx
+      - static_files:/code/djangoblog/collectedstatic
       - ./logs:/code/djangoblog/logs
       - ./uploads:/code/djangoblog/uploads
     environment:
+      - DJANGO_DEBUG=False
       - DJANGO_MYSQL_DATABASE=djangoblog
       - DJANGO_MYSQL_USER=root
-      - DJANGO_MYSQL_PASSWORD=DjAnGoBlOg!2!Q@W#E
+      - DJANGO_MYSQL_PASSWORD=QQQQwww123!@#
       - DJANGO_MYSQL_HOST=db
       - DJANGO_MYSQL_PORT=3306
       - DJANGO_REDIS_URL=redis:6379
@@ -46,8 +49,9 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./bin/nginx.conf:/etc/nginx/nginx.conf
-      - ./collectedstatic:/code/djangoblog/collectedstatic
+      - ../nginx.conf:/etc/nginx/nginx.conf
+      # 使用同一个named volume访问静态文件
+      - static_files:/code/djangoblog/collectedstatic:ro
     links:
       - djangoblog:djangoblog
     container_name: nginx
@@ -58,3 +62,7 @@ services:
     container_name: redis
     ports:
       - "6379:6379"
+
+volumes:
+  mysql_data:
+  static_files:

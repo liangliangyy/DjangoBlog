@@ -80,14 +80,15 @@ html[data-theme="dark"] a:hover {
     color: var(--dm-link-hover);
 }
 
-/* 标题 */
+/* 标题 - 使用配色方案亮色 */
 html[data-theme="dark"] h1,
 html[data-theme="dark"] h2,
 html[data-theme="dark"] h3,
 html[data-theme="dark"] h4,
 html[data-theme="dark"] h5,
 html[data-theme="dark"] h6 {
-    color: var(--dm-text-primary);
+    color: rgb(var(--color-primary-400));
+    font-weight: 800;
 }
 
 html[data-theme="dark"] .site-header h1 a,
@@ -156,7 +157,8 @@ html[data-theme="dark"] .entry-content h3,
 html[data-theme="dark"] .entry-content h4,
 html[data-theme="dark"] .entry-content h5,
 html[data-theme="dark"] .entry-content h6 {
-    color: var(--dm-text-primary);
+    color: rgb(var(--color-primary-400));
+    font-weight: 800;
 }
 
 html[data-theme="dark"] .entry-meta,
@@ -164,8 +166,28 @@ html[data-theme="dark"] .entry-meta a {
     color: var(--dm-text-secondary);
 }
 
+html[data-theme="dark"] .entry-title,
 html[data-theme="dark"] .entry-title a {
-    color: var(--dm-text-primary);
+    color: rgb(var(--color-primary-400));
+    font-weight: 700;
+}
+
+/* 文章列表标题 - 使用配色方案亮色 */
+html[data-theme="dark"] .article-title {
+    color: rgb(var(--color-primary-400));
+    font-weight: 700;
+}
+
+/* 热门文章标题 - 使用配色方案亮色 */
+html[data-theme="dark"] .hot-article-title {
+    color: rgb(var(--color-primary-400));
+    font-weight: 700;
+}
+
+/* 推荐文章标题 - 使用配色方案亮色 */
+html[data-theme="dark"] .recommendation-title {
+    color: rgb(var(--color-primary-400));
+    font-weight: 700;
 }
 
 /* ==================== 代码块 ==================== */

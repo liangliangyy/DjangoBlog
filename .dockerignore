@@ -10,3 +10,16 @@ docs/
 logs/
 static/
 .github/
+# Frontend build artifacts (will be built in Docker)
+frontend/node_modules/
+frontend/dist/
+blog/static/blog/dist/
+# Development files
+.git/
+.gitignore
+.vscode/
+.idea/
+*.pyc
+__pycache__/
+*.log
+.env

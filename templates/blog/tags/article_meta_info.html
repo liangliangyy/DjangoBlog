@@ -1,44 +1,20 @@
 {% load i18n %}
 {% load blog_tags %}
 
-
 <footer class="entry-meta">
     {% trans 'posted in' %}
-    <a href="{{ article.category.get_absolute_url }}" rel="category tag">{{ article.category.name }}</a>
-    {% if article.type == 'a' %}
-        {% if article.tags.all %}
-
-            {% trans 'and tagged' %}
-            {% for t in article.tags.all %}
-                <a href="{{ t.get_absolute_url }}" rel="tag">{{ t.name }}</a>
-                {% if t != article.tags.all.last %}
-                    ,
-                {% endif %}
-            {% endfor %}
-
-
-        {% endif %}
-    {% endif %}
-    .{% trans 'by ' %}
+    <a href="{{ article.category.get_absolute_url }}" rel="category tag">{{ article.category.name }}</a>{% if article.type == 'a' %}{% if article.tags.all %} {% trans 'and tagged' %}
+        {% for t in article.tags.all %}<a href="{{ t.get_absolute_url }}" rel="tag">{{ t.name }}</a>{% if t != article.tags.all.last %}, {% endif %}{% endfor %}{% endif %}{% endif %}.{% trans 'by ' %}
     <span class="by-author">
         <span class="author vcard">
             <a class="url fn n" href="{{ article.author.get_absolute_url }}"
-                    {% blocktranslate %}
-               title="View all articles published by {{ article.author.username }}"
-                    {% endblocktranslate %}
+                    {% blocktranslate %}title="View all articles published by {{ article.author.username }}"{% endblocktranslate %}
                rel="author">
             <span itemprop="author" itemscope itemtype="http://schema.org/Person">
-
-            <span itemprop="name" itemprop="publisher">
-
-            {{ article.author.username }}
-        </span>
+            <span itemprop="name" itemprop="publisher">{{ article.author.username }}</span>
             </span>
     </a>
-
-
-        </span>
-{% trans 'on' %}
+        </span> {% trans 'on' %}
      <a href="{{ article.get_absolute_url }}"
         title="{% datetimeformat article.pub_time %}"
         itemprop="datePublished" content="{% datetimeformat article.pub_time %}"
@@ -47,10 +23,8 @@
               datetime="{{ article.pub_time }}">
             {% datetimeformat article.pub_time %}
         </time>
-    </a>
-    {% if user.is_superuser %}
-        <a href="{{ article.get_admin_url }}">{% trans 'edit' %}</a>
-    {% endif %}
+    </a>{% if user.is_superuser %}
+        <a href="{{ article.get_admin_url }}">{% trans 'edit' %}</a>{% endif %}
     </span>
 </footer><!-- .entry-meta -->
 

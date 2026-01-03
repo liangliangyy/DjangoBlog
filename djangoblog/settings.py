@@ -156,6 +156,10 @@ USE_L10N = True
 
 USE_TZ = False
 
+# Session settings
+SESSION_COOKIE_AGE = 1209600  # 2周（Django默认值）
+REMEMBER_ME_LOGIN_TTL = 2626560  # 30天（勾选"记住我"时使用）
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
@@ -261,6 +265,9 @@ STATICFILES = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'plugins'),  # 让Django能找到插件的静态文件
 ]
+
+# Vite开发服务器URL（开发模式）
+VITE_DEV_SERVER_URL = 'http://localhost:5173'
 
 AUTH_USER_MODEL = 'accounts.BlogUser'
 LOGIN_URL = '/login/'
@@ -380,7 +387,8 @@ STATICFILES_FINDERS = (
     # other
     'compressor.finders.CompressorFinder',
 )
-COMPRESS_ENABLED = True
+# 开发模式下禁用压缩，使用Vite处理静态资源
+COMPRESS_ENABLED = not DEBUG
 # 根据环境变量决定是否启用离线压缩
 COMPRESS_OFFLINE = os.environ.get('COMPRESS_OFFLINE', 'False').lower() == 'true'
 

@@ -18,12 +18,12 @@
                 <header class="archive-header">
                     {% if suggestion %}
                         <h2 class="archive-title">
-                            已显示<span style="color: red"> “{{ suggestion }}” </span>的搜索结果。&nbsp;&nbsp;
-                            仍然搜索：<a style="text-transform: none;" href="/search/?q={{ query }}&is_suggest=no">{{ query }}</a> <br>
+                            已显示<span class="text-red-600 dark:text-red-400"> "{{ suggestion }}" </span>的搜索结果。
+                            仍然搜索：<a class="normal-case hover:underline" href="/search/?q={{ query }}&is_suggest=no">{{ query }}</a>
                         </h2>
                     {% else %}
                         <h2 class="archive-title">
-                            搜索：<span style="color: red">{{ query }} </span> &nbsp;&nbsp;
+                            搜索：<span class="text-red-600 dark:text-red-400">{{ query }}</span>
                         </h2>
                     {% endif %}
                 </header><!-- .archive-header -->
@@ -33,21 +33,33 @@
                     {% load_article_detail result.object True user query %}
                 {% endfor %}
                 {% if page.has_previous or page.has_next %}
-                    <nav id="nav-below" class="navigation" role="navigation">
-                        <h3 class="assistive-text">文章导航</h3>
+                    <nav class="flex justify-between items-center mt-8 pt-6 border-t border-gray-200 dark:border-gray-700" role="navigation">
                         {% if page.has_previous %}
-                            <div class="nav-previous"><a
-                                    href="?q={{ query }}&amp;page={{ page.previous_page_number }}"><span
-                                    class="meta-nav">&larr;</span> 早期文章</a></div>
+                            <a href="?q={{ query }}&amp;page={{ page.previous_page_number }}"
+                               class="btn btn-secondary inline-flex items-center space-x-2"
+                               rel="prev">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                                </svg>
+                                <span>上一页</span>
+                            </a>
+                        {% else %}
+                            <div></div>
                         {% endif %}
-                        {% if page.has_next %}
-                            <div class="nav-next"><a href="?q={{ query }}&amp;page={{ page.next_page_number }}">较新文章
-                                <span
-                                        class="meta-nav">→</span></a>
-                            </div>
-                        {% endif %}
-                    </nav><!-- .navigation -->
 
+                        {% if page.has_next %}
+                            <a href="?q={{ query }}&amp;page={{ page.next_page_number }}"
+                               class="btn btn-secondary inline-flex items-center space-x-2"
+                               rel="next">
+                                <span>下一页</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                </svg>
+                            </a>
+                        {% else %}
+                            <div></div>
+                        {% endif %}
+                    </nav>
                 {% endif %}
             {% else %}
                 <header class="archive-header">

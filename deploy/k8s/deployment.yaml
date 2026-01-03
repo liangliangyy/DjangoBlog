@@ -28,13 +28,13 @@ spec:
           httpGet:
             path: /health/
             port: 8000
-          initialDelaySeconds: 10
+          initialDelaySeconds: 60
           periodSeconds: 30
         livenessProbe:
           httpGet:
             path: /health/
             port: 8000
-          initialDelaySeconds: 10
+          initialDelaySeconds: 60
           periodSeconds: 30
         resources:
           requests:
@@ -125,7 +125,7 @@ spec:
             - "-u"
             - "root"
             - "-p$MYSQL_ROOT_PASSWORD"
-          initialDelaySeconds: 10
+          initialDelaySeconds: 30
           periodSeconds: 10
         livenessProbe:
           exec:
@@ -137,7 +137,7 @@ spec:
             - "-u"
             - "root"
             - "-p$MYSQL_ROOT_PASSWORD"
-          initialDelaySeconds: 10
+          initialDelaySeconds: 30
           periodSeconds: 10
         resources:
           requests:

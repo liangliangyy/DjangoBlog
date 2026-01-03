@@ -90,16 +90,15 @@ def render_article_content(context, article, is_summary=False):
     
     # 如果是摘要模式，先截断内容再应用插件
     if is_summary:
-        # 截断HTML内容到合适的长度（约300字符）
-        from django.utils.html import strip_tags
-        from django.template.defaultfilters import truncatechars
-        
-        # 先去除HTML标签，截断纯文本，然后重新转换为HTML
-        plain_text = strip_tags(html_content)
-        truncated_text = truncatechars(plain_text, 300)
-        
-        # 重新转换截断后的文本为HTML（简化版，避免复杂的插件处理）
-        html_content = CommonMarkdown.get_markdown(truncated_text)
+        # 从配置中获取摘要长度
+        from djangoblog.utils import get_blog_setting
+        from django.template.defaultfilters import truncatechars_html
+
+        blogsetting = get_blog_setting()
+        summary_length = blogsetting.article_sub_length
+
+        # 使用truncatechars_html保留HTML标签结构，正确截断HTML内容
+        html_content = truncatechars_html(html_content, summary_length)
     
     # 然后应用插件过滤器，传递完整的上下文
     from djangoblog.plugin_manage import hooks
@@ -111,14 +110,19 @@ def render_article_content(context, article, is_summary=False):
     # 应用所有文章内容相关的插件
     # 注意：摘要模式下某些插件（如版权声明）可能不适用
     optimized_html = hooks.apply_filters(
-        ARTICLE_CONTENT_HOOK_NAME, 
-        html_content, 
-        article=article, 
+        ARTICLE_CONTENT_HOOK_NAME,
+        html_content,
+        article=article,
         request=request,
         context=context,
         is_summary=is_summary  # 传递摘要标志，插件可以据此调整行为
     )
-    
+
+    # 如果有搜索查询，应用高亮
+    query = context.get('query')
+    if query and is_summary:
+        optimized_html = highlight_content(optimized_html, query)
+
     return mark_safe(optimized_html)
 
 
@@ -427,24 +431,42 @@ def highlight_search_term(text, query):
 @register.filter
 def highlight_content(html_content, query):
     """
-    对HTML内容进行搜索高亮，返回包含关键词的摘要片段
-    使用Haystack的Highlighter类
+    对HTML内容提取纯文本并进行搜索高亮
+    会去除HTML标签，只保留文本内容，并高亮搜索关键词
+    跳过代码块中的内容
     :param html_content: HTML内容
     :param query: 搜索查询词
-    :return: 高亮后的文本片段
+    :return: 高亮后的纯文本（包含mark标签）
     """
     if not query or not html_content:
         return html_content
 
-    from haystack.utils.highlighting import Highlighter
+    from bs4 import BeautifulSoup
+    import re
 
-    # 创建高亮器，使用mark标签
-    highlighter = Highlighter(query, max_length=500, html_tag='mark', css_class='')
+    # 使用BeautifulSoup解析HTML
+    soup = BeautifulSoup(html_content, 'html.parser')
 
-    # 对HTML内容进行高亮，会自动去除HTML标签并提取摘要
-    highlighted = highlighter.highlight(html_content)
+    # 移除代码块、脚本等标签（不要它们的内容）
+    for tag in soup.find_all(['code', 'pre', 'script', 'style']):
+        tag.decompose()
 
-    return mark_safe(highlighted)
+    # 提取纯文本
+    text = soup.get_text(separator=' ', strip=True)
+
+    # 分词处理（支持空格分隔的多个词）
+    terms = [term for term in query.split() if len(term) >= 2]
+
+    if not terms:
+        return text
+
+    # 对纯文本进行高亮
+    for term in terms:
+        # 使用正则替换，不区分大小写
+        pattern = re.compile(r'(' + re.escape(term) + r')', re.IGNORECASE)
+        text = pattern.sub(r'<mark>\1</mark>', text)
+
+    return mark_safe(text)
 
 
 # 返回用户头像URL

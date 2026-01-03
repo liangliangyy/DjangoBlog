@@ -18,22 +18,23 @@
 {% endblock %}
 {% block content %}
     <div id="primary" class="site-content">
-        <div id="content" role="main">
-            {% if page_type and tag_name %}
-                <header class="archive-header">
+        {% if page_type and tag_name %}
+            <header class="archive-header">
+                <p class="archive-title">{{ page_type }}：<span>{{ tag_name }}</span></p>
+            </header><!-- .archive-header -->
+        {% endif %}
 
-                    <p class="archive-title">{{ page_type }}：<span>{{ tag_name }}</span></p>
-                </header><!-- .archive-header -->
-            {% endif %}
+        <div id="article-list-container">
+            <div id="content" role="main">
+                {% for article in article_list %}
+                    {% load_article_detail article True user %}
+                {% endfor %}
+            </div><!-- #content -->
 
-            {% for article in article_list %}
-                {% load_article_detail article True user %}
-            {% endfor %}
             {% if is_paginated %}
                 {% load_pagination_info page_obj page_type tag_name %}
-
             {% endif %}
-        </div><!-- #content -->
+        </div><!-- #article-list-container -->
     </div><!-- #primary -->
 
 {% endblock %}

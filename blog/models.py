@@ -316,6 +316,18 @@ class SideBar(models.Model):
 
 class BlogSettings(models.Model):
     """blog的配置"""
+
+    COLOR_SCHEMES = (
+        ('purple', _('紫色主题 - Purple Dream')),
+        ('blue', _('蓝色主题 - Ocean Blue')),
+        ('green', _('绿色主题 - Forest Green')),
+        ('orange', _('橙色主题 - Sunset Orange')),
+        ('pink', _('粉色主题 - Cherry Blossom')),
+        ('red', _('红色主题 - Ruby Red')),
+        ('indigo', _('靛蓝主题 - Midnight Indigo')),
+        ('teal', _('青色主题 - Teal Wave')),
+    )
+
     site_name = models.CharField(
         _('site name'),
         max_length=200,
@@ -344,6 +356,12 @@ class BlogSettings(models.Model):
     google_adsense_codes = models.TextField(
         _('adsense code'), max_length=2000, null=True, blank=True, default='')
     open_site_comment = models.BooleanField(_('open site comment'), default=True)
+    color_scheme = models.CharField(
+        _('配色方案'),
+        max_length=20,
+        choices=COLOR_SCHEMES,
+        default='purple',
+        help_text=_('选择网站的主题配色方案'))
     global_header = models.TextField("公共头部", null=True, blank=True, default='')
     global_footer = models.TextField("公共尾部", null=True, blank=True, default='')
     beian_code = models.CharField(

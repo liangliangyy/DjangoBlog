@@ -112,7 +112,18 @@ def authorize(request):
                 oauth_user_login_signal.send(
                     sender=authorize.__class__, id=user.id)
                 login(request, author)
-                return HttpResponseRedirect(nexturl)
+                # 设置session过期时间为2周（默认）
+                request.session.set_expiry(settings.SESSION_COOKIE_AGE)
+                # 设置登录标记 cookie
+                response = HttpResponseRedirect(nexturl)
+                response.set_cookie(
+                    'logged_user',
+                    'true',
+                    max_age=settings.SESSION_COOKIE_AGE,
+                    httponly=False,  # 允许 JavaScript 访问
+                    samesite='Lax'
+                )
+                return response
         else:
             user.save()
             url = reverse('oauth:require_email', kwargs={
@@ -149,6 +160,8 @@ def emailconfirm(request, id, sign):
         sender=emailconfirm.__class__,
         id=oauthuser.id)
     login(request, author)
+    # 设置session过期时间为2周（默认）
+    request.session.set_expiry(settings.SESSION_COOKIE_AGE)
 
     site = 'http://' + get_current_site().domain
     content = _('''
@@ -167,7 +180,16 @@ def emailconfirm(request, id, sign):
         'oauthid': id
     })
     url = url + '?type=success'
-    return HttpResponseRedirect(url)
+    # 设置登录标记 cookie
+    response = HttpResponseRedirect(url)
+    response.set_cookie(
+        'logged_user',
+        'true',
+        max_age=settings.SESSION_COOKIE_AGE,
+        httponly=False,  # 允许 JavaScript 访问
+        samesite='Lax'
+    )
+    return response
 
 
 class RequireEmailView(FormView):

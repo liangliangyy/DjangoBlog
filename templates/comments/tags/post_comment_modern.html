@@ -1,0 +1,137 @@
+<!-- 现代化发布评论表单 -->
+<hr class="my-12 border-t-2 border-gray-300 dark:border-gray-600">
+<div x-data="{ showForm: true }"
+     id="respond"
+     class="comment-respond">
+
+    <!-- 表单标题 -->
+    <h3 class="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100 flex items-center space-x-2">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+        </svg>
+        <span>发表评论</span>
+    </h3>
+
+    <!-- 评论表单 -->
+    <form action="{% url 'comments:postcomment' article.pk %}"
+          method="post"
+          id="commentform"
+          class="comment-form space-y-4"
+          hx-post="{% url 'comments:postcomment' article.pk %}"
+          hx-target="#main"
+          hx-select="#main"
+          hx-swap="innerHTML"
+          hx-push-url="true">
+
+        {% csrf_token %}
+
+        <!-- 评论内容 -->
+        <div class="form-group">
+            <label for="{{ form.body.id_for_label }}"
+                   class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                {{ form.body.label }}
+                <span class="text-red-500">*</span>
+            </label>
+
+            <textarea
+                name="{{ form.body.html_name }}"
+                id="{{ form.body.id_for_label }}"
+                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 resize-y transition-all"
+                placeholder="写下你的评论... (支持Markdown语法)"
+                rows="6"
+                required
+            >{{ form.body.value|default:'' }}</textarea>
+
+            {% if form.body.errors %}
+                <div class="mt-2 text-sm text-red-600 dark:text-red-400">
+                    {{ form.body.errors }}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- 隐藏字段 -->
+        {{ form.parent_comment_id }}
+
+        <!-- Markdown提示和提交按钮 -->
+        <div class="flex items-center justify-between flex-wrap gap-4">
+            <div class="flex items-start space-x-2 text-sm text-gray-600 dark:text-gray-400">
+                <svg class="w-5 h-5 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                </svg>
+                <div>
+                    <div class="font-medium">支持Markdown语法</div>
+                    {% if COMMENT_NEED_REVIEW %}
+                        <div class="text-xs mt-0.5">评论经审核后才会显示</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="flex space-x-3">
+                <!-- 取消回复按钮（条件显示） -->
+                <button type="button"
+                        id="cancel_comment"
+                        onclick="cancel_reply()"
+                        style="display: none;"
+                        class="px-6 py-2.5 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors inline-flex items-center space-x-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                    <span>取消回复</span>
+                </button>
+
+                <!-- 提交按钮 -->
+                <button type="submit"
+                        id="submit-comment-btn"
+                        class="px-6 py-2.5 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-all shadow-md hover:shadow-lg inline-flex items-center space-x-2 font-medium">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                    </svg>
+                    <span>发表评论</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Markdown快速指南 -->
+        <details class="mt-4 p-4 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700">
+            <summary class="cursor-pointer text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-500 transition-colors">
+                Markdown语法指南
+            </summary>
+            <div class="mt-3 text-sm text-gray-600 dark:text-gray-400 space-y-2">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                    <div><code class="px-2 py-1 bg-gray-200 dark:bg-gray-800 rounded">**粗体**</code></div>
+                    <div><code class="px-2 py-1 bg-gray-200 dark:bg-gray-800 rounded">*斜体*</code></div>
+                    <div><code class="px-2 py-1 bg-gray-200 dark:bg-gray-800 rounded">`代码`</code></div>
+                    <div><code class="px-2 py-1 bg-gray-200 dark:bg-gray-800 rounded">[链接](url)</code></div>
+                    <div><code class="px-2 py-1 bg-gray-200 dark:bg-gray-800 rounded">- 列表</code></div>
+                    <div><code class="px-2 py-1 bg-gray-200 dark:bg-gray-800 rounded">> 引用</code></div>
+                </div>
+            </div>
+        </details>
+    </form>
+</div>
+
+<!-- 保留旧的JavaScript函数以兼容 -->
+<script>
+    // 这些函数由旧的jQuery代码使用，保留以确保兼容性
+    function do_reply(parentid) {
+        document.getElementById("id_parent_comment_id").value = parentid;
+        const form = document.getElementById("commentform");
+        const target = document.getElementById("div-comment-" + parentid);
+        if (target && form) {
+            target.appendChild(form);
+        }
+        const cancelBtn = document.getElementById("cancel_comment");
+        if (cancelBtn) cancelBtn.style.display = "inline-flex";
+    }
+
+    function cancel_reply() {
+        document.getElementById("id_parent_comment_id").value = '';
+        const form = document.getElementById("commentform");
+        const respond = document.getElementById("respond");
+        if (form && respond) {
+            respond.appendChild(form);
+        }
+        const cancelBtn = document.getElementById("cancel_comment");
+        if (cancelBtn) cancelBtn.style.display = "none";
+    }
+</script>
