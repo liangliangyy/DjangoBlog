@@ -195,31 +195,50 @@ body[data-color-scheme="teal"] {
   }
 
   /* 代码块 */
+  /* 内联代码 */
   code {
     @apply px-1.5 py-0.5 bg-gray-100 rounded text-sm;
-    @apply text-red-600;
+    color: #24292e;
     font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
   }
 
-  [data-theme="dark"] code {
-    @apply bg-gray-800 text-red-400;
+  /* 深色模式 - 内联代码 */
+  [data-theme="dark"] code,
+  [data-theme="dark"] kbd,
+  [data-theme="dark"] tt,
+  [data-theme="dark"] var {
+    background-color: #2d2d2d !important;
+    color: #d4d4d4 !important;
   }
 
+  /* 代码块容器 */
   pre {
-    @apply p-4 bg-gray-50 rounded-lg overflow-x-auto mb-4;
+    @apply p-4 rounded-lg overflow-x-auto mb-4;
+    background-color: #f9f9f9;
+    border: 1px solid #e1e4e8;
   }
 
+  /* 深色模式 - 代码块容器 */
   [data-theme="dark"] pre {
-    @apply bg-gray-900;
+    background-color: #1e1e1e !important;
+    color: #d4d4d4 !important;
+    border-color: #30363d;
   }
 
+  /* 代码块中的code标签 */
   pre code {
-    @apply p-0 bg-transparent text-gray-900;
+    @apply p-0 bg-transparent;
     font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    color: #24292e;
+    border: none;
   }
 
+  /* 深色模式 - 代码块中的code */
   [data-theme="dark"] pre code {
-    @apply text-gray-100;
+    background-color: transparent !important;
+    color: #d4d4d4 !important;
+    padding: 0;
+    border: none;
   }
 
   /* 表格 */
@@ -985,30 +1004,54 @@ body[data-color-scheme="teal"] {
 
   /* 文章内容中的代码块覆盖 */
   .entry-content pre {
-    @apply p-4 bg-gray-50 rounded-lg overflow-x-auto;
+    @apply p-4 rounded-lg overflow-x-auto;
+    background-color: #f9f9f9;
+    border: 1px solid #e1e4e8;
   }
 
-  [data-theme="dark"] .entry-content pre {
-    @apply bg-gray-900;
+  [data-theme="dark"] .entry-content pre,
+  [data-theme="dark"] .comment-content pre {
+    background-color: #1e1e1e !important;
+    color: #d4d4d4 !important;
+    border-color: #30363d;
   }
 
   .entry-content pre code {
-    @apply p-0 bg-transparent text-gray-900;
+    @apply p-0 bg-transparent;
     font-size: 0.875rem;
     line-height: 1.7;
+    color: #24292e;
   }
 
-  [data-theme="dark"] .entry-content pre code {
-    @apply text-gray-100;
+  [data-theme="dark"] .entry-content pre code,
+  [data-theme="dark"] .entry-content code,
+  [data-theme="dark"] .comment-content code {
+    color: #d4d4d4 !important;
+    background-color: transparent !important;
   }
 
+  /* 内联代码（不在pre中的） */
   .entry-content code:not(pre code) {
-    @apply px-2 py-1 bg-gray-100 text-red-600 rounded;
+    @apply px-2 py-1 rounded;
+    background-color: #f6f8fa;
+    color: #24292e;
     font-size: 0.875em;
+    border: 1px solid #e1e4e8;
   }
 
-  [data-theme="dark"] .entry-content code:not(pre code) {
-    @apply bg-gray-800 text-red-400;
+  [data-theme="dark"] .entry-content code:not(pre code),
+  [data-theme="dark"] .comment-content code:not(pre code) {
+    background-color: #2d2d2d !important;
+    color: #d4d4d4 !important;
+    border-color: #30363d;
+  }
+
+  /* 移除 Tailwind Typography 自动添加的反引号 */
+  .entry-content code:not(pre code)::before,
+  .entry-content code:not(pre code)::after,
+  .comment-content code:not(pre code)::before,
+  .comment-content code:not(pre code)::after {
+    content: none !important;
   }
 
   /* 文章列表 */
@@ -1879,7 +1922,43 @@ body[data-color-scheme="teal"] {
 
 /* ==================== 插件样式适配 ==================== */
 
-/* ========== Dark Mode 插件适配 ========== */
+/* ========== Dark Mode 核心样式 ========== */
+/* CSS变量系统 - Solarized Dark风格 */
+:root {
+  /* 亮色主题变量 */
+  --dm-bg-primary: #ffffff;
+  --dm-bg-secondary: #f4f4f4;
+  --dm-bg-tertiary: #e6e6e6;
+
+  --dm-text-primary: #444444;
+  --dm-text-secondary: #757575;
+
+  --dm-link-color: #21759b;
+  --dm-link-hover: #0f3647;
+
+  --dm-border-color: #cccccc;
+  --dm-shadow: rgba(64, 64, 64, 0.1);
+
+  /* 过渡时长 */
+  --dm-transition: 300ms;
+}
+
+/* 暗色主题变量覆盖 */
+html[data-theme="dark"] {
+  --dm-bg-primary: #002b36;
+  --dm-bg-secondary: #073642;
+  --dm-bg-tertiary: #0e4450;
+
+  --dm-text-primary: #93a1a1;
+  --dm-text-secondary: #839496;
+
+  --dm-link-color: #2aa198;
+  --dm-link-hover: #3bc1b6;
+
+  --dm-border-color: #073642;
+  --dm-shadow: rgba(0, 0, 0, 0.3);
+}
+
 /* 深色模式切换按钮 */
 .dark-mode-toggle-fixed {
   @apply fixed top-5 right-5 z-50;
@@ -1898,6 +1977,19 @@ body[data-color-scheme="teal"] {
 
 .dark-mode-toggle-btn:active {
   @apply scale-95;
+}
+
+/* 图标切换 */
+.dark-mode-toggle-btn .icon-dark {
+  display: none;
+}
+
+html[data-theme="dark"] .dark-mode-toggle-btn .icon-light {
+  display: none;
+}
+
+html[data-theme="dark"] .dark-mode-toggle-btn .icon-dark {
+  display: inline;
 }
 
 /* ========== Article Recommendation 插件适配 ========== */
@@ -2158,11 +2250,107 @@ img[loading="lazy"][src] {
 /* ==================== Pygments 代码高亮兼容 ==================== */
 .codehilite {
   @apply rounded-lg overflow-hidden mb-4;
+  background-color: #f9f9f9;
+  border: 1px solid #e1e4e8;
+}
+
+/* 深色模式 - Pygments代码高亮 */
+[data-theme="dark"] .codehilite {
+  background-color: #1e1e1e !important;
+  border-color: #30363d;
 }
 
 .codehilite pre {
   @apply m-0;
+  background-color: transparent;
 }
+
+[data-theme="dark"] .codehilite pre {
+  color: #d4d4d4 !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+[data-theme="dark"] .codehilite code {
+  color: #d4d4d4 !important;
+  background-color: transparent !important;
+}
+
+/* 深色模式 - Pygments Token 颜色覆盖（VS Code Dark+ 风格） */
+[data-theme="dark"] .codehilite .hll { background-color: #49483e !important; }
+[data-theme="dark"] .codehilite .c { color: #6a9955 !important; } /* Comment */
+[data-theme="dark"] .codehilite .err { color: #f48771 !important; } /* Error */
+[data-theme="dark"] .codehilite .k { color: #c586c0 !important; } /* Keyword */
+[data-theme="dark"] .codehilite .l { color: #ce9178 !important; } /* Literal */
+[data-theme="dark"] .codehilite .n { color: #9cdcfe !important; } /* Name */
+[data-theme="dark"] .codehilite .o { color: #d4d4d4 !important; } /* Operator */
+[data-theme="dark"] .codehilite .p { color: #d4d4d4 !important; } /* Punctuation */
+[data-theme="dark"] .codehilite .ch { color: #6a9955 !important; } /* Comment.Hashbang */
+[data-theme="dark"] .codehilite .cm { color: #6a9955 !important; } /* Comment.Multiline */
+[data-theme="dark"] .codehilite .cp { color: #c586c0 !important; } /* Comment.Preproc */
+[data-theme="dark"] .codehilite .cpf { color: #6a9955 !important; } /* Comment.PreprocFile */
+[data-theme="dark"] .codehilite .c1 { color: #6a9955 !important; } /* Comment.Single */
+[data-theme="dark"] .codehilite .cs { color: #6a9955 !important; } /* Comment.Special */
+[data-theme="dark"] .codehilite .gd { color: #f48771 !important; } /* Generic.Deleted */
+[data-theme="dark"] .codehilite .ge { font-style: italic !important; } /* Generic.Emph */
+[data-theme="dark"] .codehilite .gr { color: #f48771 !important; } /* Generic.Error */
+[data-theme="dark"] .codehilite .gh { color: #4ec9b0 !important; font-weight: bold !important; } /* Generic.Heading */
+[data-theme="dark"] .codehilite .gi { color: #b5cea8 !important; } /* Generic.Inserted */
+[data-theme="dark"] .codehilite .go { color: #808080 !important; } /* Generic.Output */
+[data-theme="dark"] .codehilite .gp { color: #808080 !important; font-weight: bold !important; } /* Generic.Prompt */
+[data-theme="dark"] .codehilite .gs { font-weight: bold !important; } /* Generic.Strong */
+[data-theme="dark"] .codehilite .gu { color: #4ec9b0 !important; font-weight: bold !important; } /* Generic.Subheading */
+[data-theme="dark"] .codehilite .gt { color: #f48771 !important; } /* Generic.Traceback */
+[data-theme="dark"] .codehilite .kc { color: #569cd6 !important; } /* Keyword.Constant */
+[data-theme="dark"] .codehilite .kd { color: #569cd6 !important; } /* Keyword.Declaration */
+[data-theme="dark"] .codehilite .kn { color: #c586c0 !important; } /* Keyword.Namespace */
+[data-theme="dark"] .codehilite .kp { color: #569cd6 !important; } /* Keyword.Pseudo */
+[data-theme="dark"] .codehilite .kr { color: #569cd6 !important; } /* Keyword.Reserved */
+[data-theme="dark"] .codehilite .kt { color: #4ec9b0 !important; } /* Keyword.Type */
+[data-theme="dark"] .codehilite .ld { color: #ce9178 !important; } /* Literal.Date */
+[data-theme="dark"] .codehilite .m { color: #b5cea8 !important; } /* Literal.Number */
+[data-theme="dark"] .codehilite .s { color: #ce9178 !important; } /* Literal.String */
+[data-theme="dark"] .codehilite .na { color: #9cdcfe !important; } /* Name.Attribute */
+[data-theme="dark"] .codehilite .nb { color: #dcdcaa !important; } /* Name.Builtin */
+[data-theme="dark"] .codehilite .nc { color: #4ec9b0 !important; } /* Name.Class */
+[data-theme="dark"] .codehilite .no { color: #4ec9b0 !important; } /* Name.Constant */
+[data-theme="dark"] .codehilite .nd { color: #dcdcaa !important; } /* Name.Decorator */
+[data-theme="dark"] .codehilite .ni { color: #4ec9b0 !important; } /* Name.Entity */
+[data-theme="dark"] .codehilite .ne { color: #4ec9b0 !important; } /* Name.Exception */
+[data-theme="dark"] .codehilite .nf { color: #dcdcaa !important; } /* Name.Function */
+[data-theme="dark"] .codehilite .nl { color: #9cdcfe !important; } /* Name.Label */
+[data-theme="dark"] .codehilite .nn { color: #4ec9b0 !important; } /* Name.Namespace */
+[data-theme="dark"] .codehilite .nx { color: #9cdcfe !important; } /* Name.Other */
+[data-theme="dark"] .codehilite .py { color: #9cdcfe !important; } /* Name.Property */
+[data-theme="dark"] .codehilite .nt { color: #569cd6 !important; } /* Name.Tag */
+[data-theme="dark"] .codehilite .nv { color: #9cdcfe !important; } /* Name.Variable */
+[data-theme="dark"] .codehilite .ow { color: #569cd6 !important; } /* Operator.Word */
+[data-theme="dark"] .codehilite .w { color: #d4d4d4 !important; } /* Text.Whitespace */
+[data-theme="dark"] .codehilite .mb { color: #b5cea8 !important; } /* Literal.Number.Bin */
+[data-theme="dark"] .codehilite .mf { color: #b5cea8 !important; } /* Literal.Number.Float */
+[data-theme="dark"] .codehilite .mh { color: #b5cea8 !important; } /* Literal.Number.Hex */
+[data-theme="dark"] .codehilite .mi { color: #b5cea8 !important; } /* Literal.Number.Integer */
+[data-theme="dark"] .codehilite .mo { color: #b5cea8 !important; } /* Literal.Number.Oct */
+[data-theme="dark"] .codehilite .sa { color: #ce9178 !important; } /* Literal.String.Affix */
+[data-theme="dark"] .codehilite .sb { color: #ce9178 !important; } /* Literal.String.Backtick */
+[data-theme="dark"] .codehilite .sc { color: #ce9178 !important; } /* Literal.String.Char */
+[data-theme="dark"] .codehilite .dl { color: #ce9178 !important; } /* Literal.String.Delimiter */
+[data-theme="dark"] .codehilite .sd { color: #6a9955 !important; } /* Literal.String.Doc */
+[data-theme="dark"] .codehilite .s2 { color: #ce9178 !important; } /* Literal.String.Double */
+[data-theme="dark"] .codehilite .se { color: #d7ba7d !important; } /* Literal.String.Escape */
+[data-theme="dark"] .codehilite .sh { color: #ce9178 !important; } /* Literal.String.Heredoc */
+[data-theme="dark"] .codehilite .si { color: #d7ba7d !important; } /* Literal.String.Interpol */
+[data-theme="dark"] .codehilite .sx { color: #ce9178 !important; } /* Literal.String.Other */
+[data-theme="dark"] .codehilite .sr { color: #d16969 !important; } /* Literal.String.Regex */
+[data-theme="dark"] .codehilite .s1 { color: #ce9178 !important; } /* Literal.String.Single */
+[data-theme="dark"] .codehilite .ss { color: #ce9178 !important; } /* Literal.String.Symbol */
+[data-theme="dark"] .codehilite .bp { color: #dcdcaa !important; } /* Name.Builtin.Pseudo */
+[data-theme="dark"] .codehilite .fm { color: #dcdcaa !important; } /* Name.Function.Magic */
+[data-theme="dark"] .codehilite .vc { color: #9cdcfe !important; } /* Name.Variable.Class */
+[data-theme="dark"] .codehilite .vg { color: #9cdcfe !important; } /* Name.Variable.Global */
+[data-theme="dark"] .codehilite .vi { color: #9cdcfe !important; } /* Name.Variable.Instance */
+[data-theme="dark"] .codehilite .vm { color: #9cdcfe !important; } /* Name.Variable.Magic */
+[data-theme="dark"] .codehilite .il { color: #b5cea8 !important; } /* Literal.Number.Integer.Long */
 
 /* ==================== 响应式优化 ==================== */
 @media (max-width: 768px) {

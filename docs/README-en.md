@@ -2,6 +2,7 @@
 
 <p align="center">
   <a href="https://github.com/liangliangyy/DjangoBlog/actions/workflows/django.yml"><img src="https://github.com/liangliangyy/DjangoBlog/actions/workflows/django.yml/badge.svg" alt="Django CI"></a>
+  <a href="https://github.com/liangliangyy/DjangoBlog/actions/workflows/frontend.yml"><img src="https://github.com/liangliangyy/DjangoBlog/actions/workflows/frontend.yml/badge.svg" alt="Frontend CI"></a>
   <a href="https://github.com/liangliangyy/DjangoBlog/actions/workflows/codeql-analysis.yml"><img src="https://github.com/liangliangyy/DjangoBlog/actions/workflows/codeql-analysis.yml/badge.svg" alt="CodeQL"></a>
   <a href="https://codecov.io/gh/liangliangyy/DjangoBlog"><img src="https://codecov.io/gh/liangliangyy/DjangoBlog/branch/master/graph/badge.svg" alt="codecov"></a>
   <a href="https://github.com/liangliangyy/DjangoBlog/blob/master/LICENSE"><img src="https://img.shields.io/github/license/liangliangyy/djangoblog.svg" alt="license"></a>
@@ -21,15 +22,16 @@ DjangoBlog is a high-performance blog platform built with Python 3.10+ and Djang
 
 - **Powerful Content Management**: Full support for managing articles, standalone pages, categories, and tags. Comes with a powerful built-in Markdown editor with syntax highlighting.
 - **Full-Text Search**: Integrated Elasticsearch/Whoosh search engine for fast and accurate content searching, with keyword highlighting support.
-- **Interactive Comment System**: Supports replies, email notifications, and Markdown formatting in comments.
+- **Interactive Comment System**: Supports replies, email notifications, and Markdown formatting in comments. Modern comment interface with infinite nested replies.
 - **Flexible Sidebar**: Customizable modules for displaying recent articles, most viewed posts, tag cloud, and more.
 - **Social Login**: Built-in OAuth support, with integrations for Google, GitHub, Facebook, Weibo, QQ, and other major platforms.
-- **Dark Mode Support**: Toggle between light and dark themes with system preference support for comfortable reading experience.
+- **Dark Mode Support**: Toggle between light and dark themes with system preference support for comfortable reading experience. Anti-FOUC (Flash of Unstyled Content) implementation.
+- **Modern Frontend**: Built with Alpine.js + Tailwind CSS + HTMX, providing SPA-like navigation experience with HTML-over-the-wire architecture.
 - **High-Performance Caching**: Native support for Redis caching with an automatic refresh mechanism to ensure high-speed website responses.
 - **SEO Friendly**: Basic SEO features are included, with automatic notifications to Google and Baidu upon new content publication.
 - **Extensible Plugin System**: Extend blog functionalities by creating standalone plugins, ensuring decoupled and maintainable code. 8 built-in plugins including view counting, SEO optimization, article recommendations, lazy image loading, and more!
 - **Integrated Image Hosting**: A simple, built-in image hosting feature for easy uploads and management.
-- **Automated Frontend**: Integrated with `django-compressor` to automatically compress and optimize CSS and JavaScript files.
+- **Automated Build**: Uses Vite to build frontend assets with hot reload and automatic optimization.
 - **Robust Operations**: Built-in email notifications for website exceptions and management capabilities through a WeChat Official Account.
 
 ## 🛠️ Tech Stack
@@ -37,7 +39,7 @@ DjangoBlog is a high-performance blog platform built with Python 3.10+ and Djang
 - **Backend**: Python 3.10+, Django 5.2
 - **Database**: MySQL, SQLite (configurable)
 - **Cache**: Redis, LocalMem (configurable)
-- **Frontend**: HTML5, CSS3, JavaScript
+- **Frontend**: Alpine.js 3.13, Tailwind CSS 3.4, HTMX 2.0, Vite 5.4
 - **Search**: Whoosh, Elasticsearch (configurable)
 - **Editor**: Markdown (mdeditor)
 
@@ -93,14 +95,32 @@ python manage.py migrate
 python manage.py createsuperuser
 ```
 
-### 5. Running the Project
+### 5. Build Frontend Assets
+
+```bash
+# Navigate to frontend directory
+cd frontend
+
+# Install dependencies (required for first run)
+npm install
+
+# Build production assets
+npm run build
+
+# Return to project root
+cd ..
+```
+
+### 6. Running the Project
 
 ```bash
 # (Optional) Generate some test data
 python manage.py create_testdata
 
-# (Optional) Collect and compress static files
+# Collect static files
 python manage.py collectstatic --noinput
+
+# (Optional) Compress static files
 python manage.py compress --force
 
 # Start the development server
@@ -108,6 +128,18 @@ python manage.py runserver
 ```
 
 Now, open your browser and navigate to `http://127.0.0.1:8000/`. You should see the DjangoBlog homepage!
+
+### Development Mode
+
+If you need to develop frontend code, you can use Vite's hot reload feature:
+
+```bash
+# Start development server in frontend directory
+cd frontend
+npm run dev
+```
+
+This will start the Vite development server, and frontend code changes will be automatically rebuilt.
 
 ## Deployment
 
@@ -124,12 +156,12 @@ The plugin system is a core feature of DjangoBlog. It allows you to add new func
 - **Built-in Plugins**: The project includes the following useful plugins
   - `view_count` - Article view counter
   - `seo_optimizer` - SEO optimization enhancements
-  - `article_copyright` - Article copyright notices
-  - `article_recommendation` - Smart article recommendations
-  - `external_links` - External link handling
-  - `image_lazy_loading` - Image lazy loading optimization
+  - `article_copyright` - Article copyright notices (modern style)
+  - `article_recommendation` - Smart article recommendations (responsive card layout)
+  - `external_links` - External link handling (automatic icon addition)
+  - `image_lazy_loading` - Image lazy loading optimization (fade-in animation)
   - `reading_time` - Article reading time estimation
-  - `dark_mode` - Dark/light theme switcher
+  - `cloudflare_cache` - Cloudflare cache management
 
 - **Develop Your Own Plugin**: Simply create a new folder under the `plugins` directory and write your `plugin.py`. We welcome you to explore and contribute your creative ideas to the DjangoBlog community!
 

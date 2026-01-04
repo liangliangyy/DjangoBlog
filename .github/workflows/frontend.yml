@@ -1,0 +1,235 @@
+name: Frontend CI
+
+on:
+  push:
+    branches:
+      - master
+      - dev
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/frontend.yml'
+  pull_request:
+    branches:
+      - master
+      - dev
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/frontend.yml'
+
+jobs:
+  build-and-validate:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18, 20]
+
+    name: Frontend Build & Validation (Node ${{ matrix.node-version }})
+
+    steps:
+      - name: Checkout代码
+        uses: actions/checkout@v4
+
+      - name: 设置Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: 'frontend/package-lock.json'
+
+      # 缓存node_modules
+      - name: 缓存Node模块
+        uses: actions/cache@v4
+        with:
+          path: |
+            frontend/node_modules
+            ~/.npm
+          key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ matrix.node-version }}-
+            ${{ runner.os }}-node-
+
+      - name: 安装依赖
+        working-directory: ./frontend
+        run: |
+          echo "📦 安装前端依赖 (Node ${{ matrix.node-version }})"
+          npm ci
+
+          # 验证关键依赖
+          echo "🔍 验证关键依赖"
+          npm list alpinejs
+          npm list htmx.org
+          npm list tailwindcss
+          npm list vite
+
+      - name: 构建前端资源
+        working-directory: ./frontend
+        run: |
+          echo "🔨 构建前端资源"
+          npm run build
+
+          # 验证构建产物
+          echo "✅ 验证构建产物"
+          ls -lh ../blog/static/blog/dist/
+
+          # 检查关键文件是否存在
+          if [ ! -f "../blog/static/blog/dist/.vite/manifest.json" ]; then
+            echo "❌ manifest.json 不存在"
+            exit 1
+          fi
+
+          # 检查是否有CSS文件
+          css_files=$(find ../blog/static/blog/dist/css -name "*.css" | wc -l)
+          if [ "$css_files" -eq 0 ]; then
+            echo "❌ 没有找到CSS文件"
+            exit 1
+          fi
+          echo "✅ 找到 $css_files 个CSS文件"
+
+          # 检查是否有JS文件
+          js_files=$(find ../blog/static/blog/dist/js -name "*.js" | wc -l)
+          if [ "$js_files" -eq 0 ]; then
+            echo "❌ 没有找到JS文件"
+            exit 1
+          fi
+          echo "✅ 找到 $js_files 个JS文件"
+
+      - name: 检查文件大小
+        working-directory: ./frontend
+        run: |
+          echo "📊 检查构建产物大小"
+
+          # 获取CSS文件大小
+          css_file=$(find ../blog/static/blog/dist/css -name "main-*.css" | head -1)
+          if [ -f "$css_file" ]; then
+            css_size=$(stat -c%s "$css_file")
+            css_size_kb=$((css_size / 1024))
+            echo "   CSS大小: ${css_size_kb}KB"
+
+            # CSS文件大小警告阈值 (200KB)
+            if [ "$css_size_kb" -gt 200 ]; then
+              echo "⚠️  警告: CSS文件较大 (${css_size_kb}KB)"
+            fi
+          fi
+
+          # 获取JS文件总大小
+          js_total_size=$(find ../blog/static/blog/dist/js -name "*.js" -exec stat -c%s {} \; | awk '{sum+=$1} END {print sum}')
+          js_total_kb=$((js_total_size / 1024))
+          echo "   JS总大小: ${js_total_kb}KB"
+
+          # JS文件大小警告阈值 (200KB)
+          if [ "$js_total_kb" -gt 200 ]; then
+            echo "⚠️  警告: JS文件较大 (${js_total_kb}KB)"
+          fi
+
+      - name: 验证CSS语法
+        working-directory: ./frontend
+        run: |
+          echo "🎨 验证CSS文件"
+
+          # 检查CSS文件是否包含关键选择器
+          css_file=$(find ../blog/static/blog/dist/css -name "main-*.css" | head -1)
+
+          if [ -f "$css_file" ]; then
+            echo "✅ 检查CSS关键选择器"
+
+            # 检查深色模式支持
+            if grep -q "data-theme=dark" "$css_file"; then
+              echo "   ✅ 包含深色模式支持"
+            else
+              echo "   ❌ 缺少深色模式支持"
+              exit 1
+            fi
+
+            # 检查Tailwind基础类
+            if grep -q "@tailwind" "$css_file" || grep -q "tailwind" "$css_file" || grep -q ".container" "$css_file"; then
+              echo "   ✅ 包含Tailwind CSS"
+            else
+              echo "   ⚠️  可能缺少Tailwind CSS"
+            fi
+
+            # 检查代码块样式
+            if grep -q "codehilite" "$css_file" || grep -q "code" "$css_file"; then
+              echo "   ✅ 包含代码块样式"
+            else
+              echo "   ⚠️  可能缺少代码块样式"
+            fi
+          fi
+
+      - name: 验证JS语法
+        working-directory: ./frontend
+        run: |
+          echo "🔍 验证JS文件"
+
+          # 检查主JS文件
+          main_js=$(find ../blog/static/blog/dist/js -name "main-*.js" | head -1)
+
+          if [ -f "$main_js" ]; then
+            echo "✅ 检查JS模块"
+
+            # 检查Alpine.js
+            if grep -q "Alpine" "$main_js" || [ -f "$(find ../blog/static/blog/dist/js -name "alpine-*.js" | head -1)" ]; then
+              echo "   ✅ 包含Alpine.js"
+            else
+              echo "   ❌ 缺少Alpine.js"
+              exit 1
+            fi
+
+            # 检查HTMX
+            if grep -q "htmx" "$main_js" || [ -f "$(find ../blog/static/blog/dist/js -name "htmx-*.js" | head -1)" ]; then
+              echo "   ✅ 包含HTMX"
+            else
+              echo "   ❌ 缺少HTMX"
+              exit 1
+            fi
+          fi
+
+      - name: 检查manifest.json
+        working-directory: ./frontend
+        run: |
+          echo "📋 验证Vite manifest"
+
+          manifest="../blog/static/blog/dist/.vite/manifest.json"
+          if [ -f "$manifest" ]; then
+            echo "✅ manifest.json 存在"
+
+            # 验证JSON格式
+            if jq empty "$manifest" 2>/dev/null; then
+              echo "   ✅ JSON格式正确"
+
+              # 显示入口点
+              echo "   📝 入口点:"
+              jq -r 'keys[]' "$manifest" | sed 's/^/      - /'
+            else
+              echo "   ❌ JSON格式错误"
+              exit 1
+            fi
+          else
+            echo "❌ manifest.json 不存在"
+            exit 1
+          fi
+
+      - name: 构建统计
+        if: always()
+        working-directory: ./frontend
+        run: |
+          echo "📊 ============ 构建统计 ============"
+          echo "   🏷️  Node版本: ${{ matrix.node-version }}"
+          echo "   📦 构建状态: ${{ job.status }}"
+
+          # 文件统计
+          if [ -d "../blog/static/blog/dist/" ]; then
+            total_size=$(du -sh ../blog/static/blog/dist/ | cut -f1)
+            file_count=$(find ../blog/static/blog/dist/ -type f | wc -l)
+            echo "   📁 总文件数: $file_count"
+            echo "   💾 总大小: $total_size"
+          fi
+
+          echo "   📅 完成时间: $(date '+%Y-%m-%d %H:%M:%S')"
+          echo "======================================"
+
+          if [ "${{ job.status }}" = "success" ]; then
+            echo "🎉 前端构建成功！"
+          else
+            echo "❌ 前端构建失败，请检查上面的日志"
+          fi
