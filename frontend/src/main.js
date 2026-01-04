@@ -12,6 +12,9 @@ import intersect from '@alpinejs/intersect';
 import collapse from '@alpinejs/collapse';
 import htmx from 'htmx.org';
 
+// 导入Dark Mode（会自动初始化防闪烁）
+import { initDarkMode } from './features/darkMode.js';
+
 // 注册Alpine插件
 Alpine.plugin(focus);
 Alpine.plugin(intersect);
@@ -35,6 +38,9 @@ window.htmx = htmx;
 
 // 启动Alpine
 Alpine.start();
+
+// 初始化Dark Mode
+initDarkMode();
 
 // HTMX 配置
 htmx.config.defaultSwapStyle = 'innerHTML';

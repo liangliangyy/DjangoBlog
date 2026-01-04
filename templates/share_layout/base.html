@@ -16,9 +16,7 @@
 <html lang="zh-CN" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
 <!--<![endif]-->
 <head>
-    <!-- 插件关键head资源 - 必须在所有资源之前加载（防闪烁等关键脚本） -->
     {% load blog_tags %}
-    {% plugin_critical_head_resources %}
 
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -29,6 +27,37 @@
         <!-- SEO插件会自动生成title、description、keywords等标签 -->
     {% endblock %}
     <link rel="profile" href="http://gmpg.org/xfn/11"/>
+
+    <!-- 防闪烁脚本：必须在CSS加载前立即执行 -->
+    <script>
+        (function() {
+            const STORAGE_KEY = 'dark-mode-enabled';
+            const THEME_ATTR = 'data-theme';
+            const ENABLE_SYSTEM = true;
+
+            function getPreferredTheme() {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved !== null) return saved === 'dark' ? 'dark' : 'light';
+                if (ENABLE_SYSTEM && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    return 'dark';
+                }
+                return 'light';
+            }
+
+            function applyTheme(theme) {
+                if (theme === 'dark') {
+                    document.documentElement.setAttribute(THEME_ATTR, 'dark');
+                    if (document.body) document.body.setAttribute(THEME_ATTR, 'dark');
+                } else {
+                    document.documentElement.removeAttribute(THEME_ATTR);
+                    if (document.body) document.body.removeAttribute(THEME_ATTR);
+                }
+            }
+
+            // 立即应用主题（防止闪烁）
+            applyTheme(getPreferredTheme());
+        })();
+    </script>
 
     <!-- 资源提示和预加载优化 -->
     <link rel="dns-prefetch" href="//cdn.mathjax.org"/>
@@ -66,8 +95,6 @@
         {{ GLOBAL_HEADER|safe }}
     {% endif %}
 
-    <!-- 插件head资源 -->
-    {% plugin_head_resources %}
 </head>
 
 <body class="home blog custom-font-enabled" data-color-scheme="{{ COLOR_SCHEME|default:'purple' }}" x-data="{ searchOpen: false }">
@@ -172,8 +199,18 @@
 {% block footer %}
 {% endblock %}
 
-<!-- 插件body资源 -->
-{% plugin_body_resources %}
+<!-- 深色模式切换按钮 -->
+<div class="dark-mode-toggle-fixed">
+    <button type="button"
+            id="dark-mode-toggle-btn"
+            class="dark-mode-toggle-btn"
+            aria-label="切换主题"
+            title="切换黑夜模式"
+            @click="window.DarkMode && window.DarkMode.toggle()">
+        <span class="icon-light">☀️</span>
+        <span class="icon-dark">🌙</span>
+    </button>
+</div>
 
 <!-- 回到顶部按钮 - Alpine.js组件 -->
 <div x-data="backToTop()"

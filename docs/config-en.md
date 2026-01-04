@@ -96,3 +96,57 @@ This project currently uses Django 5.2.9, which has been thoroughly tested and r
 - Run database migrations: `python manage.py migrate`
 - Update dependencies: `pip install -r requirements.txt`
 
+## Frontend Development Configuration
+
+### Tech Stack
+
+- **Alpine.js 3.13**: Lightweight reactive framework
+- **Tailwind CSS 3.4**: Utility-first CSS framework
+- **HTMX 2.0**: HTML-over-the-wire architecture
+- **Vite 5.4**: Modern build tool
+
+### Development Mode
+
+When developing frontend code, you can use Vite's hot reload feature:
+
+```bash
+cd frontend
+npm run dev
+```
+
+This will start the Vite development server (default port 5173), and frontend code changes will be automatically rebuilt and refreshed in the browser.
+
+### Production Build
+
+```bash
+cd frontend
+npm run build
+```
+
+Build outputs will be generated to `blog/static/blog/dist/` directory, including:
+- CSS files (compiled with Tailwind JIT and compressed)
+- JavaScript files (code-split and minified)
+- Vite manifest file (for asset mapping)
+
+### Dark Mode
+
+The project has built-in dark mode support:
+
+- **Auto-switching**: Follows system theme preferences automatically
+- **Persistence**: User choice is saved to localStorage
+- **No Flash**: Seamless theme loading without white screen flash
+- **Keyboard Shortcut**: `Ctrl+Shift+D` / `Cmd+Shift+D` for quick toggling
+
+Users can manually toggle the theme using the button in the top-right corner of the page.
+
+### Color Schemes
+
+Supports 8 color themes, configurable in `djangoblog/settings.py`:
+
+```python
+# Set in template context
+COLOR_SCHEME = 'purple'  # purple, blue, green, orange, pink, red, indigo, teal
+```
+
+Color schemes are implemented through CSS variables system and do not require rebuilding frontend assets after changes.
+

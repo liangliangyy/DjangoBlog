@@ -98,3 +98,57 @@ CSRF_TRUSTED_ORIGINS = [
 - 运行数据库迁移：`python manage.py migrate`
 - 更新依赖：`pip install -r requirements.txt`
 
+## 前端开发配置
+
+### 技术栈
+
+- **Alpine.js 3.13**: 轻量级响应式框架
+- **Tailwind CSS 3.4**: 实用优先的 CSS 框架
+- **HTMX 2.0**: HTML-over-the-wire 架构
+- **Vite 5.4**: 现代化构建工具
+
+### 开发模式
+
+在开发前端代码时，可以使用 Vite 的热更新功能：
+
+```bash
+cd frontend
+npm run dev
+```
+
+这将启动 Vite 开发服务器（默认端口 5173），修改前端代码后会自动重新构建和刷新浏览器。
+
+### 生产构建
+
+```bash
+cd frontend
+npm run build
+```
+
+构建产物将输出到 `blog/static/blog/dist/` 目录，包括：
+- CSS 文件（经过 Tailwind JIT 编译和压缩）
+- JavaScript 文件（经过代码分割和压缩）
+- Vite manifest 文件（用于资源映射）
+
+### 深色模式
+
+项目内置深色模式功能：
+
+- **自动切换**: 支持跟随系统主题自动切换
+- **持久化**: 用户选择会保存到 localStorage
+- **防闪烁**: 页面加载时无白屏闪烁
+- **快捷键**: 支持 `Ctrl+Shift+D` / `Cmd+Shift+D` 快速切换
+
+用户可以通过页面右上角的按钮手动切换主题。
+
+### 配色方案
+
+支持 8 种配色主题，可在 `djangoblog/settings.py` 中配置：
+
+```python
+# 在模板中设置
+COLOR_SCHEME = 'purple'  # purple, blue, green, orange, pink, red, indigo, teal
+```
+
+配色方案通过 CSS 变量系统实现，修改后无需重新构建前端资源。
+

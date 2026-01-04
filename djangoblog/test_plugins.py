@@ -146,27 +146,6 @@ class PluginLoaderTest(TestCase):
             self.assertIsInstance(plugins, list)
 
 
-class DarkModePluginTest(BaseTestCase, PluginTestMixin):
-    """测试暗黑模式插件"""
-
-    def test_dark_mode_plugin_loaded(self):
-        """测试暗黑模式插件已加载"""
-        from plugins.dark_mode.plugin import DarkModePlugin
-        plugin = DarkModePlugin()
-        self.assertEqual(plugin.PLUGIN_NAME, '黑夜模式')
-
-    def test_dark_mode_hook(self):
-        """测试暗黑模式钩子"""
-        from plugins.dark_mode.plugin import DarkModePlugin
-        plugin = DarkModePlugin()
-        plugin.register_hooks()
-
-        context = self.create_plugin_context()
-        result = hooks.apply_filters(HEAD_RESOURCES_HOOK, context)
-        # 应该注入暗黑模式相关代码
-        self.assertIsNotNone(result)
-
-
 class ReadingTimePluginTest(BaseTestCase, PluginTestMixin):
     """测试阅读时间插件"""
 

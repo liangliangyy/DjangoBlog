@@ -2,6 +2,7 @@
 
 <p align="center">
   <a href="https://github.com/liangliangyy/DjangoBlog/actions/workflows/django.yml"><img src="https://github.com/liangliangyy/DjangoBlog/actions/workflows/django.yml/badge.svg" alt="Django CI"></a>
+  <a href="https://github.com/liangliangyy/DjangoBlog/actions/workflows/frontend.yml"><img src="https://github.com/liangliangyy/DjangoBlog/actions/workflows/frontend.yml/badge.svg" alt="Frontend CI"></a>
   <a href="https://github.com/liangliangyy/DjangoBlog/actions/workflows/codeql-analysis.yml"><img src="https://github.com/liangliangyy/DjangoBlog/actions/workflows/codeql-analysis.yml/badge.svg" alt="CodeQL"></a>
  <a href="https://codecov.io/gh/liangliangyy/DjangoBlog" > 
  <img src="https://codecov.io/gh/liangliangyy/DjangoBlog/branch/master/graph/badge.svg?token=vmnMtzuFqN"/> 
@@ -162,7 +163,6 @@ npm run dev
   - `external_links` - 外部链接处理（自动添加图标）
   - `image_lazy_loading` - 图片懒加载优化（淡入动画）
   - `reading_time` - 文章阅读时间估算
-  - `dark_mode` - 黑夜模式主题切换（与 Tailwind 完美集成）
   - `cloudflare_cache` - Cloudflare 缓存管理
 
 - **开发您自己的插件**: 只需在 `plugins` 目录下创建一个新的文件夹，并编写您的 `plugin.py`。欢迎探索并为 DjangoBlog 社区贡献您的创意！
