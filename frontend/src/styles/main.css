@@ -213,9 +213,12 @@ body[data-color-scheme="teal"] {
 
   /* 代码块容器 */
   pre {
-    @apply p-4 rounded-lg overflow-x-auto mb-4;
+    @apply p-3 md:p-4 rounded-lg overflow-x-auto mb-4;
+    @apply text-sm md:text-base;
     background-color: #f9f9f9;
     border: 1px solid #e1e4e8;
+    max-width: 100%;
+    -webkit-overflow-scrolling: touch;
   }
 
   /* 深色模式 - 代码块容器 */
@@ -228,9 +231,11 @@ body[data-color-scheme="teal"] {
   /* 代码块中的code标签 */
   pre code {
     @apply p-0 bg-transparent;
+    @apply text-sm md:text-base;
     font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
     color: #24292e;
     border: none;
+    display: block;
   }
 
   /* 深色模式 - 代码块中的code */
@@ -382,7 +387,7 @@ body[data-color-scheme="teal"] {
   .header-content {
     @apply flex items-center justify-between px-3 md:px-6 py-6 md:py-8;
     @apply max-w-7xl mx-auto;
-    @apply gap-3 md:gap-6;
+    @apply gap-4 md:gap-6;
     @apply relative;
   }
 
@@ -421,7 +426,7 @@ body[data-color-scheme="teal"] {
   }
 
   .site-title {
-    @apply text-5xl md:text-6xl lg:text-7xl font-bold;
+    @apply text-4xl md:text-6xl lg:text-7xl font-bold;
     @apply mb-2;
     @apply truncate;
   }
@@ -534,7 +539,7 @@ body[data-color-scheme="teal"] {
 
   .header-icon-btn {
     @apply flex items-center justify-center;
-    @apply w-11 h-11 rounded-full;
+    @apply w-12 h-12 md:w-11 md:h-11 rounded-full;  /* 移动端48px，符合触摸标准 */
     @apply text-gray-700 dark:text-gray-300;
     @apply bg-white dark:bg-gray-800;
     @apply hover:bg-gradient-to-br hover:from-primary-500 hover:to-purple-600;
@@ -547,7 +552,7 @@ body[data-color-scheme="teal"] {
   }
 
   .header-icon-btn svg {
-    @apply w-7 h-7;
+    @apply w-5 h-5 md:w-7 md:h-7;
   }
 
   /* 搜索框 - 下拉式（在搜索图标下方） */
@@ -647,7 +652,8 @@ body[data-color-scheme="teal"] {
     @apply hover:bg-gradient-to-r hover:from-primary-500 hover:to-purple-600 hover:text-white;
     @apply transition-all duration-300;
     @apply flex items-center gap-1.5;
-    @apply font-medium text-sm;
+    @apply font-medium;
+    @apply text-base md:text-lg;  /* 移动端16px，桌面端18px */
     @apply shadow-sm hover:shadow-md;
     @apply border border-transparent hover:border-primary-300;
     @apply transform hover:scale-105;
@@ -866,6 +872,21 @@ body[data-color-scheme="teal"] {
     @apply px-3 py-1.5 rounded-md;
     @apply bg-white dark:bg-gray-800;
     @apply border border-gray-200 dark:border-gray-700;
+  }
+
+  /* 备案信息 */
+  .footer-beian {
+    @apply text-center py-4;
+  }
+
+  .footer-beian-link {
+    @apply inline-block hover:opacity-80 transition-opacity;
+  }
+
+  .footer-beian-text {
+    @apply text-gray-500 dark:text-gray-400;
+    @apply text-sm leading-5;
+    @apply m-0;
   }
 
   /* 响应式调整 */
@@ -1414,6 +1435,13 @@ body[data-color-scheme="teal"] {
   .children {
     @apply mt-4 space-y-4;
     @apply border-l-2 border-gray-200 dark:border-gray-700 pl-4;
+  }
+
+  /* 移动端嵌套评论更细的边框 */
+  @media (max-width: 768px) {
+    .children {
+      @apply border-l pl-2;
+    }
   }
 
   /* 评论缩进 - PC端（桌面） */
@@ -2249,9 +2277,12 @@ img[loading="lazy"][src] {
 
 /* ==================== Pygments 代码高亮兼容 ==================== */
 .codehilite {
-  @apply rounded-lg overflow-hidden mb-4;
+  @apply rounded-lg overflow-x-auto mb-4;
   background-color: #f9f9f9;
   border: 1px solid #e1e4e8;
+  /* 移动端优化 */
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* 深色模式 - Pygments代码高亮 */
@@ -2263,6 +2294,11 @@ img[loading="lazy"][src] {
 .codehilite pre {
   @apply m-0;
   background-color: transparent;
+  /* 移动端字号优化 */
+  @apply text-sm md:text-base;
+  /* 确保内容不会溢出 */
+  white-space: pre;
+  overflow-x: auto;
 }
 
 [data-theme="dark"] .codehilite pre {
@@ -2274,6 +2310,14 @@ img[loading="lazy"][src] {
 [data-theme="dark"] .codehilite code {
   color: #d4d4d4 !important;
   background-color: transparent !important;
+  /* 移动端字号 */
+  @apply text-sm md:text-base;
+}
+
+.codehilite code {
+  /* 移动端字号 */
+  @apply text-sm md:text-base;
+  display: block;
 }
 
 /* 深色模式 - Pygments Token 颜色覆盖（VS Code Dark+ 风格） */

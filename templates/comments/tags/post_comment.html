@@ -3,7 +3,7 @@
     <div id="respond" class="comment-respond">
         <h3 id="reply-title" class="comment-reply-title">发表评论
             <small><a rel="nofollow" id="cancel-comment-reply-link" href="/wordpress/?p=3786#respond"
-                      style="display:none;">取消回复</a></small>
+                      class="hidden">取消回复</a></small>
         </h3>
         <form action="{% url 'comments:postcomment' article.pk %}" method="post" id="commentform"
               class="comment-form">{% csrf_token %}
@@ -21,7 +21,7 @@
                     <span class="comment-markdown"> 支持markdown。</span>
                 {% endif %}
                 <input name="submit" type="submit" id="submit" class="submit" value="发表评论"/>
-                <small class="cancel-comment" id="cancel_comment" style="display: none">
+                <small class="cancel-comment hidden" id="cancel_comment">
                     <a href="javascript:void(0)" id="cancel-comment-reply-link" onclick="cancel_reply()">取消回复</a>
                 </small>
             </div>

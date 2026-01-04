@@ -7,7 +7,7 @@
         <div class="panel-body">
 
             {% for url,count,tag,color in article_tags_list %}
-                <a class="label label-{{ color }}" style="display: inline-block;" href="{{ url }}"
+                <a class="label label-{{ color }} inline-block" href="{{ url }}"
                    title="{{ tag.name }}">
                     {{ tag.name }}
                     <span class="badge">{{ count }}</span>

@@ -7,14 +7,14 @@
     <div id="primary" class="site-content">
         <div id="content" role="main">
 
-            <header class="archive-header">
+            <header class="archive-header text-center">
 
                 <h2 class="archive-title"> {{ content }}</h2>
             </header><!-- .archive-header -->
-            <br/>
-            <header class="archive-header" style="text-align: center">
 
-                <a href="{% url "account:login" %}">
+            <header class="archive-header text-center mt-6">
+
+                <a href="{% url "account:login" %}" hx-boost="false">
                     {% trans 'login' %}
                 </a>
                 |

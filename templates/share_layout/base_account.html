@@ -1,47 +1,70 @@
+{% load static %}
+{% load i18n %}
+{% load compress %}
+{% load vite_tags %}
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    {% load static %}
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
     <meta name="robots" content="noindex">
-    <title>{{ SITE_NAME }} | {{ SITE_DESCRIPTION }}</title>
-    <link href="{% static 'account/css/account.css' %}" rel="stylesheet">
-    {% load compress %}
+    <title>{{ SITE_NAME }} | {% block page_title %}Account{% endblock %}</title>
+    <link rel="icon" href="/favicon.ico">
+
+    <!-- 防闪烁脚本：必须在CSS加载前立即执行 -->
+    <script>
+        (function() {
+            const STORAGE_KEY = 'dark-mode-enabled';
+            const THEME_ATTR = 'data-theme';
+            const ENABLE_SYSTEM = true;
+
+            function getPreferredTheme() {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved !== null) return saved === 'dark' ? 'dark' : 'light';
+                if (ENABLE_SYSTEM && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    return 'dark';
+                }
+                return 'light';
+            }
+
+            function applyTheme(theme) {
+                if (theme === 'dark') {
+                    document.documentElement.setAttribute(THEME_ATTR, 'dark');
+                    if (document.body) document.body.setAttribute(THEME_ATTR, 'dark');
+                } else {
+                    document.documentElement.removeAttribute(THEME_ATTR);
+                    if (document.body) document.body.removeAttribute(THEME_ATTR);
+                }
+            }
+
+            applyTheme(getPreferredTheme());
+        })();
+    </script>
+
+    <!-- 新前端：Tailwind CSS + Alpine.js + HTMX（通过Vite构建） -->
+    {% vite_js 'src/main.js' %}
+
+    <!-- 插件CSS文件 -->
     {% compress css %}
-        <!-- Bootstrap core CSS -->
-        <link href="{% static 'assets/css/bootstrap.min.css' %}" rel="stylesheet">
-        <link href="{% static 'blog/css/oauth_style.css' %}" rel="stylesheet">
-        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-        <link href="{% static 'assets/css/ie10-viewport-bug-workaround.css' %}" rel="stylesheet">
-        <!-- TODC Bootstrap core CSS -->
-        <link href="{% static 'assets/css/todc-bootstrap.min.css' %}" rel="stylesheet">
-        <!-- Custom styles for this template -->
-        <link href="{% static 'assets/css/signin.css' %}" rel="stylesheet">
+        {% block compress_css %}{% endblock %}
     {% endcompress %}
-    {% compress js %}
-        <script src="{% static 'assets/js/ie10-viewport-bug-workaround.js' %}"></script>
-        <script src="{% static 'assets/js/ie-emulation-modes-warning.js' %}"></script>
-    {% endcompress %}
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
 </head>
 
-<body>
-{% block content %}
-{% endblock %}
+<body class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950 min-h-screen flex items-center justify-center p-4" x-data="{ showPassword: false }">
+    {% block content %}{% endblock %}
 
-<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-
+    <!-- 深色模式切换按钮（与主站一致） -->
+    <div class="dark-mode-toggle-fixed">
+        <button type="button"
+                id="dark-mode-toggle-btn"
+                class="dark-mode-toggle-btn"
+                aria-label="切换主题"
+                title="切换黑夜模式"
+                @click="window.DarkMode && window.DarkMode.toggle()">
+            <span class="icon-light">☀️</span>
+            <span class="icon-dark">🌙</span>
+        </button>
+    </div>
 </body>
-    <script type="text/javascript" src="{% static 'blog/js/jquery-3.6.0.min.js' %}"></script>
-    <script src="{% static 'account/js/account.js' %}" type="text/javascript"></script>
 </html>

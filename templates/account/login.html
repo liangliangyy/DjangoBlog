@@ -1,46 +1,179 @@
 {% extends 'share_layout/base_account.html' %}
 {% load static %}
 {% load i18n %}
+
+{% block page_title %}{% trans 'Sign in' %}{% endblock %}
+
 {% block content %}
-    <div class="container">
+<div class="w-full max-w-md">
+    <!-- 卡片容器 -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden border border-gray-200 dark:border-gray-700">
 
-        <h2 class="form-signin-heading text-center">Sign in with your Account</h2>
+        <!-- 头部装饰 -->
+        <div class="h-2 bg-gradient-to-r from-primary-500 via-purple-600 to-primary-500"></div>
 
-        <div class="card card-signin">
-            <img class="img-circle profile-img" src="{% static 'blog/img/avatar.png' %}" alt="">
-            <form class="form-signin" action="{% url 'account:login' %}" method="post">
+        <!-- 主内容 -->
+        <div class="p-8">
+            <!-- Logo和标题 -->
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-primary-500 to-purple-600 mb-4 shadow-lg">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                    </svg>
+                </div>
+                <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+                    {% trans 'Welcome Back' %}
+                </h1>
+                <p class="text-gray-600 dark:text-gray-400">
+                    {% trans 'Sign in to your account' %}
+                </p>
+            </div>
+
+            <!-- 表单 -->
+            <form action="{% url 'account:login' %}" method="post" class="space-y-6">
                 {% csrf_token %}
-                {{ form.non_field_errors }}
+
+                <!-- 全局错误提示 -->
+                {% if form.non_field_errors %}
+                    <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+                        <div class="flex">
+                            <svg class="w-5 h-5 text-red-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                            </svg>
+                            <div class="text-sm text-red-700 dark:text-red-400">
+                                {{ form.non_field_errors }}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <!-- 表单字段 -->
                 {% for field in form %}
-                    {{ field }}
-                    {{ field.errors }}
+                    <div>
+                        <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            {{ field.label }}
+                            {% if field.field.required %}
+                                <span class="text-red-500">*</span>
+                            {% endif %}
+                        </label>
+
+                        {% if field.name == 'password' %}
+                            <!-- 密码字段带显示/隐藏功能 -->
+                            <div class="relative">
+                                <input
+                                    :type="showPassword ? 'text' : 'password'"
+                                    name="{{ field.name }}"
+                                    id="{{ field.id_for_label }}"
+                                    value="{{ field.value|default:'' }}"
+                                    class="w-full px-4 py-3 pr-12 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 transition-colors"
+                                    placeholder="{{ field.label }}"
+                                    {% if field.field.required %}required{% endif %}>
+                                <button
+                                    type="button"
+                                    @click="showPassword = !showPassword"
+                                    class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                                    <svg x-show="!showPassword" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                    </svg>
+                                    <svg x-show="showPassword" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        {% else %}
+                            <!-- 普通输入字段 -->
+                            <input
+                                type="{{ field.field.widget.input_type|default:'text' }}"
+                                name="{{ field.name }}"
+                                id="{{ field.id_for_label }}"
+                                value="{{ field.value|default:'' }}"
+                                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 transition-colors"
+                                placeholder="{{ field.label }}"
+                                {% if field.field.required %}required{% endif %}>
+                        {% endif %}
+
+                        <!-- 字段错误 -->
+                        {% if field.errors %}
+                            <p class="mt-2 text-sm text-red-600 dark:text-red-400">
+                                {{ field.errors.0 }}
+                            </p>
+                        {% endif %}
+                    </div>
                 {% endfor %}
 
-                <input type="hidden" name="next" value="{{ redirect_to }}">
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-
-                <div class="checkbox">
-                    {% comment %}<a class="pull-right">Need help?</a>{% endcomment %}
-                    <label>
-                        <input type="checkbox" value="remember-me" name="remember"> Stay signed in
+                <!-- Remember me 和 Forget password -->
+                <div class="flex items-center justify-between">
+                    <label class="flex items-center">
+                        <input
+                            type="checkbox"
+                            name="remember"
+                            value="remember-me"
+                            class="w-4 h-4 text-primary-500 border-gray-300 dark:border-gray-600 rounded focus:ring-primary-500 focus:ring-offset-0 bg-white dark:bg-gray-700">
+                        <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                            {% trans 'Stay signed in' %}
+                        </span>
                     </label>
+
+                    <a href="{% url 'account:forget_password' %}"
+                       hx-get="{% url 'account:forget_password' %}"
+                       hx-target="body"
+                       hx-swap="outerHTML"
+                       hx-push-url="true"
+                       class="text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium transition-colors">
+                        {% trans 'Forget Password' %}?
+                    </a>
                 </div>
+
+                <!-- Hidden field -->
+                <input type="hidden" name="next" value="{{ redirect_to }}">
+
+                <!-- 提交按钮 -->
+                <button
+                    type="submit"
+                    class="w-full py-3 px-4 bg-gradient-to-r from-primary-500 to-purple-600 hover:from-primary-600 hover:to-purple-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+                    {% trans 'Sign in' %}
+                </button>
+
+                <!-- OAuth登录 -->
                 {% load oauth_tags %}
-                {% load_oauth_applications request%}
+                <div class="mt-6">
+                    <div class="relative">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-gray-300 dark:border-gray-600"></div>
+                        </div>
+                        <div class="relative flex justify-center text-sm">
+                            <span class="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">
+                                {% trans 'Or continue with' %}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 flex flex-wrap gap-3 justify-center">
+                        {% load_oauth_applications request %}
+                    </div>
+                </div>
             </form>
         </div>
 
-        <p class="text-center">
-            <a href="{% url "account:register" %}">
-                {% trans 'Create Account' %}
-            </a>
-            |
-            <a href="/">Home Page</a>
-            |
-            <a href="{% url "account:forget_password" %}">
-                {% trans 'Forget Password' %}
-            </a>
-        </p>
+        <!-- 页脚链接 -->
+        <div class="px-8 py-4 bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
+            <div class="flex flex-wrap items-center justify-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+                <a href="{% url 'account:register' %}"
+                   hx-get="{% url 'account:register' %}"
+                   hx-target="body"
+                   hx-swap="outerHTML"
+                   hx-push-url="true"
+                   class="hover:text-primary-500 dark:hover:text-primary-400 transition-colors font-medium">
+                    {% trans 'Create Account' %}
+                </a>
+                <span class="text-gray-300 dark:text-gray-700">•</span>
+                <a href="/"
+                   class="hover:text-primary-500 dark:hover:text-primary-400 transition-colors font-medium">
+                    {% trans 'Home Page' %}
+                </a>
+            </div>
+        </div>
+    </div>
 
-    </div> <!-- /container -->
 {% endblock %}

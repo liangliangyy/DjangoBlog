@@ -71,8 +71,7 @@
                 <button type="button"
                         id="cancel_comment"
                         onclick="cancel_reply()"
-                        style="display: none;"
-                        class="px-6 py-2.5 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors inline-flex items-center space-x-2">
+                        class="hidden px-6 py-2.5 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors items-center space-x-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                     </svg>
@@ -121,7 +120,10 @@
             target.appendChild(form);
         }
         const cancelBtn = document.getElementById("cancel_comment");
-        if (cancelBtn) cancelBtn.style.display = "inline-flex";
+        if (cancelBtn) {
+            cancelBtn.classList.remove("hidden");
+            cancelBtn.classList.add("inline-flex");
+        }
     }
 
     function cancel_reply() {
@@ -132,6 +134,9 @@
             respond.appendChild(form);
         }
         const cancelBtn = document.getElementById("cancel_comment");
-        if (cancelBtn) cancelBtn.style.display = "none";
+        if (cancelBtn) {
+            cancelBtn.classList.add("hidden");
+            cancelBtn.classList.remove("inline-flex");
+        }
     }
 </script>
