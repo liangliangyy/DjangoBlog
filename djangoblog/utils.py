@@ -7,7 +7,8 @@ import os
 import random
 import string
 import uuid
-from hashlib import sha256
+import hashlib
+import hmac
 
 import bleach
 import markdown
@@ -26,9 +27,10 @@ def get_max_articleid_commentid():
     return (Article.objects.latest().pk, Comment.objects.latest().pk)
 
 
-def get_sha256(str):
-    m = sha256(str.encode('utf-8'))
-    return m.hexdigest()
+def get_sha256(value):
+    key = settings.SECRET_KEY.encode('utf-8')
+    msg = str(value).encode('utf-8')
+    return hmac.new(key, msg, hashlib.sha256).hexdigest()
 
 
 def cache_decorator(expiration=3 * 60):
@@ -42,7 +44,7 @@ def cache_decorator(expiration=3 * 60):
             if not key:
                 unique_str = repr((func, args, kwargs))
 
-                m = sha256(unique_str.encode('utf-8'))
+                m = hashlib.sha256(unique_str.encode('utf-8'))
                 key = m.hexdigest()
             value = cache.get(key)
             if value is not None:
