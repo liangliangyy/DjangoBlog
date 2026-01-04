@@ -69,6 +69,7 @@ jobs:
         # 获取当前 commit SHA
         COMMIT_SHA="${{ github.event.workflow_run.head_sha }}"
         echo "📌 Commit: $COMMIT_SHA"
+        echo "🎯 触发者: ${{ github.event.workflow_run.name }}"
 
         # 检查 Django CI 状态（必须成功）
         echo ""
@@ -76,14 +77,17 @@ jobs:
         DJANGO_CI_STATUS=$(gh api \
           -H "Accept: application/vnd.github+json" \
           -H "X-GitHub-Api-Version: 2022-11-28" \
-          "/repos/${{ github.repository }}/actions/runs?head_sha=$COMMIT_SHA&event=push&status=completed" \
+          "repos/${{ github.repository }}/actions/runs?head_sha=$COMMIT_SHA&event=push&status=completed" \
           | jq -r '.workflow_runs[] | select(.name == "Django CI") | .conclusion' | head -1)
 
         if [ -z "$DJANGO_CI_STATUS" ]; then
-          echo "   ❌ Django CI 未运行或未完成"
-          exit 1
+          echo "   ⏸️  Django CI 未完成"
+          echo "   ℹ️  这可能是第一次触发（由其他CI触发），等待Django CI完成后会再次触发部署"
+          echo "   👋 优雅退出，等待下次触发..."
+          exit 0
         elif [ "$DJANGO_CI_STATUS" != "success" ]; then
           echo "   ❌ Django CI 失败: $DJANGO_CI_STATUS"
+          echo "::error::部署已取消：Django CI 检查未通过"
           exit 1
         else
           echo "   ✅ Django CI 通过"
@@ -95,14 +99,26 @@ jobs:
         FRONTEND_CI_STATUS=$(gh api \
           -H "Accept: application/vnd.github+json" \
           -H "X-GitHub-Api-Version: 2022-11-28" \
-          "/repos/${{ github.repository }}/actions/runs?head_sha=$COMMIT_SHA&event=push&status=completed" \
+          "repos/${{ github.repository }}/actions/runs?head_sha=$COMMIT_SHA&event=push&status=completed" \
           | jq -r '.workflow_runs[] | select(.name == "Frontend CI") | .conclusion' | head -1)
 
-        if [ -z "$FRONTEND_CI_STATUS" ]; then
+        # 检查 Frontend CI 是否还在运行
+        FRONTEND_CI_RUNNING=$(gh api \
+          -H "Accept: application/vnd.github+json" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          "repos/${{ github.repository }}/actions/runs?head_sha=$COMMIT_SHA&event=push" \
+          | jq -r '.workflow_runs[] | select(.name == "Frontend CI") | select(.status == "in_progress" or .status == "queued") | .id' | head -1)
+
+        if [ -n "$FRONTEND_CI_RUNNING" ]; then
+          echo "   ⏸️  Frontend CI 正在运行中"
+          echo "   ℹ️  这可能是第一次触发（由Django CI触发），等待Frontend CI完成后会再次触发部署"
+          echo "   👋 优雅退出，等待下次触发..."
+          exit 0
+        elif [ -z "$FRONTEND_CI_STATUS" ]; then
           echo "   ⏭️  Frontend CI 未运行（可能没有前端代码改动）"
         elif [ "$FRONTEND_CI_STATUS" != "success" ]; then
           echo "   ❌ Frontend CI 失败: $FRONTEND_CI_STATUS"
-          echo "::warning::部署已取消：Frontend CI 检查未通过"
+          echo "::error::部署已取消：Frontend CI 检查未通过"
           exit 1
         else
           echo "   ✅ Frontend CI 通过"
