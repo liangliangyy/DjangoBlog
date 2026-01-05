@@ -21,7 +21,7 @@ mysqlclient==2.2.7
 openai==0.28.1
 pillow==11.3.0
 prettytable==3.16.0
-propcache==0.3.1
+propcache==0.4.1
 pycparser==2.22
 pyecharts==2.0.8
 Pygments==2.19.1
