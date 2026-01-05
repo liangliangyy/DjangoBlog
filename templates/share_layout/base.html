@@ -59,13 +59,19 @@
     <link rel="dns-prefetch" href="//cdn.jsdelivr.net"/>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/>
 
+    <!-- 预加载关键字体文件 -->
+    <link rel="preload" href="{% static 'blog/fonts/open-sans.css' %}" as="style"/>
+
+    <!-- 预加载关键CSS -->
+    <link rel="preload" href="{% static 'pygments/default.css' %}" as="style"/>
+
     <!-- RSS和图标 -->
     <link rel="alternate" type="application/rss+xml" title="{{ SITE_NAME }} &raquo; Feed" href="/feed"/>
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
     <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
     <link rel="apple-touch-icon" href="/favicon.ico"/>
 
-    <!-- 关键CSS：防止深色模式闪烁 -->
+    <!-- 关键CSS：防止深色模式闪烁 + 首屏优化 -->
     <style>
         /* 立即应用深色模式的关键样式 */
         :root {
@@ -83,6 +89,50 @@
         html:not([data-theme="dark"]) body {
             background-color: #ffffff !important;
             color: #1e293b !important;
+        }
+
+        /* 首屏关键布局样式 - 防止布局抖动 */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        #page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #masthead {
+            position: relative;
+            z-index: 999;
+        }
+
+        #main {
+            flex: 1;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        /* 骨架屏样式 - 提升感知性能 */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Alpine.js x-cloak 防止闪烁 */
+        [x-cloak] {
+            display: none !important;
         }
     </style>
 
@@ -204,8 +254,8 @@
     {% plugin_compressed_js %}
 {% endcompress %}
 
-<!-- MathJax智能加载器 -->
-<script src="{% static 'blog/js/mathjax-loader.js' %}" async defer></script>
+<!-- MathJax智能加载器 - 延迟加载,不阻塞渲染 -->
+<script src="{% static 'blog/js/mathjax-loader.js' %}" defer></script>
 
 {% block footer %}
 {% endblock %}
