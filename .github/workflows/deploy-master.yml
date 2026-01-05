@@ -34,10 +34,69 @@ env:
   NAMESPACE: djangoblog
 
 jobs:
+  # Job 1: 检查 CI 状态（自动触发时）
+  check-ci:
+    name: 检查 CI 状态
+    runs-on: ubuntu-latest
+    # 只在 workflow_run 触发且不跳过测试时运行
+    if: ${{ github.event_name == 'workflow_run' }}
+    outputs:
+      ci_passed: ${{ steps.check.outputs.ci_passed }}
+
+    steps:
+    - name: 检查所有 CI 是否完成
+      id: check
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        echo "🔍 检查 CI 状态 (触发者: ${{ github.event.workflow_run.name }})"
+        COMMIT_SHA="${{ github.event.workflow_run.head_sha }}"
+
+        # 检查 Django CI（必须完成且成功）
+        DJANGO_STATUS=$(gh api "repos/${{ github.repository }}/actions/runs?head_sha=$COMMIT_SHA&event=push&status=completed" \
+          | jq -r '.workflow_runs[] | select(.name == "Django CI") | .conclusion' | head -1)
+
+        # 检查 Frontend CI 是否在运行
+        FRONTEND_RUNNING=$(gh api "repos/${{ github.repository }}/actions/runs?head_sha=$COMMIT_SHA&event=push&status=in_progress" \
+          | jq -r '.workflow_runs[] | select(.name == "Frontend CI") | .id' | head -1)
+
+        # 检查 Frontend CI 完成状态
+        FRONTEND_STATUS=$(gh api "repos/${{ github.repository }}/actions/runs?head_sha=$COMMIT_SHA&event=push&status=completed" \
+          | jq -r '.workflow_runs[] | select(.name == "Frontend CI") | .conclusion' | head -1)
+
+        # Django CI 必须完成且成功
+        if [ -z "$DJANGO_STATUS" ]; then
+          echo "⏸️  Django CI 未完成，等待..."
+          exit 1  # Job 失败，不触发部署
+        elif [ "$DJANGO_STATUS" != "success" ]; then
+          echo "❌ Django CI 失败"
+          exit 1
+        fi
+
+        # Frontend CI 如果在运行，等待
+        if [ -n "$FRONTEND_RUNNING" ]; then
+          echo "⏸️  Frontend CI 运行中，等待..."
+          exit 1
+        fi
+
+        # Frontend CI 如果运行了必须成功，未运行则跳过
+        if [ -n "$FRONTEND_STATUS" ] && [ "$FRONTEND_STATUS" != "success" ]; then
+          echo "❌ Frontend CI 失败"
+          exit 1
+        fi
+
+        echo "✅ 所有 CI 通过"
+        echo "ci_passed=true" >> $GITHUB_OUTPUT
+
+  # Job 2: 构建和部署
   deploy:
     name: 构建镜像并部署到生产环境
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+    # 手动触发 或 CI检查通过后触发
+    needs: [check-ci]
+    if: |
+      always() &&
+      (github.event_name == 'workflow_dispatch' || needs.check-ci.result == 'success')
 
     steps:
     - name: 检出代码
@@ -50,96 +109,18 @@ jobs:
           echo "trigger_type=手动触发" >> $GITHUB_OUTPUT
           echo "environment=${{ github.event.inputs.environment }}" >> $GITHUB_OUTPUT
           echo "image_tag=${{ github.event.inputs.image_tag }}" >> $GITHUB_OUTPUT
-          echo "skip_tests=${{ github.event.inputs.skip_tests }}" >> $GITHUB_OUTPUT
         else
           echo "trigger_type=CI自动触发" >> $GITHUB_OUTPUT
           echo "environment=production" >> $GITHUB_OUTPUT
           echo "image_tag=latest" >> $GITHUB_OUTPUT
-          echo "skip_tests=false" >> $GITHUB_OUTPUT
         fi
 
-    - name: 检查 CI 状态
-      id: check-ci
-      if: github.event_name == 'workflow_run' && steps.deploy-params.outputs.skip_tests == 'false'
-      env:
-        GH_TOKEN: ${{ github.token }}
-      run: |
-        echo "🔍 检查 CI 状态..."
-
-        # 获取当前 commit SHA
-        COMMIT_SHA="${{ github.event.workflow_run.head_sha }}"
-        echo "📌 Commit: $COMMIT_SHA"
-        echo "🎯 触发者: ${{ github.event.workflow_run.name }}"
-
-        # 检查 Django CI 状态（必须成功）
-        echo ""
-        echo "🐍 检查 Django CI..."
-        DJANGO_CI_STATUS=$(gh api \
-          -H "Accept: application/vnd.github+json" \
-          -H "X-GitHub-Api-Version: 2022-11-28" \
-          "repos/${{ github.repository }}/actions/runs?head_sha=$COMMIT_SHA&event=push&status=completed" \
-          | jq -r '.workflow_runs[] | select(.name == "Django CI") | .conclusion' | head -1)
-
-        if [ -z "$DJANGO_CI_STATUS" ]; then
-          echo "   ⏸️  Django CI 未完成"
-          echo "   ℹ️  这可能是第一次触发（由其他CI触发），等待Django CI完成后会再次触发部署"
-          echo "   👋 优雅退出，等待下次触发..."
-          exit 0
-        elif [ "$DJANGO_CI_STATUS" != "success" ]; then
-          echo "   ❌ Django CI 失败: $DJANGO_CI_STATUS"
-          echo "::error::部署已取消：Django CI 检查未通过"
-          exit 1
-        else
-          echo "   ✅ Django CI 通过"
-        fi
-
-        # 检查 Frontend CI 状态（如果运行了就必须成功，没运行就跳过）
-        echo ""
-        echo "🎨 检查 Frontend CI..."
-        FRONTEND_CI_STATUS=$(gh api \
-          -H "Accept: application/vnd.github+json" \
-          -H "X-GitHub-Api-Version: 2022-11-28" \
-          "repos/${{ github.repository }}/actions/runs?head_sha=$COMMIT_SHA&event=push&status=completed" \
-          | jq -r '.workflow_runs[] | select(.name == "Frontend CI") | .conclusion' | head -1)
-
-        # 检查 Frontend CI 是否还在运行
-        FRONTEND_CI_RUNNING=$(gh api \
-          -H "Accept: application/vnd.github+json" \
-          -H "X-GitHub-Api-Version: 2022-11-28" \
-          "repos/${{ github.repository }}/actions/runs?head_sha=$COMMIT_SHA&event=push" \
-          | jq -r '.workflow_runs[] | select(.name == "Frontend CI") | select(.status == "in_progress" or .status == "queued") | .id' | head -1)
-
-        if [ -n "$FRONTEND_CI_RUNNING" ]; then
-          echo "   ⏸️  Frontend CI 正在运行中"
-          echo "   ℹ️  这可能是第一次触发（由Django CI触发），等待Frontend CI完成后会再次触发部署"
-          echo "   👋 优雅退出，等待下次触发..."
-          exit 0
-        elif [ -z "$FRONTEND_CI_STATUS" ]; then
-          echo "   ⏭️  Frontend CI 未运行（可能没有前端代码改动）"
-        elif [ "$FRONTEND_CI_STATUS" != "success" ]; then
-          echo "   ❌ Frontend CI 失败: $FRONTEND_CI_STATUS"
-          echo "::error::部署已取消：Frontend CI 检查未通过"
-          exit 1
-        else
-          echo "   ✅ Frontend CI 通过"
-        fi
-
-        echo ""
-        echo "✅ 所有必要的 CI 检查通过，可以部署"
-        echo "ci_passed=true" >> $GITHUB_OUTPUT
-        
     - name: 显示部署信息
       run: |
         echo "🚀 部署信息："
         echo "   触发方式: ${{ steps.deploy-params.outputs.trigger_type }}"
         echo "   部署环境: ${{ steps.deploy-params.outputs.environment }}"
         echo "   镜像标签: ${{ steps.deploy-params.outputs.image_tag }}"
-        echo "   跳过测试: ${{ steps.deploy-params.outputs.skip_tests }}"
-
-        # 显示 CI 检查状态
-        if [ "${{ github.event_name }}" = "workflow_run" ] && [ "${{ steps.deploy-params.outputs.skip_tests }}" = "false" ]; then
-          echo "   CI 检查状态: ${{ steps.check-ci.outputs.ci_passed == 'true' && '✅ 通过' || '⏳ 跳过/未完成' }}"
-        fi
       
     - name: 设置Docker Buildx
       uses: docker/setup-buildx-action@v3
