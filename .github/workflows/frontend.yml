@@ -28,7 +28,7 @@ jobs:
 
     steps:
       - name: Checkout代码
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: 设置Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
