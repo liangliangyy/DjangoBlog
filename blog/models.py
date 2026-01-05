@@ -13,6 +13,7 @@ from uuslug import slugify
 
 from djangoblog.utils import cache_decorator, cache
 from djangoblog.utils import get_current_site
+from djangoblog.constants import CacheTimeout, CacheKey
 
 logger = logging.getLogger(__name__)
 
@@ -135,7 +136,7 @@ class Article(BaseModel):
             'day': self.creation_time.day
         })
 
-    @cache_decorator(60 * 60 * 10)
+    @cache_decorator(CacheTimeout.HOUR_10)
     def get_category_tree(self):
         tree = self.category.get_category_tree()
         names = list(map(lambda c: (c.name, c.get_absolute_url()), tree))
@@ -150,28 +151,28 @@ class Article(BaseModel):
         self.save(update_fields=['views'])
 
     def comment_list(self):
-        cache_key = 'article_comments_{id}'.format(id=self.id)
+        cache_key = CacheKey.ARTICLE_COMMENTS.format(article_id=self.id)
         value = cache.get(cache_key)
         if value:
-            logger.info('get article comments:{id}'.format(id=self.id))
+            logger.info(f'Cache HIT: article comments (id={self.id})')
             return value
         else:
             comments = self.comment_set.filter(is_enable=True).order_by('-id')
-            cache.set(cache_key, comments, 60 * 100)
-            logger.info('set article comments:{id}'.format(id=self.id))
+            cache.set(cache_key, comments, CacheTimeout.HOUR_10)
+            logger.info(f'Cache MISS: article comments (id={self.id})')
             return comments
 
     def get_admin_url(self):
         info = (self._meta.app_label, self._meta.model_name)
         return reverse('admin:%s_%s_change' % info, args=(self.pk,))
 
-    @cache_decorator(expiration=60 * 100)
+    @cache_decorator(expiration=CacheTimeout.HOUR_10)
     def next_article(self):
         # 下一篇
         return Article.objects.filter(
             id__gt=self.id, status='p').order_by('id').first()
 
-    @cache_decorator(expiration=60 * 100)
+    @cache_decorator(expiration=CacheTimeout.HOUR_10)
     def prev_article(self):
         # 前一篇
         return Article.objects.filter(id__lt=self.id, status='p').first()
@@ -212,7 +213,7 @@ class Category(BaseModel):
     def __str__(self):
         return self.name
 
-    @cache_decorator(60 * 60 * 10)
+    @cache_decorator(CacheTimeout.HOUR_10)
     def get_category_tree(self):
         """
         递归获得分类目录的父级
@@ -228,7 +229,7 @@ class Category(BaseModel):
         parse(self)
         return categorys
 
-    @cache_decorator(60 * 60 * 10)
+    @cache_decorator(CacheTimeout.HOUR_10)
     def get_sub_categorys(self):
         """
         获得当前分类目录所有子集
@@ -261,7 +262,7 @@ class Tag(BaseModel):
     def get_absolute_url(self):
         return reverse('blog:tag_detail', kwargs={'tag_name': self.slug})
 
-    @cache_decorator(60 * 60 * 10)
+    @cache_decorator(CacheTimeout.HOUR_10)
     def get_article_count(self):
         return Article.objects.filter(tags__name=self.name).distinct().count()
 

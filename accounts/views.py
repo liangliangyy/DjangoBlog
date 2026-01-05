@@ -13,15 +13,11 @@ from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
-from django.utils.decorators import method_decorator
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views import View
-from django.views.decorators.cache import never_cache
-from django.views.decorators.csrf import csrf_protect
-from django.views.decorators.debug import sensitive_post_parameters
-from django.views.generic import FormView, RedirectView
 
 from djangoblog.utils import send_email, get_sha256, get_current_site, generate_code, delete_sidebar_cache
+from djangoblog.base_views import SecureFormView, LoginFormView, LogoutRedirectView
 from . import utils
 from .forms import RegisterForm, LoginForm, ForgetPasswordForm, ForgetPasswordCodeForm
 from .models import BlogUser
@@ -31,13 +27,14 @@ logger = logging.getLogger(__name__)
 
 # Create your views here.
 
-class RegisterView(FormView):
+class RegisterView(SecureFormView):
+    """
+    用户注册视图（重构版）
+
+    使用 SecureFormView 基类，自动提供 CSRF 保护
+    """
     form_class = RegisterForm
     template_name = 'account/registration_form.html'
-
-    @method_decorator(csrf_protect)
-    def dispatch(self, *args, **kwargs):
-        return super(RegisterView, self).dispatch(*args, **kwargs)
 
     def form_valid(self, form):
         if form.is_valid():
@@ -80,12 +77,13 @@ class RegisterView(FormView):
             })
 
 
-class LogoutView(RedirectView):
-    url = '/login/'
+class LogoutView(LogoutRedirectView):
+    """
+    用户登出视图（重构版）
 
-    @method_decorator(never_cache)
-    def dispatch(self, request, *args, **kwargs):
-        return super(LogoutView, self).dispatch(request, *args, **kwargs)
+    使用 LogoutRedirectView 基类，自动禁用缓存
+    """
+    url = '/login/'
 
     def get(self, request, *args, **kwargs):
         logout(request)
@@ -96,18 +94,19 @@ class LogoutView(RedirectView):
         return response
 
 
-class LoginView(FormView):
+class LoginView(LoginFormView):
+    """
+    用户登录视图（重构版）
+
+    使用 LoginFormView 基类，自动提供：
+    - 敏感参数保护（password）
+    - CSRF 保护
+    - 禁用缓存
+    """
     form_class = LoginForm
     template_name = 'account/login.html'
     success_url = '/'
     redirect_field_name = REDIRECT_FIELD_NAME
-
-    @method_decorator(sensitive_post_parameters('password'))
-    @method_decorator(csrf_protect)
-    @method_decorator(never_cache)
-    def dispatch(self, request, *args, **kwargs):
-
-        return super(LoginView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         redirect_to = self.request.GET.get(self.redirect_field_name)
@@ -193,7 +192,12 @@ def account_result(request):
         return HttpResponseRedirect('/')
 
 
-class ForgetPasswordView(FormView):
+class ForgetPasswordView(SecureFormView):
+    """
+    忘记密码视图（重构版）
+
+    使用 SecureFormView 基类，自动提供 CSRF 保护
+    """
     form_class = ForgetPasswordForm
     template_name = 'account/forget_password.html'
 

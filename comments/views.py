@@ -1,26 +1,25 @@
 # Create your views here.
-from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_protect
-from django.views.generic.edit import FormView
 
+from djangoblog.base_views import AuthenticatedFormView
 from accounts.models import BlogUser
 from blog.models import Article
 from .forms import CommentForm
 from .models import Comment
 
 
-class CommentPostView(FormView):
+class CommentPostView(AuthenticatedFormView):
+    """
+    评论提交视图（重构版）
+
+    使用 AuthenticatedFormView 基类，自动提供：
+    - 登录验证（未登录用户会被重定向）
+    - CSRF 保护
+    """
     form_class = CommentForm
     template_name = 'blog/article_detail.html'
-
-    @method_decorator(login_required)
-    @method_decorator(csrf_protect)
-    def dispatch(self, *args, **kwargs):
-        return super(CommentPostView, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         article_id = self.kwargs['article_id']

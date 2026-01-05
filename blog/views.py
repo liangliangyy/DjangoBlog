@@ -20,11 +20,24 @@ from comments.forms import CommentForm
 from djangoblog.plugin_manage import hooks
 from djangoblog.plugin_manage.hook_constants import ARTICLE_CONTENT_HOOK_NAME
 from djangoblog.utils import cache, get_blog_setting, get_sha256
+from djangoblog.mixins import (
+    SlugCachedMixin,
+    ArticleListMixin,
+    OptimizedArticleQueryMixin,
+    CachedListViewMixin,
+    PageNumberMixin
+)
 
 logger = logging.getLogger(__name__)
 
 
-class ArticleListView(ListView):
+class ArticleListView(CachedListViewMixin, PageNumberMixin, ListView):
+    """
+    文章列表视图基类（重构版）
+
+    使用 Mixin 简化代码，消除重复逻辑
+    子类只需实现 get_queryset_data() 和 get_queryset_cache_key() 方法
+    """
     # template_name属性用于指定使用哪个模板进行渲染
     template_name = 'blog/article_index.html'
 
@@ -40,76 +53,28 @@ class ArticleListView(ListView):
     def get_view_cache_key(self):
         return self.request.get['pages']
 
-    @property
-    def page_number(self):
-        page_kwarg = self.page_kwarg
-        page = self.kwargs.get(
-            page_kwarg) or self.request.GET.get(page_kwarg) or 1
-        return page
-
-    def get_queryset_cache_key(self):
-        """
-        子类重写.获得queryset的缓存key
-        """
-        raise NotImplementedError()
-
-    def get_queryset_data(self):
-        """
-        子类重写.获取queryset的数据
-        """
-        raise NotImplementedError()
-
-    def get_queryset_from_cache(self, cache_key):
-        '''
-        缓存页面数据
-        :param cache_key: 缓存key
-        :return:
-        '''
-        value = cache.get(cache_key)
-        if value:
-            logger.info('get view cache.key:{key}'.format(key=cache_key))
-            return value
-        else:
-            article_list = self.get_queryset_data()
-            cache.set(cache_key, article_list)
-            logger.info('set view cache.key:{key}'.format(key=cache_key))
-            return article_list
-
-    def get_queryset(self):
-        '''
-        重写默认，从缓存获取数据
-        :return:
-        '''
-        key = self.get_queryset_cache_key()
-        value = self.get_queryset_from_cache(key)
-        return value
-
     def get_context_data(self, **kwargs):
         kwargs['linktype'] = self.link_type
         return super(ArticleListView, self).get_context_data(**kwargs)
 
 
-class IndexView(ArticleListView):
-    '''
-    首页
-    '''
+class IndexView(OptimizedArticleQueryMixin, ArticleListView):
+    """
+    首页视图（重构版）
+
+    继承 OptimizedArticleQueryMixin 获得优化的查询方法
+    """
     # 友情链接类型
     link_type = LinkShowType.I
 
     def get_queryset_data(self):
-        article_list = Article.objects.filter(
+        # 使用 Mixin 提供的优化查询方法
+        return self.get_optimized_article_queryset().filter(
             type='a', status='p'
-        ).select_related(
-            'author',      # 预加载作者
-            'category'     # 预加载分类
-        ).prefetch_related(
-            'tags'         # 预加载标签
         )
-        return article_list
 
     def get_queryset_cache_key(self):
-        cache_key = 'index_{page}'.format(page=self.page_number)
-        return cache_key
+        return f'index_{self.page_number}'
 
 
 class ArticleDetailView(DetailView):
@@ -180,75 +145,63 @@ class ArticleDetailView(DetailView):
         return context
 
 
-class CategoryDetailView(ArticleListView):
-    '''
-    分类目录列表
-    '''
+class CategoryDetailView(SlugCachedMixin, OptimizedArticleQueryMixin, ArticleListView):
+    """
+    分类目录列表（重构版）
+
+    使用 SlugCachedMixin 避免重复查询 Category
+    使用 OptimizedArticleQueryMixin 优化文章查询
+    """
     page_type = "分类目录归档"
+    slug_url_kwarg = 'category_name'
+    slug_model = Category
 
     def get_queryset_data(self):
-        slug = self.kwargs['category_name']
-        category = get_object_or_404(Category, slug=slug)
+        # 使用 Mixin 缓存的对象，只查询一次
+        category = self.get_slug_object()
+        categorynames = [c.name for c in category.get_sub_categorys()]
 
-        categoryname = category.name
-        self.categoryname = categoryname
-        categorynames = list(
-            map(lambda c: c.name, category.get_sub_categorys()))
-        article_list = Article.objects.filter(
+        return self.get_optimized_article_queryset().filter(
             category__name__in=categorynames, status='p'
-        ).select_related(
-            'author',
-            'category'
-        ).prefetch_related(
-            'tags'
         )
-        return article_list
 
     def get_queryset_cache_key(self):
-        slug = self.kwargs['category_name']
-        category = get_object_or_404(Category, slug=slug)
-        categoryname = category.name
-        self.categoryname = categoryname
-        cache_key = 'category_list_{categoryname}_{page}'.format(
-            categoryname=categoryname, page=self.page_number)
-        return cache_key
+        # 复用缓存的对象，不再重复查询数据库
+        category = self.get_slug_object()
+        return f'category_list_{category.name}_{self.page_number}'
 
     def get_context_data(self, **kwargs):
+        category = self.get_slug_object()
+        categoryname = category.name
 
-        categoryname = self.categoryname
         try:
             categoryname = categoryname.split('/')[-1]
         except BaseException:
             pass
+
         kwargs['page_type'] = CategoryDetailView.page_type
         kwargs['tag_name'] = categoryname
         return super(CategoryDetailView, self).get_context_data(**kwargs)
 
 
-class AuthorDetailView(ArticleListView):
-    '''
-    作者详情页
-    '''
+class AuthorDetailView(OptimizedArticleQueryMixin, ArticleListView):
+    """
+    作者详情页（重构版）
+
+    使用 OptimizedArticleQueryMixin 优化文章查询
+    """
     page_type = '作者文章归档'
 
     def get_queryset_cache_key(self):
         from uuslug import slugify
         author_name = slugify(self.kwargs['author_name'])
-        cache_key = 'author_{author_name}_{page}'.format(
-            author_name=author_name, page=self.page_number)
-        return cache_key
+        return f'author_{author_name}_{self.page_number}'
 
     def get_queryset_data(self):
         author_name = self.kwargs['author_name']
-        article_list = Article.objects.filter(
+        return self.get_optimized_article_queryset().filter(
             author__username=author_name, type='a', status='p'
-        ).select_related(
-            'author',
-            'category'
-        ).prefetch_related(
-            'tags'
         )
-        return article_list
 
     def get_context_data(self, **kwargs):
         author_name = self.kwargs['author_name']
@@ -257,64 +210,52 @@ class AuthorDetailView(ArticleListView):
         return super(AuthorDetailView, self).get_context_data(**kwargs)
 
 
-class TagDetailView(ArticleListView):
-    '''
-    标签列表页面
-    '''
+class TagDetailView(SlugCachedMixin, OptimizedArticleQueryMixin, ArticleListView):
+    """
+    标签列表页面（重构版）
+
+    使用 SlugCachedMixin 避免重复查询 Tag
+    使用 OptimizedArticleQueryMixin 优化文章查询
+    """
     page_type = '分类标签归档'
+    slug_url_kwarg = 'tag_name'
+    slug_model = Tag
 
     def get_queryset_data(self):
-        slug = self.kwargs['tag_name']
-        tag = get_object_or_404(Tag, slug=slug)
-        tag_name = tag.name
-        self.name = tag_name
-        article_list = Article.objects.filter(
-            tags__name=tag_name, type='a', status='p'
-        ).select_related(
-            'author',
-            'category'
-        ).prefetch_related(
-            'tags'
+        # 使用 Mixin 缓存的对象，只查询一次
+        tag = self.get_slug_object()
+        return self.get_optimized_article_queryset().filter(
+            tags__name=tag.name, type='a', status='p'
         )
-        return article_list
 
     def get_queryset_cache_key(self):
-        slug = self.kwargs['tag_name']
-        tag = get_object_or_404(Tag, slug=slug)
-        tag_name = tag.name
-        self.name = tag_name
-        cache_key = 'tag_{tag_name}_{page}'.format(
-            tag_name=tag_name, page=self.page_number)
-        return cache_key
+        # 复用缓存的对象，不再重复查询数据库
+        tag = self.get_slug_object()
+        return f'tag_{tag.name}_{self.page_number}'
 
     def get_context_data(self, **kwargs):
-        # tag_name = self.kwargs['tag_name']
-        tag_name = self.name
+        tag = self.get_slug_object()
         kwargs['page_type'] = TagDetailView.page_type
-        kwargs['tag_name'] = tag_name
+        kwargs['tag_name'] = tag.name
         return super(TagDetailView, self).get_context_data(**kwargs)
 
 
-class ArchivesView(ArticleListView):
-    '''
-    文章归档页面
-    '''
+class ArchivesView(OptimizedArticleQueryMixin, ArticleListView):
+    """
+    文章归档页面（重构版）
+
+    使用 OptimizedArticleQueryMixin 优化文章查询
+    """
     page_type = '文章归档'
     paginate_by = None
     page_kwarg = None
     template_name = 'blog/article_archives.html'
 
     def get_queryset_data(self):
-        return Article.objects.filter(status='p').select_related(
-            'author',
-            'category'
-        ).prefetch_related(
-            'tags'
-        ).all()
+        return self.get_optimized_article_queryset().filter(status='p')
 
     def get_queryset_cache_key(self):
-        cache_key = 'archives'
-        return cache_key
+        return 'archives'
 
 
 class LinkListView(ListView):
@@ -397,38 +338,16 @@ def fileupload(request):
         return HttpResponse("only for post")
 
 
-def page_not_found_view(
-        request,
-        exception,
-        template_name='blog/error_page.html'):
-    if exception:
-        logger.error(exception)
-    url = request.get_full_path()
-    return render(request,
-                  template_name,
-                  {'message': _('Sorry, the page you requested is not found, please click the home page to see other?'),
-                   'statuscode': '404'},
-                  status=404)
+# ===== 错误处理视图 =====
+# 注意：这些函数保留是为了向后兼容
+# 实际实现已经移动到 djangoblog.error_views
+# 可以在 urls.py 中直接引用新的实现
 
-
-def server_error_view(request, template_name='blog/error_page.html'):
-    return render(request,
-                  template_name,
-                  {'message': _('Sorry, the server is busy, please click the home page to see other?'),
-                   'statuscode': '500'},
-                  status=500)
-
-
-def permission_denied_view(
-        request,
-        exception,
-        template_name='blog/error_page.html'):
-    if exception:
-        logger.error(exception)
-    return render(
-        request, template_name, {
-            'message': _('Sorry, you do not have permission to access this page?'),
-            'statuscode': '403'}, status=403)
+from djangoblog.error_views import (
+    page_not_found_view,
+    server_error_view,
+    permission_denied_view
+)
 
 
 def clean_cache_view(request):
