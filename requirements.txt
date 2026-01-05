@@ -10,7 +10,7 @@ django-mdeditor==0.1.20
 django-uuslug==2.0.0
 elasticsearch==8.6.1
 elasticsearch-dsl==8.11.0
-gevent==23.9.1
+gevent==25.9.1
 greenlet==3.2.2
 htmlgenerator==1.2.32
 jieba==0.42.1
