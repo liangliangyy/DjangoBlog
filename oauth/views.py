@@ -15,6 +15,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView
+from django.utils.http import url_has_allowed_host_and_scheme
 
 from djangoblog.blog_signals import oauth_user_login_signal
 from djangoblog.utils import get_current_site
@@ -29,15 +30,19 @@ logger = logging.getLogger(__name__)
 def get_redirecturl(request):
     nexturl = request.GET.get('next_url', None)
     if not nexturl or nexturl == '/login/' or nexturl == '/login':
-        nexturl = '/'
+        return '/'
+
+    # Only allow relative URLs or URLs pointing to the current host
+    site_domain = get_current_site().domain
+    if url_has_allowed_host_and_scheme(
+        url=nexturl,
+        allowed_hosts={site_domain},
+        require_https=request.is_secure()
+    ):
         return nexturl
-    p = urlparse(nexturl)
-    if p.netloc:
-        site = get_current_site().domain
-        if not p.netloc.replace('www.', '') == site.replace('www.', ''):
-            logger.info('非法url:' + nexturl)
-            return "/"
-    return nexturl
+
+    logger.info('非法url:' + str(nexturl))
+    return '/'
 
 
 def oauthlogin(request):

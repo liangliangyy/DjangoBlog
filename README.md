@@ -4,7 +4,9 @@
   <a href="https://github.com/liangliangyy/DjangoBlog/actions/workflows/django.yml"><img src="https://github.com/liangliangyy/DjangoBlog/actions/workflows/django.yml/badge.svg" alt="Django CI"></a>
   <a href="https://github.com/liangliangyy/DjangoBlog/actions/workflows/frontend.yml"><img src="https://github.com/liangliangyy/DjangoBlog/actions/workflows/frontend.yml/badge.svg" alt="Frontend CI"></a>
   <a href="https://github.com/liangliangyy/DjangoBlog/actions/workflows/codeql-analysis.yml"><img src="https://github.com/liangliangyy/DjangoBlog/actions/workflows/codeql-analysis.yml/badge.svg" alt="CodeQL"></a>
-  <a href="https://codecov.io/gh/liangliangyy/DjangoBlog"><img src="https://codecov.io/gh/liangliangyy/DjangoBlog/branch/master/graph/badge.svg" alt="codecov"></a>
+ <a href="https://codecov.io/gh/liangliangyy/DjangoBlog" > 
+ <img src="https://codecov.io/gh/liangliangyy/DjangoBlog/branch/master/graph/badge.svg?token=vmnMtzuFqN"/> 
+ </a>
   <a href="https://github.com/liangliangyy/DjangoBlog/blob/master/LICENSE"><img src="https://img.shields.io/github/license/liangliangyy/djangoblog.svg" alt="license"></a>
 </p>
 
