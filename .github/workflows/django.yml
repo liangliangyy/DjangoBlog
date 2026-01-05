@@ -57,7 +57,7 @@ jobs:
     
     steps:
       - name: Checkout代码
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         
       - name: 设置测试信息
         id: test-info
