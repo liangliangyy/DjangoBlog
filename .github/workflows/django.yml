@@ -57,7 +57,7 @@ jobs:
     
     steps:
       - name: Checkout代码
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         
       - name: 设置测试信息
         id: test-info
@@ -292,7 +292,7 @@ jobs:
       # 覆盖率报告上传 (只有完整测试才执行)
       - name: 上传覆盖率到Codecov
         if: matrix.coverage == true && success()
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./coverage.xml
@@ -303,7 +303,7 @@ jobs:
           
       - name: 上传覆盖率到Codecov (备用)
         if: matrix.coverage == true && failure()
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           file: ./coverage.xml
           flags: unittests
