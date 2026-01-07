@@ -28,6 +28,10 @@ on:
         default: false
         type: boolean
 
+concurrency:
+  group: deploy-${{ github.event.workflow_run.head_sha || github.sha }}
+  cancel-in-progress: true
+
 env:
   REGISTRY: registry.cn-shenzhen.aliyuncs.com
   IMAGE_NAME: liangliangyy/djangoblog
@@ -67,21 +71,25 @@ jobs:
         # Django CI 必须完成且成功
         if [ -z "$DJANGO_STATUS" ]; then
           echo "⏸️  Django CI 未完成，等待..."
-          exit 1  # Job 失败，不触发部署
+          echo "ci_passed=false" >> $GITHUB_OUTPUT
+          exit 0  # 成功退出，但不触发部署
         elif [ "$DJANGO_STATUS" != "success" ]; then
           echo "❌ Django CI 失败"
+          echo "ci_passed=false" >> $GITHUB_OUTPUT
           exit 1
         fi
 
         # Frontend CI 如果在运行，等待
         if [ -n "$FRONTEND_RUNNING" ]; then
           echo "⏸️  Frontend CI 运行中，等待..."
-          exit 1
+          echo "ci_passed=false" >> $GITHUB_OUTPUT
+          exit 0
         fi
 
         # Frontend CI 如果运行了必须成功，未运行则跳过
         if [ -n "$FRONTEND_STATUS" ] && [ "$FRONTEND_STATUS" != "success" ]; then
           echo "❌ Frontend CI 失败"
+          echo "ci_passed=false" >> $GITHUB_OUTPUT
           exit 1
         fi
 
@@ -96,7 +104,8 @@ jobs:
     needs: [check-ci]
     if: |
       always() &&
-      (github.event_name == 'workflow_dispatch' || needs.check-ci.result == 'success')
+      (github.event_name == 'workflow_dispatch' ||
+       (needs.check-ci.result == 'success' && needs.check-ci.outputs.ci_passed == 'true'))
 
     steps:
     - name: 检出代码
