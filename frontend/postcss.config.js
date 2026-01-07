@@ -62,8 +62,11 @@ export default {
               { cleanupIDs: true }
             ]
           },
-          // Z-index 优化
-          zindex: true,
+          // Z-index 优化 - 启用但排除重要的z-index值
+          zindex: {
+            // 排除需要保持原值的z-index（fixed元素等）
+            exclude: [9999]
+          },
           // 排序属性
           cssDeclarationSorter: { order: 'smacss' }
         }]

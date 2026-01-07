@@ -7,6 +7,16 @@
  * 2. 组件层 - 可复用的组件类
  * 3. 工具层 - Tailwind 工具类
  * 4. 插件适配 - 兼容现有插件样式
+ *
+ * 响应式断点 (Mobile-First策略):
+ * - Base (0px):    超小手机基准,所有设备
+ * - sm (640px):    大手机/小平板
+ * - md (768px):    平板竖屏
+ * - lg (1024px):   平板横屏/小桌面 [侧边栏切换点]
+ * - xl (1280px):   桌面
+ * - 2xl (1536px):  大桌面
+ *
+ * 关键断点验证: 320px, 375px, 768px, 1024px, 1920px
  */
 
 @tailwind base;
@@ -155,10 +165,19 @@ body[data-color-scheme="teal"] {
     @apply scroll-smooth antialiased;
   }
 
-  /* Body基础样式 */
+  /* Body基础样式 - 现代化柔和配色 */
   body {
-    @apply bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100;
-    @apply font-sans leading-normal;
+    /* 亮色模式：柔和的灰白背景(#f9fafb)，避免纯白刺眼 */
+    @apply bg-gray-50;
+    /* 暗色模式：深Slate背景(#0f172a)，比纯黑更现代 */
+    @apply dark:bg-slate-900;
+    /* 文本色：深灰色而非纯黑，更柔和 */
+    @apply text-gray-800;
+    /* 暗色模式文本：柔和的灰白色(#e2e8f0) */
+    @apply dark:text-slate-100;
+    @apply font-sans;
+    line-height: 1.75; /* 舒适的阅读行高 */
+    font-size: 1rem; /* 16px基准字体 */
   }
 
   /* 链接样式 */
@@ -167,21 +186,52 @@ body[data-color-scheme="teal"] {
     @apply dark:text-primary-400 dark:hover:text-primary-300;
   }
 
-  /* 标题样式 */
+  /* 标题样式 - 清晰的视觉层次，现代化柔和配色 */
   h1, h2, h3, h4, h5, h6 {
-    @apply font-bold text-gray-900 dark:text-gray-100 leading-tight;
+    @apply font-bold;
+    /* 亮色模式：深灰色(#1f2937)而非纯黑，更柔和现代 */
+    @apply text-gray-800;
+    /* 暗色模式：亮灰白色(#f1f5f9)，高对比但不刺眼 */
+    @apply dark:text-slate-100;
+    line-height: 1.25; /* 紧凑的标题行高 */
   }
 
-  h1 { @apply text-4xl mb-6; }
-  h2 { @apply text-3xl mb-5; }
-  h3 { @apply text-2xl mb-4; }
-  h4 { @apply text-xl mb-3; }
-  h5 { @apply text-lg mb-2; }
-  h6 { @apply text-base mb-2; }
+  /* 排版比例 - 明显的层次梯度 */
+  h1 {
+    font-size: 2.5rem; /* 40px */
+    @apply mt-0 mb-6;
+  }
+  h2 {
+    font-size: 2rem; /* 32px */
+    @apply mt-12 mb-4;
+  }
+  h3 {
+    font-size: 1.5rem; /* 24px */
+    @apply mt-8 mb-4;
+  }
+  h4 {
+    font-size: 1.25rem; /* 20px */
+    @apply mt-6 mb-3;
+  }
+  h5 {
+    font-size: 1.125rem; /* 18px */
+    @apply mt-4 mb-2;
+  }
+  h6 {
+    font-size: 1rem; /* 16px */
+    @apply mt-4 mb-2;
+  }
 
   /* 段落和文本 */
   p {
-    @apply mb-4 leading-relaxed;
+    @apply mb-4;
+    line-height: 1.75; /* 继承body的行高 */
+  }
+
+  /* 段落间距优化 */
+  .prose p,
+  .entry-content p {
+    @apply mb-6; /* 增加段落间距，提高可读性 */
   }
 
   /* 列表样式 */
@@ -219,6 +269,38 @@ body[data-color-scheme="teal"] {
     border: 1px solid #e1e4e8;
     max-width: 100%;
     -webkit-overflow-scrolling: touch;
+  }
+
+  /* 代码块自定义scrollbar样式 - 细小、半透明 */
+  pre::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  pre::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 3px;
+  }
+
+  pre::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+  }
+
+  pre::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  /* 深色模式的scrollbar */
+  [data-theme="dark"] pre::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  [data-theme="dark"] pre::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  [data-theme="dark"] pre::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
   }
 
   /* 深色模式 - 代码块容器 */
@@ -277,6 +359,7 @@ body[data-color-scheme="teal"] {
   .btn {
     @apply inline-flex items-center justify-center;
     @apply px-4 py-2 rounded-md font-medium;
+    @apply min-h-[44px] min-w-[44px]; /* 触摸目标最小尺寸 */
     @apply transition-all duration-200;
     @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
     @apply disabled:opacity-50 disabled:cursor-not-allowed;
@@ -319,15 +402,34 @@ body[data-color-scheme="teal"] {
     @apply bg-gray-100 dark:bg-gray-900 cursor-not-allowed opacity-60;
   }
 
-  /* ========== 卡片组件 ========== */
+  /* ========== 卡片组件 - 增强视觉层次，现代化配色 ========== */
   .card {
-    @apply bg-white dark:bg-gray-800 rounded-lg shadow-md p-6;
-    @apply border border-gray-200 dark:border-gray-700;
-    @apply transition-shadow duration-200;
+    /* 亮色模式：纯白卡片配柔和边框 */
+    @apply bg-white rounded-xl p-6;
+    @apply border-2 border-gray-200;
+    /* 暗色模式：深slate卡片配柔和边框 */
+    @apply dark:bg-slate-800 dark:border-slate-700;
+    @apply transition-all duration-300;
+    /* 增强阴影效果 - 亮色模式 */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   }
 
   .card:hover {
-    @apply shadow-lg;
+    /* 亮色模式hover：主题色边框 */
+    @apply border-primary-300;
+    /* 暗色模式hover：稍亮的主题色边框 */
+    @apply dark:border-primary-600;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+  }
+
+  /* 深色模式卡片阴影 - 更深更自然 */
+  [data-theme="dark"] .card {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  }
+
+  [data-theme="dark"] .card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
   }
 
   /* ========== 站点布局 ========== */
@@ -342,7 +444,8 @@ body[data-color-scheme="teal"] {
     @apply border-b border-gray-200 dark:border-gray-700;
     @apply sticky top-0 z-40;
     @apply relative;
-    @apply backdrop-blur-md bg-opacity-95;
+    /* 移除 backdrop-blur-md 以避免影响上层按钮的清晰度 */
+    @apply bg-opacity-95;
     /* 更明显的渐变背景 - 使用配色方案变量 */
     background: linear-gradient(135deg,
       rgba(var(--color-primary-500), 0.08) 0%,
@@ -376,6 +479,7 @@ body[data-color-scheme="teal"] {
       rgb(var(--color-primary-600)) 100%);
     background-size: 200% 100%;
     animation: gradientShift 8s ease infinite;
+    pointer-events: none; /* 装饰元素不应阻止点击 */
   }
 
   @keyframes gradientShift {
@@ -383,10 +487,11 @@ body[data-color-scheme="teal"] {
     50% { background-position: 100% 0%; }
   }
 
-  /* Header内容容器 - 增加垂直空间 */
+  /* Header内容容器 - 增加垂直空间，统一容器宽度 */
   .header-content {
     @apply flex items-center justify-between px-3 md:px-6 py-6 md:py-8;
-    @apply max-w-7xl mx-auto;
+    /* 从max-w-7xl增加到max-w-screen-2xl，与主内容容器保持一致 */
+    @apply max-w-screen-2xl mx-auto;
     @apply gap-4 md:gap-6;
     @apply relative;
   }
@@ -418,22 +523,25 @@ body[data-color-scheme="teal"] {
   }
 
   .site-header hgroup {
-    @apply text-left flex-1;
+    @apply text-left;
+    /* 改为 flex-shrink，只占据内容宽度，不扩展占据整个空间 */
+    @apply flex-shrink;
     @apply px-0 py-0;
     @apply bg-transparent;
     @apply min-w-0;
-    @apply relative z-10;
+    /* 移除 z-10，不需要提升层级 */
   }
 
   .site-title {
     @apply text-4xl md:text-6xl lg:text-7xl font-bold;
     @apply mb-2;
-    @apply truncate;
+    /* 移除 truncate，让标题自然换行而不是占据整行 */
   }
 
   .site-title a {
     @apply no-underline;
-    @apply flex items-center gap-3;
+    /* 改为 inline-flex，只占据文字宽度 */
+    @apply inline-flex items-center gap-3;
     @apply transition-all duration-300;
     @apply relative;
     /* 文字渐变效果 - 使用配色方案变量 */
@@ -496,6 +604,8 @@ body[data-color-scheme="teal"] {
     position: absolute;
     bottom: -4px;
     left: 0;
+    /* 修复：只覆盖文字区域，不多出来 */
+    right: 0;
     width: 0;
     height: 3px;
     background: linear-gradient(90deg,
@@ -507,7 +617,9 @@ body[data-color-scheme="teal"] {
   }
 
   .site-title a:hover::after {
+    /* 只扩展到文字宽度 */
     width: 100%;
+    right: auto;
   }
 
   .site-description {
@@ -542,7 +654,7 @@ body[data-color-scheme="teal"] {
     @apply w-12 h-12 md:w-11 md:h-11 rounded-full;  /* 移动端48px，符合触摸标准 */
     @apply text-gray-700 dark:text-gray-300;
     @apply bg-white dark:bg-gray-800;
-    @apply hover:bg-gradient-to-br hover:from-primary-500 hover:to-purple-600;
+    @apply hover:bg-gradient-to-br hover:from-primary-500 hover:to-primary-600;
     @apply hover:text-white;
     @apply transition-all duration-300;
     @apply shadow-sm hover:shadow-lg hover:scale-110;
@@ -649,7 +761,7 @@ body[data-color-scheme="teal"] {
   /* 导航链接 - 增强样式和动画 */
   .main-navigation a {
     @apply px-3 py-1.5 rounded-lg text-gray-700 dark:text-gray-300;
-    @apply hover:bg-gradient-to-r hover:from-primary-500 hover:to-purple-600 hover:text-white;
+    @apply hover:bg-gradient-to-r hover:from-primary-500 hover:to-primary-600 hover:text-white;
     @apply transition-all duration-300;
     @apply flex items-center gap-1.5;
     @apply font-medium;
@@ -657,28 +769,12 @@ body[data-color-scheme="teal"] {
     @apply shadow-sm hover:shadow-md;
     @apply border border-transparent hover:border-primary-300;
     @apply transform hover:scale-105;
-    @apply relative overflow-hidden;
-  }
-
-  /* 导航链接背景动画 */
-  .main-navigation a::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    transition: left 0.5s ease;
-  }
-
-  .main-navigation a:hover::before {
-    left: 100%;
+    @apply relative;
   }
 
   .main-navigation a.current-menu-item,
   .main-navigation a.current_page_item {
-    @apply bg-gradient-to-r from-primary-500 to-purple-600 text-white;
+    @apply bg-gradient-to-r from-primary-500 to-primary-600 text-white;
     @apply shadow-md;
   }
 
@@ -697,18 +793,6 @@ body[data-color-scheme="teal"] {
   .main-navigation .current_page_item a {
     @apply bg-primary-500 text-white;
     @apply shadow-md;
-  }
-
-  /* 导航悬浮效果 - 下划线动画 */
-  .main-navigation a::before {
-    content: '';
-    @apply absolute bottom-0 left-0 right-0 h-0.5;
-    @apply bg-primary-400;
-    @apply transform scale-x-0 transition-transform duration-200;
-  }
-
-  .main-navigation a:hover::before {
-    @apply scale-x-100;
   }
 
   /* 子菜单样式 */
@@ -784,9 +868,30 @@ body[data-color-scheme="teal"] {
     @apply flex-1 min-w-0; /* 添加 min-w-0 防止flex子元素溢出 */
   }
 
-  /* ========== 侧边栏 ========== */
+  /* ========== 侧边栏 - 增强视觉区分 ========== */
   .widget-area {
-    @apply w-full lg:w-80 flex-shrink-0 space-y-6;
+    /* 使用Grid的4列自适应宽度 (8:4比例) */
+    @apply w-full flex-shrink-0 space-y-6;
+  }
+
+  /* 桌面端侧边栏样式 */
+  @media (min-width: 1024px) {
+    .widget-area {
+      /* 关键：让侧边栏高度跟随内容，不拉伸到整行 */
+      align-self: start;
+      /* 只设置左右和底部padding，顶部不要padding以消除高度差 */
+      @apply px-4 pb-4 rounded-xl;
+      /* 微妙的背景区分 */
+      background: linear-gradient(to bottom,
+        rgba(249, 250, 251, 0.5),
+        rgba(243, 244, 246, 0.5));
+    }
+
+    [data-theme="dark"] .widget-area {
+      background: linear-gradient(to bottom,
+        rgba(17, 24, 39, 0.5),
+        rgba(31, 41, 55, 0.5));
+    }
   }
 
   /* 页脚 */
@@ -812,7 +917,8 @@ body[data-color-scheme="teal"] {
   }
 
   .footer-content {
-    @apply max-w-7xl mx-auto px-4 md:px-6 py-8;
+    /* 从max-w-7xl增加到max-w-screen-2xl，与主内容容器保持一致 */
+    @apply max-w-screen-2xl mx-auto px-4 md:px-6 py-8;
   }
 
   .footer-section {
@@ -1123,7 +1229,7 @@ body[data-color-scheme="teal"] {
 
   .archive-hero {
     @apply text-center py-12;
-    @apply bg-gradient-to-br from-primary-50 via-purple-50 to-pink-50;
+    @apply bg-gradient-to-br from-primary-50 via-primary-100 to-primary-50;
     @apply dark:from-gray-800 dark:via-gray-900 dark:to-gray-800;
     @apply rounded-2xl shadow-lg;
     @apply border border-gray-200 dark:border-gray-700;
@@ -1167,7 +1273,7 @@ body[data-color-scheme="teal"] {
   .archive-icon {
     @apply inline-flex items-center justify-center;
     @apply w-20 h-20 rounded-full;
-    @apply bg-gradient-to-br from-primary-500 to-purple-600;
+    @apply bg-gradient-to-br from-primary-500 to-primary-600;
     @apply text-white mb-4;
     @apply shadow-lg;
     @apply relative z-10;
@@ -1208,7 +1314,7 @@ body[data-color-scheme="teal"] {
   .timeline-year-badge {
     @apply inline-flex items-center gap-3;
     @apply px-6 py-3 rounded-full;
-    @apply bg-gradient-to-r from-primary-500 to-purple-600;
+    @apply bg-gradient-to-r from-primary-500 to-primary-600;
     @apply text-white font-bold;
     @apply shadow-lg mb-8;
     @apply sticky top-20 z-30;
@@ -1228,8 +1334,8 @@ body[data-color-scheme="teal"] {
   .timeline-month-block {
     @apply relative pl-8 mb-8;
     @apply before:content-[''] before:absolute before:left-0 before:top-0 before:bottom-0;
-    @apply before:w-0.5 before:bg-gradient-to-b before:from-primary-300 before:to-purple-300;
-    @apply dark:before:from-primary-700 dark:before:to-purple-700;
+    @apply before:w-0.5 before:bg-gradient-to-b before:from-primary-300 before:to-primary-400;
+    @apply dark:before:from-primary-700 dark:before:to-primary-600;
   }
 
   .timeline-month-header {
@@ -1988,8 +2094,14 @@ html[data-theme="dark"] {
 }
 
 /* 深色模式切换按钮 */
+/* 深色模式切换按钮 - 确保始终可点击且清晰可见 */
 .dark-mode-toggle-fixed {
-  @apply fixed top-5 right-5 z-50;
+  /* 使用Tailwind配置的z-index值，让cssnano正确优化 */
+  @apply fixed top-5 right-5 z-modal;
+  pointer-events: auto !important; /* 强制可点击，不受 backdrop-blur 等影响 */
+  isolation: isolate; /* 创建独立的层叠上下文 */
+  will-change: transform; /* 提升到单独的合成层，避免被 backdrop-blur 影响 */
+  transform: translateZ(0); /* 强制硬件加速，独立渲染层 */
 }
 
 .dark-mode-toggle-btn {

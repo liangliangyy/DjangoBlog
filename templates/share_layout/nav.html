@@ -6,7 +6,8 @@
             class="menu-toggle"
             @click="toggleMenu()"
             :aria-expanded="menuOpen ? 'true' : 'false'"
-            aria-controls="menu-菜单">
+            aria-controls="menu-菜单"
+            aria-label="{% trans 'Toggle navigation menu' %}">
         <span class="screen-reader-text">{% trans 'Menu' %}</span>
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path x-show="!menuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>

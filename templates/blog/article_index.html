@@ -17,27 +17,31 @@
     <meta property="og:site_name" content="{{ SITE_NAME }}"/>
 {% endblock %}
 {% block content %}
-    <div id="primary" class="site-content">
-        {% if page_type and tag_name %}
-            <header class="archive-header">
-                <p class="archive-title">{{ page_type }}：<span>{{ tag_name }}</span></p>
-            </header><!-- .archive-header -->
-        {% endif %}
-
-        <div id="article-list-container">
-            <div id="content" role="main">
-                {% for article in article_list %}
-                    {% load_article_detail article True user %}
-                {% endfor %}
-            </div><!-- #content -->
-
-            {% if is_paginated %}
-                {% load_pagination_info page_obj page_type tag_name %}
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+        <!-- 主内容区域 - 调整为9列，给主内容更多空间 -->
+        <div id="primary" class="site-content lg:col-span-8">
+            {% if page_type and tag_name %}
+                <header class="archive-header mb-6">
+                    <p class="archive-title text-2xl font-bold">{{ page_type }}：<span class="text-primary-600 dark:text-primary-400">{{ tag_name }}</span></p>
+                </header><!-- .archive-header -->
             {% endif %}
-        </div><!-- #article-list-container -->
-    </div><!-- #primary -->
 
-{% endblock %}
-{% block sidebar %}
-    {% load_sidebar user linktype %}
+            <div id="article-list-container">
+                <div id="content" role="main" class="space-y-6">
+                    {% for article in article_list %}
+                        {% load_article_detail article True user %}
+                    {% endfor %}
+                </div><!-- #content -->
+
+                {% if is_paginated %}
+                    {% load_pagination_info page_obj page_type tag_name %}
+                {% endif %}
+            </div><!-- #article-list-container -->
+        </div><!-- #primary -->
+
+        <!-- 侧边栏 - 调整为3列，更紧凑 -->
+        <aside id="secondary" class="widget-area lg:col-span-4">
+            {% load_sidebar user linktype %}
+        </aside>
+    </div>
 {% endblock %}
