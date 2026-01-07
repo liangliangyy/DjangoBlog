@@ -2,7 +2,7 @@
 {% load cache %}
 {% load i18n %}
 <article id="post-{{ article.pk }} "
-         class="post-{{ article.pk }} post type-post status-publish format-standard hentry">
+         class="post-{{ article.pk }} post type-post status-publish format-standard hentry article-item w-full">
     <header class="entry-header">
 
         <h1 class="entry-title">
@@ -19,10 +19,12 @@
                 {% if query %}{{ article.title|highlight_search_term:query }}{% else %}{{ article.title }}{% endif %}
             {% endif %}
         </h1>
-        <div class="comments-link">
+        <div class="comments-link flex flex-wrap items-center justify-between gap-2 text-sm text-gray-600 dark:text-gray-400 mt-2">
             {% if article.comment_status == "o" and open_site_comment %}
-                <a href="{{ article.get_absolute_url }}#comments" class="ds-thread-count" data-thread-key="3815"
-                   rel="nofollow">
+                <a href="{{ article.get_absolute_url }}#comments" class="inline-flex items-center gap-1 hover:text-primary-500 transition-colors" rel="nofollow">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/>
+                    </svg>
                     <span class="leave-reply">
                     {% if article.comment_set and article.comment_set.count %}
                         {{ article.comment_set.count }} {% trans 'comments' %}
@@ -32,21 +34,25 @@
                     </span>
                 </a>
             {% endif %}
-            <div class="float-right">
-                {{ article.views }} views
+            <div class="inline-flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                </svg>
+                <span>{{ article.views }} views</span>
             </div>
         </div><!-- .comments-link -->
         <br/>
         {% if article.type == 'a' %}
             {% if not isindex %}
-                {% cache 36000 breadcrumb article.pk %}
+                {% cache 36000 breadcrumb_v3 article.pk %}
                     {% load_breadcrumb article %}
                 {% endcache %}
             {% endif %}
         {% endif %}
     </header><!-- .entry-header -->
 
-    <div class="entry-content" itemprop="articleBody">
+    <div class="entry-content max-w-full" itemprop="articleBody">
         {% if  isindex %}
             {% if query %}
                 {# 搜索结果页：先生成摘要HTML，然后高亮关键词 #}
@@ -55,8 +61,8 @@
                 {# 普通列表页：显示正常摘要 #}
                 {% render_article_content article True %}
             {% endif %}
-            <p class='read-more'><a
-                    href=' {{ article.get_absolute_url }}'>Read more</a></p>
+            <p class='read-more mt-4'><a
+                    href=' {{ article.get_absolute_url }}' class="inline-flex items-center px-4 py-2 bg-primary-500 text-white rounded-md hover:bg-primary-600 transition-colors duration-200">Read more</a></p>
         {% else %}
 
             {% if article.show_toc %}

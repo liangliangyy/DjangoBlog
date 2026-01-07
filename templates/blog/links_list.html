@@ -15,30 +15,44 @@
 
 {% endblock %}
 {% block content %}
-    <div id="primary" class="site-content">
-        <div id="content" role="main">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+        <!-- 主内容区域 - 调整为9列 -->
+        <div id="primary" class="site-content lg:col-span-8">
+            <div id="content" role="main">
 
-            <header class="archive-header">
+                <header class="archive-header mb-8">
+                    <h1 class="archive-title text-3xl font-bold text-gray-900 dark:text-gray-100">
+                        友情链接
+                    </h1>
+                </header><!-- .archive-header -->
 
-                <p class="archive-title">友情链接</p>
-            </header><!-- .archive-header -->
+                <div class="entry-content">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {% for obj in object_list %}
+                            <a href="{{ obj.link }}"
+                               target="_blank"
+                               rel="nofollow noopener"
+                               class="block p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-primary-500 dark:hover:border-primary-500 hover:shadow-md transition-all duration-200 no-underline group">
+                                <div class="flex items-center gap-3">
+                                    <svg class="w-5 h-5 text-primary-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                                    </svg>
+                                    <span class="text-gray-900 dark:text-gray-100 group-hover:text-primary-500 dark:group-hover:text-primary-400 font-medium transition-colors">
+                                        {{ obj.name }}
+                                    </span>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div><!-- #content -->
+        </div><!-- #primary -->
 
-            <div class="entry-content">
-                <ul>
-                    {% for obj in object_list %}
-                        <li>
-                            <a href="{{ obj.link }}">{{ obj.name }}</a>
-                        </li>
-                    {% endfor %} </ul>
-            </div>
-        </div><!-- #content -->
-    </div><!-- #primary -->
-
-{% endblock %}
-
-
-{% block sidebar %}
-    {% load_sidebar user 'i' %}
+        <!-- 侧边栏 - 调整为3列 -->
+        <aside id="secondary" class="widget-area lg:col-span-4">
+            {% load_sidebar user 'i' %}
+        </aside>
+    </div>
 {% endblock %}
 
 
