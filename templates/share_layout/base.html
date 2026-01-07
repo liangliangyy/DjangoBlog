@@ -105,10 +105,6 @@
 
         #main {
             flex: 1;
-            max-width: 1200px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 1rem;
         }
 
         /* 骨架屏样式 - 提升感知性能 */
@@ -225,7 +221,8 @@
         {% load i18n %}
         {% include 'share_layout/nav.html' %}
     </header><!-- #masthead -->
-    <div id="main" class="wrapper" hx-boost="true" hx-target="#main" hx-select="#main" hx-swap="innerHTML" hx-push-url="true">
+    <!-- 容器宽度从max-w-7xl(1280px)增加到max-w-screen-2xl(1536px)，更好地利用屏幕空间 -->
+    <div id="main" class="wrapper max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 w-full" hx-boost="true" hx-target="#main" hx-select="#main" hx-swap="innerHTML" hx-push-url="true">
 
         {% block content %}
         {% endblock %}
@@ -255,10 +252,11 @@
 {% endblock %}
 
 <!-- 深色模式切换按钮 -->
-<div class="dark-mode-toggle-fixed">
+<div class="dark-mode-toggle-fixed" style="pointer-events: auto;">
     <button type="button"
             id="dark-mode-toggle-btn"
             class="dark-mode-toggle-btn"
+            style="pointer-events: auto;"
             aria-label="切换主题"
             title="切换黑夜模式"
             @click="window.DarkMode && window.DarkMode.toggle()">

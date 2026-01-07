@@ -83,3 +83,5 @@ nul
 deploy/docker-compose/bin/datas
 static/avatar
 img/
+.specify/
+specs/

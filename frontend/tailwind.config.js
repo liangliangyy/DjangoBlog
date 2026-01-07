@@ -31,6 +31,11 @@ export default {
         },
       },
 
+      // Z-index 层级定义
+      zIndex: {
+        'modal': '9999',  // 深色模式按钮等固定元素
+      },
+
       // 字体家族
       fontFamily: {
         sans: ['Open Sans', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'],

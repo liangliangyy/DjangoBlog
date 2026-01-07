@@ -25,21 +25,72 @@
     <meta property="og:site_name" content="{{ SITE_NAME }}"/>
 {% endblock %}
 {% block content %}
-    <div id="primary" class="site-content">
-        <div id="content" role="main">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+        <!-- 主内容区域 - 调整为9列 -->
+        <div id="primary" class="site-content lg:col-span-8">
+            <div id="content" role="main" class="flex items-center justify-center min-h-[60vh]">
 
-            <header class="archive-header">
-                <h1 class="archive-title">{{ message }}</h1>
-            </header><!-- .archive-header -->
+                <div class="text-center px-4">
+                    <!-- 错误图标 -->
+                    <div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-red-500 to-orange-600 mb-8 shadow-lg">
+                        {% if statuscode == '404' %}
+                            <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        {% elif statuscode == '403' %}
+                            <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                            </svg>
+                        {% elif statuscode == '500' %}
+                            <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                            </svg>
+                        {% else %}
+                            <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        {% endif %}
+                    </div>
 
-        </div><!-- #content -->
-    </div><!-- #primary -->
+                    <!-- 错误代码 -->
+                    {% if statuscode %}
+                        <div class="text-6xl md:text-8xl font-bold text-gray-200 dark:text-gray-700 mb-4">
+                            {{ statuscode }}
+                        </div>
+                    {% endif %}
 
-{% endblock %}
+                    <!-- 错误消息 -->
+                    <h1 class="text-2xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+                        {{ message }}
+                    </h1>
 
+                    <!-- 操作按钮 -->
+                    <div class="flex flex-wrap items-center justify-center gap-4 mt-8">
+                        <a href="/"
+                           class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                            </svg>
+                            返回首页
+                        </a>
+                        <a href="javascript:history.back()"
+                           class="inline-flex items-center gap-2 px-6 py-3 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-900 dark:text-gray-100 font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                            </svg>
+                            返回上一页
+                        </a>
+                    </div>
+                </div>
 
-{% block sidebar %}
-    {% load_sidebar user 'i' %}
+            </div><!-- #content -->
+        </div><!-- #primary -->
+
+        <!-- 侧边栏 - 调整为3列 -->
+        <aside id="secondary" class="widget-area lg:col-span-4">
+            {% load_sidebar user 'i' %}
+        </aside>
+    </div>
 {% endblock %}
 
 

@@ -1,11 +1,16 @@
 {% extends 'share_layout/base.html' %}
 {% load blog_tags %}
+{% load i18n %}
 
 {% block header %}
 {% endblock %}
 {% block content %}
-    <div id="primary" class="site-content">
-        <div id="content" role="main">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+        <!-- 主内容区域 - 调整为9列，给文章更多空间 -->
+        <div id="primary" class="site-content lg:col-span-8">
+            <!-- 移除max-w-3xl限制，使用更宽的max-w-5xl，让文章内容更舒展 -->
+            <div id="content" role="main" class="max-w-5xl mx-auto px-4">
+
             {% load_article_detail article False user %}
 
             {% if article.type == 'a' %}
@@ -24,8 +29,9 @@
                 </nav><!-- .nav-single -->
             {% endif %}
 
-        </div><!-- #content -->
-        {% if article.comment_status == "o" and OPEN_SITE_COMMENT %}
+            </div><!-- #content -->
+
+            {% if article.comment_status == "o" and OPEN_SITE_COMMENT %}
 
             {# 使用现代化评论系统 #}
             {% include 'comments/tags/comment_list_modern.html' %}
@@ -60,11 +66,13 @@
                     </div>
                 </div>
             {% endif %}
-        {% endif %}
-    </div><!-- #primary -->
+            {% endif %}
+        </div><!-- #primary -->
 
-{% endblock %}
-
-{% block sidebar %}
-    {% load_sidebar user "p" %}
+        <!-- 侧边栏 - 移动端(<1024px)自动堆叠到主内容下方 -->
+        <!-- 侧边栏 - 调整为3列，更紧凑 -->
+        <aside id="secondary" class="widget-area lg:col-span-4">
+            {% load_sidebar user "p" %}
+        </aside>
+    </div>
 {% endblock %}

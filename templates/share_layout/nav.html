@@ -1,27 +1,72 @@
 {% load i18n %}
 
 <nav id="site-navigation" class="main-navigation" role="navigation" x-data="navigation()" hx-boost="true" hx-target="#main" hx-select="#main" hx-swap="innerHTML" hx-push-url="true">
-    <!-- 移动端菜单切换按钮 -->
+    <!-- 移动端汉堡菜单按钮 -->
     <button type="button"
-            class="menu-toggle"
+            class="menu-toggle hamburger-btn"
             @click="toggleMenu()"
             :aria-expanded="menuOpen ? 'true' : 'false'"
-            aria-controls="menu-菜单">
+            aria-controls="menu-drawer"
+            aria-label="{% trans 'Toggle navigation menu' %}">
         <span class="screen-reader-text">{% trans 'Menu' %}</span>
+        <!-- 汉堡图标 (三条线) -->
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path x-show="!menuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-            <path x-show="menuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
         </svg>
     </button>
 
-    <div class="menu-%e8%8f%9c%e5%8d%95-container">
-        <ul id="menu-%e8%8f%9c%e5%8d%95"
+    <!-- 移动端：侧边抽屉遮罩层 -->
+    <div class="drawer-overlay"
+         x-show="menuOpen && windowWidth < 768"
+         @click="toggleMenu()"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         x-cloak>
+    </div>
+
+    <!-- 导航菜单容器 -->
+    <div class="menu-container"
+         :class="{ 'drawer-open': menuOpen && windowWidth < 768 }">
+        <!-- 移动端抽屉头部 -->
+        <div class="drawer-header md:hidden">
+            <div class="drawer-header-content">
+                <!-- 网站图标 -->
+                <div class="drawer-site-icon">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                    </svg>
+                </div>
+                <!-- 网站标题和副标题 -->
+                <div class="drawer-site-info">
+                    <h2 class="drawer-title">{{ SITE_NAME }}</h2>
+                    <p class="drawer-subtitle">{% trans 'Navigation' %}</p>
+                </div>
+            </div>
+            <!-- 关闭按钮 -->
+            <button type="button"
+                    @click="toggleMenu()"
+                    class="drawer-close-btn"
+                    aria-label="{% trans 'Close menu' %}">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+
+        <ul id="menu-drawer"
             class="nav-menu"
             :class="{ 'toggled-on': menuOpen }"
             x-show="menuOpen || windowWidth >= 768"
-            x-transition:enter="transition ease-out duration-200"
-            x-transition:enter-start="opacity-0 transform -translate-y-2"
-            x-transition:enter-end="opacity-100 transform translate-y-0">
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 transform -translate-x-full"
+            x-transition:enter-end="opacity-100 transform translate-x-0"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 transform translate-x-0"
+            x-transition:leave-end="opacity-0 transform -translate-x-full">
             <li id="menu-item-3498"
                 class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item menu-item-home menu-item-3498">
                 <a href="/">
