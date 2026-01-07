@@ -370,7 +370,7 @@ jobs:
       # 上传测试工件
       - name: 上传覆盖率HTML报告
         if: matrix.coverage == true && always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: coverage-report-${{ steps.test-info.outputs.test_name }}
           path: htmlcov/
