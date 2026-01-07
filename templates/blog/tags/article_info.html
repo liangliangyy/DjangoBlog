@@ -45,7 +45,7 @@
         <br/>
         {% if article.type == 'a' %}
             {% if not isindex %}
-                {% cache 36000 breadcrumb article.pk %}
+                {% cache 36000 breadcrumb_v3 article.pk %}
                     {% load_breadcrumb article %}
                 {% endcache %}
             {% endif %}

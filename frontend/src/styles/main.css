@@ -603,9 +603,8 @@ body[data-color-scheme="teal"] {
     content: '';
     position: absolute;
     bottom: -4px;
-    left: 0;
-    /* 修复：只覆盖文字区域，不多出来 */
-    right: 0;
+    left: 50%;
+    transform: translateX(-50%);
     width: 0;
     height: 3px;
     background: linear-gradient(90deg,
@@ -617,9 +616,8 @@ body[data-color-scheme="teal"] {
   }
 
   .site-title a:hover::after {
-    /* 只扩展到文字宽度 */
+    /* 从中心向两边扩展，覆盖文字区域 */
     width: 100%;
-    right: auto;
   }
 
   .site-description {
@@ -856,6 +854,133 @@ body[data-color-scheme="teal"] {
 
   [data-theme="dark"] .main-navigation .sub-menu a {
     @apply text-gray-300;
+  }
+
+  /* ========== 侧边抽屉导航 ========== */
+  /* 遮罩层 */
+  .drawer-overlay {
+    @apply fixed inset-0 bg-black bg-opacity-50 z-40;
+    @apply md:hidden;
+  }
+
+  /* 汉堡菜单按钮 */
+  .hamburger-btn {
+    @apply md:hidden flex items-center justify-center;
+    @apply w-full px-4 py-2.5 bg-white dark:bg-gray-800;
+    @apply border-b border-gray-200 dark:border-gray-700;
+    @apply text-gray-700 dark:text-gray-300;
+    @apply hover:bg-gray-50 dark:hover:bg-gray-700;
+    @apply transition-colors duration-200;
+  }
+
+  /* 菜单容器 - 桌面端正常显示，移动端为侧边抽屉 */
+  .menu-container {
+    @apply md:block;
+  }
+
+  /* 移动端：侧边抽屉模式 */
+  @media (max-width: 767px) {
+    .menu-container {
+      @apply fixed left-0 top-0 bottom-0 w-80 max-w-[85vw];
+      @apply bg-white dark:bg-gray-800;
+      @apply shadow-2xl z-50;
+      @apply transform -translate-x-full;
+      @apply transition-transform duration-300 ease-out;
+      @apply overflow-y-auto;
+    }
+
+    .menu-container.drawer-open {
+      @apply translate-x-0;
+    }
+
+    /* 抽屉头部 */
+    .drawer-header {
+      @apply flex items-center justify-between;
+      @apply px-6 py-5 border-b border-gray-200 dark:border-gray-700;
+      @apply bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700;
+      @apply relative overflow-hidden;
+    }
+
+    /* 抽屉头部装饰背景 */
+    .drawer-header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .drawer-header-content {
+      @apply flex items-center gap-3;
+      @apply relative z-10;
+    }
+
+    .drawer-site-icon {
+      @apply w-12 h-12 rounded-full;
+      @apply bg-white bg-opacity-20;
+      @apply flex items-center justify-center;
+      @apply text-white;
+      @apply backdrop-blur-sm;
+      @apply shadow-lg;
+    }
+
+    .drawer-site-info {
+      @apply flex flex-col;
+    }
+
+    .drawer-title {
+      @apply text-lg font-bold text-white;
+      @apply m-0 leading-tight;
+    }
+
+    .drawer-subtitle {
+      @apply text-sm text-white text-opacity-90;
+      @apply m-0 mt-0.5;
+      @apply font-light;
+    }
+
+    .drawer-close-btn {
+      @apply w-10 h-10 rounded-full;
+      @apply flex items-center justify-center;
+      @apply text-white hover:bg-white hover:bg-opacity-20;
+      @apply transition-all duration-200;
+      @apply relative z-10;
+      @apply hover:rotate-90;
+    }
+
+    /* 抽屉内的菜单列表 */
+    .menu-container ul.nav-menu {
+      @apply flex-col gap-0 p-0;
+      @apply bg-transparent;
+      @apply border-0;
+    }
+
+    .menu-container li {
+      @apply border-b border-gray-200 dark:border-gray-700;
+    }
+
+    .menu-container li:last-child {
+      @apply border-b-0;
+    }
+
+    .menu-container a {
+      @apply block w-full px-4 py-3 rounded-none;
+      @apply text-gray-700 dark:text-gray-300;
+      @apply hover:bg-primary-50 dark:hover:bg-gray-700;
+      @apply border-0 shadow-none;
+      @apply transform-none;
+    }
+
+    .menu-container a.current-menu-item,
+    .menu-container .current-menu-item a,
+    .menu-container .current_page_item a {
+      @apply bg-primary-100 dark:bg-primary-900;
+      @apply text-primary-700 dark:text-primary-300;
+      @apply border-l-4 border-primary-500;
+    }
   }
 
   /* 主内容区域 */
@@ -1913,24 +2038,58 @@ body[data-color-scheme="teal"] {
   }
 
   /* ========== 面包屑导航 ========== */
+  .breadcrumb-nav {
+    @apply mb-6 px-4 py-3 rounded-lg;
+    @apply bg-white dark:bg-gray-800;
+    @apply border border-gray-200 dark:border-gray-700;
+    @apply shadow-sm;
+  }
+
   .breadcrumb {
-    @apply flex flex-wrap items-center space-x-2 text-sm;
-    @apply text-gray-600 dark:text-gray-400 mb-6;
-    background-color: transparent !important;
+    @apply flex flex-wrap items-center gap-2 text-sm;
+    @apply text-gray-600 dark:text-gray-400;
+    @apply m-0 p-0;
     list-style: none;
-    padding: 0;
   }
 
-  .breadcrumb li {
-    @apply inline-block;
+  .breadcrumb-item {
+    @apply inline-flex items-center;
   }
 
-  .breadcrumb a {
-    @apply hover:text-primary-500 dark:hover:text-primary-400;
+  .breadcrumb-link {
+    @apply inline-flex items-center gap-1.5;
+    @apply px-2 py-1 rounded-md;
+    @apply text-gray-700 dark:text-gray-300;
+    @apply hover:text-primary-600 dark:hover:text-primary-400;
+    @apply hover:bg-gray-100 dark:hover:bg-gray-700;
+    @apply transition-all duration-200;
+    @apply no-underline;
   }
 
-  .breadcrumb .active {
+  .breadcrumb-icon {
+    @apply w-4 h-4;
+  }
+
+  .breadcrumb-separator {
+    @apply text-gray-400 dark:text-gray-600;
+    @apply flex items-center;
+  }
+
+  .breadcrumb-current {
+    @apply px-2 py-1;
     @apply text-gray-900 dark:text-gray-100;
+    @apply font-medium;
+  }
+
+  /* 移动端优化 */
+  @media (max-width: 640px) {
+    .breadcrumb {
+      @apply text-xs;
+    }
+
+    .breadcrumb-link {
+      @apply px-1.5 py-0.5;
+    }
   }
 
   /* ========== 标签云 ========== */

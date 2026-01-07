@@ -1,5 +1,6 @@
 {% extends 'share_layout/base.html' %}
 {% load blog_tags %}
+{% load i18n %}
 
 {% block header %}
 {% endblock %}
@@ -9,6 +10,7 @@
         <div id="primary" class="site-content lg:col-span-8">
             <!-- 移除max-w-3xl限制，使用更宽的max-w-5xl，让文章内容更舒展 -->
             <div id="content" role="main" class="max-w-5xl mx-auto px-4">
+
             {% load_article_detail article False user %}
 
             {% if article.type == 'a' %}
