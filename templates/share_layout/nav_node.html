@@ -1,6 +1,6 @@
 <li id="menu-item-{{ node.pk }}"
-    class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-{{ node.pk }}">
-    <a href="{{ node.get_absolute_url }}">{{ node.name }}</a>
+    class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children {% if node.get_absolute_url == request.path %}current-menu-item current_page_item{% endif %} menu-item-{{ node.pk }}">
+    <a href="{{ node.get_absolute_url }}" hx-boost="false" @click="closeMobileMenu()">{{ node.name }}</a>
     {% load blog_tags %}
     {% query nav_category_list parent_category=node as child_categorys %}
     {% if child_categorys %}

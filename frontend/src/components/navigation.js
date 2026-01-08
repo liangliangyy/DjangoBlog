@@ -22,6 +22,15 @@ export default () => ({
         document.body.style.overflow = '';
       }
     });
+
+    // 监听HTMX导航事件，自动关闭移动端菜单
+    document.body.addEventListener('htmx:beforeRequest', (event) => {
+      // 如果是导航链接触发的请求，并且在移动端模式，则关闭菜单
+      if (this.windowWidth < 768 && this.menuOpen) {
+        console.log('🔗 HTMX navigation detected, closing mobile menu');
+        this.closeMobileMenu();
+      }
+    });
   },
 
   // ==================== 移动端菜单 ====================
