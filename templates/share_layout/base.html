@@ -222,7 +222,8 @@
         {% include 'share_layout/nav.html' %}
     </header><!-- #masthead -->
     <!-- 容器宽度从max-w-7xl(1280px)增加到max-w-screen-2xl(1536px)，更好地利用屏幕空间 -->
-    <div id="main" class="wrapper max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 w-full" hx-boost="true" hx-target="#main" hx-select="#main" hx-swap="innerHTML" hx-push-url="true">
+    <!-- 移动端使用更小的padding(px-2),在小屏幕上提供更宽的内容区域 -->
+    <div id="main" class="wrapper max-w-screen-2xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8 w-full" hx-boost="true" hx-target="#main" hx-select="#main" hx-swap="innerHTML" hx-push-url="true">
 
         {% block content %}
         {% endblock %}

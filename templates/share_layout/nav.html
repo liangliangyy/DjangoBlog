@@ -68,8 +68,8 @@
             x-transition:leave-start="opacity-100 transform translate-x-0"
             x-transition:leave-end="opacity-0 transform -translate-x-full">
             <li id="menu-item-3498"
-                class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item menu-item-home menu-item-3498">
-                <a href="/">
+                class="menu-item menu-item-type-custom menu-item-object-custom {% if request.path == '/' %}current-menu-item current_page_item{% endif %} menu-item-home menu-item-3498">
+                <a href="/" hx-boost="false" @click="closeMobileMenu()">
                     <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
                     </svg>
@@ -86,13 +86,13 @@
                 {% for node in nav_pages %}
 
                     <li id="menu-item-{{ node.pk }}"
-                        class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-{{ node.pk }}">
-                        <a href="{{ node.get_absolute_url }}">{{ node.title }}</a>
+                        class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children {% if request.path == node.get_absolute_url %}current-menu-item current_page_item{% endif %} menu-item-{{ node.pk }}">
+                        <a href="{{ node.get_absolute_url }}" hx-boost="false" @click="closeMobileMenu()">{{ node.title }}</a>
                     </li>
                 {% endfor %}
             {% endif %}
-            <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children">
-                <a href="{% url "blog:archives" %}">
+            <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children {% if '/archives' in request.path %}current-menu-item current_page_item{% endif %}">
+                <a href="{% url "blog:archives" %}" hx-boost="false" @click="closeMobileMenu()">
                     <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
                     </svg>

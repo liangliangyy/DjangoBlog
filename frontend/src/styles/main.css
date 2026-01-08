@@ -974,18 +974,60 @@ body[data-color-scheme="teal"] {
       @apply transform-none;
     }
 
-    .menu-container a.current-menu-item,
-    .menu-container .current-menu-item a,
-    .menu-container .current_page_item a {
-      @apply bg-primary-100 dark:bg-primary-900;
+    /* 移动端当前菜单项高亮样式 - 使用更明显的渐变背景 */
+    .menu-container .current-menu-item > a,
+    .menu-container .current_page_item > a {
+      @apply bg-gradient-to-r from-primary-500 to-primary-600;
+      @apply text-white;
+      @apply border-l-4 border-primary-700;
+      @apply font-semibold;
+    }
+
+    /* 移动端子菜单样式 - 显示为缩进列表 */
+    .menu-container .sub-menu {
+      /* 覆盖桌面端的绝对定位 */
+      position: static !important;
+      @apply block;
+      @apply w-full;
+      @apply bg-gray-50 dark:bg-gray-900;
+      @apply border-l-2 border-primary-300 dark:border-primary-700;
+      @apply ml-4;
+      @apply mt-0 mb-0;
+      @apply shadow-none;
+      @apply rounded-none;
+      @apply border-0 border-l-2;
+    }
+
+    .menu-container .sub-menu li {
+      @apply border-b border-gray-100 dark:border-gray-800;
+    }
+
+    .menu-container .sub-menu a {
+      @apply pl-6 py-2;
+      @apply text-sm;
+      @apply text-gray-600 dark:text-gray-400;
+    }
+
+    .menu-container .sub-menu a:hover {
+      @apply bg-primary-100 dark:bg-gray-800;
       @apply text-primary-700 dark:text-primary-300;
-      @apply border-l-4 border-primary-500;
+    }
+
+    /* 子菜单的当前项样式 */
+    .menu-container .sub-menu .current-menu-item > a,
+    .menu-container .sub-menu .current_page_item > a {
+      @apply bg-primary-200 dark:bg-primary-900;
+      @apply text-primary-800 dark:text-primary-200;
+      @apply border-l-2 border-primary-600;
+      @apply font-medium;
     }
   }
 
   /* 主内容区域 */
   .wrapper {
-    @apply flex-1 max-w-7xl mx-auto w-full px-4 py-8;
+    @apply flex-1 max-w-7xl mx-auto w-full py-8;
+    /* 移动端使用更小的padding,桌面端正常padding */
+    @apply px-2 sm:px-4 md:px-6 lg:px-8;
     @apply flex flex-col lg:flex-row gap-8;
   }
 
@@ -2671,11 +2713,11 @@ img[loading="lazy"][src] {
 @media (max-width: 768px) {
   /* 移动端优化 */
   .site-header {
-    @apply px-4;
+    @apply px-2;
   }
 
   .wrapper {
-    @apply px-4;
+    @apply px-2;
   }
 
   .comment-body {
