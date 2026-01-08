@@ -152,7 +152,7 @@ jobs:
           type=raw,value=${{ steps.deploy-params.outputs.image_tag }}
           
     - name: 构建并推送Docker镜像
-      uses: docker/build-push-action@v5
+      uses: docker/build-push-action@v6
       with:
         context: .
         file: ./Dockerfile

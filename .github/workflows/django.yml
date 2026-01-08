@@ -322,7 +322,7 @@ jobs:
         
       - name: Docker构建测试
         if: matrix.test-type == 'docker'
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: false
