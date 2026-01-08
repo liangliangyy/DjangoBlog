@@ -24,7 +24,7 @@ prettytable==3.16.0
 propcache==0.4.1
 pycparser==2.22
 pyecharts==2.0.9
-Pygments==2.19.1
+Pygments==2.19.2
 python-dateutil==2.9.0.post0
 python-ipware==3.0.0
 python-logstash==0.4.8
