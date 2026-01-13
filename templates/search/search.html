@@ -2,13 +2,20 @@
 {% load blog_tags %}
 {% load i18n %}
 {% block header %}
-    <title>{{ SITE_NAME }} | {{ SITE_DESCRIPTION }}</title>
-    <meta name="description" content="{{ SITE_SEO_DESCRIPTION }}"/>
-    <meta name="keywords" content="{{ SITE_KEYWORDS }}"/>
-    <meta property="og:type" content="blog"/>
-    <meta property="og:title" content="{{ SITE_NAME }}"/>
-    <meta property="og:description" content="{{ SITE_DESCRIPTION }}"/>
-    <meta property="og:url" content="{{ SITE_BASE_URL }}"/>
+    {% if query %}
+        <title>搜索：{{ query }} | {{ SITE_NAME }}</title>
+        <meta name="description" content="搜索 {{ query }} 的相关文章和内容"/>
+        <meta name="keywords" content="{{ query }}, 搜索, {{ SITE_KEYWORDS }}"/>
+    {% else %}
+        <title>搜索 | {{ SITE_NAME }}</title>
+        <meta name="description" content="{{ SITE_SEO_DESCRIPTION }}"/>
+        <meta name="keywords" content="{{ SITE_KEYWORDS }}"/>
+    {% endif %}
+    <link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:title" content="搜索{% if query %}：{{ query }}{% endif %} | {{ SITE_NAME }}"/>
+    <meta property="og:description" content="{% if query %}搜索 {{ query }} 的相关内容{% else %}{{ SITE_DESCRIPTION }}{% endif %}"/>
+    <meta property="og:url" content="{{ request.get_full_path }}"/>
     <meta property="og:site_name" content="{{ SITE_NAME }}"/>
 {% endblock %}
 {% block content %}

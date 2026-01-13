@@ -3,18 +3,17 @@
 {% load cache %}
 {% load i18n %}
 {% block header %}
-    {% if tag_name %}
-        <title>{{ page_type }}:{{ tag_name }} | {{ SITE_DESCRIPTION }}</title>
-        {% comment %}<meta name="description" content="{{ page_type }}:{{ tag_name }}"/>{% endcomment %}
-    {% else %}
-        <title>{{ SITE_NAME }} | {{ SITE_DESCRIPTION }}</title>
-    {% endif %}
-    <meta name="description" content="{{ SITE_SEO_DESCRIPTION }}"/>
-    <meta name="keywords" content="{{ SITE_KEYWORDS }}"/>
-    <meta property="og:type" content="blog"/>
-    <meta property="og:title" content="{{ SITE_NAME }}"/>
-    <meta property="og:description" content="{{ SITE_DESCRIPTION }}"/>
-    <meta property="og:url" content="{{ SITE_BASE_URL }}"/>
+    <!-- 基础SEO标签（由视图层提供） -->
+    <title>{{ seo_title|default:SITE_NAME }}</title>
+    <meta name="description" content="{{ seo_description|default:SITE_SEO_DESCRIPTION }}"/>
+    <meta name="keywords" content="{{ seo_keywords|default:SITE_KEYWORDS }}"/>
+    <link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}"/>
+    
+    <!-- Open Graph 基础标签 -->
+    <meta property="og:type" content="website"/>
+    <meta property="og:title" content="{{ seo_title|default:SITE_NAME }}"/>
+    <meta property="og:description" content="{{ seo_description|default:SITE_DESCRIPTION }}"/>
+    <meta property="og:url" content="{{ request.get_full_path|urlencode }}"/>
     <meta property="og:site_name" content="{{ SITE_NAME }}"/>
 {% endblock %}
 {% block content %}

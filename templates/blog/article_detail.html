@@ -3,6 +3,11 @@
 {% load i18n %}
 
 {% block header %}
+    <!-- 基础SEO标签（由视图层提供） -->
+    <title>{{ seo_title|default:SITE_NAME }}</title>
+    <meta name="description" content="{{ seo_description|default:SITE_DESCRIPTION }}"/>
+    <meta name="keywords" content="{{ seo_keywords|default:SITE_KEYWORDS }}"/>
+    <link rel="canonical" href="{{ article.get_full_url }}"/>
 {% endblock %}
 {% block content %}
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">

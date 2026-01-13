@@ -3,14 +3,15 @@
 {% load cache %}
 {% block header %}
 
-    <title>友情链接 | {{ SITE_DESCRIPTION }}</title>
+    <title>友情链接 | {{ SITE_NAME }}</title>
 
-    <meta name="description" content="{{ SITE_SEO_DESCRIPTION }}"/>
-    <meta name="keywords" content="{{ SITE_KEYWORDS }}"/>
-    <meta property="og:type" content="blog"/>
-    <meta property="og:title" content="{{ SITE_NAME }}"/>
-    <meta property="og:description" content="{{ SITE_DESCRIPTION }}"/>
-    <meta property="og:url" content="{{ SITE_BASE_URL }}"/>
+    <meta name="description" content="本站的友情链接列表，欢迎互换友链。"/>
+    <meta name="keywords" content="友情链接, 友链, {{ SITE_KEYWORDS }}"/>
+    <link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:title" content="友情链接 | {{ SITE_NAME }}"/>
+    <meta property="og:description" content="本站的友情链接列表"/>
+    <meta property="og:url" content="{{ request.get_full_path }}"/>
     <meta property="og:site_name" content="{{ SITE_NAME }}"/>
 
 {% endblock %}
