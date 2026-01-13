@@ -4,14 +4,15 @@
 {% load i18n %}
 {% block header %}
 
-    <title>{% trans 'article archive' %} | {{ SITE_DESCRIPTION }}</title>
+    <title>{% trans 'article archive' %} | {{ SITE_NAME }}</title>
 
-    <meta name="description" content="{{ SITE_SEO_DESCRIPTION }}"/>
-    <meta name="keywords" content="{{ SITE_KEYWORDS }}"/>
-    <meta property="og:type" content="blog"/>
-    <meta property="og:title" content="{{ SITE_NAME }}"/>
-    <meta property="og:description" content="{{ SITE_DESCRIPTION }}"/>
-    <meta property="og:url" content="{{ SITE_BASE_URL }}"/>
+    <meta name="description" content="浏览所有文章的时间归档，按年份和月份整理。"/>
+    <meta name="keywords" content="文章归档, {{ SITE_KEYWORDS }}"/>
+    <link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:title" content="{% trans 'article archive' %} | {{ SITE_NAME }}"/>
+    <meta property="og:description" content="浏览所有文章的时间归档"/>
+    <meta property="og:url" content="{{ request.get_full_path }}"/>
     <meta property="og:site_name" content="{{ SITE_NAME }}"/>
 
 {% endblock %}
