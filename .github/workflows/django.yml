@@ -144,7 +144,7 @@ jobs:
       # Python环境设置 (Docker测试跳过)
       - name: 设置Python ${{ matrix.python-version }}
         if: steps.test-info.outputs.skip_python_setup == 'false'
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
           cache: 'pip'
