@@ -1,7 +1,7 @@
 bleach==6.3.0
 coverage==7.8.0
 Django==5.2.9
-django-appconf==1.1.0
+django-appconf==1.2.0
 django-compressor==4.5.1
 django-echarts==0.6.0
 django-haystack==3.3.0
