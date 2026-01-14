@@ -13,7 +13,7 @@
     "@alpinejs/collapse": "^3.13.5",
     "@alpinejs/focus": "^3.13.5",
     "@alpinejs/intersect": "^3.13.5",
-    "alpinejs": "^3.13.5"
+    "alpinejs": "^3.15.4"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.19",
