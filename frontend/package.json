@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@alpinejs/collapse": "^3.13.5",
+    "@alpinejs/collapse": "^3.15.4",
     "@alpinejs/focus": "^3.13.5",
     "@alpinejs/intersect": "^3.13.5",
     "alpinejs": "^3.13.5"
