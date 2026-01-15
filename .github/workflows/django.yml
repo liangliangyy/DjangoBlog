@@ -153,7 +153,7 @@ jobs:
       # 多层缓存策略优化
       - name: 缓存Python依赖
         if: steps.test-info.outputs.skip_python_setup == 'false'
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ~/.cache/pip
@@ -167,7 +167,7 @@ jobs:
       # Django缓存优化 (测试数据库等)
       - name: 缓存Django资源
         if: matrix.test-type != 'docker'
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             .coverage*
