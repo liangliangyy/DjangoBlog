@@ -16,6 +16,10 @@ on:
       - 'frontend/**'
       - '.github/workflows/frontend.yml'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build-and-validate:
     runs-on: ubuntu-latest
