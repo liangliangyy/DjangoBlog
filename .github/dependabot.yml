@@ -5,7 +5,19 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 3  # 从 5 减少到 3
+    # 将依赖更新分组，减少 PR 数量
+    groups:
+      production-dependencies:
+        dependency-type: "production"
+        update-types:
+          - "minor"
+          - "patch"
+      development-dependencies:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
     labels:
       - "dependencies"
       - "python"
@@ -19,7 +31,19 @@ updates:
     directory: "/frontend"
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 3  # 从 5 减少到 3
+    # 将依赖更新分组
+    groups:
+      frontend-production:
+        dependency-type: "production"
+        update-types:
+          - "minor"
+          - "patch"
+      frontend-development:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
     labels:
       - "dependencies"
       - "frontend"
@@ -27,7 +51,6 @@ updates:
       prefix: "chore"
       prefix-development: "chore"
       include: "scope"
-    # 忽略主要版本更新（减少破坏性变更）
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
@@ -37,7 +60,15 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 3  # 从 5 减少到 3
+    # 将 GitHub Actions 更新分组
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
     labels:
       - "dependencies"
       - "ci"

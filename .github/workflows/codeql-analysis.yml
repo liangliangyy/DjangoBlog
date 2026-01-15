@@ -24,6 +24,9 @@ on:
   schedule:
     - cron: '30 1 * * 0'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   CodeQL-Build:
