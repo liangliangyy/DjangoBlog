@@ -87,6 +87,51 @@
     color: #757575;
 }
 
+/* 深色模式支持 */
+@media (prefers-color-scheme: dark) {
+    .article-recommendations {
+        background: #1a1a1a;
+        border-color: #333;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    }
+
+    .recommendations-title {
+        color: #e0e0e0;
+        border-bottom-color: #3a8fb7;
+    }
+
+    .recommendation-card {
+        background: #2a2a2a;
+        border-color: #3a3a3a;
+    }
+
+    .recommendation-card:hover {
+        border-color: #3a8fb7;
+        box-shadow: 0 2px 5px rgba(58, 143, 183, 0.2);
+    }
+
+    .recommendation-title {
+        color: #d0d0d0;
+    }
+
+    .recommendation-card:hover .recommendation-title {
+        color: #3a8fb7;
+    }
+
+    .recommendation-meta {
+        color: #999;
+    }
+
+    .recommendation-category {
+        background: #3a3a3a;
+        color: #b0b0b0;
+    }
+
+    .recommendation-date {
+        color: #999;
+    }
+}
+
 /* 侧边栏推荐样式 */
 .widget_recommendations {
     margin-bottom: 20px;
