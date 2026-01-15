@@ -23,7 +23,23 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  duplicate-check:
+    runs-on: ubuntu-latest
+    outputs:
+      should_skip: ${{ steps.skip_check.outputs.should_skip }}
+    steps:
+      - id: skip_check
+        uses: fkirc/skip-duplicate-actions@v5
+        with:
+          skip_after_successful_duplicate: 'true'
+          paths_ignore: '["**/*.md", "**/*.txt", "docs/**"]'
+          do_not_skip: '["workflow_dispatch", "schedule"]'
+          concurrent_skipping: 'same_content_newer'
+          cancel_others: 'true'
+
   test:
+    needs: duplicate-check
+    if: needs.duplicate-check.outputs.should_skip != 'true'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
