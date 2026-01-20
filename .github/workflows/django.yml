@@ -32,7 +32,7 @@ jobs:
         uses: fkirc/skip-duplicate-actions@v5
         with:
           skip_after_successful_duplicate: 'true'
-          paths_ignore: '["**/*.md", "**/*.txt", "docs/**"]'
+          paths_ignore: '["**/*.md", "docs/**"]'
           do_not_skip: '["workflow_dispatch", "schedule"]'
           concurrent_skipping: 'same_content_newer'
           cancel_others: 'true'
