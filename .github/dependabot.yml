@@ -3,6 +3,7 @@ updates:
   # Python 依赖管理
   - package-ecosystem: "pip"
     directory: "/"
+    target-branch: "dev"
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 3  # 从 5 减少到 3
@@ -29,6 +30,7 @@ updates:
   # 前端 npm 依赖管理
   - package-ecosystem: "npm"
     directory: "/frontend"
+    target-branch: "dev"
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 3  # 从 5 减少到 3
@@ -58,6 +60,7 @@ updates:
   # GitHub Actions 依赖管理
   - package-ecosystem: "github-actions"
     directory: "/"
+    target-branch: "dev"
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 3  # 从 5 减少到 3
