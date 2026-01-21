@@ -1,6 +1,3 @@
-blog/static/* linguist-vendored
-*.js linguist-vendored
-*.css linguist-vendored
 * text=auto
 *.sh text eol=lf
 *.conf text eol=lf
