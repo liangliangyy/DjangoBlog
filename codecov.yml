@@ -12,6 +12,9 @@ coverage:
         target: auto
         threshold: 1%
         informational: true
+        branches:
+          - master
+          - dev
     patch:
       default:
         target: auto
