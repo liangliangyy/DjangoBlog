@@ -1,4 +1,5 @@
 import hashlib
+import json
 import logging
 import random
 import urllib
@@ -138,6 +139,33 @@ def get_markdown_toc(content):
 def comment_markdown(content):
     content = CommonMarkdown.get_markdown(content)
     return mark_safe(sanitize_html(content))
+
+
+@register.filter(is_safe=True)
+def to_json(value):
+    """
+    将 Python 对象转换为 JSON 字符串，用于模板中传递给 JavaScript
+    使用 ensure_ascii=False 以支持 emoji 等 unicode 字符
+    """
+    try:
+        return mark_safe(json.dumps(value, ensure_ascii=False))
+    except (TypeError, ValueError):
+        return mark_safe('{}')
+
+
+@register.filter
+def get_reactions_for_user(comment, user):
+    """
+    获取评论的 reactions 数据（过滤器方式）
+    用法: {{ comment|get_reactions_for_user:user }}
+    """
+    try:
+        return comment.get_reactions_summary(user if user.is_authenticated else None)
+    except Exception as e:
+        logger.error(f"Error getting reactions for comment {comment.id}: {e}")
+        return {}
+
+
 
 
 @register.filter(is_safe=True)

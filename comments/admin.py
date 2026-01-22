@@ -3,6 +3,8 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
+from .models import Comment, CommentReaction
+
 
 def disable_commentstatus(modeladmin, request, queryset):
     queryset.update(is_enable=False)
@@ -47,3 +49,32 @@ class CommentAdmin(admin.ModelAdmin):
 
     link_to_userinfo.short_description = _('User')
     link_to_article.short_description = _('Article')
+
+
+class CommentReactionAdmin(admin.ModelAdmin):
+    list_display = ('id', 'reaction_type', 'link_to_comment', 'link_to_user', 'created_at')
+    list_display_links = ('id', 'reaction_type')
+    list_filter = ('reaction_type', 'created_at')
+    raw_id_fields = ('comment', 'user')
+    search_fields = ('comment__body', 'user__username')
+    date_hierarchy = 'created_at'
+
+    def link_to_comment(self, obj):
+        info = (obj.comment._meta.app_label, obj.comment._meta.model_name)
+        link = reverse('admin:%s_%s_change' % info, args=(obj.comment.id,))
+        return format_html(
+            u'<a href="%s">Comment #%s</a>' % (link, obj.comment.id))
+
+    def link_to_user(self, obj):
+        info = (obj.user._meta.app_label, obj.user._meta.model_name)
+        link = reverse('admin:%s_%s_change' % info, args=(obj.user.id,))
+        return format_html(
+            u'<a href="%s">%s</a>' %
+            (link, obj.user.nickname if obj.user.nickname else obj.user.username))
+
+    link_to_comment.short_description = _('Comment')
+    link_to_user.short_description = _('User')
+
+
+admin.site.register(Comment, CommentAdmin)
+admin.site.register(CommentReaction, CommentReactionAdmin)
