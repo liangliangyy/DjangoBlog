@@ -22,7 +22,7 @@ openai==0.28.1
 pillow==12.1.0
 prettytable==3.17.0
 propcache==0.4.1
-pycparser==2.23
+pycparser==3.0
 pyecharts==2.0.9
 Pygments==2.19.2
 python-dateutil==2.9.0.post0
