@@ -53,25 +53,29 @@ def health_check(request):
         'timestamp': time.time()
     })
 
+from servermanager.views import statistics_view
+
 urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')),
     path('health/', health_check, name='health_check'),
+    path('statistics/', statistics_view, name='statistics'),
+    path('servermanager/', include('servermanager.urls', namespace='servermanager')),
 ]
 urlpatterns += i18n_patterns(
     re_path(r'^admin/', admin_site.urls),
-    re_path(r'', include('blog.urls', namespace='blog')),
     re_path(r'mdeditor/', include('mdeditor.urls')),
-    re_path(r'', include('comments.urls', namespace='comment')),
-    re_path(r'', include('accounts.urls', namespace='account')),
-    re_path(r'', include('oauth.urls', namespace='oauth')),
     re_path(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps},
             name='django.contrib.sitemaps.views.sitemap'),
     re_path(r'^feed/$', DjangoBlogFeed()),
     re_path(r'^rss/$', DjangoBlogFeed()),
     re_path('^search', search_view_factory(view_class=EsSearchView, form_class=ElasticSearchModelSearchForm),
             name='search'),
-    re_path(r'', include('servermanager.urls', namespace='servermanager')),
-    re_path(r'', include('owntracks.urls', namespace='owntracks'))
+    path('servermanager/', include('servermanager.urls', namespace='servermanager')),
+    re_path(r'', include('owntracks.urls', namespace='owntracks')),
+    re_path(r'', include('blog.urls', namespace='blog')),
+    re_path(r'', include('comments.urls', namespace='comment')),
+    re_path(r'', include('accounts.urls', namespace='account')),
+    re_path(r'', include('oauth.urls', namespace='oauth'))
     , prefix_default_language=False) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
