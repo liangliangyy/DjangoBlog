@@ -1,5 +1,5 @@
 bleach==6.3.0
-coverage==7.13.1
+coverage==7.13.2
 Django==5.2.9
 django-appconf==1.2.0
 django-compressor==4.6.0
@@ -11,7 +11,7 @@ django-uuslug==2.0.0
 elasticsearch==8.6.1
 elasticsearch-dsl==8.11.0
 gevent==25.9.1
-greenlet==3.3.0
+greenlet==3.3.1
 htmlgenerator==1.2.32
 jieba==0.42.1
 Jinja2==3.1.6
@@ -34,7 +34,7 @@ rcssmin==1.2.2
 redis==7.1.0
 requests==2.32.5
 rjsmin==1.2.5
-setuptools==80.10.1
+setuptools==80.10.2
 simplejson==3.20.2
 tzdata==2025.3
 user-agents==2.2.0
