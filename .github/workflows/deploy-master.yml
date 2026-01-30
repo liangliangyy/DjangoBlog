@@ -164,7 +164,7 @@ jobs:
         platforms: linux/amd64
         
     - name: 部署到生产服务器
-      uses: appleboy/ssh-action@v1.2.4
+      uses: appleboy/ssh-action@v1.2.5
       with:
         host: ${{ secrets.PRODUCTION_HOST }}
         username: ${{ secrets.PRODUCTION_USER }}
