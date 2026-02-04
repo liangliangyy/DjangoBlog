@@ -1,6 +1,6 @@
 bleach==6.3.0
 coverage==7.13.2
-Django==5.2.9
+Django==5.2.11
 django-appconf==1.2.0
 django-compressor==4.6.0
 django-echarts==0.6.0
@@ -42,3 +42,9 @@ WeRoBot==1.13.1
 Whoosh==2.7.4
 jsonpickle==4.1.1
 beautifulsoup4==4.14.3
+certifi>=2024.7.4
+configobj>=5.0.9
+cryptography>=43.0.1
+idna>=3.7
+urllib3>=2.6.3
+wheel>=0.46.2
