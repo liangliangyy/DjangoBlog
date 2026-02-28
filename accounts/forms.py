@@ -18,6 +18,15 @@ class LoginForm(AuthenticationForm):
 
 
 class RegisterForm(UserCreationForm):
+    bio = forms.CharField(
+        label=_('Bio'),
+        widget=widgets.Textarea(
+            attrs={'placeholder': "Tell us about yourself", "class": "form-control", 'rows': 3}
+        ),
+        required=False,
+        max_length=500
+    )
+    
     def __init__(self, *args, **kwargs):
         super(RegisterForm, self).__init__(*args, **kwargs)
 
@@ -38,7 +47,7 @@ class RegisterForm(UserCreationForm):
 
     class Meta:
         model = get_user_model()
-        fields = ("username", "email")
+        fields = ("username", "email", "bio")
 
 
 class ForgetPasswordForm(forms.Form):

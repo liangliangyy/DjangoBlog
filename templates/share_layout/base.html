@@ -253,7 +253,10 @@
 <script src="{% static 'blog/js/mathjax-loader.js' %}" defer></script>
 
 {% block footer %}
+    {% include 'share_layout/footer.html' %}
 {% endblock %}
+
+{% include 'account/auth_modal.html' %}
 
 <!-- 深色模式切换按钮 -->
 <div class="dark-mode-toggle-fixed" style="pointer-events: auto;">

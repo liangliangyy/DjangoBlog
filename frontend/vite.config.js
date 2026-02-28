@@ -114,7 +114,7 @@ export default defineConfig({
 
   // 开发服务器配置
   server: {
-    port: 5173,
+    port: 8800,
     host: true,
     // CORS配置，允许Django访问
     cors: true,

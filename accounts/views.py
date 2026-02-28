@@ -7,7 +7,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth import logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.hashers import make_password
-from django.http import HttpResponseRedirect, HttpResponseForbidden
+from django.http import HttpResponseRedirect, HttpResponseForbidden, JsonResponse
 from django.http.request import HttpRequest
 from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404
@@ -41,6 +41,7 @@ class RegisterView(SecureFormView):
             user = form.save(False)
             user.is_active = False
             user.source = 'Register'
+            user.bio = form.cleaned_data.get('bio', '')
             user.save(True)
             site = get_current_site().domain
             sign = get_sha256(get_sha256(settings.SECRET_KEY + str(user.id)))
@@ -68,10 +69,21 @@ class RegisterView(SecureFormView):
                 title='验证您的电子邮箱',
                 content=content)
 
+            # 检查是否为AJAX请求
+            if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({'success': True, 'message': 'Registration successful. Please check your email for verification.'})
+            
             url = reverse('accounts:result') + \
                   '?type=register&id=' + str(user.id)
             return HttpResponseRedirect(url)
         else:
+            # 检查是否为AJAX请求
+            if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                errors = {}
+                for field, error_list in form.errors.items():
+                    errors[field] = error_list[0]
+                return JsonResponse({'success': False, 'errors': errors}, status=400)
+            
             return self.render_to_response({
                 'form': form
             })
@@ -133,6 +145,9 @@ class LoginView(LoginFormView):
                 self.request.session.set_expiry(settings.SESSION_COOKIE_AGE)
                 cookie_max_age = settings.SESSION_COOKIE_AGE
 
+            # 生成Token
+            token = get_sha256(get_sha256(settings.SECRET_KEY + str(self.request.user.id)))
+            
             # 获取响应对象并设置登录标记 cookie
             response = super(LoginView, self).form_valid(form)
             response.set_cookie(
@@ -142,9 +157,27 @@ class LoginView(LoginFormView):
                 httponly=False,  # 允许 JavaScript 访问
                 samesite='Lax'
             )
+            response.set_cookie(
+                'token',
+                token,
+                max_age=86400,  # 24小时过期
+                httponly=False,
+                samesite='Lax'
+            )
+            
+            # 检查是否为AJAX请求
+            if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({'success': True, 'token': token})
+            
             return response
-            # return HttpResponseRedirect('/')
         else:
+            # 检查是否为AJAX请求
+            if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                errors = {}
+                for field, error_list in form.errors.items():
+                    errors[field] = error_list[0]
+                return JsonResponse({'success': False, 'errors': errors}, status=400)
+            
             return self.render_to_response({
                 'form': form
             })

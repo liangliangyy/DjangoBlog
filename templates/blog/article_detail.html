@@ -48,6 +48,23 @@
                 <hr class="my-12 border-t-2 border-gray-300 dark:border-gray-600">
                 <div class="comments-area p-6 bg-gradient-to-r from-primary-50 to-blue-50 dark:from-gray-800 dark:to-gray-900 rounded-lg border border-primary-200 dark:border-gray-700">
                     <div class="flex items-start space-x-4">
+                        <div class="flex-shrink-0">
+                            <svg class="w-10 h-10 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">{% trans 'Sign in to comment' %}</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">{% trans 'Please sign in to leave a comment.' %}</p>
+                            <button
+                                onclick="showAuthModal()"
+                                class="py-2 px-4 bg-[#d4c4b7] hover:bg-[#c0b0a3] text-white font-bold rounded-lg transition-all transform hover:scale-[0.98] active:scale-[0.96]">
+                                {% trans 'Sign In' %}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
                         <svg class="w-8 h-8 text-primary-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                         </svg>
