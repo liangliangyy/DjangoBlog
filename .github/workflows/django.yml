@@ -334,7 +334,7 @@ jobs:
       # Docker构建测试
       - name: 设置QEMU
         if: matrix.test-type == 'docker'
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@v4
         
       - name: 设置Docker Buildx
         if: matrix.test-type == 'docker'
@@ -390,7 +390,7 @@ jobs:
       # 上传测试工件
       - name: 上传覆盖率HTML报告
         if: matrix.coverage == true && always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: coverage-report-${{ steps.test-info.outputs.test_name }}
           path: htmlcov/
