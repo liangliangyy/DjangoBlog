@@ -29,7 +29,7 @@ python-dateutil==2.9.0.post0
 python-ipware==3.0.0
 python-logstash==0.4.8
 python-slugify==8.0.4
-pytz==2025.2
+pytz==2026.1.post1
 rcssmin==1.2.2
 redis==7.2.1
 requests==2.32.5
