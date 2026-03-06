@@ -334,7 +334,7 @@ jobs:
       # Docker构建测试
       - name: 设置QEMU
         if: matrix.test-type == 'docker'
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@v4
         
       - name: 设置Docker Buildx
         if: matrix.test-type == 'docker'
