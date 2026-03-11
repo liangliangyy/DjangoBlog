@@ -143,7 +143,7 @@ jobs:
         
     - name: 提取镜像元数据
       id: meta
-      uses: docker/metadata-action@v5
+      uses: docker/metadata-action@v6
       with:
         images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
         tags: |
