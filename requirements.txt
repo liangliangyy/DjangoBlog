@@ -18,7 +18,7 @@ Jinja2==3.1.6
 Markdown==3.10.2
 MarkupSafe==3.0.3
 mysqlclient==2.2.8
-openai==2.24.0
+openai==2.26.0
 pillow==12.1.1
 prettytable==3.17.0
 propcache==0.4.1
@@ -29,12 +29,12 @@ python-dateutil==2.9.0.post0
 python-ipware==3.0.0
 python-logstash==0.4.8
 python-slugify==8.0.4
-pytz==2025.2
+pytz==2026.1.post1
 rcssmin==1.2.2
-redis==7.2.1
+redis==7.3.0
 requests==2.32.5
 rjsmin==1.2.5
-setuptools==82.0.0
+setuptools==82.0.1
 simplejson==3.20.2
 tzdata==2025.3
 user-agents==2.2.0

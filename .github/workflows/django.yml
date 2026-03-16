@@ -338,11 +338,11 @@ jobs:
         
       - name: 设置Docker Buildx
         if: matrix.test-type == 'docker'
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
         
       - name: Docker构建测试
         if: matrix.test-type == 'docker'
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           push: false
