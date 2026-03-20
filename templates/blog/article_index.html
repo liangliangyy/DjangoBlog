@@ -1,69 +1,69 @@
 {% extends 'share_layout/base.html' %}
 {% load blog_tags %}
-{% load cache %}
 {% load i18n %}
+
 {% block header %}
-    <!-- 基础SEO标签（由视图层提供） -->
-    <title>{{ seo_title|default:SITE_NAME }}</title>
-    <meta name="description" content="{{ seo_description|default:SITE_SEO_DESCRIPTION }}"/>
-    <meta name="keywords" content="{{ seo_keywords|default:SITE_KEYWORDS }}"/>
-    <link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}"/>
-    
-    <!-- Open Graph 基础标签 -->
-    <meta property="og:type" content="website"/>
-    <meta property="og:title" content="{{ seo_title|default:SITE_NAME }}"/>
-    <meta property="og:description" content="{{ seo_description|default:SITE_DESCRIPTION }}"/>
-    <meta property="og:url" content="{{ request.get_full_path|urlencode }}"/>
-    <meta property="og:site_name" content="{{ SITE_NAME }}"/>
+    <title>{{ SITE_NAME }}</title>
+    <meta name="description" content="{{ SITE_DESCRIPTION }}"/>
+    <meta name="keywords" content="{{ SITE_KEYWORDS }}"/>
 {% endblock %}
+
 {% block content %}
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
-        <!-- 主内容区域 - 调整为9列，给主内容更多空间 -->
-        <div id="primary" class="site-content lg:col-span-8">
-            {% if page_type and tag_name %}
-                <!-- 面包屑导航 -->
-                <nav aria-label="breadcrumb" class="breadcrumb-nav">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item">
-                            <a href="/" class="breadcrumb-link">
-                                <svg class="breadcrumb-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-                                </svg>
-                                {% trans 'Home' %}
-                            </a>
-                        </li>
-                        <li class="breadcrumb-separator" aria-hidden="true">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                            </svg>
-                        </li>
-                        <li class="breadcrumb-item">
-                            <span class="breadcrumb-current">{{ page_type }}: {{ tag_name }}</span>
-                        </li>
-                    </ol>
-                </nav>
+    <div class="mx-auto max-w-6xl px-4 py-4 lg:px-6 lg:py-6">
+        {# Main Grid #}
+        <div class="grid gap-6 lg:grid-cols-[1fr_300px]">
+            {# Main Content #}
+            <main>
+                {# Title Section #}
+                <div class="mb-6">
+                    {% if page_type == "分类目录归档" %}
+                        <p class="mb-0.5 text-xs text-muted-foreground">分类</p>
+                        <h2 class="text-xl font-bold text-foreground m-0">{{ tag_name }}</h2>
+                    {% elif page_type == "分类标签归档" %}
+                        <p class="mb-0.5 text-xs text-muted-foreground">标签</p>
+                        <h2 class="text-xl font-bold text-foreground m-0">{{ tag_name }}</h2>
+                    {% elif page_type == "作者文章归档" %}
+                        <p class="mb-0.5 text-xs text-muted-foreground">作者</p>
+                        <h2 class="text-xl font-bold text-foreground m-0">{{ tag_name }}</h2>
+                    {% else %}
+                        <h2 class="text-xl font-bold text-foreground m-0">{% trans 'recent articles' %}</h2>
+                    {% endif %}
+                </div>
 
-                <header class="archive-header mb-6">
-                    <p class="archive-title text-2xl font-bold">{{ page_type }}：<span class="text-primary-600 dark:text-primary-400">{{ tag_name }}</span></p>
-                </header><!-- .archive-header -->
-            {% endif %}
-
-            <div id="article-list-container">
-                <div id="content" role="main" class="space-y-6">
+                {# Article List #}
+                <div class="flex flex-col gap-5">
                     {% for article in article_list %}
                         {% load_article_detail article True user %}
                     {% endfor %}
-                </div><!-- #content -->
+                </div>
 
+                {# Pagination #}
                 {% if is_paginated %}
                     {% load_pagination_info page_obj page_type tag_name %}
                 {% endif %}
-            </div><!-- #article-list-container -->
-        </div><!-- #primary -->
+            </main>
 
-        <!-- 侧边栏 - 调整为3列，更紧凑 -->
-        <aside id="secondary" class="widget-area lg:col-span-4">
-            {% load_sidebar user linktype %}
-        </aside>
+            {# Sidebar - Desktop: fixed right column #}
+            <div class="hidden lg:block">
+                <div class="sticky top-20">
+                    {% load_sidebar user "p" %}
+                </div>
+            </div>
+        </div>
+
+        {# Mobile Sidebar - shown below content on small screens #}
+        <div class="mt-8 lg:hidden">
+            <details class="rounded-xl border border-border bg-card group">
+                <summary class="flex cursor-pointer items-center justify-between p-4 text-sm font-medium text-muted-foreground list-none [&::-webkit-details-marker]:hidden">
+                    <span>{% trans 'More content' %}</span>
+                    <svg class="size-4 text-muted-foreground transition-transform duration-200 group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </summary>
+                <div class="border-t border-border p-4">
+                    {% load_sidebar user "p" %}
+                </div>
+            </details>
+        </div>
     </div>
 {% endblock %}

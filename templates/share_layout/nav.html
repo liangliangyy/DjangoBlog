@@ -1,104 +1,274 @@
+{% load blog_tags %}
 {% load i18n %}
 
-<nav id="site-navigation" class="main-navigation" role="navigation" x-data="navigation()" hx-boost="true" hx-target="#main" hx-select="#main" hx-swap="innerHTML" hx-push-url="true">
-    <!-- 移动端汉堡菜单按钮 -->
-    <button type="button"
-            class="menu-toggle hamburger-btn"
-            @click="toggleMenu()"
-            :aria-expanded="menuOpen ? 'true' : 'false'"
-            aria-controls="menu-drawer"
-            aria-label="{% trans 'Toggle navigation menu' %}">
-        <span class="screen-reader-text">{% trans 'Menu' %}</span>
-        <!-- 汉堡图标 (三条线) -->
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-        </svg>
-    </button>
+<header class="sticky top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-xl"
+        @keydown.ctrl.k.window.prevent="document.getElementById('header-search-input')?.focus()"
+        @keydown.meta.k.window.prevent="document.getElementById('header-search-input')?.focus()">
+    {# Skip to content link for accessibility #}
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[200] focus:rounded-lg focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-primary-foreground focus:shadow-lg">
+        {% trans 'Skip to content' %}
+    </a>
+    <div class="mx-auto flex max-w-6xl items-center gap-6 px-4 py-3 lg:px-6">
 
-    <!-- 移动端：侧边抽屉遮罩层 -->
-    <div class="drawer-overlay"
-         x-show="menuOpen && windowWidth < 768"
-         @click="toggleMenu()"
-         x-transition:enter="transition ease-out duration-300"
-         x-transition:enter-start="opacity-0"
-         x-transition:enter-end="opacity-100"
-         x-transition:leave="transition ease-in duration-200"
-         x-transition:leave-start="opacity-100"
-         x-transition:leave-end="opacity-0"
-         x-cloak>
-    </div>
+        {# Logo #}
+        <a href="/" class="group flex flex-col items-end leading-none">
+            <span class="text-[2.125rem] font-bold tracking-tight text-foreground transition-colors group-hover:text-primary">
+                {{ SITE_NAME }}
+            </span>
+            {% if SITE_DESCRIPTION %}
+            <span class="text-[11px] text-muted-foreground tracking-wide">
+                {{ SITE_DESCRIPTION }}
+            </span>
+            {% endif %}
+        </a>
 
-    <!-- 导航菜单容器 -->
-    <div class="menu-container"
-         :class="{ 'drawer-open': menuOpen && windowWidth < 768 }">
-        <!-- 移动端抽屉头部 -->
-        <div class="drawer-header md:hidden">
-            <div class="drawer-header-content">
-                <!-- 网站图标 -->
-                <div class="drawer-site-icon">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-                    </svg>
+        {# Desktop Nav #}
+        <nav class="hidden flex-1 items-center gap-0.5 lg:flex"
+             hx-boost="true"
+             hx-target="#main"
+             hx-select="#main"
+             hx-swap="innerHTML"
+             hx-push-url="true">
+            {% current_nav_item request as nav_active %}
+            <a href="{% url 'blog:index' %}"
+               class="relative rounded-lg px-3.5 py-2 text-sm font-medium transition-all duration-200 hover:bg-secondary hover:text-foreground {% if nav_active == 'index' %}text-primary bg-primary/5{% else %}text-muted-foreground{% endif %}"
+               {% if nav_active == 'index' %}aria-current="page"{% endif %}>
+                {% trans 'index' %}
+                {% if nav_active == 'index' %}<span class="absolute bottom-0 left-1/2 h-0.5 w-4 -translate-x-1/2 rounded-full bg-primary"></span>{% endif %}
+            </a>
+
+            {# Each top-level category as its own nav link #}
+            {% query nav_category_list parent_category__isnull=True as nav_top_cats %}
+            {% for category in nav_top_cats %}
+                {% query nav_category_list parent_category=category as nav_children %}
+                {% if nav_children %}
+                {# Category with children — hover dropdown #}
+                <div class="relative" x-data="{ open: false }"
+                     @mouseenter="open = true" @mouseleave="open = false">
+                    <button @click="open = !open"
+                            class="relative flex items-center gap-1 rounded-lg px-3.5 py-2 text-sm font-medium transition-all duration-200 hover:bg-secondary hover:text-foreground {% if request.path == category.get_absolute_url %}text-primary bg-primary/5{% else %}text-muted-foreground{% endif %}">
+                        {{ category.name }}
+                        <svg class="size-3.5 transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <div x-show="open"
+                         x-transition:enter="transition ease-out duration-150"
+                         x-transition:enter-start="opacity-0 translate-y-1"
+                         x-transition:enter-end="opacity-100 translate-y-0"
+                         x-transition:leave="transition ease-in duration-100"
+                         x-transition:leave-start="opacity-100"
+                         x-transition:leave-end="opacity-0"
+                         class="absolute left-0 top-full z-50 mt-1 min-w-48 overflow-hidden rounded-xl border border-border bg-card p-1.5 shadow-xl shadow-foreground/5"
+                         style="display: none;">
+                        {% for child in nav_children %}
+                            <a href="{{ child.get_absolute_url }}"
+                               @click="open = false"
+                               class="flex items-center justify-between rounded-lg px-3 py-2 text-sm text-foreground transition-colors hover:bg-secondary hover:text-primary">
+                                <span>{{ child.name }}</span>
+                                <span class="text-xs text-muted-foreground tabular-nums">{{ child.article_set.count }}</span>
+                            </a>
+                        {% endfor %}
+                    </div>
                 </div>
-                <!-- 网站标题和副标题 -->
-                <div class="drawer-site-info">
-                    <h2 class="drawer-title">{{ SITE_NAME }}</h2>
-                    <p class="drawer-subtitle">{% trans 'Navigation' %}</p>
-                </div>
-            </div>
-            <!-- 关闭按钮 -->
-            <button type="button"
-                    @click="toggleMenu()"
-                    class="drawer-close-btn"
-                    aria-label="{% trans 'Close menu' %}">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {% else %}
+                {# Leaf category — simple link #}
+                <a href="{{ category.get_absolute_url }}"
+                   class="relative rounded-lg px-3.5 py-2 text-sm font-medium transition-all duration-200 hover:bg-secondary hover:text-foreground {% if request.path == category.get_absolute_url %}text-primary bg-primary/5{% else %}text-muted-foreground{% endif %}">
+                    {{ category.name }}
+                    {% if request.path == category.get_absolute_url %}<span class="absolute bottom-0 left-1/2 h-0.5 w-4 -translate-x-1/2 rounded-full bg-primary"></span>{% endif %}
+                </a>
+                {% endif %}
+            {% endfor %}
+
+            {# Divider #}
+            <span class="mx-1 h-4 w-px bg-border/60"></span>
+
+            <a href="{% url 'blog:archives' %}"
+               class="relative rounded-lg px-3.5 py-2 text-sm font-medium transition-all duration-200 hover:bg-secondary hover:text-foreground {% if nav_active == 'archives' %}text-primary bg-primary/5{% else %}text-muted-foreground{% endif %}"
+               {% if nav_active == 'archives' %}aria-current="page"{% endif %}>
+                {% trans 'archives' %}
+                {% if nav_active == 'archives' %}<span class="absolute bottom-0 left-1/2 h-0.5 w-4 -translate-x-1/2 rounded-full bg-primary"></span>{% endif %}
+            </a>
+            {% for page in nav_pages %}
+                <a href="{{ page.get_absolute_url }}"
+                   class="relative rounded-lg px-3.5 py-2 text-sm font-medium transition-all duration-200 hover:bg-secondary hover:text-foreground {% if request.path == page.get_absolute_url %}text-primary bg-primary/5{% else %}text-muted-foreground{% endif %}"
+                   {% if request.path == page.get_absolute_url %}aria-current="page"{% endif %}>
+                    {{ page.title }}
+                    {% if request.path == page.get_absolute_url %}<span class="absolute bottom-0 left-1/2 h-0.5 w-4 -translate-x-1/2 rounded-full bg-primary"></span>{% endif %}
+                </a>
+            {% endfor %}
+        </nav>
+
+        {# Desktop inline search bar #}
+        <form action="{% url 'search' %}" method="get"
+              class="hidden lg:flex items-center gap-2 h-9 w-44 rounded-lg border border-border bg-secondary/60 px-3 transition-all duration-300 focus-within:w-56 focus-within:border-primary/40 focus-within:bg-background focus-within:ring-2 focus-within:ring-primary/20">
+            <svg class="size-4 shrink-0 text-muted-foreground pointer-events-none"
+                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+            <input id="header-search-input"
+                   name="q"
+                   type="search"
+                   placeholder="搜索文章..."
+                   class="flex-1 min-w-0 appearance-none bg-transparent p-0 border-0 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"/>
+        </form>
+
+        {# Right: theme toggle + mobile menu #}
+        <div class="ml-auto flex items-center gap-0.5 lg:ml-0">
+            {# Theme toggle #}
+            <button class="size-9 rounded-lg text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+                    @click="window.themeManager && window.themeManager.toggle()"
+                    aria-label="{% trans 'Toggle theme' %}">
+                <svg class="size-[18px] mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                </svg>
+            </button>
+
+            {# Mobile menu button #}
+            <button class="size-9 rounded-lg text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground lg:hidden"
+                    @click="$store.nav.mobileOpen = !$store.nav.mobileOpen"
+                    aria-label="{% trans 'Menu' %}">
+                <svg x-show="!$store.nav.mobileOpen" class="size-[18px] mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+                <svg x-show="$store.nav.mobileOpen" class="size-[18px] mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" x-cloak>
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                 </svg>
             </button>
         </div>
-
-        <ul id="menu-drawer"
-            class="nav-menu"
-            :class="{ 'toggled-on': menuOpen }"
-            x-show="menuOpen || windowWidth >= 768"
-            x-transition:enter="transition ease-out duration-300"
-            x-transition:enter-start="opacity-0 transform -translate-x-full"
-            x-transition:enter-end="opacity-100 transform translate-x-0"
-            x-transition:leave="transition ease-in duration-200"
-            x-transition:leave-start="opacity-100 transform translate-x-0"
-            x-transition:leave-end="opacity-0 transform -translate-x-full">
-            <li id="menu-item-3498"
-                class="menu-item menu-item-type-custom menu-item-object-custom {% if request.path == '/' %}current-menu-item current_page_item{% endif %} menu-item-home menu-item-3498">
-                <a href="/" hx-boost="false" @click="closeMobileMenu()">
-                    <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-                    </svg>
-                    {% trans 'index' %}
-                </a>
-            </li>
-
-            {% load blog_tags %}
-            {% query nav_category_list parent_category=None as root_categorys %}
-            {% for node in root_categorys %}
-                {% include 'share_layout/nav_node.html' %}
-            {% endfor %}
-            {% if nav_pages %}
-                {% for node in nav_pages %}
-
-                    <li id="menu-item-{{ node.pk }}"
-                        class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children {% if request.path == node.get_absolute_url %}current-menu-item current_page_item{% endif %} menu-item-{{ node.pk }}">
-                        <a href="{{ node.get_absolute_url }}" hx-boost="false" @click="closeMobileMenu()">{{ node.title }}</a>
-                    </li>
-                {% endfor %}
-            {% endif %}
-            <li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children {% if '/archives' in request.path %}current-menu-item current_page_item{% endif %}">
-                <a href="{% url "blog:archives" %}" hx-boost="false" @click="closeMobileMenu()">
-                    <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
-                    </svg>
-                    {% trans 'Article archive' %}
-                </a>
-            </li>
-        </ul>
     </div>
-</nav><!-- #site-navigation -->
+
+    {# Mobile Nav #}
+    <nav x-show="$store.nav.mobileOpen"
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 -translate-y-2"
+         x-transition:enter-end="opacity-100 translate-y-0"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="opacity-100 translate-y-0"
+         x-transition:leave-end="opacity-0 -translate-y-2"
+         class="border-t border-border/60 bg-background/95 px-4 py-2 backdrop-blur-xl lg:hidden"
+         x-cloak
+         hx-boost="true"
+         hx-target="#main"
+         hx-select="#main"
+         hx-swap="innerHTML"
+         hx-push-url="true">
+        <div class="flex flex-col gap-0.5"
+             x-data="{ mobileCategoryOpen: false }">
+
+            {# Mobile search #}
+            <form action="{% url 'search' %}" method="get"
+                  class="my-1 flex items-center gap-2 rounded-lg bg-secondary px-3 py-2">
+                <svg class="size-4 shrink-0 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+                <input name="q" type="search"
+                       placeholder="搜索文章..."
+                       class="flex-1 appearance-none bg-transparent p-0 border-0 rounded-none text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"/>
+            </form>
+
+            <div class="my-1 border-t border-border/60"></div>
+
+            <a href="{% url 'blog:index' %}"
+               @click="$store.nav.mobileOpen = false"
+               class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-secondary">
+                <svg class="size-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                </svg>
+                {% trans 'index' %}
+            </a>
+
+            {# Mobile Category Accordion #}
+            <div>
+                <button @click="mobileCategoryOpen = !mobileCategoryOpen"
+                        class="flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-secondary">
+                    <span class="flex items-center gap-3">
+                        <svg class="size-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
+                        </svg>
+                        {% trans 'category' %}
+                    </span>
+                    <svg :class="mobileCategoryOpen ? 'rotate-180' : ''" class="size-4 text-muted-foreground transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+                <div x-show="mobileCategoryOpen"
+                     x-transition
+                     class="ml-7 flex flex-col gap-0.5 border-l-2 border-border pl-3"
+                     x-cloak>
+                    {% query nav_category_list parent_category__isnull=True as mobile_top_cats %}
+                    {% for category in mobile_top_cats %}
+                        {% query nav_category_list parent_category=category as mobile_children %}
+                        {% if mobile_children %}
+                        <div x-data="{ mobileSubOpen: false }">
+                            <div class="flex items-center">
+                                <a href="{{ category.get_absolute_url }}"
+                                   @click="$store.nav.mobileOpen = false"
+                                   class="flex flex-1 items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors hover:bg-secondary hover:text-primary">
+                                    <span class="font-medium text-foreground">{{ category.name }}</span>
+                                    <span class="text-xs text-muted-foreground">{{ category.article_set.count }}</span>
+                                </a>
+                                <button @click="mobileSubOpen = !mobileSubOpen"
+                                        class="flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-secondary">
+                                    <svg class="size-3.5 transition-transform duration-200" :class="mobileSubOpen ? 'rotate-90' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div x-show="mobileSubOpen" x-transition
+                                 class="ml-3 flex flex-col gap-0.5 border-l border-border/60 pl-3"
+                                 x-cloak>
+                                {% for child in mobile_children %}
+                                    <a href="{{ child.get_absolute_url }}"
+                                       @click="$store.nav.mobileOpen = false"
+                                       class="flex items-center justify-between rounded-lg px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-primary">
+                                        <span>{{ child.name }}</span>
+                                        <span class="text-xs">{{ child.article_set.count }}</span>
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% else %}
+                        <a href="{{ category.get_absolute_url }}"
+                           @click="$store.nav.mobileOpen = false"
+                           class="flex items-center justify-between rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-primary">
+                            <span>{{ category.name }}</span>
+                            <span class="text-xs">{{ category.article_set.count }}</span>
+                        </a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <a href="{% url 'blog:archives' %}"
+               @click="$store.nav.mobileOpen = false"
+               class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-secondary">
+                <svg class="size-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
+                </svg>
+                {% trans 'archives' %}
+            </a>
+            {% for page in nav_pages %}
+                <a href="{{ page.get_absolute_url }}"
+                   @click="$store.nav.mobileOpen = false"
+                   class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-secondary">
+                    <svg class="size-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    {{ page.title }}
+                </a>
+            {% endfor %}
+        </div>
+    </nav>
+</header>
+
+<script>
+document.addEventListener('alpine:init', () => {
+    Alpine.store('nav', {
+        mobileOpen: false
+    });
+});
+</script>

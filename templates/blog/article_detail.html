@@ -1,5 +1,6 @@
 {% extends 'share_layout/base.html' %}
 {% load blog_tags %}
+{% load cache %}
 {% load i18n %}
 
 {% block header %}
@@ -9,76 +10,180 @@
     <meta name="keywords" content="{{ seo_keywords|default:SITE_KEYWORDS }}"/>
     <link rel="canonical" href="{{ article.get_full_url }}"/>
 {% endblock %}
+
 {% block content %}
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
-        <!-- 主内容区域 - 调整为9列，给文章更多空间 -->
-        <div id="primary" class="site-content lg:col-span-8">
-            <!-- 移除max-w-3xl限制，使用更宽的max-w-5xl，让文章内容更舒展 -->
-            <!-- 移动端不加padding，避免多层嵌套导致内容过窄 -->
-            <div id="content" role="main" class="max-w-5xl mx-auto px-0 sm:px-4">
+    <div class="mx-auto max-w-6xl px-4 py-4 lg:px-6 lg:py-6">
+        <div class="grid gap-6 lg:grid-cols-[1fr_300px]">
+            {# Main Content #}
+            <main>
+                {# Article #}
+                <article class="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+                    <div class="p-6 md:p-8">
+                        {# Breadcrumb #}
+                        {% if article.type == 'a' %}
+                            {% cache 36000 breadcrumb_v3 article.pk %}
+                                {% load_breadcrumb article %}
+                            {% endcache %}
+                        {% endif %}
 
-            {% load_article_detail article False user %}
+                        {# Title #}
+                        <h1 class="mb-4 text-2xl font-bold leading-tight tracking-tight text-foreground md:text-3xl">
+                            {{ article.title }}
+                        </h1>
 
-            {% if article.type == 'a' %}
-                <nav class="nav-single">
-                    <h3 class="assistive-text">文章导航</h3>
-                    {% if next_article %}
+                        {# Meta #}
+                        <div class="mb-6 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+                            <a href="{{ article.category.get_absolute_url }}"
+                               class="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 font-medium text-primary transition-colors hover:bg-primary/20">
+                                {{ article.category.name }}
+                            </a>
+                            <span class="flex items-center gap-1">
+                                <svg class="size-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                </svg>
+                                {{ article.pub_time|date:"Y-m-d" }}
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <svg class="size-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                </svg>
+                                {{ article.views }}
+                            </span>
+                            {% if article.comment_status == "o" and open_site_comment %}
+                                <span class="flex items-center gap-1">
+                                    <svg class="size-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                                    </svg>
+                                    {{ article.comment_set.count }}
+                                </span>
+                            {% endif %}
+                        </div>
 
-                        <span class="nav-previous"><a href="{{ next_article.get_absolute_url }}" rel="prev"><span
-                                class="meta-nav">&larr;</span> {{ next_article.title }}</a></span>
-                    {% endif %}
-                    {% if prev_article %}
-                        <span class="nav-next"><a href="{{ prev_article.get_absolute_url }}"
-                                                  rel="next">{{ prev_article.title }} <span
-                                class="meta-nav">&rarr;</span></a></span>
-                    {% endif %}
-                </nav><!-- .nav-single -->
-            {% endif %}
+                        <div class="mb-6 h-px bg-border/60"></div>
 
-            </div><!-- #content -->
+                        {# Content #}
+                        <div class="entry-content max-w-full" itemprop="articleBody">
+                            {% if article.show_toc %}
+                                {% get_markdown_toc article.body as toc %}
+                                <details class="mb-6 group" open>
+                                    <summary class="flex cursor-pointer select-none items-center gap-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground list-none [&::-webkit-details-marker]:hidden">
+                                        <svg class="size-3 transition-transform duration-150 group-open:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                        </svg>
+                                        {% trans 'toc' %}
+                                    </summary>
+                                    <nav class="toc-nav mt-3 border-l-2 border-border/50 pl-4 text-sm
+                                                [&_ul]:my-0 [&_ul]:ml-4 [&_ul]:list-none [&_ul]:p-0
+                                                [&_li]:py-0.5">
+                                        {{ toc|safe }}
+                                    </nav>
+                                </details>
+                            {% endif %}
+                            <div class="article prose prose-base dark:prose-invert max-w-none">
+                                {% render_article_content article False %}
+                            </div>
+                        </div>
 
-            {% if article.comment_status == "o" and OPEN_SITE_COMMENT %}
+                        {# Tags #}
+                        <div class="mt-8 flex flex-wrap items-center gap-2 border-t border-border pt-6">
+                            {% for tag in article.tags.all %}
+                                <a href="{{ tag.get_absolute_url }}"
+                                   class="inline-flex items-center rounded-md bg-secondary px-2.5 py-1 text-xs text-foreground/80 transition-colors hover:text-primary">
+                                    {{ tag.name }}
+                                </a>
+                            {% endfor %}
+                        </div>
 
-            {# 使用现代化评论系统 #}
-            {% include 'comments/tags/comment_list_modern.html' %}
+                        {# Prev/Next Navigation #}
+                        {% if article.type == 'a' and next_article or prev_article %}
+                            <div class="mt-8 grid gap-4 {% if next_article and prev_article %}md:grid-cols-2{% endif %}">
+                                {% if next_article %}
+                                    <a href="{{ next_article.get_absolute_url }}" rel="prev"
+                                       class="group flex items-center gap-3 rounded-xl border border-border p-4 transition-all hover:border-primary/20 hover:bg-secondary/40">
+                                        <svg class="size-4 shrink-0 text-muted-foreground transition-colors group-hover:text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                                        </svg>
+                                        <div class="flex flex-col">
+                                            <span class="text-[11px] text-muted-foreground">
+                                                上一篇
+                                            </span>
+                                            <span class="line-clamp-1 text-sm font-medium text-foreground transition-colors group-hover:text-primary">
+                                                {{ next_article.title }}
+                                            </span>
+                                        </div>
+                                    </a>
+                                {% endif %}
 
-            {% if user.is_authenticated %}
-                {% include 'comments/tags/post_comment_modern.html' %}
-            {% else %}
-                <hr class="my-12 border-t-2 border-gray-300 dark:border-gray-600">
-                <div class="comments-area p-6 bg-gradient-to-r from-primary-50 to-blue-50 dark:from-gray-800 dark:to-gray-900 rounded-lg border border-primary-200 dark:border-gray-700">
-                    <div class="flex items-start space-x-4">
-                        <svg class="w-8 h-8 text-primary-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                        </svg>
-                        <div>
-                            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                                登录后发表评论
-                            </h3>
-                            <p class="text-gray-700 dark:text-gray-300 mb-4">
-                                您还没有登录，请先
+                                {% if prev_article %}
+                                    <a href="{{ prev_article.get_absolute_url }}" rel="next"
+                                       class="group flex items-center justify-end gap-3 rounded-xl border border-border p-4 text-right transition-all hover:border-primary/20 hover:bg-secondary/40 {% if not next_article %}md:col-start-1 md:justify-self-end md:max-w-[50%]{% endif %}">
+                                        <div class="flex flex-col">
+                                            <span class="text-[11px] text-muted-foreground">
+                                                下一篇
+                                            </span>
+                                            <span class="line-clamp-1 text-sm font-medium text-foreground transition-colors group-hover:text-primary">
+                                                {{ prev_article.title }}
+                                            </span>
+                                        </div>
+                                        <svg class="size-4 shrink-0 text-muted-foreground transition-colors group-hover:text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                        </svg>
+                                    </a>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </article>
+
+                {# Article bottom plugins #}
+                {% render_plugin_widgets 'article_bottom' article=article %}
+
+                {# Comments Section #}
+                {% if article.comment_status == "o" and OPEN_SITE_COMMENT %}
+                    {% include 'comments/tags/comment_list_modern.html' %}
+
+                    {% if user.is_authenticated %}
+                        {% include 'comments/tags/post_comment_modern.html' %}
+                    {% else %}
+                        <div class="mt-8 flex items-center justify-between gap-4 rounded-xl border border-border bg-card px-5 py-4">
+                            <p class="text-sm text-muted-foreground m-0">
                                 <a href="{% url "account:login" %}?next={{ request.get_full_path }}"
-                                   class="text-primary-600 dark:text-primary-400 font-medium hover:underline"
+                                   class="text-primary font-medium hover:underline"
                                    rel="nofollow"
-                                   hx-boost="false">登录</a>
-                                后发表评论。
+                                   hx-boost="false">{% trans 'login' %}</a>
+                                后发表评论
                             </p>
-
                             {% load oauth_tags %}
-                            <div class="flex flex-wrap gap-2">
+                            <div class="flex flex-wrap gap-2 shrink-0">
                                 {% load_oauth_applications request %}
                             </div>
                         </div>
-                    </div>
-                </div>
-            {% endif %}
-            {% endif %}
-        </div><!-- #primary -->
+                    {% endif %}
+                {% endif %}
+            </main>
 
-        <!-- 侧边栏 - 移动端(<1024px)自动堆叠到主内容下方 -->
-        <!-- 侧边栏 - 调整为3列，更紧凑 -->
-        <aside id="secondary" class="widget-area lg:col-span-4">
-            {% load_sidebar user "p" %}
-        </aside>
+            {# Sidebar - Desktop #}
+            <div class="hidden lg:block">
+                <div class="sticky top-20">
+                    {% load_sidebar user "p" %}
+                </div>
+            </div>
+        </div>
+
+        {# Mobile Sidebar #}
+        <div class="mt-8 lg:hidden">
+            <details class="rounded-xl border border-border bg-card group">
+                <summary class="flex cursor-pointer items-center justify-between p-4 text-sm font-medium text-muted-foreground list-none [&::-webkit-details-marker]:hidden">
+                    <span>{% trans 'More content' %}</span>
+                    <svg class="size-4 text-muted-foreground transition-transform duration-200 group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </summary>
+                <div class="border-t border-border p-4">
+                    {% load_sidebar user "p" %}
+                </div>
+            </details>
+        </div>
     </div>
 {% endblock %}

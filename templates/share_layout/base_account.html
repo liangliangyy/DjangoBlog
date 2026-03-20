@@ -31,14 +31,15 @@
             function applyTheme(theme) {
                 if (theme === 'dark') {
                     document.documentElement.setAttribute(THEME_ATTR, 'dark');
-                    if (document.body) document.body.setAttribute(THEME_ATTR, 'dark');
+                    document.documentElement.classList.add('dark');
                 } else {
                     document.documentElement.removeAttribute(THEME_ATTR);
-                    if (document.body) document.body.removeAttribute(THEME_ATTR);
+                    document.documentElement.classList.remove('dark');
                 }
             }
 
             applyTheme(getPreferredTheme());
+            window.__THEME__ = getPreferredTheme();
         })();
     </script>
 
@@ -49,22 +50,32 @@
     {% compress css %}
         {% block compress_css %}{% endblock %}
     {% endcompress %}
+
+    <style>
+        .account-bg {
+            background-image:
+                radial-gradient(at 20% 20%, rgb(var(--color-primary-500) / 0.06) 0%, transparent 50%),
+                radial-gradient(at 80% 80%, rgb(var(--color-primary-400) / 0.04) 0%, transparent 50%);
+        }
+        [data-theme="dark"] .account-bg,
+        .dark .account-bg {
+            background-image:
+                radial-gradient(at 20% 20%, rgb(var(--color-primary-500) / 0.08) 0%, transparent 50%),
+                radial-gradient(at 80% 80%, rgb(var(--color-primary-400) / 0.05) 0%, transparent 50%);
+        }
+    </style>
 </head>
 
-<body class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950 min-h-screen flex items-center justify-center p-4" x-data="{ showPassword: false }">
+<body class="account-bg min-h-screen flex items-center justify-center p-4 bg-background" x-data="{ showPassword: false }">
     {% block content %}{% endblock %}
 
-    <!-- 深色模式切换按钮（与主站一致） -->
-    <div class="dark-mode-toggle-fixed">
-        <button type="button"
-                id="dark-mode-toggle-btn"
-                class="dark-mode-toggle-btn"
-                aria-label="切换主题"
-                title="切换黑夜模式"
-                @click="window.DarkMode && window.DarkMode.toggle()">
-            <span class="icon-light">☀️</span>
-            <span class="icon-dark">🌙</span>
-        </button>
-    </div>
+    {# Theme toggle button #}
+    <button class="fixed top-4 right-4 size-9 flex items-center justify-center rounded-lg border border-border/60 bg-card/80 backdrop-blur-sm text-muted-foreground shadow-sm transition-all hover:bg-secondary hover:text-foreground hover:shadow-md"
+            @click="window.themeManager && window.themeManager.toggle()"
+            aria-label="切换主题">
+        <svg class="size-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+        </svg>
+    </button>
 </body>
 </html>

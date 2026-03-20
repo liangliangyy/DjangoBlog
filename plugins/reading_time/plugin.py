@@ -43,7 +43,7 @@ class ReadingTimePlugin(BasePlugin):
         if reading_minutes < 1:
             reading_minutes = 1
             
-        reading_time_html = f'<p style="color: #888;"><em>预计阅读时间：{reading_minutes} 分钟</em></p>'
+        reading_time_html = f'<p class="reading-time-estimate"><em>预计阅读时间：{reading_minutes} 分钟</em></p>'
         
         return reading_time_html + content
 

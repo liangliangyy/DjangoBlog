@@ -158,8 +158,100 @@ body[data-color-scheme="teal"] {
   --color-primary-900: 19 78 74;
 }
 
+/* ==================== 语义化 CSS 变量系统 (对标 Next.js) ==================== */
+:root {
+  /* 基础色 - 亮色模式 - 使用OKLCH色彩空间获得更好的感知均匀性 */
+  --background: 249 250 251;           /* rgb(249 250 251) - 柔和的灰白背景 */
+  --foreground: 17 24 39;              /* rgb(17 24 39) - 深灰色文本 */
+
+  /* 卡片 */
+  --card: 255 255 255;                 /* rgb(255 255 255) - 纯白卡片 */
+  --card-foreground: 17 24 39;         /* rgb(17 24 39) - 卡片文本色 */
+
+  /* Popover浮层 */
+  --popover: 255 255 255;              /* rgb(255 255 255) */
+  --popover-foreground: 17 24 39;      /* rgb(17 24 39) */
+
+  /* 边框和输入 */
+  --border: 229 231 235;               /* rgb(229 231 235) - 边框色 */
+  --input: 229 231 235;                /* rgb(229 231 235) - 输入框边框 */
+  --ring: var(--color-primary-500);   /* 使用主题色作为聚焦环 */
+
+  /* 静音色 */
+  --muted: 243 244 246;                /* rgb(243 244 246) - 静音背景 */
+  --muted-foreground: 107 114 128;     /* rgb(107 114 128) - 静音文本 */
+
+  /* 主色 - 使用现有的 primary 变量 */
+  --primary: var(--color-primary-500);
+  --primary-foreground: 255 255 255;   /* rgb(255 255 255) - 主色上的白色文本 */
+
+  /* 次要色 */
+  --secondary: 243 244 246;            /* rgb(243 244 246) - 次要背景 */
+  --secondary-foreground: 31 41 55;    /* rgb(31 41 55) - 次要文本 */
+
+  /* 强调色 */
+  --accent: var(--color-primary-400);
+  --accent-foreground: 255 255 255;    /* rgb(255 255 255) - 强调色上的白色文本 */
+
+  /* 破坏性操作 */
+  --destructive: 239 68 68;            /* rgb(239 68 68) - 红色 */
+  --destructive-foreground: 255 255 255;
+
+  /* 圆角系统 */
+  --radius: 0.5rem;                    /* 8px - 基准圆角 */
+
+  /* 阴影系统 - 使用更柔和的阴影 */
+  --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-card-hover: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-elevated: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+/* 深色模式变量 */
+.dark,
+[data-theme="dark"] {
+  --background: 15 23 42;              /* rgb(15 23 42) - Slate-900 深灰背景 */
+  --foreground: 226 232 240;           /* rgb(226 232 240) - Slate-200 亮灰文本 */
+
+  --card: 30 41 59;                    /* rgb(30 41 59) - Slate-800 深色卡片 */
+  --card-foreground: 226 232 240;      /* rgb(226 232 240) - 卡片文本 */
+
+  --popover: 30 41 59;                 /* rgb(30 41 59) */
+  --popover-foreground: 226 232 240;   /* rgb(226 232 240) */
+
+  --border: 51 65 85;                  /* rgb(51 65 85) - Slate-700 深色边框 */
+  --input: 51 65 85;                   /* rgb(51 65 85) - 输入框边框 */
+
+  --muted: 51 65 85;                   /* rgb(51 65 85) - 静音背景 */
+  --muted-foreground: 148 163 184;     /* rgb(148 163 184) - Slate-400 静音文本 */
+
+  --secondary: 51 65 85;               /* rgb(51 65 85) - 次要背景 */
+  --secondary-foreground: 226 232 240; /* rgb(226 232 240) - 次要文本 */
+
+  /* 深色模式阴影 - 使用更深更自然的阴影 */
+  --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.3);
+  --shadow-card-hover: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.4);
+  --shadow-elevated: 0 20px 25px -5px rgb(0 0 0 / 0.5), 0 8px 10px -6px rgb(0 0 0 / 0.5);
+}
+
 /* ==================== 基础样式层 ==================== */
 @layer base {
+  /* Nav header search input — reset global input styles injected by component layer */
+  #header-search-input {
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  /* Suppress browser-default search field decorations */
+  input[type="search"]::-webkit-search-decoration,
+  input[type="search"]::-webkit-search-cancel-button,
+  input[type="search"]::-webkit-search-results-button,
+  input[type="search"]::-webkit-search-results-decoration {
+    -webkit-appearance: none;
+    display: none;
+  }
+
   /* HTML根元素 */
   html {
     @apply scroll-smooth antialiased;
@@ -212,6 +304,13 @@ body[data-color-scheme="teal"] {
   h4 {
     font-size: 1.25rem; /* 20px */
     @apply mt-6 mb-3;
+  }
+
+  /* 侧边栏标题重置 - 移除默认的 margin */
+  aside h3 {
+    @apply mt-0 mb-0;
+    font-size: 0.875rem; /* 14px - 与模板中的 text-sm 一致 */
+    line-height: 1.5;
   }
   h5 {
     font-size: 1.125rem; /* 18px */
@@ -349,7 +448,7 @@ body[data-color-scheme="teal"] {
 
   /* HR分隔线 */
   hr {
-    @apply my-8 border-t border-gray-300 dark:border-gray-700;
+    @apply my-6 border-t border-border/60;
   }
 }
 
@@ -404,32 +503,103 @@ body[data-color-scheme="teal"] {
 
   /* ========== 卡片组件 - 增强视觉层次，现代化配色 ========== */
   .card {
-    /* 亮色模式：纯白卡片配柔和边框 */
-    @apply bg-white rounded-xl p-6;
-    @apply border-2 border-gray-200;
-    /* 暗色模式：深slate卡片配柔和边框 */
-    @apply dark:bg-slate-800 dark:border-slate-700;
+    /* 使用语义化变量 */
+    background-color: rgb(var(--card));
+    color: rgb(var(--card-foreground));
+    border-color: rgb(var(--border));
+    @apply rounded-xl p-6;
+    @apply border;
     @apply transition-all duration-300;
-    /* 增强阴影效果 - 亮色模式 */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    /* 增强阴影效果 - 使用变量 */
+    box-shadow: var(--shadow-card);
   }
 
   .card:hover {
-    /* 亮色模式hover：主题色边框 */
-    @apply border-primary-300;
-    /* 暗色模式hover：稍亮的主题色边框 */
-    @apply dark:border-primary-600;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    /* hover时边框更明显 */
+    border-color: rgb(var(--primary) / 0.2);
+    box-shadow: var(--shadow-card-hover);
     transform: translateY(-2px);
   }
 
-  /* 深色模式卡片阴影 - 更深更自然 */
-  [data-theme="dark"] .card {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  /* ========== 使用语义化变量的工具类 ========== */
+  .bg-background {
+    background-color: rgb(var(--background));
   }
 
-  [data-theme="dark"] .card:hover {
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  .bg-foreground {
+    background-color: rgb(var(--foreground));
+  }
+
+  .bg-card {
+    background-color: rgb(var(--card));
+  }
+
+  .bg-muted {
+    background-color: rgb(var(--muted));
+  }
+
+  .bg-secondary {
+    background-color: rgb(var(--secondary));
+  }
+
+  .bg-accent {
+    background-color: rgb(var(--accent));
+  }
+
+  .text-foreground {
+    color: rgb(var(--foreground));
+  }
+
+  .text-card-foreground {
+    color: rgb(var(--card-foreground));
+  }
+
+  .text-muted-foreground {
+    color: rgb(var(--muted-foreground));
+  }
+
+  .text-secondary-foreground {
+    color: rgb(var(--secondary-foreground));
+  }
+
+  .border-border {
+    border-color: rgb(var(--border));
+  }
+
+  /* ========== 毛玻璃效果类 ========== */
+  .backdrop-blur-header {
+    @apply backdrop-blur-xl;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-color: rgba(229, 231, 235, 0.6);
+  }
+
+  [data-theme="dark"] .backdrop-blur-header {
+    background-color: rgba(31, 41, 55, 0.8);
+    border-color: rgba(55, 65, 81, 0.6);
+  }
+
+  /* 毛玻璃效果降级方案 */
+  @supports not (backdrop-filter: blur(0)) {
+    .backdrop-blur-header {
+      background-color: rgb(255, 255, 255);
+    }
+
+    [data-theme="dark"] .backdrop-blur-header {
+      background-color: rgb(31, 41, 55);
+    }
+  }
+
+  /* ========== 阴影工具类 ========== */
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+
+  .shadow-card-hover {
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .shadow-elevated {
+    box-shadow: var(--shadow-elevated);
   }
 
   /* ========== 站点布局 ========== */
@@ -438,20 +608,19 @@ body[data-color-scheme="teal"] {
     @apply min-h-screen flex flex-col;
   }
 
-  /* 头部 - 带渐变背景和装饰 */
+  /* 头部 - 毛玻璃效果和渐变背景 */
   .site-header {
     @apply shadow-md;
-    @apply border-b border-gray-200 dark:border-gray-700;
     @apply sticky top-0 z-40;
     @apply relative;
-    /* 移除 backdrop-blur-md 以避免影响上层按钮的清晰度 */
-    @apply bg-opacity-95;
-    /* 更明显的渐变背景 - 使用配色方案变量 */
+    /* 毛玻璃效果 */
+    @apply backdrop-blur-xl;
     background: linear-gradient(135deg,
       rgba(var(--color-primary-500), 0.08) 0%,
       rgba(var(--color-primary-600), 0.08) 50%,
       rgba(var(--color-primary-400), 0.06) 100%),
-      white;
+      rgba(255, 255, 255, 0.8);
+    border-bottom: 1px solid rgba(229, 231, 235, 0.6);
   }
 
   /* 深色模式的渐变 */
@@ -460,7 +629,27 @@ body[data-color-scheme="teal"] {
       rgba(var(--color-primary-500), 0.15) 0%,
       rgba(var(--color-primary-600), 0.15) 50%,
       rgba(var(--color-primary-400), 0.12) 100%),
-      #1f2937;
+      rgba(31, 41, 55, 0.8);
+    border-bottom-color: rgba(55, 65, 81, 0.6);
+  }
+
+  /* 毛玻璃效果降级方案 */
+  @supports not (backdrop-filter: blur(0)) {
+    .site-header {
+      background: linear-gradient(135deg,
+        rgba(var(--color-primary-500), 0.08) 0%,
+        rgba(var(--color-primary-600), 0.08) 50%,
+        rgba(var(--color-primary-400), 0.06) 100%),
+        rgb(255, 255, 255);
+    }
+
+    [data-theme="dark"] .site-header {
+      background: linear-gradient(135deg,
+        rgba(var(--color-primary-500), 0.15) 0%,
+        rgba(var(--color-primary-600), 0.15) 50%,
+        rgba(var(--color-primary-400), 0.12) 100%),
+        rgb(31, 41, 55);
+    }
   }
 
   /* 顶部装饰线 - 增加高度和动画 */
@@ -706,11 +895,23 @@ body[data-color-scheme="teal"] {
     @apply w-7 h-7;
   }
 
-  /* 导航菜单 - 降低padding */
+  /* 导航菜单 - 毛玻璃效果 */
   .main-navigation {
-    @apply bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700;
+    @apply sticky top-0 z-50;
+    @apply backdrop-blur-xl;
+    @apply relative;
+    background-color: rgba(var(--background) / 0.8);
+    border-bottom: 1px solid rgb(var(--border) / 0.6);
+  }
+
+  /* 桌面端当前菜单项高亮 */
+  .main-navigation .current-menu-item > a,
+  .main-navigation .current_page_item > a {
+    @apply bg-secondary text-foreground;
     @apply relative;
   }
+
+  /* 移动端当前菜单项高亮已在 HTML 内联样式中处理 */
 
   /* 菜单切换按钮（仅移动端显示） */
   .menu-toggle {
@@ -1198,6 +1399,84 @@ body[data-color-scheme="teal"] {
     @apply transition-colors duration-200;
   }
 
+  /* 文章摘要（列表页） — prose prose-sm 已提供基础 markdown 样式，此处做收口覆盖 */
+
+  /* prose 默认 p/ul/ol margin 对卡片太大，压紧 */
+  .article-excerpt p,
+  .article-excerpt ul,
+  .article-excerpt ol,
+  .article-excerpt li,
+  .article-excerpt blockquote {
+    color: rgb(var(--muted-foreground));
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .article-excerpt :first-child {
+    margin-top: 0;
+  }
+
+  /* 摘要中标题压缩为正文大小，绝不能超过文章标题 */
+  .article-excerpt h1,
+  .article-excerpt h2,
+  .article-excerpt h3,
+  .article-excerpt h4,
+  .article-excerpt h5,
+  .article-excerpt h6 {
+    font-size: 0.875rem;
+    line-height: 1.4;
+    font-weight: 600;
+    color: rgb(var(--muted-foreground));
+    margin-top: 0.5rem;
+    margin-bottom: 0.25rem;
+  }
+
+  /* 摘要内链接不染色 */
+  .article-excerpt a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* 摘要中图片正常显示，圆角+限高，避免超大图撑破卡片 */
+  .article-excerpt img {
+    display: block;
+    max-width: 100%;
+    max-height: 320px;
+    width: auto;
+    height: auto;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  /* 代码块、表格、iframe、视频等复杂元素在摘要中隐藏 */
+  .article-excerpt pre,
+  .article-excerpt code,
+  .article-excerpt table,
+  .article-excerpt hr,
+  .article-excerpt iframe,
+  .article-excerpt video,
+  .article-excerpt .codehilite {
+    display: none;
+  }
+
+  /* 详情页文章体：h1 不能超过页面文章标题（text-2xl/text-3xl = 1.5rem/1.875rem）*/
+  .article.prose h1 {
+    font-size: 1.5rem;   /* text-2xl，与移动端文章标题等高，小于桌面端文章标题 */
+    line-height: 2rem;
+  }
+
+  .article.prose h2 {
+    font-size: 1.25rem;  /* text-xl */
+    line-height: 1.75rem;
+  }
+
+  .article.prose h3 {
+    font-size: 1.125rem; /* text-lg */
+    line-height: 1.75rem;
+  }
+
   /* 文章内容 */
   .entry-content {
     @apply prose prose-base dark:prose-invert max-w-none;
@@ -1290,6 +1569,25 @@ body[data-color-scheme="teal"] {
   /* 减少目录和正文之间的间距 */
   .entry-content .break_line {
     @apply my-4;
+  }
+
+  /* 阅读时间预估（由插件注入） */
+  .reading-time-estimate {
+    @apply text-xs mb-4;
+    color: rgb(var(--muted-foreground));
+  }
+  .reading-time-estimate em {
+    font-style: normal;
+  }
+
+  /* 文章目录（覆盖全局 a { text-primary-500 } 规则） */
+  .toc-nav a {
+    @apply no-underline;
+    color: rgb(var(--muted-foreground));
+    transition: color 150ms;
+  }
+  .toc-nav a:hover {
+    color: rgb(var(--primary));
   }
 
   .entry-content > b {
@@ -2080,59 +2378,7 @@ body[data-color-scheme="teal"] {
   }
 
   /* ========== 面包屑导航 ========== */
-  .breadcrumb-nav {
-    @apply mb-6 px-4 py-3 rounded-lg;
-    @apply bg-white dark:bg-gray-800;
-    @apply border border-gray-200 dark:border-gray-700;
-    @apply shadow-sm;
-  }
-
-  .breadcrumb {
-    @apply flex flex-wrap items-center gap-2 text-sm;
-    @apply text-gray-600 dark:text-gray-400;
-    @apply m-0 p-0;
-    list-style: none;
-  }
-
-  .breadcrumb-item {
-    @apply inline-flex items-center;
-  }
-
-  .breadcrumb-link {
-    @apply inline-flex items-center gap-1.5;
-    @apply px-2 py-1 rounded-md;
-    @apply text-gray-700 dark:text-gray-300;
-    @apply hover:text-primary-600 dark:hover:text-primary-400;
-    @apply hover:bg-gray-100 dark:hover:bg-gray-700;
-    @apply transition-all duration-200;
-    @apply no-underline;
-  }
-
-  .breadcrumb-icon {
-    @apply w-4 h-4;
-  }
-
-  .breadcrumb-separator {
-    @apply text-gray-400 dark:text-gray-600;
-    @apply flex items-center;
-  }
-
-  .breadcrumb-current {
-    @apply px-2 py-1;
-    @apply text-gray-900 dark:text-gray-100;
-    @apply font-medium;
-  }
-
-  /* 移动端优化 */
-  @media (max-width: 640px) {
-    .breadcrumb {
-      @apply text-xs;
-    }
-
-    .breadcrumb-link {
-      @apply px-1.5 py-0.5;
-    }
-  }
+  /* breadcrumb 现已使用 Tailwind 内联样式，此处仅保留注释 */
 
   /* ========== 标签云 ========== */
   .tagcloud {
@@ -2432,34 +2678,6 @@ html[data-theme="dark"] .dark-mode-toggle-btn .icon-dark {
 
 .reading-time-icon {
   @apply w-4 h-4;
-}
-
-/* ========== External Links 插件适配 ========== */
-.external-link-icon {
-  @apply inline-block w-3 h-3 ml-1 opacity-60;
-}
-
-a[target="_blank"]:not(.no-external-icon)::after {
-  content: "";
-  display: inline-block;
-  width: 0.75rem;
-  height: 0.75rem;
-  margin-left: 0.25rem;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14'%3E%3C/path%3E%3C/svg%3E");
-  background-size: contain;
-  background-repeat: no-repeat;
-  opacity: 0.6;
-  vertical-align: middle;
-}
-
-/* Dark mode 外部链接图标 */
-[data-theme="dark"] a[target="_blank"]:not(.no-external-icon)::after {
-  filter: invert(1);
-}
-
-/* Footer备案号等链接不显示外链图标，避免布局问题 */
-footer .site-info a[target="_blank"]::after {
-  display: none;
 }
 
 /* ========== Image Lazy Loading 插件适配 ========== */
