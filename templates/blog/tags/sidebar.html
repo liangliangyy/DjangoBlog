@@ -1,191 +1,245 @@
 {% load blog_tags %}
 {% load i18n %}
-<div id="secondary" class="widget-area" role="complementary">
+
+<aside class="flex flex-col gap-4">
+    {# Category List #}
+    {% if sidebar_categorys %}
+    <div class="rounded-xl border border-border bg-card p-5 shadow-sm">
+        <h3 class="mb-3 flex items-center gap-2 text-sm font-semibold tracking-tight text-foreground">
+            <svg class="size-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
+            </svg>
+            {% trans 'category' %}
+        </h3>
+        <ul class="m-0 flex flex-col gap-0.5 p-0 list-none">
+            {% for c in sidebar_categorys %}
+                <li>
+                    <a href="{{ c.get_absolute_url }}"
+                       class="flex items-center justify-between rounded-lg px-3 py-2 text-sm text-foreground transition-colors hover:bg-secondary hover:text-primary">
+                        <span>{{ c.name }}</span>
+                        <span class="rounded-full bg-secondary px-2 py-0.5 text-xs text-muted-foreground">{{ c.article_set.count }}</span>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    {# Tag Cloud #}
+    {% if sidebar_tags %}
+    <div class="rounded-xl border border-border bg-card p-5 shadow-sm">
+        <h3 class="mb-3 flex items-center gap-2 text-sm font-semibold tracking-tight text-foreground">
+            <svg class="size-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+            </svg>
+            {% trans 'Tag Cloud' %}
+        </h3>
+        <div class="flex flex-wrap gap-2">
+            {% for tag,count,size in sidebar_tags %}
+                <a href="{{ tag.get_absolute_url }}"
+                   class="inline-flex items-center rounded-md border border-border px-2.5 py-1 text-foreground transition-colors hover:border-primary hover:bg-primary/10 hover:text-primary {% if size >= 4 %}text-sm font-medium{% elif size == 3 %}text-xs{% else %}text-[11px]{% endif %}">
+                    {{ tag.name }}
+                    <span class="ml-1 opacity-60">{{ count }}</span>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {# Recent Posts #}
+    {% if recent_articles %}
+    <div class="rounded-xl border border-border bg-card p-5 shadow-sm">
+        <h3 class="mb-3 flex items-center gap-2 text-sm font-semibold tracking-tight text-foreground">
+            <svg class="size-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            {% trans 'recent articles' %}
+        </h3>
+        <ul class="m-0 flex flex-col gap-3 p-0 list-none">
+            {% for a in recent_articles %}
+                <li>
+                    <a href="{{ a.get_absolute_url }}" class="group flex flex-col gap-1">
+                        <span class="line-clamp-2 text-sm leading-snug text-foreground transition-colors group-hover:text-primary">
+                            {{ a.title }}
+                        </span>
+                        <span class="text-[11px] text-muted-foreground">
+                            {{ a.pub_time|date:"Y-m-d" }}
+                        </span>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    {# Hot Posts #}
+    {% if most_read_articles %}
+    <div class="rounded-xl border border-border bg-card p-5 shadow-sm">
+        <h3 class="mb-3 flex items-center gap-2 text-sm font-semibold tracking-tight text-foreground">
+            <svg class="size-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+            </svg>
+            {% trans 'Hot articles' %}
+        </h3>
+        <ul class="m-0 flex flex-col gap-3 p-0 list-none">
+            {% for a in most_read_articles %}
+                <li class="flex gap-3">
+                    <span class="flex size-5 shrink-0 items-center justify-center rounded text-[11px] font-semibold {% if forloop.counter <= 3 %}text-primary{% else %}text-muted-foreground{% endif %}">
+                        {{ forloop.counter }}
+                    </span>
+                    <a href="{{ a.get_absolute_url }}" class="group flex min-w-0 flex-col gap-1">
+                        <span class="line-clamp-2 text-sm leading-snug text-foreground transition-colors group-hover:text-primary">
+                            {{ a.title }}
+                        </span>
+                        <span class="text-[11px] text-muted-foreground">
+                            {{ a.views }} {% trans 'views' %}
+                        </span>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    {# Recent Comments #}
+    {% if sidebar_comments and open_site_comment %}
+    <div class="rounded-xl border border-border bg-card p-5 shadow-sm">
+        <h3 class="mb-3 flex items-center gap-2 text-sm font-semibold tracking-tight text-foreground">
+            <svg class="size-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+            </svg>
+            {% trans 'recent comments' %}
+        </h3>
+        <ul class="m-0 flex flex-col gap-2 p-0 list-none">
+            {% for c in sidebar_comments %}
+                <li>
+                    <a href="{{ c.article.get_absolute_url }}#comment-{{ c.pk }}"
+                       class="-mx-2 group flex items-start gap-2.5 rounded-lg px-2 py-2 transition-colors hover:bg-secondary/50">
+                        <img src="{{ c.author.email|gravatar_url:32 }}"
+                             alt="{{ c.author.username }}"
+                             class="mt-0.5 size-7 shrink-0 rounded-full"
+                             loading="lazy">
+                        <div class="min-w-0 flex-1">
+                            <p class="m-0 line-clamp-2 text-sm leading-snug text-foreground">
+                                {{ c.body|striptags|truncatechars:60 }}
+                            </p>
+                            <div class="mt-1 flex items-center gap-1 text-[11px] text-muted-foreground">
+                                <span class="font-medium">{{ c.author.username }}</span>
+                                <span>&middot;</span>
+                                <span>{{ c.creation_time|timesince }}前</span>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    {# Extra Sidebars #}
     {% if extra_sidebars %}
         {% for sidebar in extra_sidebars %}
-
-            <aside class="widget_text widget widget_custom_html"><p class="widget-title">
-                {{ sidebar.name }}</p>
-                <div class="textwidget custom-html-widget">
+            <div class="rounded-xl border border-border bg-card p-5 shadow-sm">
+                <h3 class="mb-3 flex items-center gap-2 text-sm font-semibold tracking-tight text-foreground">
+                    {{ sidebar.name }}
+                </h3>
+                <div class="prose prose-sm dark:prose-invert max-w-none text-foreground">
                     {{ sidebar.content|sidebar_markdown|safe }}
                 </div>
-            </aside>
+            </div>
         {% endfor %}
     {% endif %}
-    {% if most_read_articles %}
 
-        <aside id="views-4" class="widget widget_views">
-            <p class="widget-title">
-                <svg class="w-5 h-5 inline-block mr-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
-                    <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
-                </svg>
-                Views
-            </p>
-            <ul class="sidebar-hot-articles">
-                {% for a in most_read_articles %}
-                    <li class="hot-article-item group">
-                        <span class="hot-article-rank rank-{{ forloop.counter }}">{{ forloop.counter }}</span>
-                        <div class="hot-article-content">
-                            <a href="{{ a.get_absolute_url }}" title="{{ a.title }}" class="hot-article-title">
-                                {{ a.title }}
-                            </a>
-                            <div class="hot-article-meta">
-                                <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd"/>
-                                </svg>
-                                <span class="hot-article-views">{{ a.views }}</span>
-                            </div>
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
-
-        </aside>
-    {% endif %}
-    {% if sidebar_categorys %}
-        <aside id="su_siloed_terms-2" class="widget widget_su_siloed_terms">
-            <p class="widget-title">
-                <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
-                </svg>
-                {% trans 'category' %}
-            </p>
-            <ul class="sidebar-categories">
-                {% for c in sidebar_categorys %}
-                    <li class="category-item group">
-                        <a href="{{ c.get_absolute_url }}" class="category-link">
-                            <span class="category-icon">
-                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"/>
-                                </svg>
-                            </span>
-                            <span class="category-name">{{ c.name }}</span>
-                            <span class="category-count">{{ c.article_set.count }}</span>
-                        </a>
-                    </li>
-                {% endfor %}
-            </ul>
-        </aside>
-    {% endif %}
-    {% if sidebar_comments and  open_site_comment %}
-        <aside id="ds-recent-comments-4" class="widget ds-widget-recent-comments">
-            <p class="widget-title">
-                <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-                </svg>
-                {% trans 'recent comments' %}
-            </p>
-
-            <ul id="recentcomments" class="sidebar-recent-comments">
-                {% for c in sidebar_comments %}
-                    <li class="recent-comment-item group">
-                        <div class="comment-avatar">
-                            <img src="{{ c.author.email|gravatar_url:32 }}"
-                                 alt="{{ c.author.username }}"
-                                 class="w-8 h-8 rounded-full">
-                        </div>
-                        <div class="comment-content">
-                            <p class="comment-text">{{ c.body|striptags|truncatechars:80 }}</p>
-                            <div class="comment-meta">
-                                <span class="comment-author-name">{{ c.author.username }}</span>
-                                <span class="comment-separator">·</span>
-                                <span class="comment-time">{{ c.creation_time|timesince }}前</span>
-                                <span class="comment-separator">·</span>
-                                <a href="{{ c.article.get_absolute_url }}#comment-{{ c.pk }}" class="comment-article-link">
-                                    {{ c.article.title|truncatechars:20 }}
-                                </a>
-                            </div>
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
-        </aside>
-    {% endif %}
-    {% if recent_articles %}
-        <aside id="recent-posts-2" class="widget widget_recent_entries"><p class="widget-title">{% trans 'recent articles' %}</p>
-            <ul>
-
-                {% for a in  recent_articles %}
-                    <li><a href="{{ a.get_absolute_url }}" title="{{ a.title }}">
-                        {{ a.title }}
-                    </a></li>
-                {% endfor %}
-            </ul>
-        </aside>
-    {% endif %}
+    {# Links #}
     {% if sidabar_links %}
-        <aside id="linkcat-0" class="widget widget_links"><p class="widget-title">{% trans 'bookmark' %}</p>
-            <ul class='xoxo blogroll'>
-                {% for l in sidabar_links %}
-                    <li>
-                        <a href="{{ l.link }}" target="_blank" title="{{ l.name }}">{{ l.name }}</a>
-                    </li>
-                {% endfor %}
-
-            </ul>
-        </aside>
-    {% endif %}
-    {% if show_google_adsense %}
-        <aside id="text-2" class="widget widget_text"><p class="widget-title">Google AdSense</p>
-            <div class="textwidget">
-                {{ google_adsense_codes|safe }}
-            </div>
-        </aside>
-    {% endif %}
-    {% if sidebar_tags %}
-        <aside id="tag_cloud-2" class="widget widget_tag_cloud">
-            <p class="widget-title">
-                <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
-                </svg>
-                {% trans 'Tag Cloud' %}
-            </p>
-            <div class="tagcloud sidebar-tagcloud">
-                {% for tag,count,size in sidebar_tags %}
-                    <a href="{{ tag.get_absolute_url }}"
-                       class="sidebar-tag tag-size-{{ size|floatformat:0 }}"
-                       title="{{ count }}个话题">
-                        <svg class="w-3 h-3 inline-block" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
-                        </svg>
-                        {{ tag.name }}
+    <div class="rounded-xl border border-border bg-card p-5 shadow-sm">
+        <h3 class="mb-3 flex items-center gap-2 text-sm font-semibold tracking-tight text-foreground">
+            <svg class="size-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+            </svg>
+            {% trans 'bookmark' %}
+        </h3>
+        <ul class="m-0 flex flex-col gap-0.5 p-0 list-none">
+            {% for l in sidabar_links %}
+                <li>
+                    <a href="{{ l.link }}" target="_blank"
+                       class="block rounded-lg px-3 py-2 text-sm text-foreground transition-colors hover:bg-secondary hover:text-primary">
+                        {{ l.name }}
                     </a>
-                {% endfor %}
-            </div>
-        </aside>
-    {% endif %}
-    <aside id="text-2" class="widget widget_text"><p class="widget-title">{% trans 'Welcome to star or fork the source code of this site' %}</p>
-        <div class="textwidget">
-            <div class="flex flex-wrap items-center gap-3">
-                <a href="https://github.com/liangliangyy/DjangoBlog" rel="nofollow" class="inline-block">
-                    <img src="https://resource.lylinux.net/img.shields.io/github/stars/liangliangyy/djangoblog.svg?style=social&amp;label=Star"
-                         alt="GitHub stars">
-                </a>
-                <a href="https://github.com/liangliangyy/DjangoBlog" rel="nofollow" class="inline-block">
-                    <img src="https://resource.lylinux.net/img.shields.io/github/forks/liangliangyy/djangoblog.svg?style=social&amp;label=Fork"
-                         alt="GitHub forks">
-                </a>
-            </div>
-        </div>
-    </aside>
-
-    <aside id="meta-3" class="widget widget_meta"><p class="widget-title">{% trans 'Function' %}</p>
-        <ul>
-            <li><a href="/admin/" rel="nofollow" hx-boost="false">{% trans 'management site' %}</a></li>
-            {% if user.is_authenticated %}
-                <li><a href="{% url "account:logout" %}" rel="nofollow" hx-boost="false">{% trans 'logout' %}</a>
                 </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
 
+    {# AdSense #}
+    {% if show_google_adsense %}
+    <div class="rounded-xl border border-border bg-card p-5 shadow-sm">
+        <div class="textwidget">
+            {{ google_adsense_codes|safe }}
+        </div>
+    </div>
+    {% endif %}
+
+    {# GitHub Stars #}
+    <div class="rounded-xl border border-border bg-card p-5 shadow-sm">
+        <h3 class="mb-3 flex items-center gap-2 text-sm font-semibold tracking-tight text-foreground">
+            <svg class="size-4 text-primary" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.840 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.430.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+            GitHub
+        </h3>
+        <div class="flex flex-wrap items-center gap-3">
+            <a href="https://github.com/liangliangyy/DjangoBlog" rel="nofollow" class="inline-block">
+                <img src="https://resource.lylinux.net/img.shields.io/github/stars/liangliangyy/djangoblog.svg?style=social&amp;label=Star"
+                     alt="GitHub stars" loading="lazy">
+            </a>
+            <a href="https://github.com/liangliangyy/DjangoBlog" rel="nofollow" class="inline-block">
+                <img src="https://resource.lylinux.net/img.shields.io/github/forks/liangliangyy/djangoblog.svg?style=social&amp;label=Fork"
+                     alt="GitHub forks" loading="lazy">
+            </a>
+        </div>
+    </div>
+
+    {# Functions #}
+    <div class="rounded-xl border border-border bg-card p-5 shadow-sm">
+        <h3 class="mb-3 flex items-center gap-2 text-sm font-semibold tracking-tight text-foreground">
+            <svg class="size-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            {% trans 'functions' %}
+        </h3>
+        <ul class="m-0 flex flex-col gap-0.5 p-0 list-none">
+            <li>
+                <a href="/admin/" rel="nofollow" hx-boost="false"
+                   class="block rounded-lg px-3 py-2 text-sm text-foreground transition-colors hover:bg-secondary hover:text-primary">
+                    {% trans 'management site' %}
+                </a>
+            </li>
+            {% if user.is_authenticated %}
+                <li>
+                    <a href="{% url 'account:logout' %}" rel="nofollow" hx-boost="false"
+                       class="block rounded-lg px-3 py-2 text-sm text-foreground transition-colors hover:bg-secondary hover:text-primary">
+                        {% trans 'logout' %}
+                    </a>
+                </li>
             {% else %}
-                <li><a href="{% url "account:login" %}" rel="nofollow" hx-boost="false">{% trans 'login' %}</a></li>
+                <li>
+                    <a href="{% url 'account:login' %}" rel="nofollow" hx-boost="false"
+                       class="block rounded-lg px-3 py-2 text-sm text-foreground transition-colors hover:bg-secondary hover:text-primary">
+                        {% trans 'login' %}
+                    </a>
+                </li>
             {% endif %}
             {% if user.is_superuser %}
-                <li><a href="{% url 'owntracks:show_dates' %}" target="_blank" hx-boost="false">{% trans 'Track record' %}</a></li>
+                <li>
+                    <a href="{% url 'owntracks:show_dates' %}" target="_blank" hx-boost="false"
+                       class="block rounded-lg px-3 py-2 text-sm text-foreground transition-colors hover:bg-secondary hover:text-primary">
+                        {% trans 'Track record' %}
+                    </a>
+                </li>
             {% endif %}
-            <li><a href="http://gitbook.lylinux.net" target="_blank" rel="nofollow" hx-boost="false">GitBook</a></li>
         </ul>
-    </aside>
-
-    <!-- 旧的回到顶部按钮已移到 base.html 中，使用 Alpine.js 实现 -->
-</div><!-- #secondary -->
+    </div>
+</aside>

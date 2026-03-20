@@ -52,6 +52,17 @@
 
             // 存储主题供后续使用
             window.__THEME__ = theme;
+
+            // 全局主题管理器，供导航栏等组件调用
+            window.themeManager = {
+                toggle: function() {
+                    var current = document.documentElement.getAttribute(THEME_ATTR) === 'dark' ? 'dark' : 'light';
+                    var next = current === 'dark' ? 'light' : 'dark';
+                    applyTheme(next);
+                    localStorage.setItem(STORAGE_KEY, next);
+                    window.__THEME__ = next;
+                }
+            };
         })();
     </script>
 
@@ -153,80 +164,10 @@
 <body data-color-scheme="{{ COLOR_SCHEME|default:'purple' }}"
       data-authenticated="{% if user.is_authenticated %}true{% else %}false{% endif %}"
       x-data="{ searchOpen: false }">
-<div id="page" class="hfeed site">
-    <header id="masthead" class="site-header" role="banner">
-        <div class="header-content">
-            <hgroup>
-                <h1 class="site-title"><a href="/" title="{{ SITE_NAME }}" rel="home" hx-boost="true">{{ SITE_NAME }}</a>
-                </h1>
-                <h2 class="site-description">{{ SITE_DESCRIPTION }}</h2>
-            </hgroup>
-
-            <!-- 快捷入口图标 -->
-            <div class="header-actions relative">
-                <!-- 搜索按钮 -->
-                <button type="button"
-                        class="header-icon-btn search-toggle"
-                        @click="searchOpen = !searchOpen; if (searchOpen) { $nextTick(() => $refs.searchInput.focus()) }"
-                        title="搜索">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                    </svg>
-                </button>
-
-                <!-- RSS订阅 -->
-                <a href="/feed"
-                   class="header-icon-btn no-external-icon"
-                   title="RSS订阅"
-                   target="_blank">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 5c7.18 0 13 5.82 13 13M6 11a7 7 0 017 7m-6 0a1 1 0 11-2 0 1 1 0 012 0z"/>
-                    </svg>
-                </a>
-
-                <!-- GitHub链接 -->
-                <a href="https://github.com/liangliangyy/DjangoBlog"
-                   class="header-icon-btn no-external-icon"
-                   title="GitHub"
-                   target="_blank">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                    </svg>
-                </a>
-
-                <!-- 搜索框下拉 -->
-                <div class="header-search"
-                     x-show="searchOpen"
-                     @click.away="searchOpen = false"
-                     x-transition:enter="transition ease-out duration-200"
-                     x-transition:enter-start="opacity-0 transform -translate-y-2"
-                     x-transition:enter-end="opacity-100 transform translate-y-0"
-                     x-transition:leave="transition ease-in duration-150"
-                     x-transition:leave-start="opacity-100 transform translate-y-0"
-                     x-transition:leave-end="opacity-0 transform -translate-y-2">
-                    <form role="search" method="get" action="/search" class="search-form">
-                        <input type="search"
-                               name="q"
-                               placeholder="搜索文章..."
-                               class="search-input"
-                               x-ref="searchInput"
-                               @keydown.escape="searchOpen = false">
-                        <button type="submit" class="search-submit">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                            </svg>
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        {% load i18n %}
-        {% include 'share_layout/nav.html' %}
-    </header><!-- #masthead -->
-    <!-- 容器宽度从max-w-7xl(1280px)增加到max-w-screen-2xl(1536px)，更好地利用屏幕空间 -->
-    <!-- 移动端使用更小的padding(px-2),在小屏幕上提供更宽的内容区域 -->
-    <div id="main" class="wrapper max-w-screen-2xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8 w-full" hx-boost="true" hx-target="#main" hx-select="#main" hx-swap="innerHTML" hx-push-url="true">
+<div id="page" class="hfeed site flex min-h-screen flex-col">
+    {% load i18n %}
+    {% include 'share_layout/nav.html' %}
+    <div id="main" role="main" class="flex-1" hx-boost="true" hx-target="#main" hx-select="#main" hx-swap="innerHTML" hx-push-url="true">
 
         {% block content %}
         {% endblock %}
@@ -255,22 +196,8 @@
 {% block footer %}
 {% endblock %}
 
-<!-- 深色模式切换按钮 -->
-<div class="dark-mode-toggle-fixed" style="pointer-events: auto;">
-    <button type="button"
-            id="dark-mode-toggle-btn"
-            class="dark-mode-toggle-btn"
-            style="pointer-events: auto;"
-            aria-label="切换主题"
-            title="切换黑夜模式"
-            @click="window.DarkMode && window.DarkMode.toggle()">
-        <span class="icon-light">☀️</span>
-        <span class="icon-dark">🌙</span>
-    </button>
-</div>
-
 <!-- 回到顶部按钮 - Alpine.js组件 -->
-<div x-data="backToTop()"
+<button x-data="backToTop()"
      x-init="init()"
      @click="scrollToTop()"
      id="rocket"
@@ -278,19 +205,25 @@
      x-transition:enter="transition ease-out duration-300"
      x-transition:enter-start="opacity-0 scale-90"
      x-transition:enter-end="opacity-100 scale-100"
-     x-cloak>
+     x-cloak
+     aria-label="{% trans 'Back to top' %}">
     <svg class="w-6 h-6 fill-current text-white" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
         <path fill-rule="evenodd" d="M3.293 9.707a1 1 0 010-1.414l6-6a1 1 0 011.414 0l6 6a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L4.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
     </svg>
-</div>
+</button>
 
 <!-- 图片灯箱 - Alpine.js组件 -->
 <div x-data="imageLightbox()"
      x-init="init()"
      @keydown.escape.window="closeLightbox()"
-     x-cloak>
+     x-cloak
+     role="dialog"
+     aria-modal="true"
+     :aria-hidden="!showLightbox"
+     aria-label="{% trans 'Image preview' %}">
     <!-- 遮罩层 -->
     <div x-show="showLightbox"
+         x-trap="showLightbox"
          @click="closeLightbox()"
          class="fixed inset-0 z-50 bg-black bg-opacity-90 backdrop-blur-sm"
          x-transition:enter="transition ease-out duration-300"
@@ -323,7 +256,7 @@
 
             <!-- 关闭按钮 -->
             <button @click="closeLightbox()"
-                    class="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors">
+                    class="absolute -top-12 right-0 text-white hover:text-white/70 transition-colors">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                 </svg>

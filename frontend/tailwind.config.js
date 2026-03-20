@@ -17,6 +17,7 @@ export default {
     extend: {
       // 自定义颜色，使用CSS变量支持动态主题
       colors: {
+        // 主题色系统
         primary: {
           50: 'rgb(var(--color-primary-50) / <alpha-value>)',
           100: 'rgb(var(--color-primary-100) / <alpha-value>)',
@@ -28,6 +29,32 @@ export default {
           700: 'rgb(var(--color-primary-700) / <alpha-value>)',
           800: 'rgb(var(--color-primary-800) / <alpha-value>)',
           900: 'rgb(var(--color-primary-900) / <alpha-value>)',
+        },
+        // 语义化颜色（对标 Next.js）
+        border: 'rgb(var(--border) / <alpha-value>)',
+        input: 'rgb(var(--input) / <alpha-value>)',
+        ring: 'rgb(var(--ring) / <alpha-value>)',
+        background: 'rgb(var(--background) / <alpha-value>)',
+        foreground: 'rgb(var(--foreground) / <alpha-value>)',
+        card: {
+          DEFAULT: 'rgb(var(--card) / <alpha-value>)',
+          foreground: 'rgb(var(--card-foreground) / <alpha-value>)',
+        },
+        muted: {
+          DEFAULT: 'rgb(var(--muted) / <alpha-value>)',
+          foreground: 'rgb(var(--muted-foreground) / <alpha-value>)',
+        },
+        secondary: {
+          DEFAULT: 'rgb(var(--secondary) / <alpha-value>)',
+          foreground: 'rgb(var(--secondary-foreground) / <alpha-value>)',
+        },
+        accent: {
+          DEFAULT: 'rgb(var(--accent) / <alpha-value>)',
+          foreground: 'rgb(var(--accent-foreground) / <alpha-value>)',
+        },
+        destructive: {
+          DEFAULT: 'rgb(var(--destructive) / <alpha-value>)',
+          foreground: 'rgb(var(--destructive-foreground) / <alpha-value>)',
         },
       },
 

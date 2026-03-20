@@ -1,27 +1,38 @@
 {% extends 'share_layout/base.html' %}
 {% load i18n %}
 {% block header %}
-    <title> {{ title }}</title>
+    <title>{{ title }}</title>
 {% endblock %}
 {% block content %}
-    <div id="primary" class="site-content">
-        <div id="content" role="main">
+    <div class="mx-auto max-w-6xl px-4 py-6 lg:px-6 lg:py-10">
+        <div class="mx-auto max-w-lg">
+            <div class="rounded-xl border border-border/60 bg-card p-8 text-center shadow-xl shadow-foreground/5 transition-all duration-300">
+                <div class="inline-flex items-center justify-center size-12 rounded-xl bg-primary mb-4 shadow-md shadow-primary/20">
+                    <svg class="size-6 text-primary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
 
-            <header class="archive-header text-center">
+                <h2 class="text-xl font-bold tracking-tight text-foreground mb-4">{{ content }}</h2>
 
-                <h2 class="archive-title"> {{ content }}</h2>
-            </header><!-- .archive-header -->
-
-            <header class="archive-header text-center mt-6">
-
-                <a href="{% url "account:login" %}" hx-boost="false">
-                    {% trans 'login' %}
-                </a>
-                |
-                <a href="/">
-                    {% trans 'back to the homepage' %}
-                </a>
-            </header><!-- .archive-header -->
+                <div class="flex items-center justify-center gap-4 text-sm">
+                    <a href="{% url 'account:login' %}" hx-boost="false"
+                       class="inline-flex items-center gap-1.5 font-medium text-primary transition-colors hover:text-primary/80">
+                        <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+                        </svg>
+                        {% trans 'login' %}
+                    </a>
+                    <span class="text-border">|</span>
+                    <a href="/"
+                       class="inline-flex items-center gap-1.5 font-medium text-primary transition-colors hover:text-primary/80">
+                        <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                        </svg>
+                        {% trans 'back to the homepage' %}
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}

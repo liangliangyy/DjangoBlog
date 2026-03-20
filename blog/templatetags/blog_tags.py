@@ -134,6 +134,23 @@ def get_markdown_toc(content):
     return mark_safe(toc)
 
 
+@register.simple_tag
+def current_nav_item(request):
+    """Determine the active navigation item based on the current URL path."""
+    path = request.path
+    if path == '/' or path.startswith('/page/'):
+        return 'index'
+    elif path.startswith('/archives'):
+        return 'archives'
+    elif path.startswith('/links'):
+        return 'links'
+    elif path.startswith('/category/'):
+        return 'category'
+    elif path.startswith('/tag/'):
+        return 'category'
+    return ''
+
+
 @register.filter()
 @stringfilter
 def comment_markdown(content):
@@ -323,68 +340,69 @@ def load_article_metas(article, user):
 def load_pagination_info(page_obj, page_type, tag_name):
     previous_url = ''
     next_url = ''
-    if page_type == '':
-        if page_obj.has_next():
-            next_number = page_obj.next_page_number()
-            next_url = reverse('blog:index_page', kwargs={'page': next_number})
-        if page_obj.has_previous():
-            previous_number = page_obj.previous_page_number()
-            previous_url = reverse(
-                'blog:index_page', kwargs={
-                    'page': previous_number})
-    if page_type == '分类标签归档':
-        tag = get_object_or_404(Tag, name=tag_name)
-        if page_obj.has_next():
-            next_number = page_obj.next_page_number()
-            next_url = reverse(
-                'blog:tag_detail_page',
-                kwargs={
-                    'page': next_number,
-                    'tag_name': tag.slug})
-        if page_obj.has_previous():
-            previous_number = page_obj.previous_page_number()
-            previous_url = reverse(
-                'blog:tag_detail_page',
-                kwargs={
-                    'page': previous_number,
-                    'tag_name': tag.slug})
-    if page_type == '作者文章归档':
-        if page_obj.has_next():
-            next_number = page_obj.next_page_number()
-            next_url = reverse(
-                'blog:author_detail_page',
-                kwargs={
-                    'page': next_number,
-                    'author_name': tag_name})
-        if page_obj.has_previous():
-            previous_number = page_obj.previous_page_number()
-            previous_url = reverse(
-                'blog:author_detail_page',
-                kwargs={
-                    'page': previous_number,
-                    'author_name': tag_name})
 
-    if page_type == '分类目录归档':
-        category = get_object_or_404(Category, name=tag_name)
-        if page_obj.has_next():
-            next_number = page_obj.next_page_number()
-            next_url = reverse(
-                'blog:category_detail_page',
-                kwargs={
-                    'page': next_number,
-                    'category_name': category.slug})
-        if page_obj.has_previous():
-            previous_number = page_obj.previous_page_number()
-            previous_url = reverse(
-                'blog:category_detail_page',
-                kwargs={
-                    'page': previous_number,
-                    'category_name': category.slug})
+    # Pre-resolve slug for tag/category to avoid repeated DB queries
+    _slug = None
+    if page_type == '分类标签归档':
+        _slug = get_object_or_404(Tag, name=tag_name).slug
+    elif page_type == '分类目录归档':
+        _slug = get_object_or_404(Category, name=tag_name).slug
+
+    def _build_url(page_number):
+        """Build URL for a given page number based on page_type."""
+        if page_type == '':
+            return reverse('blog:index_page', kwargs={'page': page_number})
+        elif page_type == '分类标签归档':
+            return reverse('blog:tag_detail_page',
+                           kwargs={'page': page_number, 'tag_name': _slug})
+        elif page_type == '作者文章归档':
+            return reverse('blog:author_detail_page',
+                           kwargs={'page': page_number, 'author_name': tag_name})
+        elif page_type == '分类目录归档':
+            return reverse('blog:category_detail_page',
+                           kwargs={'page': page_number, 'category_name': _slug})
+        return ''
+
+    if page_obj.has_next():
+        next_url = _build_url(page_obj.next_page_number())
+    if page_obj.has_previous():
+        previous_url = _build_url(page_obj.previous_page_number())
+
+    # Build page range with URLs for numbered pagination
+    current_page = page_obj.number
+    total_pages = page_obj.paginator.num_pages
+    page_range = []
+
+    if total_pages > 1:
+        # Show at most 5 page numbers centered around current page
+        # with ellipsis indicators
+        if total_pages <= 7:
+            nums = range(1, total_pages + 1)
+        else:
+            nums = set()
+            nums.add(1)
+            nums.add(total_pages)
+            for i in range(max(1, current_page - 2), min(total_pages + 1, current_page + 3)):
+                nums.add(i)
+            nums = sorted(nums)
+
+        last_num = 0
+        for num in nums:
+            if num - last_num > 1:
+                page_range.append({'type': 'ellipsis'})
+            page_range.append({
+                'type': 'page',
+                'number': num,
+                'url': _build_url(num),
+                'is_current': num == current_page,
+            })
+            last_num = num
 
     return {
         'previous_url': previous_url,
         'next_url': next_url,
-        'page_obj': page_obj
+        'page_obj': page_obj,
+        'page_range': page_range,
     }
 
 
