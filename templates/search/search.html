@@ -19,68 +19,81 @@
     <meta property="og:site_name" content="{{ SITE_NAME }}"/>
 {% endblock %}
 {% block content %}
-    <div id="primary" class="site-content">
-        <div id="content" role="main">
-            {% if query %}
-                <header class="archive-header">
-                    {% if suggestion %}
-                        <h2 class="archive-title">
-                            已显示<span class="text-red-600 dark:text-red-400"> "{{ suggestion }}" </span>的搜索结果。
-                            仍然搜索：<a class="normal-case hover:underline" href="/search/?q={{ query }}&is_suggest=no">{{ query }}</a>
-                        </h2>
-                    {% else %}
-                        <h2 class="archive-title">
-                            搜索：<span class="text-red-600 dark:text-red-400">{{ query }}</span>
-                        </h2>
-                    {% endif %}
-                </header><!-- .archive-header -->
-            {% endif %}
-            {% if query and page.object_list %}
-                {% for result in page.object_list %}
-                    {% load_article_detail result.object True user query %}
-                {% endfor %}
-                {% if page.has_previous or page.has_next %}
-                    <nav class="flex justify-between items-center mt-8 pt-6 border-t border-gray-200 dark:border-gray-700" role="navigation">
-                        {% if page.has_previous %}
-                            <a href="?q={{ query }}&amp;page={{ page.previous_page_number }}"
-                               class="btn btn-secondary inline-flex items-center space-x-2"
-                               rel="prev">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-                                </svg>
-                                <span>上一页</span>
-                            </a>
+    <div class="mx-auto max-w-6xl px-4 py-4 lg:px-6 lg:py-6">
+        <div class="grid gap-6 lg:grid-cols-[1fr_300px]">
+            <main>
+                {% if query %}
+                    {# Search header #}
+                    <div class="mb-6">
+                        {% if suggestion %}
+                            <h1 class="text-lg font-bold text-foreground m-0">
+                                已显示 <span class="text-primary">"{{ suggestion }}"</span> 的搜索结果。
+                                仍然搜索：<a class="text-primary hover:underline" href="/search/?q={{ query }}&is_suggest=no">{{ query }}</a>
+                            </h1>
                         {% else %}
-                            <div></div>
+                            <h1 class="text-lg font-bold text-foreground m-0">
+                                搜索：<span class="text-primary">{{ query }}</span>
+                            </h1>
                         {% endif %}
-
-                        {% if page.has_next %}
-                            <a href="?q={{ query }}&amp;page={{ page.next_page_number }}"
-                               class="btn btn-secondary inline-flex items-center space-x-2"
-                               rel="next">
-                                <span>下一页</span>
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                                </svg>
-                            </a>
-                        {% else %}
-                            <div></div>
-                        {% endif %}
-                    </nav>
+                    </div>
                 {% endif %}
-            {% else %}
-                <header class="archive-header">
 
-                    <h1 class="archive-title">哎呀，关键字：<span>{{ query }}</span>没有找到结果，要不换个词再试试？</h1>
-                </header><!-- .archive-header -->
-            {% endif %}
-        </div><!-- #content -->
-    </div><!-- #primary -->
+                {% if query and page.object_list %}
+                    <div class="flex flex-col gap-5">
+                        {% for result in page.object_list %}
+                            {% load_article_detail result.object True user query %}
+                        {% endfor %}
+                    </div>
+
+                    {% if page.has_previous or page.has_next %}
+                        <nav class="flex justify-between items-center mt-8 pt-6 border-t border-border" role="navigation">
+                            {% if page.has_previous %}
+                                <a href="?q={{ query }}&amp;page={{ page.previous_page_number }}"
+                                   class="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-secondary"
+                                   rel="prev">
+                                    <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                                    </svg>
+                                    <span>上一页</span>
+                                </a>
+                            {% else %}
+                                <div></div>
+                            {% endif %}
+
+                            {% if page.has_next %}
+                                <a href="?q={{ query }}&amp;page={{ page.next_page_number }}"
+                                   class="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-secondary"
+                                   rel="next">
+                                    <span>下一页</span>
+                                    <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                    </svg>
+                                </a>
+                            {% else %}
+                                <div></div>
+                            {% endif %}
+                        </nav>
+                    {% endif %}
+                {% else %}
+                    {# No results #}
+                    <div class="rounded-xl border border-border bg-card p-12 text-center">
+                        <svg class="size-12 mx-auto mb-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                        <h2 class="text-lg font-bold text-foreground mb-2">
+                            关键字：<span class="text-primary">{{ query }}</span> 没有找到结果
+                        </h2>
+                        <p class="text-sm text-muted-foreground">要不换个词再试试？</p>
+                    </div>
+                {% endif %}
+            </main>
+
+            {# Sidebar #}
+            <div class="hidden lg:block">
+                <div class="sticky top-20">
+                    {% load_sidebar request.user 'i' %}
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
-
-
-{% block sidebar %}
-    {% load_sidebar request.user 'i' %}
-{% endblock %}
-
-
