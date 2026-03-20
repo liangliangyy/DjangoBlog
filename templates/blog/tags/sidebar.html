@@ -2,22 +2,77 @@
 {% load i18n %}
 
 <aside class="flex flex-col gap-4">
-    {# Category List #}
-    {% if sidebar_categorys %}
+    {# 公告（Extra Sidebars）— 第一 #}
+    {% if extra_sidebars %}
+        {% for sidebar in extra_sidebars %}
+            <div class="rounded-xl border border-border bg-card p-5 shadow-sm">
+                <h3 class="mb-3 flex items-center gap-2 text-sm font-semibold tracking-tight text-foreground">
+                    {{ sidebar.name }}
+                </h3>
+                <div class="prose prose-sm dark:prose-invert max-w-none text-foreground">
+                    {{ sidebar.content|sidebar_markdown|safe }}
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {# Hot Posts — 第二 #}
+    {% if most_read_articles %}
     <div class="rounded-xl border border-border bg-card p-5 shadow-sm">
         <h3 class="mb-3 flex items-center gap-2 text-sm font-semibold tracking-tight text-foreground">
             <svg class="size-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
             </svg>
-            {% trans 'category' %}
+            {% trans 'Hot articles' %}
         </h3>
-        <ul class="m-0 flex flex-col gap-0.5 p-0 list-none">
-            {% for c in sidebar_categorys %}
+        <ul class="m-0 flex flex-col gap-3 p-0 list-none">
+            {% for a in most_read_articles %}
+                <li class="flex gap-3">
+                    <span class="flex size-5 shrink-0 items-center justify-center rounded text-[11px] font-semibold {% if forloop.counter <= 3 %}text-primary{% else %}text-muted-foreground{% endif %}">
+                        {{ forloop.counter }}
+                    </span>
+                    <a href="{{ a.get_absolute_url }}" class="group flex min-w-0 flex-col gap-1">
+                        <span class="line-clamp-2 text-sm leading-snug text-foreground transition-colors group-hover:text-primary">
+                            {{ a.title }}
+                        </span>
+                        <span class="text-[11px] text-muted-foreground">
+                            {{ a.views }} {% trans 'views' %}
+                        </span>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    {# Recent Comments — 第三 #}
+    {% if sidebar_comments and open_site_comment %}
+    <div class="rounded-xl border border-border bg-card p-5 shadow-sm">
+        <h3 class="mb-3 flex items-center gap-2 text-sm font-semibold tracking-tight text-foreground">
+            <svg class="size-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+            </svg>
+            {% trans 'recent comments' %}
+        </h3>
+        <ul class="m-0 flex flex-col gap-2 p-0 list-none">
+            {% for c in sidebar_comments %}
                 <li>
-                    <a href="{{ c.get_absolute_url }}"
-                       class="flex items-center justify-between rounded-lg px-3 py-2 text-sm text-foreground transition-colors hover:bg-secondary hover:text-primary">
-                        <span>{{ c.name }}</span>
-                        <span class="rounded-full bg-secondary px-2 py-0.5 text-xs text-muted-foreground">{{ c.article_set.count }}</span>
+                    <a href="{{ c.article.get_absolute_url }}#comment-{{ c.pk }}"
+                       class="-mx-2 group flex items-start gap-2.5 rounded-lg px-2 py-2 transition-colors hover:bg-secondary/50">
+                        <img src="{{ c.author.email|gravatar_url:32 }}"
+                             alt="{{ c.author.username }}"
+                             class="mt-0.5 size-7 shrink-0 rounded-full"
+                             loading="lazy">
+                        <div class="min-w-0 flex-1">
+                            <p class="m-0 line-clamp-2 text-sm leading-snug text-foreground">
+                                {{ c.body|striptags|truncatechars:60 }}
+                            </p>
+                            <div class="mt-1 flex items-center gap-1 text-[11px] text-muted-foreground">
+                                <span class="font-medium">{{ c.author.username }}</span>
+                                <span>&middot;</span>
+                                <span>{{ c.creation_time|timesince }}前</span>
+                            </div>
+                        </div>
                     </a>
                 </li>
             {% endfor %}
@@ -72,84 +127,6 @@
     </div>
     {% endif %}
 
-    {# Hot Posts #}
-    {% if most_read_articles %}
-    <div class="rounded-xl border border-border bg-card p-5 shadow-sm">
-        <h3 class="mb-3 flex items-center gap-2 text-sm font-semibold tracking-tight text-foreground">
-            <svg class="size-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
-            </svg>
-            {% trans 'Hot articles' %}
-        </h3>
-        <ul class="m-0 flex flex-col gap-3 p-0 list-none">
-            {% for a in most_read_articles %}
-                <li class="flex gap-3">
-                    <span class="flex size-5 shrink-0 items-center justify-center rounded text-[11px] font-semibold {% if forloop.counter <= 3 %}text-primary{% else %}text-muted-foreground{% endif %}">
-                        {{ forloop.counter }}
-                    </span>
-                    <a href="{{ a.get_absolute_url }}" class="group flex min-w-0 flex-col gap-1">
-                        <span class="line-clamp-2 text-sm leading-snug text-foreground transition-colors group-hover:text-primary">
-                            {{ a.title }}
-                        </span>
-                        <span class="text-[11px] text-muted-foreground">
-                            {{ a.views }} {% trans 'views' %}
-                        </span>
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
-    {% endif %}
-
-    {# Recent Comments #}
-    {% if sidebar_comments and open_site_comment %}
-    <div class="rounded-xl border border-border bg-card p-5 shadow-sm">
-        <h3 class="mb-3 flex items-center gap-2 text-sm font-semibold tracking-tight text-foreground">
-            <svg class="size-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-            </svg>
-            {% trans 'recent comments' %}
-        </h3>
-        <ul class="m-0 flex flex-col gap-2 p-0 list-none">
-            {% for c in sidebar_comments %}
-                <li>
-                    <a href="{{ c.article.get_absolute_url }}#comment-{{ c.pk }}"
-                       class="-mx-2 group flex items-start gap-2.5 rounded-lg px-2 py-2 transition-colors hover:bg-secondary/50">
-                        <img src="{{ c.author.email|gravatar_url:32 }}"
-                             alt="{{ c.author.username }}"
-                             class="mt-0.5 size-7 shrink-0 rounded-full"
-                             loading="lazy">
-                        <div class="min-w-0 flex-1">
-                            <p class="m-0 line-clamp-2 text-sm leading-snug text-foreground">
-                                {{ c.body|striptags|truncatechars:60 }}
-                            </p>
-                            <div class="mt-1 flex items-center gap-1 text-[11px] text-muted-foreground">
-                                <span class="font-medium">{{ c.author.username }}</span>
-                                <span>&middot;</span>
-                                <span>{{ c.creation_time|timesince }}前</span>
-                            </div>
-                        </div>
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
-    {% endif %}
-
-    {# Extra Sidebars #}
-    {% if extra_sidebars %}
-        {% for sidebar in extra_sidebars %}
-            <div class="rounded-xl border border-border bg-card p-5 shadow-sm">
-                <h3 class="mb-3 flex items-center gap-2 text-sm font-semibold tracking-tight text-foreground">
-                    {{ sidebar.name }}
-                </h3>
-                <div class="prose prose-sm dark:prose-invert max-w-none text-foreground">
-                    {{ sidebar.content|sidebar_markdown|safe }}
-                </div>
-            </div>
-        {% endfor %}
-    {% endif %}
-
     {# Links #}
     {% if sidabar_links %}
     <div class="rounded-xl border border-border bg-card p-5 shadow-sm">
@@ -201,14 +178,14 @@
         </div>
     </div>
 
-    {# Functions #}
+    {# 功能 #}
     <div class="rounded-xl border border-border bg-card p-5 shadow-sm">
         <h3 class="mb-3 flex items-center gap-2 text-sm font-semibold tracking-tight text-foreground">
             <svg class="size-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
             </svg>
-            {% trans 'functions' %}
+            功能
         </h3>
         <ul class="m-0 flex flex-col gap-0.5 p-0 list-none">
             <li>

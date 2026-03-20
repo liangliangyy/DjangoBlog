@@ -1399,9 +1399,12 @@ body[data-color-scheme="teal"] {
     @apply transition-colors duration-200;
   }
 
-  /* 文章摘要（列表页） */
-  /* 文本颜色统一为 muted */
+  /* 文章摘要（列表页） — prose prose-sm 已提供基础 markdown 样式，此处做收口覆盖 */
+
+  /* prose 默认 p/ul/ol margin 对卡片太大，压紧 */
   .article-excerpt p,
+  .article-excerpt ul,
+  .article-excerpt ol,
   .article-excerpt li,
   .article-excerpt blockquote {
     color: rgb(var(--muted-foreground));
@@ -1409,7 +1412,11 @@ body[data-color-scheme="teal"] {
     margin-bottom: 0.25rem;
   }
 
-  /* 摘要中标题压缩为正文大小，避免比文章标题本身还大 */
+  .article-excerpt :first-child {
+    margin-top: 0;
+  }
+
+  /* 摘要中标题压缩为正文大小，绝不能超过文章标题 */
   .article-excerpt h1,
   .article-excerpt h2,
   .article-excerpt h3,
@@ -1417,29 +1424,57 @@ body[data-color-scheme="teal"] {
   .article-excerpt h5,
   .article-excerpt h6 {
     font-size: 0.875rem;
+    line-height: 1.4;
     font-weight: 600;
     color: rgb(var(--muted-foreground));
     margin-top: 0.5rem;
     margin-bottom: 0.25rem;
   }
 
-  /* 摘要内链接不染色，避免全局 a { text-primary } 影响 */
+  /* 摘要内链接不染色 */
   .article-excerpt a {
     color: inherit;
     text-decoration: none;
   }
 
-  /* 图片和复杂块元素在摘要中隐藏 */
-  .article-excerpt img,
+  /* 摘要中图片正常显示，圆角+限高，避免超大图撑破卡片 */
+  .article-excerpt img {
+    display: block;
+    max-width: 100%;
+    max-height: 320px;
+    width: auto;
+    height: auto;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  /* 代码块、表格、iframe、视频等复杂元素在摘要中隐藏 */
   .article-excerpt pre,
   .article-excerpt code,
   .article-excerpt table,
   .article-excerpt hr,
   .article-excerpt iframe,
   .article-excerpt video,
-  .article-excerpt svg,
   .article-excerpt .codehilite {
     display: none;
+  }
+
+  /* 详情页文章体：h1 不能超过页面文章标题（text-2xl/text-3xl = 1.5rem/1.875rem）*/
+  .article.prose h1 {
+    font-size: 1.5rem;   /* text-2xl，与移动端文章标题等高，小于桌面端文章标题 */
+    line-height: 2rem;
+  }
+
+  .article.prose h2 {
+    font-size: 1.25rem;  /* text-xl */
+    line-height: 1.75rem;
+  }
+
+  .article.prose h3 {
+    font-size: 1.125rem; /* text-lg */
+    line-height: 1.75rem;
   }
 
   /* 文章内容 */

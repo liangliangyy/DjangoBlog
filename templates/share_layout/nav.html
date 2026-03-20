@@ -11,10 +11,15 @@
     <div class="mx-auto flex max-w-6xl items-center gap-6 px-4 py-3 lg:px-6">
 
         {# Logo #}
-        <a href="/" class="group flex items-center gap-2">
+        <a href="/" class="group flex flex-col items-end leading-none">
             <span class="text-[2.125rem] font-bold tracking-tight text-foreground transition-colors group-hover:text-primary">
                 {{ SITE_NAME }}
             </span>
+            {% if SITE_DESCRIPTION %}
+            <span class="text-[11px] text-muted-foreground tracking-wide">
+                {{ SITE_DESCRIPTION }}
+            </span>
+            {% endif %}
         </a>
 
         {# Desktop Nav #}

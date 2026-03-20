@@ -48,7 +48,7 @@
 
     {# Excerpt (List page only) #}
     {% if isindex %}
-        <div class="article-excerpt mb-3 text-sm leading-relaxed sm:mb-4">
+        <div class="article-excerpt prose prose-sm dark:prose-invert max-w-none mb-3 sm:mb-4">
             {% render_article_content article True %}
         </div>
     {% endif %}
