@@ -130,7 +130,7 @@ def vite_js(entry_name='src/main.js'):
 
     return mark_safe(f'''
     <!-- Vite生产模式 -->
-{css_html}    <script type="module" src="{js_url}"></script>
+{css_html}    <script type="module" crossorigin src="{js_url}"></script>
 ''')
 
 
@@ -192,7 +192,7 @@ def vite_preload(entry_name):
 
     # 根据文件类型决定预加载方式
     if file_path.endswith('.js'):
-        return mark_safe(f'<link rel="modulepreload" href="{url}">')
+        return mark_safe(f'<link rel="modulepreload" crossorigin href="{url}">')
     elif file_path.endswith('.css'):
         return mark_safe(f'<link rel="preload" href="{url}" as="style">')
     else:
