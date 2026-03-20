@@ -666,3 +666,7 @@ msgstr "快捷登錄"
 #: .\templates\share_layout\nav.html:26
 msgid "Article archive"
 msgstr "文章歸檔"
+
+#: templates/blog/article_detail.html templates/blog/article_index.html
+msgid "Discover more"
+msgstr "發現更多"

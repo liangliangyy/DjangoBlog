@@ -665,3 +665,7 @@ msgstr "快捷登录"
 #: .\templates\share_layout\nav.html:26
 msgid "Article archive"
 msgstr "文章归档"
+
+#: templates/blog/article_detail.html templates/blog/article_index.html
+msgid "Discover more"
+msgstr "发现更多"

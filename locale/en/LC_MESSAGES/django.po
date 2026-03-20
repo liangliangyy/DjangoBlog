@@ -683,3 +683,7 @@ msgstr "quick login"
 #: .\templates\share_layout\nav.html:26
 msgid "Article archive"
 msgstr "Article archive"
+
+#: templates/blog/article_detail.html templates/blog/article_index.html
+msgid "Discover more"
+msgstr "Discover more"
