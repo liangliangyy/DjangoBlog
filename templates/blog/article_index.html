@@ -17,16 +17,28 @@
                 {# Title Section #}
                 <div class="mb-6">
                     {% if page_type == "分类目录归档" %}
-                        <p class="mb-0.5 text-xs text-muted-foreground">分类</p>
-                        <h2 class="text-xl font-bold text-foreground m-0">{{ tag_name }}</h2>
+                        <p class="mb-1 text-xs text-muted-foreground">分类</p>
+                        <h2 class="flex items-center gap-2 text-xl font-bold text-foreground m-0">
+                            <span class="h-5 w-1 shrink-0 rounded-full bg-primary"></span>
+                            {{ tag_name }}
+                        </h2>
                     {% elif page_type == "分类标签归档" %}
-                        <p class="mb-0.5 text-xs text-muted-foreground">标签</p>
-                        <h2 class="text-xl font-bold text-foreground m-0">{{ tag_name }}</h2>
+                        <p class="mb-1 text-xs text-muted-foreground">标签</p>
+                        <h2 class="flex items-center gap-2 text-xl font-bold text-foreground m-0">
+                            <span class="h-5 w-1 shrink-0 rounded-full bg-primary"></span>
+                            {{ tag_name }}
+                        </h2>
                     {% elif page_type == "作者文章归档" %}
-                        <p class="mb-0.5 text-xs text-muted-foreground">作者</p>
-                        <h2 class="text-xl font-bold text-foreground m-0">{{ tag_name }}</h2>
+                        <p class="mb-1 text-xs text-muted-foreground">作者</p>
+                        <h2 class="flex items-center gap-2 text-xl font-bold text-foreground m-0">
+                            <span class="h-5 w-1 shrink-0 rounded-full bg-primary"></span>
+                            {{ tag_name }}
+                        </h2>
                     {% else %}
-                        <h2 class="text-xl font-bold text-foreground m-0">{% trans 'recent articles' %}</h2>
+                        <h2 class="flex items-center gap-2 text-xl font-bold text-foreground m-0">
+                            <span class="h-5 w-1 shrink-0 rounded-full bg-primary"></span>
+                            {% trans 'recent articles' %}
+                        </h2>
                     {% endif %}
                 </div>
 
