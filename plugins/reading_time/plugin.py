@@ -43,7 +43,15 @@ class ReadingTimePlugin(BasePlugin):
         if reading_minutes < 1:
             reading_minutes = 1
             
-        reading_time_html = f'<p class="reading-time-estimate"><em>预计阅读时间：{reading_minutes} 分钟</em></p>'
+        reading_time_html = (
+            f'<div class="reading-time-estimate flex items-center gap-1.5 text-sm text-muted-foreground mb-6">'
+            f'<svg class="size-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">'
+            f'<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" '
+            f'd="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>'
+            f'</svg>'
+            f'预计阅读时间：{reading_minutes} 分钟'
+            f'</div>'
+        )
         
         return reading_time_html + content
 

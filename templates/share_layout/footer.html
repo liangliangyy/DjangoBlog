@@ -20,10 +20,11 @@
                     {% trans 'index' %}
                 </a>
                 <a href="{% url 'blog:archives' %}" class="text-xs text-muted-foreground transition-colors hover:text-primary">
-                    {% trans 'archives' %}
+                    归档
                 </a>
-                <a href="{% url 'blog:links' %}" class="text-xs text-muted-foreground transition-colors hover:text-primary">
-                    {% trans 'links' %}
+<a href="https://tools.lylinux.net/" class="inline-flex items-center gap-0.5 text-xs text-muted-foreground transition-colors hover:text-primary" target="_blank" rel="noopener">
+                    工具站
+                    <svg class="size-2.5 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
                 </a>
                 <a href="/feed" class="text-xs text-muted-foreground transition-colors hover:text-primary" target="_blank" rel="noopener">
                     RSS
@@ -58,7 +59,7 @@
         <div class="flex flex-col items-center justify-between gap-2 border-t border-border/60 py-4 text-[11px] text-muted-foreground md:flex-row md:gap-0">
             <p class="flex items-center gap-1">
                 Built with
-                <svg class="mx-0.5 size-2.5 text-primary/60" fill="currentColor" viewBox="0 0 20 20">
+                <svg class="mx-0.5 size-2.5 text-red-500 animate-[heartbeat_1.2s_ease-in-out_infinite]" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
                 </svg>
                 Django &amp; Tailwind CSS
