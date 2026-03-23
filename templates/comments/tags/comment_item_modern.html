@@ -68,10 +68,13 @@
                     {{ comment_item.body|comment_markdown }}
                 </div>
 
+                <!-- Actions row: reactions + reply -->
+                <div class="flex flex-wrap items-center gap-3">
+
                 <!-- Emoji Reactions -->
                 <div x-data="reactionPicker({{ comment_item.pk }})"
                      data-reactions='{{ comment_item|get_reactions_for_user:user|to_json }}'
-                     class="mb-1">
+                     class="flex items-center">
 
                     <!-- Reactions 显示区 -->
                     <div class="flex flex-wrap gap-1 items-center">
@@ -148,8 +151,11 @@
                     </div>
                 </div>
 
-                <!-- 操作按钮 -->
-                <div class="flex items-center gap-4">
+                <!-- 分隔 -->
+                <span class="h-3 w-px bg-border/60"></span>
+
+                <!-- 回复按钮 -->
+                <div class="flex items-center gap-3">
                     {% if user.is_authenticated %}
                     <button @click="startReply({{ comment_item.pk }})"
                             :disabled="isLoading"
@@ -171,7 +177,9 @@
                         <span>回复</span>
                     </a>
                     {% endif %}
-                </div>
+                </div>{# end 回复按钮 #}
+
+                </div>{# end actions row #}
 
                 <!-- 回复表单 -->
                 <template x-if="replyingTo === {{ comment_item.pk }}">
