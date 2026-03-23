@@ -66,16 +66,17 @@
                         <div class="entry-content max-w-full" itemprop="articleBody">
                             {% if article.show_toc %}
                                 {% get_markdown_toc article.body as toc %}
-                                <details class="mb-6 group" open>
-                                    <summary class="flex cursor-pointer select-none items-center gap-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground list-none [&::-webkit-details-marker]:hidden">
+                                <details class="mb-6 group rounded-xl border border-border bg-muted/30 px-4 py-3" open>
+                                    <summary class="flex cursor-pointer select-none items-center gap-1.5 text-xs font-semibold tracking-wider text-muted-foreground transition-colors hover:text-foreground list-none [&::-webkit-details-marker]:hidden">
                                         <svg class="size-3 transition-transform duration-150 group-open:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                                         </svg>
                                         {% trans 'toc' %}
                                     </summary>
-                                    <nav class="toc-nav mt-3 border-l-2 border-border/50 pl-4 text-sm
+                                    <nav class="toc-nav mt-3 border-l-2 border-primary/30 pl-4 text-sm
                                                 [&_ul]:my-0 [&_ul]:ml-4 [&_ul]:list-none [&_ul]:p-0
-                                                [&_li]:py-0.5">
+                                                [&_li]:py-0.5
+                                                [&_a]:text-muted-foreground [&_a]:no-underline [&_a]:transition-colors [&_a:hover]:text-primary">
                                         {{ toc|safe }}
                                     </nav>
                                 </details>
@@ -146,17 +147,25 @@
                     {% if user.is_authenticated %}
                         {% include 'comments/tags/post_comment_modern.html' %}
                     {% else %}
-                        <div class="mt-8 flex items-center justify-between gap-4 rounded-xl border border-border bg-card px-5 py-4">
-                            <p class="text-sm text-muted-foreground m-0">
-                                <a href="{% url "account:login" %}?next={{ request.get_full_path }}"
-                                   class="text-primary font-medium hover:underline"
-                                   rel="nofollow"
-                                   hx-boost="false">{% trans 'login' %}</a>
-                                后发表评论
-                            </p>
-                            {% load oauth_tags %}
-                            <div class="flex flex-wrap gap-2 shrink-0">
-                                {% load_oauth_applications request %}
+                        <div class="mt-8 overflow-hidden rounded-xl border border-border bg-card">
+                            <div class="flex items-center gap-2 border-b border-border/60 bg-muted/30 px-5 py-3">
+                                <svg class="size-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/>
+                                </svg>
+                                <h3 class="m-0 text-sm font-semibold text-foreground">发表评论</h3>
+                            </div>
+                            <div class="flex items-center justify-between gap-4 px-5 py-4">
+                                <p class="text-sm text-muted-foreground m-0">
+                                    <a href="{% url "account:login" %}?next={{ request.get_full_path }}"
+                                       class="text-primary font-medium hover:underline"
+                                       rel="nofollow"
+                                       hx-boost="false">{% trans 'login' %}</a>
+                                    后发表评论
+                                </p>
+                                {% load oauth_tags %}
+                                <div class="flex items-center gap-2 shrink-0">
+                                    {% load_oauth_applications request %}
+                                </div>
                             </div>
                         </div>
                     {% endif %}
@@ -186,4 +195,33 @@
             </details>
         </div>
     </div>
+{% endblock %}
+
+{% block compress_js %}
+{{ block.super }}
+<script>
+(function () {
+  document.querySelectorAll('.article.prose pre').forEach(function (pre) {
+    if (pre.querySelector('.copy-code-btn')) return;
+    var btn = document.createElement('button');
+    btn.className = 'copy-code-btn absolute right-2 top-2 flex items-center gap-1 rounded-md border border-border/60 bg-card/80 px-2 py-1 text-[11px] text-muted-foreground backdrop-blur-sm transition-all hover:border-primary/40 hover:text-primary opacity-0 group-hover/pre:opacity-100';
+    btn.innerHTML = '<svg class="size-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg><span>复制</span>';
+    btn.setAttribute('aria-label', '复制代码');
+    pre.classList.add('relative', 'group/pre');
+    pre.appendChild(btn);
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var text = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(text).then(function () {
+        btn.innerHTML = '<svg class="size-3 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span>已复制</span>';
+        btn.classList.add('opacity-100');
+        setTimeout(function () {
+          btn.innerHTML = '<svg class="size-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg><span>复制</span>';
+          btn.classList.remove('opacity-100');
+        }, 2000);
+      });
+    });
+  });
+})();
+</script>
 {% endblock %}

@@ -224,7 +224,7 @@
     <!-- 嵌套评论（递归，最大缩进3层） -->
     {% query article_comments parent_comment=comment_item as cc_comments %}
     {% if cc_comments %}
-        <ul class="mt-4 flex flex-col gap-4 m-0 p-0 list-none {% if depth < 3 %}ml-2 md:ml-4 lg:ml-6 border-l-2 border-border pl-2 md:pl-4{% endif %}">
+        <ul class="mt-4 flex flex-col gap-4 m-0 p-0 list-none {% if depth < 2 %}ml-2 md:ml-4 border-l-2 border-border pl-2 md:pl-4{% endif %}">
             {% for cc in cc_comments %}
                 {% with comment_item=cc %}
                     {% with depth|add:1 as depth %}
