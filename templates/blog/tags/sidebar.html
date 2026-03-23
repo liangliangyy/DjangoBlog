@@ -130,27 +130,7 @@
     </div>
     {% endif %}
 
-    {# Links #}
-    {% if sidabar_links %}
-    <div class="rounded-xl border border-border bg-card p-5 shadow-sm">
-        <h3 class="mb-3 flex items-center gap-2 text-sm font-semibold tracking-tight text-foreground">
-            <svg class="size-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
-            </svg>
-            {% trans 'bookmark' %}
-        </h3>
-        <ul class="m-0 flex flex-col gap-0.5 p-0 list-none">
-            {% for l in sidabar_links %}
-                <li>
-                    <a href="{{ l.link }}" target="_blank"
-                       class="block rounded-lg px-3 py-2 text-sm text-foreground transition-colors hover:bg-secondary hover:text-primary">
-                        {{ l.name }}
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
-    {% endif %}
+
 
     {# AdSense #}
     {% if show_google_adsense %}

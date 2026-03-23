@@ -98,6 +98,14 @@
                     {% if request.path == page.get_absolute_url %}<span class="absolute bottom-0 left-1/2 h-0.5 w-4 -translate-x-1/2 rounded-full bg-primary"></span>{% endif %}
                 </a>
             {% endfor %}
+
+            {# External: tools site #}
+            <span class="mx-1 h-4 w-px bg-border/60"></span>
+            <a href="https://tools.lylinux.net/" target="_blank" rel="noopener"
+               class="flex items-center gap-1 rounded-lg px-3.5 py-2 text-sm font-medium text-muted-foreground transition-all duration-200 hover:bg-secondary hover:text-foreground">
+                工具站
+                <svg class="size-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+            </a>
         </nav>
 
         {# Desktop inline search bar #}
@@ -246,6 +254,15 @@
                     {{ page.title }}
                 </a>
             {% endfor %}
+
+            {# External: tools site #}
+            <div class="my-1 border-t border-border/60"></div>
+            <a href="https://tools.lylinux.net/" target="_blank" rel="noopener"
+               @click="$store.nav.mobileOpen = false"
+               class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-secondary">
+                <svg class="size-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                工具站
+            </a>
         </div>
     </nav>
 </header>
