@@ -23,7 +23,7 @@
             <svg class="size-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
             </svg>
-            {% trans 'Hot articles' %}
+            热门文章
         </h3>
         <ul class="m-0 flex flex-col gap-3 p-0 list-none">
             {% for a in most_read_articles %}
@@ -89,12 +89,15 @@
             </svg>
             {% trans 'Tag Cloud' %}
         </h3>
-        <div class="flex flex-wrap gap-2">
-            {% for tag,count,size in sidebar_tags %}
+        <div class="flex flex-wrap gap-1.5">
+            {% for tag, count, size in sidebar_tags %}
                 <a href="{{ tag.get_absolute_url }}"
-                   class="inline-flex items-center rounded-md border border-border px-2.5 py-1 text-foreground transition-colors hover:border-primary hover:bg-primary/10 hover:text-primary {% if size >= 4 %}text-sm font-medium{% elif size == 3 %}text-xs{% else %}text-[11px]{% endif %}">
+                   class="inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 transition-colors hover:border-primary hover:bg-primary/10 hover:text-primary
+                   {% if size >= 18 %}border-primary/30 bg-primary/8 text-foreground text-sm font-semibold
+                   {% elif size >= 13 %}border-border text-foreground text-sm
+                   {% else %}border-border/60 text-muted-foreground text-xs{% endif %}">
                     {{ tag.name }}
-                    <span class="ml-1 opacity-60">{{ count }}</span>
+                    <span class="tabular-nums opacity-50 text-[10px]">{{ count }}</span>
                 </a>
             {% endfor %}
         </div>

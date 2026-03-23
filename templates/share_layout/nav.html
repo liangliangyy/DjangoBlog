@@ -1,7 +1,7 @@
 {% load blog_tags %}
 {% load i18n %}
 
-<header class="sticky top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-xl"
+<header class="sticky top-0 z-50 border-b border-border/60 dark:border-white/[0.08] bg-background/80 backdrop-blur-xl"
         @keydown.ctrl.k.window.prevent="document.getElementById('header-search-input')?.focus()"
         @keydown.meta.k.window.prevent="document.getElementById('header-search-input')?.focus()">
     {# Skip to content link for accessibility #}
@@ -121,8 +121,13 @@
             <button class="size-9 rounded-lg text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
                     @click="window.themeManager && window.themeManager.toggle()"
                     aria-label="{% trans 'Toggle theme' %}">
-                <svg class="size-[18px] mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {# Moon — shown in light mode #}
+                <svg class="size-[18px] mx-auto theme-icon-moon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                </svg>
+                {# Sun — shown in dark mode #}
+                <svg class="size-[18px] mx-auto theme-icon-sun" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"/>
                 </svg>
             </button>
 
@@ -155,8 +160,7 @@
          hx-select="#main"
          hx-swap="innerHTML"
          hx-push-url="true">
-        <div class="flex flex-col gap-0.5"
-             x-data="{ mobileCategoryOpen: false }">
+        <div class="flex flex-col gap-0.5">
 
             {# Mobile search #}
             <form action="{% url 'search' %}" method="get"
@@ -181,67 +185,48 @@
                 {% trans 'index' %}
             </a>
 
-            {# Mobile Category Accordion #}
-            <div>
-                <button @click="mobileCategoryOpen = !mobileCategoryOpen"
-                        class="flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-secondary">
-                    <span class="flex items-center gap-3">
-                        <svg class="size-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
-                        </svg>
-                        {% trans 'category' %}
-                    </span>
-                    <svg :class="mobileCategoryOpen ? 'rotate-180' : ''" class="size-4 text-muted-foreground transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                    </svg>
-                </button>
-                <div x-show="mobileCategoryOpen"
-                     x-transition
-                     class="ml-7 flex flex-col gap-0.5 border-l-2 border-border pl-3"
-                     x-cloak>
-                    {% query nav_category_list parent_category__isnull=True as mobile_top_cats %}
-                    {% for category in mobile_top_cats %}
-                        {% query nav_category_list parent_category=category as mobile_children %}
-                        {% if mobile_children %}
-                        <div x-data="{ mobileSubOpen: false }">
-                            <div class="flex items-center">
-                                <a href="{{ category.get_absolute_url }}"
-                                   @click="$store.nav.mobileOpen = false"
-                                   class="flex flex-1 items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors hover:bg-secondary hover:text-primary">
-                                    <span class="font-medium text-foreground">{{ category.name }}</span>
-                                    <span class="text-xs text-muted-foreground">{{ category.article_set.count }}</span>
-                                </a>
-                                <button @click="mobileSubOpen = !mobileSubOpen"
-                                        class="flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-secondary">
-                                    <svg class="size-3.5 transition-transform duration-200" :class="mobileSubOpen ? 'rotate-90' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                                    </svg>
-                                </button>
-                            </div>
-                            <div x-show="mobileSubOpen" x-transition
-                                 class="ml-3 flex flex-col gap-0.5 border-l border-border/60 pl-3"
-                                 x-cloak>
-                                {% for child in mobile_children %}
-                                    <a href="{{ child.get_absolute_url }}"
-                                       @click="$store.nav.mobileOpen = false"
-                                       class="flex items-center justify-between rounded-lg px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-primary">
-                                        <span>{{ child.name }}</span>
-                                        <span class="text-xs">{{ child.article_set.count }}</span>
-                                    </a>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        {% else %}
+            {# Mobile Categories — flat, mirroring desktop nav #}
+            {% query nav_category_list parent_category__isnull=True as mobile_top_cats %}
+            {% for category in mobile_top_cats %}
+                {% query nav_category_list parent_category=category as mobile_children %}
+                {% if mobile_children %}
+                {# Parent with children: link + expandable sub-items #}
+                <div x-data="{ mobileSubOpen: false }">
+                    <div class="flex items-center">
                         <a href="{{ category.get_absolute_url }}"
                            @click="$store.nav.mobileOpen = false"
-                           class="flex items-center justify-between rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-primary">
-                            <span>{{ category.name }}</span>
-                            <span class="text-xs">{{ category.article_set.count }}</span>
+                           class="flex flex-1 items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-secondary">
+                            {{ category.name }}
                         </a>
-                        {% endif %}
-                    {% endfor %}
+                        <button @click="mobileSubOpen = !mobileSubOpen"
+                                class="flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-secondary">
+                            <svg class="size-3.5 transition-transform duration-200" :class="mobileSubOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div x-show="mobileSubOpen" x-transition
+                         class="ml-4 flex flex-col gap-0.5 border-l-2 border-border pl-3"
+                         x-cloak>
+                        {% for child in mobile_children %}
+                            <a href="{{ child.get_absolute_url }}"
+                               @click="$store.nav.mobileOpen = false"
+                               class="flex items-center justify-between rounded-lg px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-primary">
+                                <span>{{ child.name }}</span>
+                                <span class="text-xs tabular-nums">{{ child.article_set.count }}</span>
+                            </a>
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
+                {% else %}
+                {# Leaf category — simple link #}
+                <a href="{{ category.get_absolute_url }}"
+                   @click="$store.nav.mobileOpen = false"
+                   class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-secondary">
+                    {{ category.name }}
+                </a>
+                {% endif %}
+            {% endfor %}
 
             <a href="{% url 'blog:archives' %}"
                @click="$store.nav.mobileOpen = false"

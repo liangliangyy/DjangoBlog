@@ -2579,6 +2579,19 @@ html[data-theme="dark"] .dark-mode-toggle-btn .icon-dark {
   display: inline;
 }
 
+/* 导航栏主题切换图标 */
+.theme-icon-sun {
+  display: none;
+}
+
+html[data-theme="dark"] .theme-icon-moon {
+  display: none;
+}
+
+html[data-theme="dark"] .theme-icon-sun {
+  display: block;
+}
+
 /* ========== Article Recommendation 插件适配 ========== */
 .article-recommendations {
   @apply my-8 p-6 card;

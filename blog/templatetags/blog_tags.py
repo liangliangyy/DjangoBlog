@@ -289,19 +289,19 @@ def load_sidebar(user, linktype):
         commment_list = Comment.objects.filter(
             is_enable=True
         ).select_related('author').order_by('-id')[:blogsetting.sidebar_comment_count]
-        # 标签云 计算字体大小
-        # 根据总数计算出平均值 大小为 (数目/平均值)*步长
+        # 标签云 — 按文章数排序，取 top 20，size = (count/avg)*5+10
         increment = 5
         tags = Tag.objects.all()
         sidebar_tags = None
         if tags and len(tags) > 0:
-            s = [t for t in [(t, t.get_article_count()) for t in tags] if t[1]]
+            s = sorted(
+                [t for t in [(t, t.get_article_count()) for t in tags] if t[1]],
+                key=lambda x: x[1], reverse=True
+            )[:20]
             count = sum([t[1] for t in s])
-            dd = 1 if (count == 0 or not len(tags)) else count / len(tags)
-            import random
+            dd = 1 if (count == 0 or not len(s)) else count / len(s)
             sidebar_tags = list(
                 map(lambda x: (x[0], x[1], (x[1] / dd) * increment + 10), s))
-            random.shuffle(sidebar_tags)
 
         value = {
             'recent_articles': recent_articles,
