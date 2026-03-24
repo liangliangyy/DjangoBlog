@@ -64,7 +64,7 @@
                     <!-- 取消回复按钮（条件显示） -->
                     <button type="button"
                             id="cancel_comment"
-                            onclick="cancel_reply()"
+                            data-action="cancel-reply"
                             class="hidden items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:border-border/80 hover:text-foreground">
                         <svg class="size-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -107,33 +107,3 @@
     </form>
 </div>
 
-<!-- 保留旧的JavaScript函数以兼容 -->
-<script>
-    function do_reply(parentid) {
-        document.getElementById("id_parent_comment_id").value = parentid;
-        const form = document.getElementById("commentform");
-        const target = document.getElementById("div-comment-" + parentid);
-        if (target && form) {
-            target.appendChild(form);
-        }
-        const cancelBtn = document.getElementById("cancel_comment");
-        if (cancelBtn) {
-            cancelBtn.classList.remove("hidden");
-            cancelBtn.classList.add("inline-flex");
-        }
-    }
-
-    function cancel_reply() {
-        document.getElementById("id_parent_comment_id").value = '';
-        const form = document.getElementById("commentform");
-        const respond = document.getElementById("respond");
-        if (form && respond) {
-            respond.appendChild(form);
-        }
-        const cancelBtn = document.getElementById("cancel_comment");
-        if (cancelBtn) {
-            cancelBtn.classList.add("hidden");
-            cancelBtn.classList.remove("inline-flex");
-        }
-    }
-</script>

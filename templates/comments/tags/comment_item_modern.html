@@ -103,7 +103,7 @@
                                     x-transition:leave-start="opacity-100"
                                     x-transition:leave-end="opacity-0"
                                     class="absolute bottom-full mb-1.5 left-1/2 -translate-x-1/2 px-2.5 py-1.5 bg-foreground text-background text-[11px] rounded-md shadow-lg whitespace-nowrap z-20 pointer-events-none"
-                                    style="display: none;"
+                                    x-cloak
                                 >
                                     <span x-text="formatUsersText(data.users, data.count)"></span>
                                     <div class="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-l-[5px] border-r-[5px] border-t-[5px] border-transparent border-t-foreground"></div>
@@ -135,7 +135,7 @@
                                 x-transition:leave-start="opacity-100 scale-100"
                                 x-transition:leave-end="opacity-0 scale-95"
                                 class="absolute bottom-full mb-2 left-0 flex items-center gap-0.5 p-1 bg-card border border-border rounded-full shadow-lg shadow-foreground/8 z-10"
-                                style="display: none;"
+                                x-cloak
                             >
                                 <button @click="toggleReaction('👍')" class="size-8 flex items-center justify-center text-base rounded-full hover:bg-secondary transition-colors" title="赞">👍</button>
                                 <button @click="toggleReaction('👎')" class="size-8 flex items-center justify-center text-base rounded-full hover:bg-secondary transition-colors" title="踩">👎</button>

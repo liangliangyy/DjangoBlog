@@ -28,8 +28,8 @@
         </div>
         <div class="entry-content">{{ comment_item.body|comment_markdown }}</div>
         <div class="reply"><a rel="nofollow" class="comment-reply-link"
-                              href="javascript:void(0)"
-                              onclick="do_reply({{ comment_item.pk }})"
+                              href="#"
+                              data-action="do-reply" data-pk="{{ comment_item.pk }}"
                               aria-label="回复给{{ comment_item.author.username }}">回复</a></div>
     </div>
 

@@ -60,7 +60,7 @@
                          x-transition:leave-start="opacity-100"
                          x-transition:leave-end="opacity-0"
                          class="absolute left-0 top-full z-50 mt-1 min-w-48 overflow-hidden rounded-xl border border-border bg-card p-1.5 shadow-xl shadow-foreground/5"
-                         style="display: none;">
+                         x-cloak>
                         {% for child in nav_children %}
                             <a href="{{ child.get_absolute_url }}"
                                @click="open = false"
