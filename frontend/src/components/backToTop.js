@@ -1,70 +1,61 @@
 /**
  * 回到顶部组件
- * 替代原有的jQuery实现
+ * 使用 IntersectionObserver 代替 scroll 事件，避免强制 reflow
  */
 
 export default () => ({
-  // ==================== 状态 ====================
   isVisible: false,
   isAnimating: false,
+  _sentinel: null,
+  _observer: null,
+  handleScroll: null,
 
-  // ==================== 初始化 ====================
   init() {
-    // 初始检查滚动位置
-    this.checkScroll();
+    if ('IntersectionObserver' in window) {
+      // 在文档顶部 200px 处插入 1px 哨兵元素
+      // 哨兵离开视口时说明已滚动超过 200px，显示按钮
+      this._sentinel = document.createElement('div');
+      this._sentinel.style.cssText = 'position:absolute;top:200px;left:0;width:1px;height:1px;pointer-events:none;visibility:hidden;';
+      document.body.prepend(this._sentinel);
 
-    // 监听滚动事件（使用防抖）
-    this.handleScroll = this.debounce(this.checkScroll.bind(this), 100);
-    window.addEventListener('scroll', this.handleScroll);
-
-    console.log('🚀 Back to Top Initialized');
+      this._observer = new IntersectionObserver(([entry]) => {
+        this.isVisible = !entry.isIntersecting;
+      });
+      this._observer.observe(this._sentinel);
+    } else {
+      // 降级：passive scroll + rAF 批处理，避免布局抖动
+      let ticking = false;
+      this.handleScroll = () => {
+        if (!ticking) {
+          requestAnimationFrame(() => {
+            this.isVisible = window.scrollY > 200;
+            ticking = false;
+          });
+          ticking = true;
+        }
+      };
+      window.addEventListener('scroll', this.handleScroll, { passive: true });
+      this.isVisible = window.scrollY > 200;
+    }
   },
 
-  // ==================== 销毁 ====================
   destroy() {
-    window.removeEventListener('scroll', this.handleScroll);
+    this._observer?.disconnect();
+    this._sentinel?.remove();
+    if (this.handleScroll) {
+      window.removeEventListener('scroll', this.handleScroll);
+    }
   },
 
-  // ==================== 检查滚动位置 ====================
-  checkScroll() {
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    this.isVisible = scrollTop > 200;
-  },
-
-  // ==================== 滚动到顶部 ====================
   scrollToTop() {
     if (this.isAnimating) return;
-
     this.isAnimating = true;
-
-    // 使用现代API平滑滚动
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
-
-    // 添加火箭动画效果
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     const rocket = this.$el;
     rocket.classList.add('move');
-
     setTimeout(() => {
       rocket.classList.remove('move');
       this.isAnimating = false;
     }, 800);
-
-    console.log('🚀 Scrolling to top');
-  },
-
-  // ==================== 工具函数 ====================
-  debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-      const later = () => {
-        clearTimeout(timeout);
-        func(...args);
-      };
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-    };
   },
 });

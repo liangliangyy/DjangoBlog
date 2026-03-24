@@ -7,12 +7,25 @@
     
     /**
      * 检测页面是否包含数学公式
+     * 只扫描文章正文区域，并排除 pre/code 代码块，
+     * 避免 $PATH、$(cmd) 等 Shell 变量触发误判
      * @returns {boolean} 是否包含数学公式
      */
     function hasMathFormulas() {
-        const content = document.body.textContent || document.body.innerText || '';
-        // 检测常见的数学公式语法
-        return /\$.*?\$|\$\$.*?\$\$|\\begin\{.*?\}|\\end\{.*?\}|\\[a-zA-Z]+\{/.test(content);
+        // 只检查文章正文，范围外不做处理
+        var article = document.querySelector('.article.prose, .entry-content, #content');
+        if (!article) return false;
+
+        // 浅复制后移除 pre/code，避免代码片段干扰
+        var clone = article.cloneNode(true);
+        clone.querySelectorAll('pre, code').forEach(function(el) { el.remove(); });
+        var content = clone.textContent || '';
+
+        // 仅匹配明确的 LaTeX 语法：
+        //   $$...$$  块级公式
+        //   \[...\]  块级公式（另一种写法）
+        //   \begin{env} LaTeX 环境
+        return /\$\$[\s\S]+?\$\$|\\\[[\s\S]+?\\\]|\\begin\{[a-zA-Z]+\*?\}/.test(content);
     }
     
     /**
