@@ -95,15 +95,8 @@ export default defineConfig({
           // 其他资源放在assets目录
           return 'assets/[name]-[hash][extname]';
         },
-        // 手动代码分割
-        manualChunks: (id) => {
-          // 将 node_modules 中的包分离
-          if (id.includes('node_modules')) {
-            if (id.includes('alpinejs')) return 'alpine';
-            if (id.includes('htmx')) return 'htmx';
-            return 'vendor';
-          }
-        },
+        // 不手动分割：alpine/htmx 作为静态依赖合并进 main bundle
+        // 消除 main.js → alpine + htmx 的串行加载链（减少 1 次 RTT）
         // 最小化输出
         compact: true,
         // 不生成 sourcemap

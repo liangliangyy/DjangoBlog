@@ -19,4 +19,5 @@
     {% endif %}
 </div>
 
-<link rel="stylesheet" href="{% static 'blog/css/oauth_style.css' %}">
+<link rel="stylesheet" href="{% static 'blog/css/oauth_style.css' %}" media="print" onload="this.media='all'; this.onload=null;">
+<noscript><link rel="stylesheet" href="{% static 'blog/css/oauth_style.css' %}"></noscript>

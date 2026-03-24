@@ -23,6 +23,17 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  /* 隐藏滚动条但保留滚动能力 */
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 /* ==================== 主题配色方案 CSS 变量 ==================== */
 :root {
   /* 默认主题：紫色 Purple Dream */

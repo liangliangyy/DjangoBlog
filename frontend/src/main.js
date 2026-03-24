@@ -14,6 +14,8 @@ import htmx from 'htmx.org';
 
 // 导入Dark Mode（会自动初始化防闪烁）
 import { initDarkMode } from './features/darkMode.js';
+import { initCodeCopyFeature } from './components/codeCopy.js';
+import { initLegacyCommentsFeature } from './components/legacyComments.js';
 
 // 注册Alpine插件
 Alpine.plugin(focus);
@@ -43,6 +45,12 @@ Alpine.start();
 
 // 初始化Dark Mode
 initDarkMode();
+
+// 初始化代码复制按钮
+initCodeCopyFeature();
+
+// 初始化旧版评论回复功能
+initLegacyCommentsFeature();
 
 // HTMX 配置
 htmx.config.defaultSwapStyle = 'innerHTML';

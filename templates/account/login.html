@@ -9,22 +9,22 @@
     {# Header #}
     <div class="mb-8 text-center">
         <a href="/" class="mb-6 inline-flex items-center justify-center">
-            <div class="flex size-12 items-center justify-center rounded-xl bg-primary shadow-lg" style="box-shadow: 0 4px 14px 0 rgb(var(--primary) / 0.25);">
-                <span class="text-lg font-bold" style="color: rgb(var(--primary-foreground));">
+            <div class="flex size-12 items-center justify-center rounded-xl bg-primary shadow-lg shadow-primary/25">
+                <span class="text-lg font-bold text-primary-foreground">
                     {{ SITE_NAME|slice:":1" }}
                 </span>
             </div>
         </a>
-        <h1 class="mt-4 text-2xl font-bold tracking-tight" style="color: rgb(var(--foreground));">
+        <h1 class="mt-4 text-2xl font-bold tracking-tight text-foreground">
             {% trans 'Welcome Back' %}
         </h1>
-        <p class="mt-2 text-sm" style="color: rgb(var(--muted-foreground));">
+        <p class="mt-2 text-sm text-muted-foreground">
             {% trans 'Sign in to your account' %}
         </p>
     </div>
 
     {# Form Card #}
-    <div class="rounded-2xl border bg-card p-6 sm:p-8" style="border-color: rgb(var(--border)); background-color: rgb(var(--card)); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);">
+    <div class="rounded-2xl border border-border bg-card p-6 shadow-2xl sm:p-8">
         <div x-data="{ showPassword: false }">
 
             {# Form #}
