@@ -31,8 +31,8 @@ python-logstash==0.4.8
 python-slugify==8.0.4
 pytz==2026.1.post1
 rcssmin==1.2.2
-redis==7.3.0
-requests==2.32.5
+redis==7.4.0
+requests==2.33.0
 rjsmin==1.2.5
 setuptools==82.0.1
 simplejson==3.20.2
