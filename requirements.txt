@@ -36,7 +36,7 @@ requests==2.33.1
 rjsmin==1.2.5
 setuptools==82.0.1
 simplejson==3.20.2
-tzdata==2025.3
+tzdata==2026.1
 user-agents==2.2.0
 WeRoBot==1.13.1
 Whoosh==2.7.4
