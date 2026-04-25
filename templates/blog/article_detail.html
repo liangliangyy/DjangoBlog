@@ -31,6 +31,21 @@
                             {{ article.title }}
                         </h1>
 
+                        {# Scheduled Publish Notice #}
+                        {% load tz %}
+                        {% now "Y-m-d H:i:s" as current_time %}
+                        {% if article.scheduled_publish_time %}
+                            {% with article.scheduled_publish_time|date:"Y-m-d H:i:s" as scheduled_time %}
+                                {% if scheduled_time > current_time %}
+                                    <div class="mb-4 rounded-lg border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm text-yellow-800 dark:border-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-200">
+                                        <span class="font-semibold">{% trans 'Scheduled Publication' %}:</span>
+                                        {% trans 'This article will be published on' %}
+                                        <span class="font-medium">{{ article.scheduled_publish_time|date:"Y年m月d日 H:i" }}</span>
+                                    </div>
+                                {% endif %}
+                            {% endwith %}
+                        {% endif %}
+
                         {# Meta #}
                         <div class="mb-6 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
                             <a href="{{ article.category.get_absolute_url }}"

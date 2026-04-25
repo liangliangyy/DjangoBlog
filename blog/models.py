@@ -105,6 +105,13 @@ class Article(BaseModel):
         blank=False,
         null=False)
     tags = models.ManyToManyField('Tag', verbose_name=_('tag'), blank=True)
+    scheduled_publish_time = models.DateTimeField(
+        _('scheduled publish time'),
+        blank=True,
+        null=True,
+        help_text=_('If set, the article will be automatically published at this time. '
+                    'Can be set for both draft and published articles.')
+    )
 
     def body_to_string(self):
         return self.body
@@ -166,16 +173,30 @@ class Article(BaseModel):
         info = (self._meta.app_label, self._meta.model_name)
         return reverse('admin:%s_%s_change' % info, args=(self.pk,))
 
+    @classmethod
+    def get_published_queryset(cls):
+        """
+        获取实际上已发布的文章 QuerySet
+        条件：状态为已发布，且（没有设置定时发布 或 已过定时发布时间）
+        """
+        from django.db.models import Q
+        return cls.objects.filter(
+            Q(status='p') &
+            (Q(scheduled_publish_time__isnull=True) |
+             Q(scheduled_publish_time__lte=now()))
+        )
+
     @cache_decorator(expiration=CacheTimeout.HOUR_10)
     def next_article(self):
         # 下一篇
-        return Article.objects.filter(
-            id__gt=self.id, status='p').order_by('id').first()
+        return Article.get_published_queryset().filter(
+            id__gt=self.id).order_by('id').first()
 
     @cache_decorator(expiration=CacheTimeout.HOUR_10)
     def prev_article(self):
         # 前一篇
-        return Article.objects.filter(id__lt=self.id, status='p').first()
+        return Article.get_published_queryset().filter(
+            id__lt=self.id).order_by('-id').first()
 
     def get_first_image_url(self):
         """
@@ -186,6 +207,50 @@ class Article(BaseModel):
         if match:
             return match.group(1)
         return ""
+
+    def is_scheduled_publish(self):
+        """
+        判断文章是否设置了定时发布
+        """
+        return self.scheduled_publish_time is not None
+
+    def is_past_scheduled_time(self):
+        """
+        判断是否已过定时发布时间
+        """
+        if not self.is_scheduled_publish():
+            return False
+        return now() >= self.scheduled_publish_time
+
+    def should_be_published(self):
+        """
+        判断文章是否应该被自动发布
+        条件：设置了定时发布、已过定时时间、当前状态为草稿
+        """
+        return (self.is_scheduled_publish() and
+                self.is_past_scheduled_time() and
+                self.status == 'd')
+
+    def is_actually_published(self):
+        """
+        判断文章是否实际上已发布
+        条件：状态为已发布，且（没有设置定时发布 或 已过定时发布时间）
+        """
+        if self.status != 'p':
+            return False
+        if self.is_scheduled_publish():
+            return self.is_past_scheduled_time()
+        return True
+
+    def get_scheduled_status_display(self):
+        """
+        获取定时发布状态的显示文本
+        """
+        if not self.is_scheduled_publish():
+            return _('Not scheduled')
+        if self.is_past_scheduled_time():
+            return _('Scheduled time passed')
+        return _('Scheduled')
 
 
 class Category(BaseModel):
