@@ -69,8 +69,14 @@ class IndexView(OptimizedArticleQueryMixin, ArticleListView):
 
     def get_queryset_data(self):
         # 使用 Mixin 提供的优化查询方法
+        # 条件：状态为已发布，且（没有设置定时发布 或 已过定时发布时间）
+        from django.db.models import Q
+        from django.utils.timezone import now
         return self.get_optimized_article_queryset().filter(
-            type='a', status='p'
+            Q(type='a') &
+            Q(status='p') &
+            (Q(scheduled_publish_time__isnull=True) |
+             Q(scheduled_publish_time__lte=now()))
         )
 
     def get_queryset_cache_key(self):
@@ -94,6 +100,21 @@ class ArticleDetailView(DetailView):
     model = Article
     pk_url_kwarg = 'article_id'
     context_object_name = "article"
+
+    def get_queryset(self):
+        """
+        过滤文章查询，只返回实际上已发布的文章：
+        - 状态为已发布
+        - 且（没有设置定时发布 或 已过定时发布时间）
+        如果文章不符合条件，get_object() 会返回 404
+        """
+        from django.db.models import Q
+        from django.utils.timezone import now
+        return super().get_queryset().filter(
+            Q(status='p') &
+            (Q(scheduled_publish_time__isnull=True) |
+             Q(scheduled_publish_time__lte=now()))
+        )
 
     def get_context_data(self, **kwargs):
         comment_form = CommentForm()
@@ -190,8 +211,14 @@ class CategoryDetailView(SlugCachedMixin, OptimizedArticleQueryMixin, ArticleLis
         category = self.get_slug_object()
         categorynames = [c.name for c in category.get_sub_categorys()]
 
+        # 条件：状态为已发布，且（没有设置定时发布 或 已过定时发布时间）
+        from django.db.models import Q
+        from django.utils.timezone import now
         return self.get_optimized_article_queryset().filter(
-            category__name__in=categorynames, status='p'
+            Q(category__name__in=categorynames) &
+            Q(status='p') &
+            (Q(scheduled_publish_time__isnull=True) |
+             Q(scheduled_publish_time__lte=now()))
         )
 
     def get_queryset_cache_key(self):
@@ -236,8 +263,15 @@ class AuthorDetailView(OptimizedArticleQueryMixin, ArticleListView):
 
     def get_queryset_data(self):
         author_name = self.kwargs['author_name']
+        # 条件：状态为已发布，且（没有设置定时发布 或 已过定时发布时间）
+        from django.db.models import Q
+        from django.utils.timezone import now
         return self.get_optimized_article_queryset().filter(
-            author__username=author_name, type='a', status='p'
+            Q(author__username=author_name) &
+            Q(type='a') &
+            Q(status='p') &
+            (Q(scheduled_publish_time__isnull=True) |
+             Q(scheduled_publish_time__lte=now()))
         )
 
     def get_context_data(self, **kwargs):
@@ -269,8 +303,15 @@ class TagDetailView(SlugCachedMixin, OptimizedArticleQueryMixin, ArticleListView
     def get_queryset_data(self):
         # 使用 Mixin 缓存的对象，只查询一次
         tag = self.get_slug_object()
+        # 条件：状态为已发布，且（没有设置定时发布 或 已过定时发布时间）
+        from django.db.models import Q
+        from django.utils.timezone import now
         return self.get_optimized_article_queryset().filter(
-            tags__name=tag.name, type='a', status='p'
+            Q(tags__name=tag.name) &
+            Q(type='a') &
+            Q(status='p') &
+            (Q(scheduled_publish_time__isnull=True) |
+             Q(scheduled_publish_time__lte=now()))
         )
 
     def get_queryset_cache_key(self):
@@ -305,7 +346,14 @@ class ArchivesView(OptimizedArticleQueryMixin, ArticleListView):
     template_name = 'blog/article_archives.html'
 
     def get_queryset_data(self):
-        return self.get_optimized_article_queryset().filter(status='p')
+        # 条件：状态为已发布，且（没有设置定时发布 或 已过定时发布时间）
+        from django.db.models import Q
+        from django.utils.timezone import now
+        return self.get_optimized_article_queryset().filter(
+            Q(status='p') &
+            (Q(scheduled_publish_time__isnull=True) |
+             Q(scheduled_publish_time__lte=now()))
+        )
 
     def get_queryset_cache_key(self):
         return 'archives'
