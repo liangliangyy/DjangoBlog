@@ -1,12 +1,41 @@
 from django import forms
 from django.contrib import admin
 from django.contrib.auth import get_user_model
+from django.db.models import Q
 from django.urls import reverse
 from django.utils.html import format_html
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 
 # Register your models here.
 from .models import Article, Category, Tag, Links, SideBar, BlogSettings
+
+
+class ScheduledPublishFilter(admin.SimpleListFilter):
+    title = _('scheduled publish status')
+    parameter_name = 'scheduled_status'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('scheduled', _('Scheduled')),
+            ('past', _('Scheduled time passed')),
+            ('not_scheduled', _('Not scheduled')),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == 'scheduled':
+            return queryset.filter(
+                scheduled_publish_time__isnull=False,
+                scheduled_publish_time__gt=now()
+            )
+        elif self.value() == 'past':
+            return queryset.filter(
+                scheduled_publish_time__isnull=False,
+                scheduled_publish_time__lte=now()
+            )
+        elif self.value() == 'not_scheduled':
+            return queryset.filter(scheduled_publish_time__isnull=True)
+        return queryset
 
 
 class ArticleForm(forms.ModelForm):
@@ -49,12 +78,15 @@ class ArticlelAdmin(admin.ModelAdmin):
         'author',
         'link_to_category',
         'creation_time',
+        'pub_time',
+        'scheduled_publish_time',
+        'scheduled_status_display',
         'views',
         'status',
         'type',
         'article_order')
     list_display_links = ('id', 'title')
-    list_filter = ('status', 'type', 'category')
+    list_filter = ('status', 'type', 'category', ScheduledPublishFilter)
     date_hierarchy = 'creation_time'
     filter_horizontal = ('tags',)
     exclude = ('creation_time', 'last_modify_time')
@@ -65,6 +97,17 @@ class ArticlelAdmin(admin.ModelAdmin):
         close_article_commentstatus,
         open_article_commentstatus]
     raw_id_fields = ('author', 'category',)
+    fieldsets = (
+        (None, {
+            'fields': ('title', 'body', 'status', 'pub_time', 'scheduled_publish_time')
+        }),
+        (_('Classification'), {
+            'fields': ('category', 'tags', 'type', 'article_order', 'author')
+        }),
+        (_('Other Settings'), {
+            'fields': ('comment_status', 'show_toc', 'views')
+        }),
+    )
 
     def link_to_category(self, obj):
         info = (obj.category._meta.app_label, obj.category._meta.model_name)
@@ -72,6 +115,23 @@ class ArticlelAdmin(admin.ModelAdmin):
         return format_html(u'<a href="%s">%s</a>' % (link, obj.category.name))
 
     link_to_category.short_description = _('category')
+
+    def scheduled_status_display(self, obj):
+        """显示定时发布状态"""
+        if not obj.is_scheduled_publish():
+            return format_html('<span style="color: #666;">{}</span>', _('Not scheduled'))
+        if obj.is_past_scheduled_time():
+            if obj.status == 'p':
+                return format_html('<span style="color: #0a0;">{}</span>', _('Published'))
+            else:
+                return format_html('<span style="color: #a00;">{}</span>', _('Scheduled time passed'))
+        return format_html(
+            '<span style="color: #00a; font-weight: bold;">{}</span>',
+            _('Scheduled')
+        )
+
+    scheduled_status_display.short_description = _('scheduled status')
+    scheduled_status_display.admin_order_field = 'scheduled_publish_time'
 
     def get_form(self, request, obj=None, **kwargs):
         form = super(ArticlelAdmin, self).get_form(request, obj, **kwargs)
