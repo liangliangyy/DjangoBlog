@@ -24,8 +24,7 @@ class Command(BaseCommand):
         count = 0
         for article in articles_to_publish:
             article.status = 'p'
-            if not article.pub_time or article.pub_time < article.scheduled_publish_time:
-                article.pub_time = article.scheduled_publish_time
+            article.pub_time = article.scheduled_publish_time
             article.save()
             count += 1
             logger.info(f'Published scheduled article: {article.title} (ID: {article.id})')

@@ -101,6 +101,21 @@ class ArticleDetailView(DetailView):
     pk_url_kwarg = 'article_id'
     context_object_name = "article"
 
+    def get_queryset(self):
+        """
+        过滤文章查询，只返回实际上已发布的文章：
+        - 状态为已发布
+        - 且（没有设置定时发布 或 已过定时发布时间）
+        如果文章不符合条件，get_object() 会返回 404
+        """
+        from django.db.models import Q
+        from django.utils.timezone import now
+        return super().get_queryset().filter(
+            Q(status='p') &
+            (Q(scheduled_publish_time__isnull=True) |
+             Q(scheduled_publish_time__lte=now()))
+        )
+
     def get_context_data(self, **kwargs):
         comment_form = CommentForm()
 
