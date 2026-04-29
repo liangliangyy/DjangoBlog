@@ -5,20 +5,20 @@ updates:
     directory: "/"
     target-branch: "dev"
     schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 3  # 从 5 减少到 3
-    # 将依赖更新分组，减少 PR 数量
+      interval: "monthly"
+    open-pull-requests-limit: 2
+    # 所有 minor/patch 更新合并为单 PR
     groups:
-      production-dependencies:
-        dependency-type: "production"
+      python-dependencies:
+        patterns:
+          - "*"
         update-types:
           - "minor"
           - "patch"
-      development-dependencies:
-        dependency-type: "development"
-        update-types:
-          - "minor"
-          - "patch"
+    # 忽略 major 版本升级（需要人工评估）
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
     labels:
       - "dependencies"
       - "python"
@@ -32,20 +32,18 @@ updates:
     directory: "/frontend"
     target-branch: "dev"
     schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 3  # 从 5 减少到 3
-    # 将依赖更新分组
+      interval: "monthly"
+    open-pull-requests-limit: 2
     groups:
-      frontend-production:
-        dependency-type: "production"
+      frontend-dependencies:
+        patterns:
+          - "*"
         update-types:
           - "minor"
           - "patch"
-      frontend-development:
-        dependency-type: "development"
-        update-types:
-          - "minor"
-          - "patch"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
     labels:
       - "dependencies"
       - "frontend"
@@ -53,18 +51,14 @@ updates:
       prefix: "chore"
       prefix-development: "chore"
       include: "scope"
-    ignore:
-      - dependency-name: "*"
-        update-types: ["version-update:semver-major"]
 
   # GitHub Actions 依赖管理
   - package-ecosystem: "github-actions"
     directory: "/"
     target-branch: "dev"
     schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 3  # 从 5 减少到 3
-    # 将 GitHub Actions 更新分组
+      interval: "monthly"
+    open-pull-requests-limit: 2
     groups:
       github-actions:
         patterns:
@@ -72,6 +66,9 @@ updates:
         update-types:
           - "minor"
           - "patch"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
     labels:
       - "dependencies"
       - "ci"
