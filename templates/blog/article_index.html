@@ -63,9 +63,19 @@
             </div>
         </div>
 
-        {# Mobile Sidebar - shown below content on small screens #}
+        {# Mobile Sidebar - collapsible accordion on small screens #}
         <div class="mt-8 lg:hidden">
-            {% load_sidebar user "p" %}
+            <details class="rounded-xl border border-border bg-card group">
+                <summary class="flex cursor-pointer items-center justify-between p-4 text-sm font-medium text-muted-foreground list-none [&::-webkit-details-marker]:hidden">
+                    <span>发现更多</span>
+                    <svg class="size-4 text-muted-foreground transition-transform duration-200 group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </summary>
+                <div class="border-t border-border p-4">
+                    {% load_sidebar user "p" %}
+                </div>
+            </details>
         </div>
     </div>
 {% endblock %}

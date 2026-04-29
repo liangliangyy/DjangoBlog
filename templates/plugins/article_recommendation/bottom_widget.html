@@ -1,23 +1,31 @@
 {% load i18n %}
-<div class="article-recommendations">
-    <h3 class="recommendations-title">
-        <span class="recommendations-icon">📖</span>{{ title }}
+<section class="mt-8 rounded-xl border border-border bg-card p-5 shadow-sm md:p-6">
+    <h3 class="mb-4 flex items-center gap-2 text-base font-semibold tracking-tight text-foreground">
+        <svg class="size-5 shrink-0 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+        </svg>
+        {{ title }}
     </h3>
-    <div class="recommendations-grid">
+    <ul class="grid gap-3 sm:grid-cols-2 m-0 p-0 list-none">
         {% for article in recommendations %}
             {% if article.title and article.title|length > 0 %}
-                <div class="recommendation-card">
-                    <a href="{{ article.get_absolute_url }}" class="recommendation-link" title="{{ article.title }}">
-                        <div class="recommendation-title">{{ article.title|truncatechars:45 }}</div>
-                        <div class="recommendation-meta">
+                <li>
+                    <a href="{{ article.get_absolute_url }}" title="{{ article.title }}"
+                       class="group flex h-full flex-col gap-2 rounded-lg border border-border bg-background p-3 transition-colors hover:border-primary/40 hover:bg-secondary">
+                        <span class="line-clamp-2 text-sm font-medium leading-snug text-foreground transition-colors group-hover:text-primary">
+                            {{ article.title|truncatechars:45 }}
+                        </span>
+                        <span class="flex items-center gap-2 text-[11px] text-muted-foreground">
                             {% if article.category %}
-                                <span class="recommendation-category">{{ article.category.name }}</span>
+                                <span class="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-primary">
+                                    {{ article.category.name }}
+                                </span>
                             {% endif %}
-                            <span class="recommendation-date">{{ article.pub_time|date:"m-d" }}</span>
-                        </div>
+                            <span>{{ article.pub_time|date:"m-d" }}</span>
+                        </span>
                     </a>
-                </div>
+                </li>
             {% endif %}
         {% endfor %}
-    </div>
-</div>
+    </ul>
+</section>

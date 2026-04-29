@@ -70,7 +70,7 @@
     {% block content %}{% endblock %}
 
     {# Theme toggle button #}
-    <button class="fixed top-4 right-4 size-9 flex items-center justify-center rounded-lg border border-border/60 bg-card/80 backdrop-blur-sm text-muted-foreground shadow-sm transition-all hover:bg-secondary hover:text-foreground hover:shadow-md"
+    <button class="fixed top-4 right-4 size-9 flex items-center justify-center rounded-lg border border-border bg-card/80 backdrop-blur-sm text-muted-foreground shadow-sm transition-colors hover:bg-secondary hover:text-foreground"
             @click="window.themeManager && window.themeManager.toggle()"
             aria-label="切换主题">
         <svg class="size-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">

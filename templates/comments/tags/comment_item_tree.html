@@ -1,6 +1,6 @@
 {% load blog_tags %}
 <li id="comment-{{ comment_item.pk }}"
-    class="comment even thread-even depth-{{ depth }} parent {% if depth == 1 %}ml-12{% elif depth == 2 %}ml-24{% elif depth >= 3 %}ml-36{% endif %}">
+    class="comment even thread-even depth-{{ depth }} parent {% if depth == 1 %}ml-3 md:ml-12{% elif depth == 2 %}ml-6 md:ml-24{% elif depth >= 3 %}ml-9 md:ml-36{% endif %}">
     <div id="div-comment-{{ comment_item.pk }}" class="comment-body">
         <div class="comment-author vcard">
             <img alt="{{ comment_item.author.username }}的头像"

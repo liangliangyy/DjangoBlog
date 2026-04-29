@@ -9,7 +9,7 @@
     {# Header #}
     <div class="mb-8 text-center">
         <a href="/" class="mb-6 inline-flex items-center justify-center">
-            <div class="flex size-12 items-center justify-center rounded-xl bg-primary shadow-lg shadow-primary/25">
+            <div class="flex size-12 items-center justify-center rounded-xl bg-primary shadow-sm">
                 <span class="text-lg font-bold text-primary-foreground">
                     {{ SITE_NAME|slice:":1" }}
                 </span>
@@ -24,7 +24,7 @@
     </div>
 
     {# Form Card #}
-    <div class="rounded-2xl border border-border bg-card p-6 shadow-2xl sm:p-8">
+    <div class="rounded-xl border border-border bg-card p-6 shadow-sm sm:p-8">
         <div x-data="{ showPassword: false }">
 
             {# Form #}

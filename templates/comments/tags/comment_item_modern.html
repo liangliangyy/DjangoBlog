@@ -5,7 +5,7 @@
     :class="replyingTo === {{ comment_item.pk }} && 'ring-2 ring-primary rounded-xl'">
 
     <div id="div-comment-{{ comment_item.pk }}"
-         class="comment-body p-4 md:p-5 bg-card rounded-xl border border-border transition-all duration-200 hover:border-primary/20 hover:shadow-md hover:shadow-primary/5">
+         class="comment-body p-4 md:p-5 bg-card rounded-xl border border-border shadow-sm transition-colors duration-200 hover:border-primary/20">
 
         <!-- 评论头部 -->
         <div class="flex items-start gap-3 md:gap-4">
@@ -134,17 +134,17 @@
                                 x-transition:leave="transition ease-in duration-100"
                                 x-transition:leave-start="opacity-100 scale-100"
                                 x-transition:leave-end="opacity-0 scale-95"
-                                class="absolute bottom-full mb-2 left-0 flex items-center gap-0.5 p-1 bg-card border border-border rounded-full shadow-lg shadow-foreground/8 z-10"
+                                class="absolute bottom-full mb-2 left-0 flex items-center gap-0.5 p-1 bg-card border border-border rounded-full shadow-xl shadow-foreground/5 z-10 max-w-[calc(100vw-2rem)] overflow-x-auto scrollbar-none"
                                 x-cloak
                             >
-                                <button @click="toggleReaction('👍')" class="size-8 flex items-center justify-center text-base rounded-full hover:bg-secondary transition-colors" title="赞">👍</button>
-                                <button @click="toggleReaction('👎')" class="size-8 flex items-center justify-center text-base rounded-full hover:bg-secondary transition-colors" title="踩">👎</button>
-                                <button @click="toggleReaction('❤️')" class="size-8 flex items-center justify-center text-base rounded-full hover:bg-secondary transition-colors" title="喜欢">❤️</button>
-                                <button @click="toggleReaction('😄')" class="size-8 flex items-center justify-center text-base rounded-full hover:bg-secondary transition-colors" title="笑">😄</button>
-                                <button @click="toggleReaction('🎉')" class="size-8 flex items-center justify-center text-base rounded-full hover:bg-secondary transition-colors" title="庆祝">🎉</button>
-                                <button @click="toggleReaction('😕')" class="size-8 flex items-center justify-center text-base rounded-full hover:bg-secondary transition-colors" title="困惑">😕</button>
-                                <button @click="toggleReaction('🚀')" class="size-8 flex items-center justify-center text-base rounded-full hover:bg-secondary transition-colors" title="火箭">🚀</button>
-                                <button @click="toggleReaction('👀')" class="size-8 flex items-center justify-center text-base rounded-full hover:bg-secondary transition-colors" title="关注">👀</button>
+                                <button @click="toggleReaction('👍')" class="size-8 flex items-center justify-center text-base rounded-full hover:bg-secondary transition-colors" title="赞" aria-label="赞">👍</button>
+                                <button @click="toggleReaction('👎')" class="size-8 flex items-center justify-center text-base rounded-full hover:bg-secondary transition-colors" title="踩" aria-label="踩">👎</button>
+                                <button @click="toggleReaction('❤️')" class="size-8 flex items-center justify-center text-base rounded-full hover:bg-secondary transition-colors" title="喜欢" aria-label="喜欢">❤️</button>
+                                <button @click="toggleReaction('😄')" class="size-8 flex items-center justify-center text-base rounded-full hover:bg-secondary transition-colors" title="笑" aria-label="笑">😄</button>
+                                <button @click="toggleReaction('🎉')" class="size-8 flex items-center justify-center text-base rounded-full hover:bg-secondary transition-colors" title="庆祝" aria-label="庆祝">🎉</button>
+                                <button @click="toggleReaction('😕')" class="size-8 flex items-center justify-center text-base rounded-full hover:bg-secondary transition-colors" title="困惑" aria-label="困惑">😕</button>
+                                <button @click="toggleReaction('🚀')" class="size-8 flex items-center justify-center text-base rounded-full hover:bg-secondary transition-colors" title="火箭" aria-label="火箭">🚀</button>
+                                <button @click="toggleReaction('👀')" class="size-8 flex items-center justify-center text-base rounded-full hover:bg-secondary transition-colors" title="关注" aria-label="关注">👀</button>
                             </div>
                             {% endif %}
                         </div>
@@ -210,7 +210,7 @@
                                     <span class="text-xs text-muted-foreground">支持 Markdown 语法</span>
                                     <button @click="submitReply({{ comment_item.pk }})"
                                             :disabled="isLoading || !replyContent.trim()"
-                                            class="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-md shadow-primary/20 transition-all hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed">
+                                            class="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed">
                                         <svg x-show="isLoading" class="animate-spin size-3.5" fill="none" viewBox="0 0 24 24">
                                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>

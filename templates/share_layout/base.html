@@ -11,7 +11,8 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="format-detection" content="telephone=no"/>
-    <meta name="theme-color" content="#21759b"/>
+    <meta name="theme-color" content="#a855f7" media="(prefers-color-scheme: light)"/>
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)"/>
     <meta name="robots" content="index, follow"/>
     {% head_meta %}
     {% block header %}
@@ -76,27 +77,30 @@
     <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
     <link rel="apple-touch-icon" href="/favicon.ico"/>
 
-    <!-- 关键CSS：防止深色模式闪烁 + 首屏优化 -->
+    <!-- 关键CSS：防止深色模式闪烁 + 首屏优化（bootstrap 样式，Tailwind 加载前生效，颜色值与 design system 一致） -->
     <style>
-        /* 立即应用深色模式的关键样式 */
         :root {
-            --color-primary-500: 102, 126, 234;
-            --color-primary-600: 79, 70, 229;
+            /* bootstrap token：与 main.css 的 --background/--foreground 保持同值 */
+            --bootstrap-bg-light: 249 250 251;
+            --bootstrap-fg-light: 17 24 39;
+            --bootstrap-bg-dark: 15 23 42;
+            --bootstrap-fg-dark: 226 232 240;
+            --bootstrap-skeleton-base: 243 244 246;
+            --bootstrap-skeleton-high: 229 231 235;
         }
 
         html[data-theme="dark"],
         html[data-theme="dark"] body {
-            background-color: #0f172a !important;
-            color: #e2e8f0 !important;
+            background-color: rgb(var(--bootstrap-bg-dark)) !important;
+            color: rgb(var(--bootstrap-fg-dark)) !important;
         }
 
         html:not([data-theme="dark"]),
         html:not([data-theme="dark"]) body {
-            background-color: #ffffff !important;
-            color: #1e293b !important;
+            background-color: rgb(var(--bootstrap-bg-light)) !important;
+            color: rgb(var(--bootstrap-fg-light)) !important;
         }
 
-        /* 首屏关键布局样式 - 防止布局抖动 */
         body {
             margin: 0;
             padding: 0;
@@ -119,9 +123,11 @@
             flex: 1;
         }
 
-        /* 骨架屏样式 - 提升感知性能 */
         .skeleton {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background: linear-gradient(90deg,
+                rgb(var(--bootstrap-skeleton-base)) 25%,
+                rgb(var(--bootstrap-skeleton-high)) 50%,
+                rgb(var(--bootstrap-skeleton-base)) 75%);
             background-size: 200% 100%;
             animation: loading 1.5s infinite;
         }
@@ -131,7 +137,6 @@
             100% { background-position: -200% 0; }
         }
 
-        /* Alpine.js x-cloak 防止闪烁 */
         [x-cloak] {
             display: none !important;
         }
@@ -225,7 +230,7 @@
     <div x-show="showLightbox"
          x-trap="showLightbox"
          @click="closeLightbox()"
-         class="fixed inset-0 z-50 bg-black bg-opacity-90 backdrop-blur-sm"
+         class="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm"
          x-transition:enter="transition ease-out duration-300"
          x-transition:enter-start="opacity-0"
          x-transition:enter-end="opacity-100"
@@ -243,21 +248,22 @@
          x-transition:leave="transition ease-in duration-200"
          x-transition:leave-start="opacity-100 scale-100"
          x-transition:leave-end="opacity-0 scale-95">
-        <div class="relative max-w-7xl max-h-full" @click.stop>
+        <div class="relative max-w-[90vw] max-h-full" @click.stop>
             <img :src="currentImage"
                  :alt="currentAlt"
-                 class="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl">
+                 class="max-w-full max-h-[85vh] sm:max-h-[90vh] object-contain rounded-lg shadow-2xl">
 
             <!-- 图片说明 -->
             <div x-show="currentAlt"
-                 class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-75 text-white text-center py-3 px-4 rounded-b-lg">
-                <p class="text-sm" x-text="currentAlt"></p>
+                 class="absolute bottom-0 left-0 right-0 bg-black/75 text-white text-center py-3 px-4 rounded-b-lg max-w-full">
+                <p class="text-sm break-words" x-text="currentAlt"></p>
             </div>
 
             <!-- 关闭按钮 -->
             <button @click="closeLightbox()"
-                    class="absolute -top-12 right-0 text-white hover:text-white/70 transition-colors">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    aria-label="{% trans 'Close' %}"
+                    class="absolute top-2 right-2 inline-flex size-9 items-center justify-center rounded-full bg-black/60 text-white transition-colors hover:bg-black/80 focus:outline-none focus:ring-2 focus:ring-white/50">
+                <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                 </svg>
             </button>
