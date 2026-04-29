@@ -1,17 +1,25 @@
 {% load i18n %}
-<aside class="widget widget_recommendations">
-    <p class="widget-title">{{ title }}</p>
-    <ul class="recommendations-list">
+<div class="rounded-xl border border-border bg-card p-5 shadow-sm">
+    <h3 class="mb-3 flex items-center gap-2 text-sm font-semibold tracking-tight text-foreground">
+        <svg class="size-4 shrink-0 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/>
+        </svg>
+        {{ title }}
+    </h3>
+    <ul class="m-0 flex flex-col gap-3 p-0 list-none">
         {% for article in recommendations %}
-            <li class="recommendation-item">
-                <a href="{{ article.get_absolute_url }}" title="{{ article.title }}">
-                    {{ article.title|truncatechars:35 }}
+            <li>
+                <a href="{{ article.get_absolute_url }}" title="{{ article.title }}" class="group flex min-w-0 flex-col gap-1">
+                    <span class="line-clamp-2 text-sm leading-snug text-foreground transition-colors group-hover:text-primary">
+                        {{ article.title|truncatechars:35 }}
+                    </span>
+                    <span class="flex items-center gap-2 text-[11px] text-muted-foreground">
+                        <span>{{ article.views }} {% trans 'views' %}</span>
+                        <span aria-hidden="true">·</span>
+                        <span>{{ article.pub_time|date:"m-d" }}</span>
+                    </span>
                 </a>
-                <div class="recommendation-meta">
-                    <span class="recommendation-views">{{ article.views }} {% trans 'views' %}</span>
-                    <span class="recommendation-date">{{ article.pub_time|date:"m-d" }}</span>
-                </div>
             </li>
         {% endfor %}
     </ul>
-</aside>
+</div>

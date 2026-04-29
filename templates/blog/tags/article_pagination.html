@@ -1,5 +1,5 @@
 {% if page_obj.paginator.num_pages > 1 %}
-<nav class="flex items-center justify-center gap-1 mt-8 pt-6 border-t border-border" role="navigation">
+<nav class="flex items-center justify-center gap-1 mt-8 pt-6 border-t border-border" role="navigation" aria-label="分页导航">
     {# Previous #}
     {% if page_obj.has_previous and previous_url %}
         <a href="{{ previous_url }}"
@@ -23,7 +23,7 @@
         {% if item.type == 'ellipsis' %}
             <span class="inline-flex size-9 items-center justify-center text-sm text-muted-foreground">...</span>
         {% elif item.is_current %}
-            <span class="inline-flex size-9 items-center justify-center rounded-lg bg-primary text-sm font-medium text-primary-foreground shadow-sm shadow-primary/20" aria-current="page">
+            <span class="inline-flex size-9 items-center justify-center rounded-lg bg-primary text-sm font-medium text-primary-foreground shadow-sm" aria-current="page">
                 {{ item.number }}
             </span>
         {% else %}

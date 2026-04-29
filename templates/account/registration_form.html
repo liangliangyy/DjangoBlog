@@ -9,7 +9,7 @@
     {# Header #}
     <div class="mb-8 text-center">
         <a href="/" class="mb-6 inline-flex items-center justify-center">
-            <div class="flex size-12 items-center justify-center rounded-xl bg-primary shadow-lg shadow-primary/25">
+            <div class="flex size-12 items-center justify-center rounded-xl bg-primary shadow-sm">
                 <span class="text-lg font-bold text-primary-foreground">
                     {{ SITE_NAME|slice:":1" }}
                 </span>
@@ -24,7 +24,7 @@
     </div>
 
     {# Form Card #}
-    <div class="rounded-2xl border border-border bg-card p-6 shadow-2xl sm:p-8">
+    <div class="rounded-xl border border-border bg-card p-6 shadow-sm sm:p-8">
         <div x-data="{ showPassword: false }">
 
             <form action="{% url 'account:register' %}" method="post" class="space-y-4">
@@ -102,7 +102,7 @@
 
                 <button
                     type="submit"
-                    class="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-md shadow-primary/20 transition-all duration-200 hover:opacity-90 hover:shadow-lg hover:shadow-primary/25 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2">
+                    class="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2">
                     {% trans 'Create Account' %}
                 </button>
             </form>

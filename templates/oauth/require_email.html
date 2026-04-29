@@ -6,15 +6,15 @@
 
 {% block content %}
 <div class="w-full max-w-md">
-    <div class="rounded-xl border border-border/60 bg-card overflow-hidden shadow-xl shadow-foreground/5 transition-all duration-300">
-        <div class="h-1 bg-gradient-to-r from-primary/80 via-primary to-primary/80"></div>
+    <div class="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+        <div class="h-1 bg-primary"></div>
 
         <div class="p-8">
             <div class="text-center mb-8">
                 {% if picture %}
-                    <img class="size-14 rounded-xl border-2 border-border/60 mx-auto mb-4 shadow-md object-cover" src="{{ picture }}" alt="">
+                    <img class="size-14 rounded-xl border border-border mx-auto mb-4 shadow-sm object-cover" src="{{ picture }}" alt="">
                 {% else %}
-                    <img class="size-14 rounded-xl border-2 border-border/60 mx-auto mb-4 shadow-md object-cover" src="{% static 'blog/img/avatar.png' %}" alt="">
+                    <img class="size-14 rounded-xl border border-border mx-auto mb-4 shadow-sm object-cover" src="{% static 'blog/img/avatar.png' %}" alt="">
                 {% endif %}
                 <h1 class="text-xl font-bold tracking-tight text-foreground mb-1">绑定您的邮箱账号</h1>
                 <p class="text-sm text-muted-foreground">请输入您的邮箱以完成绑定</p>
@@ -63,7 +63,7 @@
                 {% endfor %}
 
                 <button type="submit"
-                        class="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-md shadow-primary/20 transition-all duration-200 hover:opacity-90 hover:shadow-lg hover:shadow-primary/25 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2">
+                        class="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2">
                     提交
                 </button>
             </form>
