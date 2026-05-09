@@ -10,20 +10,20 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@alpinejs/collapse": "^3.15.11",
-    "@alpinejs/focus": "^3.15.11",
-    "@alpinejs/intersect": "^3.15.11",
-    "alpinejs": "^3.15.11"
+    "@alpinejs/collapse": "^3.15.12",
+    "@alpinejs/focus": "^3.15.12",
+    "@alpinejs/intersect": "^3.15.12",
+    "alpinejs": "^3.15.12"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.19",
     "autoprefixer": "^10.5.0",
-    "cssnano": "^7.1.5",
-    "cssnano-preset-advanced": "^7.0.13",
-    "htmx.org": "^2.0.8",
-    "postcss": "^8.5.10",
+    "cssnano": "^7.1.7",
+    "cssnano-preset-advanced": "^7.0.15",
+    "htmx.org": "^2.0.10",
+    "postcss": "^8.5.13",
     "tailwindcss": "^3.4.1",
-    "terser": "^5.46.1",
+    "terser": "^5.46.2",
     "vite": "^6.4.2"
   },
   "overrides": {
