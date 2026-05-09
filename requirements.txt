@@ -11,14 +11,14 @@ django-uuslug==2.0.0
 elasticsearch==8.19.3
 elasticsearch-dsl==8.11.0
 gevent==26.4.0
-greenlet==3.4.0
+greenlet==3.5.0
 htmlgenerator==1.2.32
 jieba==0.42.1
 Jinja2==3.1.6
 Markdown==3.10.2
 MarkupSafe==3.0.3
 mysqlclient==2.2.8
-openai==2.31.0
+openai==2.33.0
 pillow==12.2.0
 prettytable==3.17.0
 propcache==0.4.1
@@ -36,7 +36,7 @@ requests==2.33.1
 rjsmin==1.2.5
 setuptools==82.0.1
 simplejson==3.20.2
-tzdata==2026.1
+tzdata==2026.2
 user-agents==2.2.0
 WeRoBot==1.13.1
 Whoosh==2.7.4
