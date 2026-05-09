@@ -42,7 +42,7 @@ WeRoBot==1.13.1
 Whoosh==2.7.4
 jsonpickle==4.1.1
 beautifulsoup4==4.14.3
-certifi>=2024.7.4
+certifi>=2024.12.14
 configobj>=5.0.9
 cryptography>=43.0.1
 idna>=3.7
