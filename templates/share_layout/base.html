@@ -164,6 +164,10 @@
         {{ GLOBAL_HEADER|safe }}
     {% endif %}
 
+    {% if ANALYTICS_CODE %}
+        {{ ANALYTICS_CODE|safe }}
+    {% endif %}
+
 </head>
 
 <body data-color-scheme="{{ COLOR_SCHEME|default:'purple' }}"
