@@ -44,7 +44,7 @@ jsonpickle==4.1.2
 beautifulsoup4==4.14.3
 certifi>=2024.12.14
 configobj>=5.0.9
-cryptography>=43.0.1
+cryptography>=43.0.3
 idna>=3.7
 urllib3>=2.6.3
 wheel>=0.46.2
