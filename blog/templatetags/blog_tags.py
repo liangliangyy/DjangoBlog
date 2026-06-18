@@ -711,6 +711,43 @@ def plugin_compressed_js():
 
 
 
+@register.filter
+def get_article_image(article):
+    """
+    获取文章的代表图片
+    1. 优先从文章内容中提取第一张图片
+    2. 如果没有找到，使用占位图片
+    
+    使用方式: {{ article|get_article_image }}
+    """
+    from bs4 import BeautifulSoup
+    from django.templatetags.static import static
+    
+    try:
+        # 尝试从文章内容中提取第一张图片
+        if hasattr(article, 'body') and article.body:
+            # 转换Markdown为HTML
+            html_content = CommonMarkdown.get_markdown(article.body)
+            
+            # 解析HTML查找img标签
+            soup = BeautifulSoup(html_content, 'html.parser')
+            img_tag = soup.find('img')
+            
+            if img_tag and img_tag.get('src'):
+                img_src = img_tag.get('src')
+                # 如果是相对路径，需要加上域名前缀
+                if not img_src.startswith(('http://', 'https://', '/')):
+                    img_src = '/' + img_src
+                return img_src
+        
+        # 如果没有找到图片，返回占位图片
+        return static('blog/img/article-placeholder.png')
+    except Exception as e:
+        logger.error(f"Error extracting image from article {article.id}: {e}")
+        # 发生错误时返回占位图片
+        return static('blog/img/article-placeholder.png')
+
+
 @register.simple_tag(takes_context=True)
 def plugin_widget(context, plugin_name, widget_type='default', **kwargs):
     """
