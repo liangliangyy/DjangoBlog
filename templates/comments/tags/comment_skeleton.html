@@ -1,0 +1,33 @@
+{% load static %}
+
+<!-- 评论加载骨架屏 -->
+<div class="animate-pulse space-y-5">
+    {% for i in "0123" %}
+    <div class="flex gap-4">
+        <!-- 头像骨架 -->
+        <div class="h-10 w-10 flex-shrink-0 rounded-full bg-muted"></div>
+        
+        <!-- 内容骨架 -->
+        <div class="flex-1 space-y-2">
+            <!-- 作者和时间行 -->
+            <div class="flex justify-between">
+                <div class="h-4 w-24 rounded bg-muted"></div>
+                <div class="h-4 w-20 rounded bg-muted"></div>
+            </div>
+            
+            <!-- 评论文本行 -->
+            <div class="space-y-1">
+                <div class="h-3 w-full rounded bg-muted"></div>
+                <div class="h-3 w-5/6 rounded bg-muted"></div>
+                <div class="h-3 w-4/6 rounded bg-muted"></div>
+            </div>
+            
+            <!-- 操作栏骨架 -->
+            <div class="flex gap-2 pt-2">
+                <div class="h-7 w-16 rounded-full bg-muted"></div>
+                <div class="h-7 w-16 rounded-full bg-muted"></div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
