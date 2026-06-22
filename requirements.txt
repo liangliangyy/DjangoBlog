@@ -1,4 +1,4 @@
-bleach==6.3.0
+bleach==6.4.0
 coverage==7.14.1
 Django==5.2.14
 django-appconf==1.2.0
