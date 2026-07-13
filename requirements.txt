@@ -1,6 +1,6 @@
 bleach==6.4.0
 coverage==7.14.1
-Django==5.2.14
+Django==5.2.15
 django-appconf==1.2.0
 django-compressor==4.6.0
 django-echarts==0.6.0
