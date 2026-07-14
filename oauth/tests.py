@@ -128,9 +128,12 @@ class OauthLoginTest(TestCase):
         github_app = self.get_app_by_type('github')
         assert github_app
         url = github_app.get_authorization_url()
-        self.assertTrue("github.com" in url)
+        # Verify the URL starts with GitHub's OAuth endpoint
+        self.assertTrue(url.startswith("https://github.com/login/oauth/authorize"))
         self.assertTrue("client_id" in url)
-        self.assertTrue("user:email" in url or "user%3Aemail" in url)
+        # Check that the scope parameter includes user:email (URL-encoded form)
+        from urllib.parse import unquote
+        self.assertIn("user:email", unquote(url))
         
         mock_do_post.return_value = "access_token=gho_test_token&scope=user:email&token_type=bearer"
         
