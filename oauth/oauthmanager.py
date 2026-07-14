@@ -249,6 +249,7 @@ class GitHubOauthManager(ProxyManagerMixin, BaseOauthManager):
     AUTH_URL = 'https://github.com/login/oauth/authorize'
     TOKEN_URL = 'https://github.com/login/oauth/access_token'
     API_URL = 'https://api.github.com/user'
+    EMAILS_API_URL = 'https://api.github.com/user/emails'
     ICON_NAME = 'github'
 
     def __init__(self, access_token=None, openid=None):
@@ -267,7 +268,7 @@ class GitHubOauthManager(ProxyManagerMixin, BaseOauthManager):
             'client_id': self.client_id,
             'response_type': 'code',
             'redirect_uri': f'{self.callback_url}&next_url={next_url}',
-            'scope': 'user'
+            'scope': 'user:email'
         }
         url = self.AUTH_URL + "?" + urllib.parse.urlencode(params)
         return url
@@ -294,7 +295,7 @@ class GitHubOauthManager(ProxyManagerMixin, BaseOauthManager):
     def get_oauth_userinfo(self):
 
         rsp = self.do_get(self.API_URL, params={}, headers={
-            "Authorization": "token " + self.access_token
+            "Authorization": "Bearer " + self.access_token
         })
         try:
             datas = json.loads(rsp)
@@ -307,6 +308,25 @@ class GitHubOauthManager(ProxyManagerMixin, BaseOauthManager):
             user.metadata = rsp
             if 'email' in datas and datas['email']:
                 user.email = datas['email']
+            else:
+                # If email is not public, fetch from /user/emails endpoint
+                try:
+                    emails_rsp = self.do_get(self.EMAILS_API_URL, params={}, headers={
+                        "Authorization": "Bearer " + self.access_token
+                    })
+                    emails = json.loads(emails_rsp)
+                    # Find verified email, prioritizing primary verified email
+                    for email_data in emails:
+                        if email_data.get('verified'):
+                            if email_data.get('primary'):
+                                # Primary verified email takes priority
+                                user.email = email_data.get('email')
+                                break
+                            elif not user.email:
+                                # Use first verified email as fallback
+                                user.email = email_data.get('email')
+                except Exception as e:
+                    logger.warning(f'Failed to fetch private email from GitHub API. User login will fail if email is required: {e}')
             return user
         except Exception as e:
             logger.error(e)

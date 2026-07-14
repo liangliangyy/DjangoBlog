@@ -1,5 +1,6 @@
 import json
 from unittest.mock import patch
+from urllib.parse import unquote
 
 from django.conf import settings
 from django.contrib import auth
@@ -119,6 +120,49 @@ class OauthLoginTest(TestCase):
         userinfo = github_app.get_oauth_userinfo()
         self.assertEqual(userinfo.token, 'gho_16C7e42F292c6912E7710c838347Ae178B4a')
         self.assertEqual(userinfo.openid, 'id')
+
+
+    @patch("oauth.oauthmanager.GitHubOauthManager.do_post")
+    @patch("oauth.oauthmanager.GitHubOauthManager.do_get")
+    def test_github_login_private_email(self, mock_do_get, mock_do_post):
+        """Test GitHub OAuth login when user's email is private"""
+        github_app = self.get_app_by_type('github')
+        assert github_app
+        url = github_app.get_authorization_url()
+        # Verify the URL starts with GitHub's OAuth endpoint
+        self.assertTrue(url.startswith("https://github.com/login/oauth/authorize"))
+        self.assertTrue("client_id" in url)
+        # Check that the scope parameter includes user:email (URL-encoded form)
+        self.assertIn("user:email", unquote(url))
+        
+        mock_do_post.return_value = "access_token=gho_test_token&scope=user:email&token_type=bearer"
+        
+        # First call returns user info without email (private email)
+        # Second call returns emails from /user/emails endpoint
+        mock_do_get.side_effect = [
+            json.dumps({
+                "avatar_url": "avatar_url",
+                "name": "name",
+                "id": "id",
+                "email": None,  # Email is private
+            }),
+            json.dumps([
+                {
+                    "email": "user@example.com",
+                    "primary": True,
+                    "verified": True,
+                    "visibility": "private"
+                }
+            ])
+        ]
+        
+        token = github_app.get_access_token_by_code('code')
+        userinfo = github_app.get_oauth_userinfo()
+        self.assertEqual(userinfo.token, 'gho_test_token')
+        self.assertEqual(userinfo.openid, 'id')
+        self.assertEqual(userinfo.email, 'user@example.com')
+        # Verify both API calls were made
+        self.assertEqual(mock_do_get.call_count, 2)
 
     @patch("oauth.oauthmanager.FaceBookOauthManager.do_post")
     @patch("oauth.oauthmanager.FaceBookOauthManager.do_get")
