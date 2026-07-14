@@ -41,7 +41,7 @@ class BaseOauthManager(metaclass=ABCMeta):
         return self.is_access_token_set and self.access_token is not None and self.openid is not None
 
     @abstractmethod
-    def get_authorization_url(self, nexturl='/'):
+    def get_authorization_url(self, nexturl='/', state=None):
         pass
 
     @abstractmethod
@@ -88,12 +88,14 @@ class WBOauthManager(BaseOauthManager):
             access_token=access_token,
             openid=openid)
 
-    def get_authorization_url(self, nexturl='/'):
+    def get_authorization_url(self, nexturl='/', state=None):
         params = {
             'client_id': self.client_id,
             'response_type': 'code',
             'redirect_uri': self.callback_url + '&next_url=' + nexturl
         }
+        if state:
+            params['state'] = state
         url = self.AUTH_URL + "?" + urllib.parse.urlencode(params)
         return url
 
@@ -184,13 +186,15 @@ class GoogleOauthManager(ProxyManagerMixin, BaseOauthManager):
             access_token=access_token,
             openid=openid)
 
-    def get_authorization_url(self, nexturl='/'):
+    def get_authorization_url(self, nexturl='/', state=None):
         params = {
             'client_id': self.client_id,
             'response_type': 'code',
             'redirect_uri': self.callback_url,
             'scope': 'openid email',
         }
+        if state:
+            params['state'] = state
         url = self.AUTH_URL + "?" + urllib.parse.urlencode(params)
         return url
 
@@ -262,13 +266,15 @@ class GitHubOauthManager(ProxyManagerMixin, BaseOauthManager):
             access_token=access_token,
             openid=openid)
 
-    def get_authorization_url(self, next_url='/'):
+    def get_authorization_url(self, next_url='/', state=None):
         params = {
             'client_id': self.client_id,
             'response_type': 'code',
             'redirect_uri': f'{self.callback_url}&next_url={next_url}',
             'scope': 'user'
         }
+        if state:
+            params['state'] = state
         url = self.AUTH_URL + "?" + urllib.parse.urlencode(params)
         return url
 
@@ -335,13 +341,15 @@ class FaceBookOauthManager(ProxyManagerMixin, BaseOauthManager):
             access_token=access_token,
             openid=openid)
 
-    def get_authorization_url(self, next_url='/'):
+    def get_authorization_url(self, next_url='/', state=None):
         params = {
             'client_id': self.client_id,
             'response_type': 'code',
             'redirect_uri': self.callback_url,
             'scope': 'email,public_profile'
         }
+        if state:
+            params['state'] = state
         url = self.AUTH_URL + "?" + urllib.parse.urlencode(params)
         return url
 
@@ -410,12 +418,14 @@ class QQOauthManager(BaseOauthManager):
             access_token=access_token,
             openid=openid)
 
-    def get_authorization_url(self, next_url='/'):
+    def get_authorization_url(self, next_url='/', state=None):
         params = {
             'response_type': 'code',
             'client_id': self.client_id,
             'redirect_uri': self.callback_url + '&next_url=' + next_url,
         }
+        if state:
+            params['state'] = state
         url = self.AUTH_URL + "?" + urllib.parse.urlencode(params)
         return url
 

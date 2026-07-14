@@ -21,6 +21,7 @@ from djangoblog.blog_signals import oauth_user_login_signal
 from djangoblog.utils import get_current_site
 from djangoblog.utils import send_email, get_sha256
 from oauth.forms import RequireEmailForm
+from oauth.state_manager import generate_oauth_state, validate_oauth_state
 from .models import OAuthUser
 from .oauthmanager import get_manager_by_type, OAuthAccessTokenException
 
@@ -52,8 +53,16 @@ def oauthlogin(request):
     manager = get_manager_by_type(type)
     if not manager:
         return HttpResponseRedirect('/')
+    
+    # Ensure session exists
+    if not request.session.session_key:
+        request.session.create()
+    
+    # Generate and store OAuth state for CSRF protection
+    state = generate_oauth_state(request.session.session_key, type)
+    
     nexturl = get_redirecturl(request)
-    authorizeurl = manager.get_authorization_url(nexturl)
+    authorizeurl = manager.get_authorization_url(nexturl, state)
     return HttpResponseRedirect(authorizeurl)
 
 
@@ -64,6 +73,13 @@ def authorize(request):
     manager = get_manager_by_type(type)
     if not manager:
         return HttpResponseRedirect('/')
+    
+    # Validate OAuth state parameter for CSRF protection
+    state = request.GET.get('state', None)
+    if not request.session.session_key or not validate_oauth_state(request.session.session_key, type, state):
+        logger.warning(f"Invalid OAuth state parameter for type: {type}")
+        return HttpResponseForbidden(_("Invalid OAuth state parameter. Possible CSRF attack."))
+    
     code = request.GET.get('code', None)
     try:
         rsp = manager.get_access_token_by_code(code)
@@ -75,67 +91,77 @@ def authorize(request):
         rsp = None
     nexturl = get_redirecturl(request)
     if not rsp:
-        return HttpResponseRedirect(manager.get_authorization_url(nexturl))
+        # Regenerate state for retry
+        state = generate_oauth_state(request.session.session_key, type)
+        return HttpResponseRedirect(manager.get_authorization_url(nexturl, state))
     user = manager.get_oauth_userinfo()
     if user:
         if not user.nickname or not user.nickname.strip():
             user.nickname = "djangoblog" + timezone.now().strftime('%y%m%d%I%M%S')
-        try:
-            temp = OAuthUser.objects.get(type=type, openid=user.openid)
-            temp.picture = user.picture
-            temp.metadata = user.metadata
-            temp.nickname = user.nickname
-            user = temp
-        except ObjectDoesNotExist:
-            pass
+        
         # facebook的token过长
         if type == 'facebook':
             user.token = ''
-        if user.email:
+        
+        # Use atomic get_or_create to avoid race conditions
+        with transaction.atomic():
+            oauth_user, created = OAuthUser.objects.get_or_create(
+                type=type,
+                openid=user.openid,
+                defaults={
+                    'nickname': user.nickname,
+                    'token': user.token,
+                    'picture': user.picture,
+                    'email': user.email,
+                    'metadata': user.metadata
+                }
+            )
+            if not created:
+                # Update existing OAuth user
+                oauth_user.picture = user.picture
+                oauth_user.metadata = user.metadata
+                oauth_user.nickname = user.nickname
+                oauth_user.token = user.token
+                if user.email:
+                    oauth_user.email = user.email
+                oauth_user.save()
+            
+            user = oauth_user
+        
+        if user.author_id:
+            # OAuth user is already linked to an account
             with transaction.atomic():
-                author = None
                 try:
-                    author = get_user_model().objects.get(id=user.author_id)
+                    author = get_user_model().objects.get(pk=user.author_id)
+                    # Check if user account is active
+                    if not author.is_active:
+                        logger.warning(f"Attempt to login with inactive account: {author.username}")
+                        return HttpResponseForbidden(_("Your account has been deactivated."))
+                    
+                    oauth_user_login_signal.send(
+                        sender=authorize.__class__, id=user.id)
+                    login(request, author)
+                    # 设置session过期时间为2周（默认）
+                    request.session.set_expiry(settings.SESSION_COOKIE_AGE)
+                    # 设置登录标记 cookie
+                    response = HttpResponseRedirect(nexturl)
+                    response.set_cookie(
+                        'logged_user',
+                        'true',
+                        max_age=settings.SESSION_COOKIE_AGE,
+                        httponly=False,  # 允许 JavaScript 访问
+                        samesite='Lax'
+                    )
+                    return response
                 except ObjectDoesNotExist:
+                    # Author was deleted, need to re-bind
                     pass
-                if not author:
-                    result = get_user_model().objects.get_or_create(email=user.email)
-                    author = result[0]
-                    if result[1]:
-                        try:
-                            get_user_model().objects.get(username=user.nickname)
-                        except ObjectDoesNotExist:
-                            author.username = user.nickname
-                        else:
-                            author.username = "djangoblog" + timezone.now().strftime('%y%m%d%I%M%S')
-                        author.source = 'authorize'
-                        author.save()
-
-                user.author = author
-                user.save()
-
-                oauth_user_login_signal.send(
-                    sender=authorize.__class__, id=user.id)
-                login(request, author)
-                # 设置session过期时间为2周（默认）
-                request.session.set_expiry(settings.SESSION_COOKIE_AGE)
-                # 设置登录标记 cookie
-                response = HttpResponseRedirect(nexturl)
-                response.set_cookie(
-                    'logged_user',
-                    'true',
-                    max_age=settings.SESSION_COOKIE_AGE,
-                    httponly=False,  # 允许 JavaScript 访问
-                    samesite='Lax'
-                )
-                return response
-        else:
-            user.save()
-            url = reverse('oauth:require_email', kwargs={
-                'oauthid': user.id
-            })
-
-            return HttpResponseRedirect(url)
+        
+        # OAuth user is not linked yet, redirect to email binding page
+        url = reverse('oauth:require_email', kwargs={
+            'oauthid': user.id
+        })
+        return HttpResponseRedirect(url)
     else:
         return HttpResponseRedirect(nexturl)
 
@@ -161,6 +187,12 @@ def emailconfirm(request, id, sign):
                 author.save()
         oauthuser.author = author
         oauthuser.save()
+    
+    # Check if user account is active before allowing login
+    if not author.is_active:
+        logger.warning(f"Attempt to login with inactive account via email confirmation: {author.username}")
+        return HttpResponseForbidden(_("Your account has been deactivated."))
+    
     oauth_user_login_signal.send(
         sender=emailconfirm.__class__,
         id=oauthuser.id)
@@ -211,10 +243,8 @@ class RequireEmailView(FormView):
         return super(RequireEmailView, self).get(request, *args, **kwargs)
 
     def get_initial(self):
-        oauthid = self.kwargs['oauthid']
         return {
-            'email': '',
-            'oauthid': oauthid
+            'email': ''
         }
 
     def get_context_data(self, **kwargs):
@@ -226,8 +256,15 @@ class RequireEmailView(FormView):
 
     def form_valid(self, form):
         email = form.cleaned_data['email']
-        oauthid = form.cleaned_data['oauthid']
+        # Get oauthid from URL, not from form data to prevent IDOR
+        oauthid = self.kwargs['oauthid']
         oauthuser = get_object_or_404(OAuthUser, pk=oauthid)
+        
+        # Validate that OAuth user is not already linked to prevent account takeover
+        if oauthuser.author_id:
+            logger.warning(f"Attempt to rebind already linked OAuth user: {oauthid}")
+            return HttpResponseForbidden(_("This OAuth account is already bound to an account."))
+        
         oauthuser.email = email
         oauthuser.save()
         sign = get_sha256(settings.SECRET_KEY +
