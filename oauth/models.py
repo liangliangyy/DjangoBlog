@@ -30,6 +30,7 @@ class OAuthUser(models.Model):
         verbose_name = _('oauth user')
         verbose_name_plural = verbose_name
         ordering = ['-creation_time']
+        unique_together = [['type', 'openid']]
 
 
 class OAuthConfig(models.Model):

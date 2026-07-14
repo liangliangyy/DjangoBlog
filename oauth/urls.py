@@ -6,7 +6,8 @@ app_name = "oauth"
 urlpatterns = [
     path(
         r'oauth/authorize',
-        views.authorize),
+        views.authorize,
+        name='authorize'),
     path(
         r'oauth/requireemail/<int:oauthid>.html',
         views.RequireEmailView.as_view(),

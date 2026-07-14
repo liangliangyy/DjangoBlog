@@ -9,18 +9,25 @@ from itertools import groupby
 import django
 import requests
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 from django.http import JsonResponse
 from django.shortcuts import render
-from django.views.decorators.csrf import csrf_exempt
+from django.utils.translation import gettext_lazy as _
 
 from .models import OwnTrackLog
 
 logger = logging.getLogger(__name__)
 
 
-@csrf_exempt
+@login_required
 def manage_owntrack_log(request):
+    """
+    Manage OwnTrack logs. Requires authentication.
+    Only authenticated users can submit location data.
+    """
+    if not request.user.is_superuser:
+        return HttpResponseForbidden(_("Only administrators can submit location data."))
+    
     try:
         s = json.loads(request.read().decode('utf-8'))
         tid = s['tid']
@@ -54,8 +61,7 @@ def show_maps(request):
         }
         return render(request, 'owntracks/show_maps.html', context)
     else:
-        from django.http import HttpResponseForbidden
-        return HttpResponseForbidden()
+        return HttpResponseForbidden(_("Only administrators can view location data."))
 
 
 @login_required
