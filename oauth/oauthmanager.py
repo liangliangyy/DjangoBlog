@@ -267,7 +267,7 @@ class GitHubOauthManager(ProxyManagerMixin, BaseOauthManager):
             'client_id': self.client_id,
             'response_type': 'code',
             'redirect_uri': f'{self.callback_url}&next_url={next_url}',
-            'scope': 'user'
+            'scope': 'user:email'
         }
         url = self.AUTH_URL + "?" + urllib.parse.urlencode(params)
         return url
@@ -307,6 +307,26 @@ class GitHubOauthManager(ProxyManagerMixin, BaseOauthManager):
             user.metadata = rsp
             if 'email' in datas and datas['email']:
                 user.email = datas['email']
+            else:
+                # If email is not public, fetch from /user/emails endpoint
+                try:
+                    emails_rsp = self.do_get('https://api.github.com/user/emails', params={}, headers={
+                        "Authorization": "token " + self.access_token
+                    })
+                    emails = json.loads(emails_rsp)
+                    # Find the primary verified email
+                    for email_data in emails:
+                        if email_data.get('primary') and email_data.get('verified'):
+                            user.email = email_data.get('email')
+                            break
+                    # If no primary email, use the first verified email
+                    if not user.email:
+                        for email_data in emails:
+                            if email_data.get('verified'):
+                                user.email = email_data.get('email')
+                                break
+                except Exception as e:
+                    logger.warning(f'Failed to fetch GitHub user emails: {e}')
             return user
         except Exception as e:
             logger.error(e)
