@@ -249,6 +249,7 @@ class GitHubOauthManager(ProxyManagerMixin, BaseOauthManager):
     AUTH_URL = 'https://github.com/login/oauth/authorize'
     TOKEN_URL = 'https://github.com/login/oauth/access_token'
     API_URL = 'https://api.github.com/user'
+    EMAILS_API_URL = 'https://api.github.com/user/emails'
     ICON_NAME = 'github'
 
     def __init__(self, access_token=None, openid=None):
@@ -310,7 +311,7 @@ class GitHubOauthManager(ProxyManagerMixin, BaseOauthManager):
             else:
                 # If email is not public, fetch from /user/emails endpoint
                 try:
-                    emails_rsp = self.do_get('https://api.github.com/user/emails', params={}, headers={
+                    emails_rsp = self.do_get(self.EMAILS_API_URL, params={}, headers={
                         "Authorization": "Bearer " + self.access_token
                     })
                     emails = json.loads(emails_rsp)
@@ -326,7 +327,7 @@ class GitHubOauthManager(ProxyManagerMixin, BaseOauthManager):
                                 user.email = email_data.get('email')
                                 break
                 except Exception as e:
-                    logger.warning(f'Failed to fetch private email from GitHub API (user login will fail if email is not public): {e}')
+                    logger.warning(f'Failed to fetch private email from GitHub API, login may fail for this user: {e}')
             return user
         except Exception as e:
             logger.error(e)

@@ -1,5 +1,6 @@
 import json
 from unittest.mock import patch
+from urllib.parse import unquote
 
 from django.conf import settings
 from django.contrib import auth
@@ -132,7 +133,6 @@ class OauthLoginTest(TestCase):
         self.assertTrue(url.startswith("https://github.com/login/oauth/authorize"))
         self.assertTrue("client_id" in url)
         # Check that the scope parameter includes user:email (URL-encoded form)
-        from urllib.parse import unquote
         self.assertIn("user:email", unquote(url))
         
         mock_do_post.return_value = "access_token=gho_test_token&scope=user:email&token_type=bearer"
