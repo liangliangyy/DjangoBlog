@@ -315,19 +315,18 @@ class GitHubOauthManager(ProxyManagerMixin, BaseOauthManager):
                         "Authorization": "Bearer " + self.access_token
                     })
                     emails = json.loads(emails_rsp)
-                    # Find the primary verified email
+                    # Find verified email, prioritizing primary verified email
                     for email_data in emails:
-                        if email_data.get('primary') and email_data.get('verified'):
-                            user.email = email_data.get('email')
-                            break
-                    # If no primary email, use the first verified email
-                    if not user.email:
-                        for email_data in emails:
-                            if email_data.get('verified'):
+                        if email_data.get('verified'):
+                            if email_data.get('primary'):
+                                # Primary verified email takes priority
                                 user.email = email_data.get('email')
                                 break
+                            elif not user.email:
+                                # Use first verified email as fallback
+                                user.email = email_data.get('email')
                 except Exception as e:
-                    logger.warning(f'Failed to fetch private email from GitHub API, login may fail for this user: {e}')
+                    logger.warning(f'Failed to fetch private email from GitHub API. User login will fail if email is required: {e}')
             return user
         except Exception as e:
             logger.error(e)
