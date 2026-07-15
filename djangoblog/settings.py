@@ -59,7 +59,6 @@ INSTALLED_APPS = [
     'comments',
     'oauth',
     'servermanager',
-    'owntracks',
     'compressor',
     'djangoblog'
 ]
@@ -112,7 +111,7 @@ DATABASES = {
         'NAME': os.environ.get('DJANGO_MYSQL_DATABASE') or 'djangoblog',
         'USER': os.environ.get('DJANGO_MYSQL_USER') or 'root',
         'PASSWORD': os.environ.get('DJANGO_MYSQL_PASSWORD') or 'root',
-        'HOST': os.environ.get('DJANGO_MYSQL_HOST') or '127.0.0.1',
+        'HOST': os.environ.get('DJANGO_MYSQL_HOST') or '172.24.31.104',
         'PORT': int(
             os.environ.get('DJANGO_MYSQL_PORT') or 3306),
         'OPTIONS': {
@@ -306,7 +305,8 @@ BAIDU_NOTIFY_URL = os.environ.get('DJANGO_BAIDU_NOTIFY_URL') \
                    or 'http://data.zz.baidu.com/urls?site=https://www.lylinux.net&token=1uAOGrMsUm5syDGn'
 
 # Email:
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = os.environ.get(
+    'DJANGO_EMAIL_BACKEND') or 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = env_to_bool('DJANGO_EMAIL_TLS', False)
 EMAIL_USE_SSL = env_to_bool('DJANGO_EMAIL_SSL', True)
 EMAIL_HOST = os.environ.get('DJANGO_EMAIL_HOST') or 'smtp.mxhichina.com'
