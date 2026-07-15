@@ -16,12 +16,12 @@
     "alpinejs": "^3.15.12"
   },
   "devDependencies": {
-    "@tailwindcss/typography": "^0.5.19",
-    "autoprefixer": "^10.5.0",
+    "@tailwindcss/typography": "^0.5.20",
+    "autoprefixer": "^10.5.2",
     "cssnano": "^7.1.9",
     "cssnano-preset-advanced": "^7.0.16",
     "htmx.org": "^2.0.10",
-    "postcss": "^8.5.15",
+    "postcss": "^8.5.16",
     "tailwindcss": "^3.4.1",
     "terser": "^5.48.0",
     "vite": "^6.4.3"
