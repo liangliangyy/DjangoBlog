@@ -33,10 +33,6 @@ qq：http://你的域名/oauth/authorize?type=qq
 微博：http://你的域名/oauth/authorize?type=weibo  
 type对应在`oauthmanager`中的type字段。
 
-## owntracks：
-owntracks是一个位置追踪软件，可以定时的将你的坐标提交到你的服务器上，现在简单的支持owntracks功能，需要安装owntracks的app，然后将api地址设置为:
-`你的域名/owntracks/logtracks`就可以了。然后访问`你的域名/owntracks/show_dates`就可以看到有经纬度记录的日期，点击之后就可以看到运动轨迹了。地图是使用高德地图绘制。
-
 ## 邮件功能：
 同样，将`settings.py`中的`ADMINS = [('liangliang', 'liangliangyy@gmail.com')]`配置为你自己的错误接收邮箱，另外修改:
 ```python
