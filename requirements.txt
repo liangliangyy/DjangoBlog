@@ -34,7 +34,7 @@ rcssmin==1.2.2
 redis==7.4.1
 requests==2.34.2
 rjsmin==1.2.5
-setuptools==82.0.1
+setuptools==83.0.0
 simplejson==3.20.2
 tzdata==2026.3
 user-agents==2.2.0
