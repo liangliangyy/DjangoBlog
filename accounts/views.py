@@ -15,9 +15,11 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views import View
+from django.utils.decorators import method_decorator
 
 from djangoblog.utils import send_email, get_sha256, get_current_site, generate_code, delete_sidebar_cache
 from djangoblog.base_views import SecureFormView, LoginFormView, LogoutRedirectView
+from djangoblog.ratelimit import ratelimit
 from . import utils
 from .forms import RegisterForm, LoginForm, ForgetPasswordForm, ForgetPasswordCodeForm
 from .models import BlogUser
@@ -32,9 +34,15 @@ class RegisterView(SecureFormView):
     用户注册视图（重构版）
 
     使用 SecureFormView 基类，自动提供 CSRF 保护
+    包含速率限制防止滥用
     """
     form_class = RegisterForm
     template_name = 'account/registration_form.html'
+
+    @method_decorator(ratelimit(key_prefix='register', rate='3/h'))
+    def dispatch(self, *args, **kwargs):
+        """添加速率限制：每小时最多3次注册尝试"""
+        return super().dispatch(*args, **kwargs)
 
     def form_valid(self, form):
         if form.is_valid():
@@ -102,11 +110,17 @@ class LoginView(LoginFormView):
     - 敏感参数保护（password）
     - CSRF 保护
     - 禁用缓存
+    - 速率限制防止暴力破解
     """
     form_class = LoginForm
     template_name = 'account/login.html'
     success_url = '/'
     redirect_field_name = REDIRECT_FIELD_NAME
+
+    @method_decorator(ratelimit(key_prefix='login', rate='5/m'))
+    def dispatch(self, *args, **kwargs):
+        """添加速率限制：每分钟最多5次登录尝试"""
+        return super().dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         redirect_to = self.request.GET.get(self.redirect_field_name)
@@ -197,9 +211,15 @@ class ForgetPasswordView(SecureFormView):
     忘记密码视图（重构版）
 
     使用 SecureFormView 基类，自动提供 CSRF 保护
+    包含速率限制防止滥用
     """
     form_class = ForgetPasswordForm
     template_name = 'account/forget_password.html'
+
+    @method_decorator(ratelimit(key_prefix='forgot_password', rate='3/h'))
+    def dispatch(self, *args, **kwargs):
+        """添加速率限制：每小时最多3次密码重置尝试"""
+        return super().dispatch(*args, **kwargs)
 
     def form_valid(self, form):
         if form.is_valid():
@@ -212,6 +232,11 @@ class ForgetPasswordView(SecureFormView):
 
 
 class ForgetPasswordEmailCode(View):
+    
+    @method_decorator(ratelimit(key_prefix='forgot_password_code', rate='3/h'))
+    def dispatch(self, *args, **kwargs):
+        """添加速率限制：每小时最多3次验证码请求"""
+        return super().dispatch(*args, **kwargs)
 
     def post(self, request: HttpRequest):
         form = ForgetPasswordCodeForm(request.POST)

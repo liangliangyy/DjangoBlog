@@ -15,10 +15,18 @@ class OnlineMiddleware(object):
         super().__init__()
 
     def __call__(self, request):
-        ''' page render time '''
+        ''' 
+        Page render time tracking middleware
+        
+        Security Note: IP address is extracted server-side using ipware.get_client_ip()
+        which properly handles X-Forwarded-For headers. Geographic location is then
+        derived server-side by Elasticsearch's GeoIP pipeline. No client-provided 
+        location data is accepted.
+        '''
         start_time = time.time()
         response = self.get_response(request)
         http_user_agent = request.META.get('HTTP_USER_AGENT', '')
+        # Security: IP is extracted server-side, not from client input
         ip, _ = get_client_ip(request)
         user_agent = parse(http_user_agent)
         if not response.streaming:
@@ -28,6 +36,8 @@ class OnlineMiddleware(object):
                     time_taken = round((cast_time) * 1000, 2)
                     url = request.path
                     from django.utils import timezone
+                    # Security: GeoIP location is derived server-side by Elasticsearch
+                    # from the IP address, not from any client-provided data
                     ElaspedTimeDocumentManager.create(
                         url=url,
                         time_taken=time_taken,

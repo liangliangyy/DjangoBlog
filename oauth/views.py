@@ -16,10 +16,12 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView
 from django.utils.http import url_has_allowed_host_and_scheme
+from django.utils.decorators import method_decorator
 
 from djangoblog.blog_signals import oauth_user_login_signal
 from djangoblog.utils import get_current_site
 from djangoblog.utils import send_email, get_sha256
+from djangoblog.ratelimit import ratelimit
 from oauth.forms import RequireEmailForm
 from .models import OAuthUser
 from .oauthmanager import get_manager_by_type, OAuthAccessTokenException
@@ -141,13 +143,36 @@ def authorize(request):
 
 
 def emailconfirm(request, id, sign):
+    """
+    邮箱绑定确认视图
+    
+    安全性：
+    1. 验证签名防止IDOR攻击
+    2. 签名包含SECRET_KEY、用户ID
+    3. 必须匹配才能完成绑定
+    """
     if not sign:
+        logger.warning(f'Email confirmation attempted without signature for ID: {id}')
         return HttpResponseForbidden()
-    if not get_sha256(settings.SECRET_KEY +
-                      str(id) +
-                      settings.SECRET_KEY).upper() == sign.upper():
+    
+    # Security: Validate signature to prevent IDOR
+    expected_sign = get_sha256(settings.SECRET_KEY + str(id) + settings.SECRET_KEY)
+    if not expected_sign.upper() == sign.upper():
+        logger.warning(f'Invalid signature for email confirmation. ID: {id}')
         return HttpResponseForbidden()
+    
     oauthuser = get_object_or_404(OAuthUser, pk=id)
+    
+    # Additional security check: prevent binding if already bound to another user
+    # and the current user is not logged in or is a different user
+    if oauthuser.author_id and request.user.is_authenticated:
+        if oauthuser.author_id != request.user.id:
+            logger.warning(
+                f'Attempted to bind OAuthUser {id} already bound to user {oauthuser.author_id} '
+                f'by user {request.user.id}'
+            )
+            return HttpResponseForbidden('This OAuth account is already bound to another user.')
+    
     with transaction.atomic():
         if oauthuser.author:
             author = get_user_model().objects.get(pk=oauthuser.author_id)
@@ -200,6 +225,11 @@ def emailconfirm(request, id, sign):
 class RequireEmailView(FormView):
     form_class = RequireEmailForm
     template_name = 'oauth/require_email.html'
+
+    @method_decorator(ratelimit(key_prefix='oauth_email', rate='5/h'))
+    def dispatch(self, *args, **kwargs):
+        """添加速率限制：每小时最多5次邮箱绑定尝试"""
+        return super().dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         oauthid = self.kwargs['oauthid']

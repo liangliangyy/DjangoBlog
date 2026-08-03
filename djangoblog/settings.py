@@ -28,15 +28,37 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get(
-    'DJANGO_SECRET_KEY') or 'n9ceqv38)#&mwuat@(mjb_p%em$e8$qyr#fw9ot!=ba6lijx-6'
+# SECRET_KEY is required and must be set via environment variable DJANGO_SECRET_KEY
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+if not SECRET_KEY:
+    if TESTING:
+        # Only allow a default key in test mode
+        SECRET_KEY = 'test-secret-key-only-for-testing'
+    else:
+        raise ValueError(
+            'DJANGO_SECRET_KEY environment variable is not set. '
+            'Please set a strong, unique secret key for security.'
+        )
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env_to_bool('DJANGO_DEBUG', True)
 # DEBUG = False
 TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 
-# ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['*', '127.0.0.1', 'example.com']
+# ALLOWED_HOSTS configuration
+# In production, set DJANGO_ALLOWED_HOSTS environment variable (comma-separated list)
+# Example: DJANGO_ALLOWED_HOSTS=yourdomain.com,www.yourdomain.com
+allowed_hosts_env = os.environ.get('DJANGO_ALLOWED_HOSTS', '')
+if allowed_hosts_env:
+    ALLOWED_HOSTS = [host.strip() for host in allowed_hosts_env.split(',') if host.strip()]
+elif DEBUG:
+    # Only allow wildcard in DEBUG mode for development
+    ALLOWED_HOSTS = ['*']
+else:
+    # Production mode requires explicit ALLOWED_HOSTS configuration
+    raise ValueError(
+        'DJANGO_ALLOWED_HOSTS environment variable must be set in production mode. '
+        'Example: DJANGO_ALLOWED_HOSTS=yourdomain.com,www.yourdomain.com'
+    )
 # django 4.0新增配置
 CSRF_TRUSTED_ORIGINS = ['http://example.com']
 # Application definition
@@ -317,8 +339,13 @@ SERVER_EMAIL = EMAIL_HOST_USER
 # Setting debug=false did NOT handle except email notifications
 ADMINS = [('admin', os.environ.get('DJANGO_ADMIN_EMAIL') or 'admin@admin.com')]
 # WX ADMIN password(Two times md5)
-WXADMIN = os.environ.get(
-    'DJANGO_WXADMIN_PASSWORD') or '995F03AC401D6CABABAEF756FC4D43C7'
+# Must be set via environment variable for security
+WXADMIN = os.environ.get('DJANGO_WXADMIN_PASSWORD')
+if not WXADMIN and not TESTING:
+    raise ValueError(
+        'DJANGO_WXADMIN_PASSWORD environment variable is not set. '
+        'Please set a strong password (double MD5 hashed) for WeChat admin access.'
+    )
 
 LOG_PATH = os.path.join(BASE_DIR, 'logs')
 if not os.path.exists(LOG_PATH):

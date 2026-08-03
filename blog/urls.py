@@ -57,6 +57,6 @@ urlpatterns = [
         name='upload'),
     path(
         r'clean',
-        views.clean_cache_view,
+        views.staff_member_required(views.clean_cache_view),
         name='clean'),
 ]

@@ -403,6 +403,14 @@ from djangoblog.error_views import (
 )
 
 
+from django.contrib.admin.views.decorators import staff_member_required
+
+
 def clean_cache_view(request):
+    """
+    清除缓存的管理员视图
+    
+    需要管理员权限才能访问
+    """
     cache.clear()
-    return HttpResponse('ok')
+    return HttpResponse('Cache cleared successfully')
