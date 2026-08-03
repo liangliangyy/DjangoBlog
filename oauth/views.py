@@ -144,17 +144,19 @@ def authorize(request):
                     # 设置session过期时间为2周（默认）
                     request.session.set_expiry(settings.SESSION_COOKIE_AGE)
                     
-                    # Double-check URL validation before redirect for security
+                    # Validate and sanitize redirect URL for security
                     site_domain = get_current_site().domain
-                    if not url_has_allowed_host_and_scheme(
+                    if url_has_allowed_host_and_scheme(
                         url=nexturl,
                         allowed_hosts={site_domain},
                         require_https=request.is_secure()
                     ):
-                        nexturl = '/'
+                        safe_redirect_url = nexturl
+                    else:
+                        safe_redirect_url = '/'
                     
                     # 设置登录标记 cookie
-                    response = HttpResponseRedirect(nexturl)
+                    response = HttpResponseRedirect(safe_redirect_url)
                     response.set_cookie(
                         'logged_user',
                         'true',
