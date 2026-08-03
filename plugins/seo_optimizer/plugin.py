@@ -174,7 +174,7 @@ class SeoOptimizerPlugin(BasePlugin):
         此处只负责生成增强的 Open Graph 标签和 JSON-LD 结构化数据
         """
         request = context.get('request')
-        if not request:
+        if not request or not request.resolver_match:
             return metas
 
         view_name = request.resolver_match.view_name

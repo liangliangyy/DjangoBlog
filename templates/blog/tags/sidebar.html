@@ -195,14 +195,6 @@
                     </a>
                 </li>
             {% endif %}
-            {% if user.is_superuser %}
-                <li>
-                    <a href="{% url 'owntracks:show_dates' %}" target="_blank" hx-boost="false"
-                       class="block rounded-lg px-3 py-2 text-sm text-foreground transition-colors hover:bg-secondary hover:text-primary">
-                        {% trans 'Track record' %}
-                    </a>
-                </li>
-            {% endif %}
         </ul>
     </div>
 </aside>

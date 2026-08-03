@@ -11,8 +11,6 @@ from comments.models import *
 from djangoblog.logentryadmin import LogEntryAdmin
 from oauth.admin import *
 from oauth.models import *
-from owntracks.admin import *
-from owntracks.models import *
 from servermanager.admin import *
 from servermanager.models import *
 
@@ -56,8 +54,6 @@ admin_site.register(Comment, CommentAdmin)
 
 admin_site.register(OAuthUser, OAuthUserAdmin)
 admin_site.register(OAuthConfig, OAuthConfigAdmin)
-
-admin_site.register(OwnTrackLog, OwnTrackLogsAdmin)
 
 admin_site.register(Site, SiteAdmin)
 
