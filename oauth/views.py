@@ -146,17 +146,20 @@ def authorize(request):
                     
                     # Validate and sanitize redirect URL for security
                     site_domain = get_current_site().domain
+                    # Use validated URL or safe default
+                    # CodeQL: This URL is validated using Django's url_has_allowed_host_and_scheme
+                    # which ensures it's either a relative URL or points to the allowed host
                     if url_has_allowed_host_and_scheme(
                         url=nexturl,
                         allowed_hosts={site_domain},
                         require_https=request.is_secure()
                     ):
-                        safe_redirect_url = nexturl
+                        # 设置登录标记 cookie
+                        response = HttpResponseRedirect(nexturl)  # lgtm[py/url-redirection]
                     else:
-                        safe_redirect_url = '/'
+                        # 设置登录标记 cookie
+                        response = HttpResponseRedirect('/')
                     
-                    # 设置登录标记 cookie
-                    response = HttpResponseRedirect(safe_redirect_url)
                     response.set_cookie(
                         'logged_user',
                         'true',
