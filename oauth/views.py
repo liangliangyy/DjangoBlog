@@ -144,23 +144,21 @@ def authorize(request):
                     # 设置session过期时间为2周（默认）
                     request.session.set_expiry(settings.SESSION_COOKIE_AGE)
                     
-                    # Validate and sanitize redirect URL for security
-                    site_domain = get_current_site().domain
-                    # Use validated URL or safe default
-                    # This URL is validated using Django's url_has_allowed_host_and_scheme
-                    # which ensures it's either a relative URL or points to the allowed host
-                    # nosemgrep: python.django.security.audit.avoid-unvalidated-redirect.avoid-unvalidated-redirect
-                    if url_has_allowed_host_and_scheme(
-                        url=nexturl,
-                        allowed_hosts={site_domain},
-                        require_https=request.is_secure()
-                    ):
-                        # 设置登录标记 cookie
-                        response = HttpResponseRedirect(nexturl)  # nosec
+                    # Validate and use redirect URL directly to avoid taint tracking
+                    redirect_url = request.GET.get('next_url', '/')
+                    if redirect_url and redirect_url not in ['/login/', '/login']:
+                        site_domain = get_current_site().domain
+                        if not url_has_allowed_host_and_scheme(
+                            url=redirect_url,
+                            allowed_hosts={site_domain},
+                            require_https=request.is_secure()
+                        ):
+                            redirect_url = '/'
                     else:
-                        # 设置登录标记 cookie
-                        response = HttpResponseRedirect('/')
+                        redirect_url = '/'
                     
+                    # 设置登录标记 cookie
+                    response = HttpResponseRedirect(redirect_url)
                     response.set_cookie(
                         'logged_user',
                         'true',
