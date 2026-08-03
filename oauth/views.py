@@ -143,6 +143,16 @@ def authorize(request):
                     login(request, author)
                     # 设置session过期时间为2周（默认）
                     request.session.set_expiry(settings.SESSION_COOKIE_AGE)
+                    
+                    # Double-check URL validation before redirect for security
+                    site_domain = get_current_site().domain
+                    if not url_has_allowed_host_and_scheme(
+                        url=nexturl,
+                        allowed_hosts={site_domain},
+                        require_https=request.is_secure()
+                    ):
+                        nexturl = '/'
+                    
                     # 设置登录标记 cookie
                     response = HttpResponseRedirect(nexturl)
                     response.set_cookie(
@@ -262,7 +272,7 @@ class RequireEmailView(FormView):
         
         # Validate that OAuth user is not already linked to prevent account takeover
         if oauthuser.author_id:
-            logger.warning(f"Attempt to rebind already linked OAuth user: {oauthid}")
+            logger.warning("Attempt to rebind already linked OAuth user")
             return HttpResponseForbidden(_("This OAuth account is already bound to an account."))
         
         oauthuser.email = email
