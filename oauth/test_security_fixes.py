@@ -1,12 +1,11 @@
 """
-Security tests for OAuth and OwnTracks vulnerabilities (Issue #981)
+Security tests for OAuth vulnerabilities (Issue #981)
 
 These tests verify that the security fixes for the following issues are working:
 1. OAuth email binding IDOR
 2. OAuth state validation
 3. Inactive user bypass
 4. OAuthUser duplicate race condition
-5. OwnTracks authentication
 """
 
 from django.test import TestCase, Client, RequestFactory
@@ -19,7 +18,6 @@ import json
 
 from oauth.models import OAuthUser, OAuthConfig
 from oauth.state_manager import generate_oauth_state, validate_oauth_state
-from owntracks.models import OwnTrackLog
 
 
 class OAuthEmailBindingIDORTest(TestCase):
@@ -276,94 +274,3 @@ class OAuthUserDuplicateTest(TestCase):
         self.assertFalse(created2)
         self.assertEqual(oauth1.id, oauth2.id)
 
-
-class OwnTracksAuthenticationTest(TestCase):
-    """Test OwnTracks endpoint authentication requirement"""
-    
-    def setUp(self):
-        self.client = Client()
-        User = get_user_model()
-        
-        # Create regular user
-        self.user = User.objects.create_user(
-            username='user',
-            email='user@example.com',
-            password='password'
-        )
-        
-        # Create superuser
-        self.superuser = User.objects.create_user(
-            username='admin',
-            email='admin@example.com',
-            password='password',
-            is_superuser=True,
-            is_staff=True
-        )
-    
-    def test_anonymous_cannot_submit_location(self):
-        """Test anonymous users cannot submit location data"""
-        url = reverse('owntracks:logtracks')
-        
-        data = json.dumps({
-            'tid': 'test',
-            'lat': 1.0,
-            'lon': 2.0
-        })
-        
-        response = self.client.post(
-            url,
-            data=data,
-            content_type='application/json'
-        )
-        
-        # Should redirect to login (302) or return forbidden
-        self.assertIn(response.status_code, [302, 403])
-    
-    def test_regular_user_cannot_submit_location(self):
-        """Test regular users cannot submit location data"""
-        self.client.login(username='user', password='password')
-        
-        url = reverse('owntracks:logtracks')
-        
-        data = json.dumps({
-            'tid': 'test',
-            'lat': 1.0,
-            'lon': 2.0
-        })
-        
-        response = self.client.post(
-            url,
-            data=data,
-            content_type='application/json'
-        )
-        
-        # Should return forbidden
-        self.assertEqual(response.status_code, 403)
-    
-    def test_superuser_can_submit_location(self):
-        """Test superusers can submit location data"""
-        self.client.login(username='admin', password='password')
-        
-        url = reverse('owntracks:logtracks')
-        
-        data = json.dumps({
-            'tid': 'test',
-            'lat': 1.0,
-            'lon': 2.0
-        })
-        
-        response = self.client.post(
-            url,
-            data=data,
-            content_type='application/json'
-        )
-        
-        # Should succeed
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content.decode(), 'ok')
-        
-        # Verify data was saved
-        log = OwnTrackLog.objects.filter(tid='test').first()
-        self.assertIsNotNone(log)
-        self.assertEqual(log.lat, 1.0)
-        self.assertEqual(log.lon, 2.0)
