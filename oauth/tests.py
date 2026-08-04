@@ -31,10 +31,23 @@ class OAuthConfigTest(TestCase):
         response = self.client.get('/oauth/oauthlogin?type=weibo')
         self.assertEqual(response.status_code, 302)
         self.assertTrue("api.weibo.com" in response.url)
-
+        
+        # Extract state parameter from redirect URL
+        from urllib.parse import urlparse, parse_qs
+        parsed_url = urlparse(response.url)
+        query_params = parse_qs(parsed_url.query)
+        state = query_params.get('state', [None])[0]
+        
+        # The authorize endpoint requires a valid state parameter for CSRF protection
+        # Without it, it should return 403 (security fix)
         response = self.client.get('/oauth/authorize?type=weibo&code=code')
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, '/')
+        self.assertEqual(response.status_code, 403)  # Expect 403 without valid state
+        
+        # With valid state, it should work (but will still fail due to invalid code)
+        if state:
+            response = self.client.get(f'/oauth/authorize?type=weibo&code=code&state={state}')
+            # This will redirect to login or back to the OAuth URL because the code is invalid
+            self.assertEqual(response.status_code, 302)
 
 
 class OauthLoginTest(TestCase):
