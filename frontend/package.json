@@ -21,7 +21,7 @@
     "cssnano": "^7.1.9",
     "cssnano-preset-advanced": "^7.0.16",
     "htmx.org": "^2.0.10",
-    "postcss": "^8.5.15",
+    "postcss": "^8.5.25",
     "tailwindcss": "^3.4.1",
     "terser": "^5.48.0",
     "vite": "^6.4.3"
