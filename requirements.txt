@@ -47,4 +47,4 @@ configobj>=5.0.9
 cryptography>=43.0.3
 idna>=3.7
 urllib3>=2.6.3
-wheel>=0.46.2
+wheel>=0.47.0
