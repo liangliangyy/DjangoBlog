@@ -19,7 +19,7 @@ Markdown==3.10.3
 MarkupSafe==3.0.3
 mysqlclient==2.2.8
 openai==2.54.0
-pillow==12.3.0
+pillow==13.0.0
 prettytable==3.18.0
 propcache==0.5.2
 pycparser==3.0
