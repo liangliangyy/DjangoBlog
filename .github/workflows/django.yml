@@ -45,29 +45,36 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # 标准测试 - Python 3.10
-          - python-version: "3.10"
+          # 标准测试 - Python 3.11
+          - python-version: "3.11"
             test-type: "standard"
             database: "mysql"
             elasticsearch: false
             coverage: false
-            
-          # 标准测试 - Python 3.11  
-          - python-version: "3.11"
-            test-type: "standard" 
+
+          # 标准测试 - Python 3.12
+          - python-version: "3.12"
+            test-type: "standard"
             database: "mysql"
             elasticsearch: false
             coverage: false
-            
+
+          # 标准测试 - Python 3.13
+          - python-version: "3.13"
+            test-type: "standard"
+            database: "mysql"
+            elasticsearch: false
+            coverage: false
+
           # 完整测试 - 包含ES和覆盖率
-          - python-version: "3.11"
+          - python-version: "3.12"
             test-type: "full"
             database: "mysql"
             elasticsearch: true
             coverage: true
             
           # Docker构建测试
-          - python-version: "3.11"
+          - python-version: "3.12"
             test-type: "docker"
             database: "none"
             elasticsearch: false
