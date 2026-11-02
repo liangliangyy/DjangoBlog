@@ -162,7 +162,10 @@ jobs:
         cache-from: type=gha
         cache-to: type=gha,mode=max
         platforms: linux/amd64
-        
+        # 阿里云ACR不支持 oci.empty 清单（attestation/provenance），必须关闭
+        provenance: false
+        sbom: false
+
     - name: 部署到生产服务器
       uses: appleboy/ssh-action@v1.2.5
       with:
