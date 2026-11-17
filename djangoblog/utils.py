@@ -10,7 +10,7 @@ import uuid
 import hashlib
 import hmac
 
-import bleach
+import nh3
 import markdown
 import requests
 from django.conf import settings
@@ -226,7 +226,7 @@ def get_resource_url():
 
 
 # 允许的HTML标签白名单 - 支持markdown常用元素
-ALLOWED_TAGS = [
+ALLOWED_TAGS = {
     'a', 'abbr', 'acronym', 'b', 'blockquote', 'code', 'em', 'i', 'li', 'ol', 'ul', 'pre', 'strong',
     'h1', 'h2', 'h3', 'h4', 'h5', 'h6',  # 标题
     'p', 'span', 'div', 'br', 'hr',  # 段落和分隔
@@ -234,59 +234,37 @@ ALLOWED_TAGS = [
     'dl', 'dt', 'dd',  # 定义列表
     'img',  # 图片（需配合ALLOWED_ATTRIBUTES限制src）
     'del', 'ins', 'sub', 'sup',  # 文本修饰
-]
-
-# 安全的class值白名单 - 只允许代码高亮相关的class
-ALLOWED_CLASSES = [
-    'codehilite', 'highlight', 'hll', 'c', 'err', 'k', 'l', 'n', 'o', 'p', 'cm', 'cp', 'c1', 'cs',
-    'gd', 'ge', 'gr', 'gh', 'gi', 'go', 'gp', 'gs', 'gu', 'gt', 'kc', 'kd', 'kn', 'kp', 'kr', 'kt',
-    'ld', 'm', 'mf', 'mh', 'mi', 'mo', 'na', 'nb', 'nc', 'no', 'nd', 'ni', 'ne', 'nf', 'nl', 'nn',
-    'nt', 'nv', 'ow', 'w', 'mb', 'mh', 'mi', 'mo', 'sb', 'sc', 'sd', 'se', 'sh', 'si', 'sx', 's2',
-    's1', 'ss', 'bp', 'vc', 'vg', 'vi', 'il'
-]
-
-def class_filter(tag, name, value):
-    """自定义class属性过滤器"""
-    if name == 'class':
-        # 只允许预定义的安全class值
-        allowed_classes = [cls for cls in value.split() if cls in ALLOWED_CLASSES]
-        return ' '.join(allowed_classes) if allowed_classes else False
-    return value
+}
 
 # 安全的属性白名单
+# 使用 nh3 的集合白名单，'*' 对所有标签生效。class 值本身不会执行脚本，
+# 仅用于 Pygments 代码高亮等可信场景，故不再做 class 值过滤。
+# 注意：nh3 不支持 callable 属性过滤器，从根本上避免了过去 class_filter
+# 回退分支 `return value` 误放行 onfocus/autofocus 等事件属性的问题。
 ALLOWED_ATTRIBUTES = {
-    'a': ['href', 'title', 'rel'],  # rel="nofollow" 用于外部链接
-    'abbr': ['title'], 
-    'acronym': ['title'],
-    'img': ['src', 'alt', 'title', 'width', 'height'],  # 图片属性
-    'table': ['border', 'cellpadding', 'cellspacing'],
-    'th': ['align', 'valign'],
-    'td': ['align', 'valign'],
-    'span': class_filter,
-    'div': class_filter,
-    'pre': class_filter,
-    'code': class_filter
+    '*': {'class'},
+    'a': {'href', 'title', 'rel'},  # rel="nofollow" 用于外部链接
+    'abbr': {'title'},
+    'acronym': {'title'},
+    'img': {'src', 'alt', 'title', 'width', 'height'},  # 图片属性
+    'table': {'border', 'cellpadding', 'cellspacing'},
+    'th': {'align', 'valign'},
+    'td': {'align', 'valign'},
 }
 
 # 安全的协议白名单 - 防止javascript:等危险协议
-ALLOWED_PROTOCOLS = ['http', 'https', 'mailto']
+ALLOWED_PROTOCOLS = {'http', 'https', 'mailto'}
 
 def sanitize_html(html):
     """
     安全的HTML清理函数
-    使用bleach库进行白名单过滤，防止XSS攻击
+    使用 nh3（ammonia 的 Python 绑定，bleach 官方推荐继任者）进行白名单过滤，防止XSS攻击。
     """
-    cleaned = bleach.clean(
-        html, 
-        tags=ALLOWED_TAGS, 
+    return nh3.clean(
+        html,
+        tags=ALLOWED_TAGS,
         attributes=ALLOWED_ATTRIBUTES,
-        protocols=ALLOWED_PROTOCOLS,  # 限制允许的协议
-        strip=True,  # 移除不允许的标签而不是转义
-        strip_comments=True  # 移除HTML注释
+        url_schemes=ALLOWED_PROTOCOLS,  # 限制允许的协议
+        link_rel=None,  # 不自动注入 rel，由 ALLOWED_ATTRIBUTES 中 a 的 rel 白名单管理
+        strip_comments=True,  # 移除HTML注释
     )
-    
-    # 移除空的 style 属性（bleach 有时会保留 style=""）
-    import re
-    cleaned = re.sub(r'\s*style\s*=\s*["\'][\s]*["\']', '', cleaned)
-    
-    return cleaned
