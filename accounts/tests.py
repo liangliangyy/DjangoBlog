@@ -56,7 +56,7 @@ class AccountTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_validate_register(self):
-        self.assertEquals(
+        self.assertEqual(
             0, len(
                 BlogUser.objects.filter(
                     email='user123@user.com')))
@@ -66,7 +66,7 @@ class AccountTest(TestCase):
             'password1': 'password123!q@wE#R$T',
             'password2': 'password123!q@wE#R$T',
         })
-        self.assertEquals(
+        self.assertEqual(
             1, len(
                 BlogUser.objects.filter(
                     email='user123@user.com')))

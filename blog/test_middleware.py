@@ -140,7 +140,8 @@ class OnlineMiddlewareTest(TestCase):
         self.assertTrue(mock_get_client_ip.called)
         mock_get_client_ip.assert_called_once_with(request)
 
-    def test_middleware_user_agent_parsing(self):
+    @patch('blog.middleware.ElaspedTimeDocumentManager.create')
+    def test_middleware_user_agent_parsing(self, mock_create):
         """测试User-Agent解析"""
         request = self.factory.get('/test/')
         request.META['HTTP_USER_AGENT'] = 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X)'
