@@ -73,8 +73,10 @@
 
                 <!-- Emoji Reactions -->
                 <div x-data="reactionPicker({{ comment_item.pk }})"
-                     data-reactions='{{ comment_item|get_reactions_for_user:user|to_json }}'
                      class="flex items-center">
+                    {% with script_id="reactions-data-"|add:comment_item.pk %}
+                    {{ comment_item|get_reactions_for_user:user|json_script:script_id }}
+                    {% endwith %}
 
                     <!-- Reactions 显示区 -->
                     <div class="flex flex-wrap gap-1 items-center">

@@ -16,18 +16,20 @@ export default (commentId) => {
       this.loadFromDataAttribute();
     },
 
-    // ==================== 从 data 属性加载（SSR 数据）====================
+    // ==================== 从 <script> 标签加载（SSR 数据）====================
+    // SSR 数据由 Django json_script 输出为 <script type="application/json">，
+    // 相比 data-* 属性，json_script 会转义 < > & ' 等字符，避免属性注入型 XSS。
     loadFromDataAttribute() {
       try {
-        const dataAttr = this.$el.dataset.reactions;
-        if (dataAttr) {
-          this.reactions = JSON.parse(dataAttr);
+        const scriptEl = this.$el.querySelector('script[type="application/json"]');
+        if (scriptEl && scriptEl.textContent) {
+          this.reactions = JSON.parse(scriptEl.textContent);
         } else {
           // 如果没有 SSR 数据，降级到 API 加载
           this.loadFromAPI();
         }
       } catch (error) {
-        console.error('Error parsing reactions from data attribute:', error);
+        console.error('Error parsing reactions from script tag:', error);
         // 解析失败，降级到 API 加载
         this.loadFromAPI();
       }

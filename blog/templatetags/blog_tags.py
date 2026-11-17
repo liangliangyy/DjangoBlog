@@ -1,5 +1,4 @@
 import hashlib
-import json
 import logging
 import random
 import urllib
@@ -156,18 +155,6 @@ def current_nav_item(request):
 def comment_markdown(content):
     content = CommonMarkdown.get_markdown(content)
     return mark_safe(sanitize_html(content))
-
-
-@register.filter(is_safe=True)
-def to_json(value):
-    """
-    将 Python 对象转换为 JSON 字符串，用于模板中传递给 JavaScript
-    使用 ensure_ascii=False 以支持 emoji 等 unicode 字符
-    """
-    try:
-        return mark_safe(json.dumps(value, ensure_ascii=False))
-    except (TypeError, ValueError):
-        return mark_safe('{}')
 
 
 @register.filter

